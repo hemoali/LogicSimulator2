@@ -1,4 +1,4 @@
-/* 
+/*
 See "version.h" for version info and copyright information
 This file was last modified on 05.16.1999
 */
@@ -10,18 +10,18 @@ This file was last modified on 05.16.1999
 
 class color {
 
-  public:
+public:
 
-    // Default constructor creates black
-    color(unsigned char Red = 0, unsigned char Green = 0, unsigned char Blue = 0) { 
-        ucRed = Red;  ucGreen = Green;  ucBlue = Blue; 
-    }
+	// Default constructor creates black
+	color(unsigned char Red = 0, unsigned char Green = 0, unsigned char Blue = 0) {
+		ucRed = Red;  ucGreen = Green;  ucBlue = Blue;
+	}
 
 
-    // Color components.  0 = no intensity, 255 = full intensity
-    unsigned char ucRed;
-    unsigned char ucGreen;
-    unsigned char ucBlue;
+	// Color components.  0 = no intensity, 255 = full intensity
+	unsigned char ucRed;
+	unsigned char ucGreen;
+	unsigned char ucBlue;
 
 };
 
@@ -30,10 +30,10 @@ bool operator!=(color a, color b);
 
 /*
 
-  Predefine some color objects...  Data was liberally borrowed from the
-  Open Group's X11 rbg.txt file
+Predefine some color objects...  Data was liberally borrowed from the
+Open Group's X11 rbg.txt file
 
-  $XConsortium: rgb.txt,v 10.41 94/02/20 18:39:36 rws Exp 
+$XConsortium: rgb.txt,v 10.41 94/02/20 18:39:36 rws Exp
 
 */
 
@@ -144,7 +144,7 @@ const color SANDYBROWN = color(244, 164, 96);
 const color TAN = color(210, 180, 140);
 const color CHOCOLATE = color(210, 105, 30);
 const color FIREBRICK = color(178, 34, 34);
-const color BROWN = color(165, 42, 42);
+const color BROWN = color(92, 23, 23);
 const color DARKSALMON = color(233, 150, 122);
 const color SALMON = color(250, 128, 114);
 const color LIGHTSALMON = color(255, 160, 122);

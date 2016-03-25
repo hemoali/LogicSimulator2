@@ -4,7 +4,7 @@
 //This header file contains some defenitions to be used all over the application
 
 //All possible actions
-enum ActionType 
+enum ActionType
 {
 	ADD_Buff,			//Add 1-input Buffer gate
 	ADD_INV,			//Add 1-input Inverter gate
@@ -20,13 +20,29 @@ enum ActionType
 	ADD_Switch,			//Add Switch
 	ADD_LED,			//Add LED
 	ADD_CONNECTION,		//Add Wire Connection
+	ADD_Buff_H,			//Add 1-input Buffer gate
+	ADD_INV_H,			//Add 1-input Inverter gate
+	ADD_AND_GATE_2_H,		//Add 2-input AND gate
+	ADD_OR_GATE_2_H,		//Add 2-input OR gate
+	ADD_NAND_GATE_2_H,	//Add 2-input NAND gate
+	ADD_NOR_GATE_2_H,		//Add 2-input NOR gate
+	ADD_XOR_GATE_2_H,		//Add 2-input XOR gate
+	ADD_XNOR_GATE_2_H,	//Add 2-input XNOR gate
+	ADD_AND_GATE_3_H,		//Add 3-input AND gate
+	ADD_NOR_GATE_3_H,		//Add 3-input NOR gate
+	ADD_XOR_GATE_3_H,		//Add 3-input XOR gate
+	ADD_Switch_H,			//Add Switch
+	ADD_LED_H,			//Add LED
+	ADD_CONNECTION_H,		//Add Wire Connection
 
 	ADD_Label,			//Add Label to a Component, a Connection
 	EDIT_Label,			//Edit Label of a Component, a Connection
 
 	Create_TruthTable,	//Create Truth Table of the Circuit
+	Simulate,
+	Validate,
 
-	Change_Switch,		//Change Switch Status in Simulation Mode
+	Change_Switch,		//Change Switch Status in Simulation Mode // ????? TODO:
 
 	SELECT,		//Select a Component, a Connection
 	DEL,		//Delete a Component, a Connection
@@ -47,7 +63,6 @@ enum ActionType
 	DSN_TOOL,	//A click on an empty place in the design tool bar
 
 };
-
 //Possible Status for the pin
 enum STATUS
 {
@@ -66,27 +81,50 @@ enum DsgnMenuItem //The items of the design menu (you should add more items)
 {
 	//Note: Items are ordered here as they appear in menu
 	//If you want to change the menu items order, change the order here
-	ITM_AND2,		//AND gate item in menu
-	ITM_OR2,		//OR gate item in menu
-	
-	ITM_EXIT,		//Exit item
-	//TODO: Add more items names here
-	
-	ITM_DSN_CNT		//no. of design menu items ==> This should be the last line in this enum
-	
+	D2AND,		//AND gate item in menu
+	D3AND,
+	D2OR,
+	D2XOR,
+	D3XOR,
+	DBUFFER,
+	DNOT,
+	D2NAND,
+	D2NOR,
+	D3NOR,
+	D2XNOR,
+	DSWITCH,
+	DLED,
+	DCONNECTION,
+	DSIMULATION,
+	DSAVE,
+	DLOAD,
+	DEXIT,
+	DITEMSCOUNT		//no. of design menu items ==> This should be the last line in this enum
+
 };
 
 
 enum SimMenuItem //The items of the simulation menu (you should add more items)
 {
 	//Note: Items are ordered here as they appear in menu
-	ITM_SIM,	//Simulate menu item
-	ITM_TRUTH,	//Truth table menu item
-	
-	//TODO:Add more items names here
-	
-	ITM_SIM_CNT		//no. of simulation menu items ==> This should be the last line in this enum
-	
+	SVALIDATE,	//Simulate menu item
+	SSIMULATE,
+	STT,	//Truth table menu item
+	SDESIGN,
+	SSAVE,
+	SLOAD,
+	SEXIT,
+	SITEMSCOUNT		//no. of simulation menu items ==> This should be the last line in this enum
+
+};
+enum CellType{
+	EMPTY,
+	GATE,
+	VERTICAL,
+	HORIZONTAL,
+	INTERSECTION,
+	END_CONNECTION,
+	AVAILABE_FOR_CONNECTIONS
 };
 
 //Maximum number of input pins that can be connected to any output pin

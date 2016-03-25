@@ -1,11 +1,21 @@
 #pragma once
 #include "..\Defs.h"
 #include "Input.h"
+#include<vector>
 
+struct bfs_node
+{
+	int x;
+	int y;
+	bfs_node* parent;
+};
 class Output	//The application manager should have a pointer to this class
 {
 private:
 	window* pWind;	//Pointer to the Graphics Window
+	mutable vector < pair <int, int> >vec;
+	static CellType Output::usedPixels[44][74];
+
 public:
 	Output(); // Performs the Window Initialization
 	Input* CreateInput() const; //creates a pointer to the Input object
@@ -20,15 +30,24 @@ public:
 
 	window* CreateWind(int wd, int h, int x, int y) const; //Creates user interface window
 
+	bool DrawString(string s, GraphicsInfo Gfx_info) const;
+	void DrawGrid() const;
 	
-	// Draws 2-input AND gate
-	void DrawAND2(GraphicsInfo r_GfxInfo, bool selected = false) const;
+	// Draw  
+	bool SetDragImage(ActionType ActType, GraphicsInfo GfxInfo);
+	image* DrawNot_Buffer(GraphicsInfo, bool = false, bool = false) const;
+	image* DrawAnd_Nand(GraphicsInfo, int = 2, bool = false, bool = false) const;
+	image* DrawOr_Nor(GraphicsInfo, int = 2, bool = false, bool = false) const;
+	image* DrawXor_Xnor(GraphicsInfo, int = 2, bool = false, bool = false) const;
+	image* DrawLed(GraphicsInfo, bool = false, bool = false) const;
+	image* DrawSwtich(GraphicsInfo, bool = false, bool = false) const;
 
-	///TODO: Make similar functions for drawing all other gates, switch, and LED, .. etc
+	bool DrawConnection(GraphicsInfo r_GfxInfo, bool selected = false) const;
+	bfs_node* bfs(bfs_node* bf, int requX, int requY, vector<bfs_node*> allNodes) const;
+	bool CheckPoint(GraphicsInfo) const;
+	bool CheckPoint(int x, int y) const;
+	bool CheckPointForConnections(int x, int y) const;
 
-	// Draws Connection
-	void DrawConnection(GraphicsInfo r_GfxInfo, bool selected = false) const;
-	
 	void PrintMsg(string msg) const;	//Print a message on Status bar
 
 

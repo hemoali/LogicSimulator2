@@ -1,70 +1,155 @@
-//#include "Input.h"
+#include "Input.h"
 #include "Output.h"
-
+#include "..\Utils.h"
+#include <iostream>
 Input::Input(window* pW)
 {
 	pWind = pW; //point to the passed window
 }
 
-void Input::GetPointClicked(int &x, int &y)
+void Input::GetPointClicked(int &x, int &y, bool DrawGate, bool DrawConnection)
 {
 	pWind->WaitMouseClick(x, y);	//Wait for mouse click
+	Utils::correctPointClicked(x, y, DrawGate, DrawConnection);
+
 }
 
 string Input::GetSrting(Output *pOut)
 {
-	///TODO: Implement this Function
-	//Read a complete string from the user until the user presses "ENTER".
-	//If the user presses "ESCAPE". This function shoulsadasd return an empty string.
-	//"BACKSPACE" should be also supported
-	//User should see what he is typing at the status bar
+	string s = "";
+	char ch;
+	keytype k;
+	while ((k = pWind->WaitKeyPress(ch)) != '\n' && (int)ch != 13){
+		if (k == ESCAPE){
+			s = "";
+		}
+		else if (k == ASCII && (int)ch == 8){
+			s = s.substr(0, s.size() - 1);
+		}
+		else if (k == ASCII && (int)ch != 27){
+			s += ch;
+		}
+		pOut->PrintMsg(s);
+	}
+	pOut->PrintMsg("");
 
-	return NULL;
+	return s;
 }
 
 //This function reads the position where the user clicks to determine the desired action
 ActionType Input::GetUserAction() const
-{	
-	int x,y;
-	pWind->WaitMouseClick(x, y);	//Get the coordinates of the user click
-
-	if(UI.AppMode == DESIGN )	//application is in design mode
+{
+	int x, y;
+	clicktype s;
+	s = pWind->WaitMouseClick(x, y);	//Get the coordinates of the user click
+	if (UI.AppMode == DESIGN)	//application is in design mode
 	{
 		//[1] If user clicks on the Toolbar
-		if ( y >= 0 && y < UI.ToolBarHeight)
-		{	
+		if (y >= 0 && y < UI.ToolBarHeight)
+		{
+			//TODO
 			//Check whick Menu item was clicked
 			//==> This assumes that menu items are lined up horizontally <==
-			int ClickedItemOrder = (x / UI.ToolItemWidth);
+
+
+			int ClickedItemOrder = -1;//TODO:Modify
+			for (; x > 0; ClickedItemOrder++)
+			{
+				x -= (UI.ToolItemWidth + 5);
+			}
 			//Divide x coord of the point clicked by the menu item width (int division)
 			//if division result is 0 ==> first item is clicked, if 1 ==> 2nd item and so on
-
-			switch (ClickedItemOrder)
+			if (s == LEFT_CLICK)
 			{
-			case ITM_AND2: return ADD_AND_GATE_2;
-			case ITM_OR2: return ADD_OR_GATE_2;
-			case ITM_EXIT: return EXIT;	
-			
-			default: return DSN_TOOL;	//A click on empty place in desgin toolbar
+				switch (ClickedItemOrder)
+				{
+				case D2AND:  return ADD_AND_GATE_2;
+				case D3AND:  return ADD_AND_GATE_3;
+				case D2OR: return ADD_OR_GATE_2;
+				case D2XOR: return ADD_XOR_GATE_2;
+				case D3XOR: return ADD_XOR_GATE_3;
+				case DBUFFER: return ADD_Buff;
+				case DNOT: return ADD_INV;
+				case D2NAND: return ADD_NAND_GATE_2;
+				case D2NOR: return ADD_NOR_GATE_2;
+				case D3NOR: return ADD_NOR_GATE_3;
+				case D2XNOR: return ADD_XNOR_GATE_2;
+				case DCONNECTION: return ADD_CONNECTION;
+				case DSWITCH: return ADD_Switch;
+				case DLED: return ADD_LED;
+				case DSIMULATION: return SIM_MODE;
+				case DSAVE: return SAVE;
+				case DLOAD: return LOAD;
+				case DEXIT: return EXIT;
+				default: return DSN_TOOL;	//A click on empty place in desgin toolbar
+				}
 			}
+			else{
+				switch (ClickedItemOrder)
+				{
+				case D2AND:  return ADD_AND_GATE_2_H;
+				case D3AND:  return ADD_AND_GATE_3_H;
+				case D2OR: return ADD_OR_GATE_2_H;
+				case D2XOR: return ADD_XOR_GATE_2_H;
+				case D3XOR: return ADD_XOR_GATE_3_H;
+				case DBUFFER: return ADD_Buff_H;
+				case DNOT: return ADD_INV_H;
+				case D2NAND: return ADD_NAND_GATE_2_H;
+				case D2NOR: return ADD_NOR_GATE_2_H;
+				case D3NOR: return ADD_NOR_GATE_3_H;
+				case D2XNOR: return ADD_XNOR_GATE_2_H;
+				case DCONNECTION: return ADD_CONNECTION_H;
+				case DSWITCH: return ADD_Switch_H;
+				case DLED: return ADD_LED_H;
+				case DSIMULATION: return SIM_MODE;
+				case DSAVE: return SAVE;
+				case DLOAD: return LOAD;
+				case DEXIT: return EXIT;
+				default: return DSN_TOOL;	//A click on empty place in desgin toolbar
+				}
+			}
+
 		}
-	
-		//[2] User clicks on the drawing area
-		if ( y >= UI.ToolBarHeight && y < UI.height - UI.StatusBarHeight)
+
+		//[2] User clicks on the drawing area //TODO:
+		if (y >= UI.ToolBarHeight && y < UI.height - UI.StatusBarHeight)
 		{
-			return SELECT;	//user want to select/unselect a statement in the flowchart
+			return SELECT;	//user want to select/unselect a statement i;
 		}
-		
+
 		//[3] User clicks on the status bar
 		return STATUS_BAR;
 	}
 	else	//Application is in Simulation mode
 	{
-		return SIM_MODE;	//This should be changed after creating the compelete simulation bar 
+		if (y > 0 && y < UI.ToolBarHeight){
+			int ClickedItemOrder = -1;//TODO:Modify
+			for (; x > 0; ClickedItemOrder++){
+				x -= (UI.ToolItemWidth + 5);
+			}
+			switch (ClickedItemOrder){
+			case SVALIDATE: return Validate;
+			case SSIMULATE: return Simulate;
+			case STT: return Create_TruthTable;
+			case SDESIGN: return DSN_MODE;
+			case SSAVE: return SAVE;
+			case SLOAD: return LOAD;
+			case SEXIT: return EXIT;
+			default: return DSN_TOOL; //TODO:
+			}
+		}
+		//return SIM_MODE;	//This should be changed after creating the compelete simulation bar 
+		//[2] User clicks on the drawing area //TODO:
+		if (y >= UI.ToolBarHeight && y < UI.height - UI.StatusBarHeight)
+		{
+			return SELECT;	//user want to select/unselect a statement i;
+		}
+
+		//[3] User clicks on the status bar
+		return STATUS_BAR;
 	}
 
 }
-
 
 Input::~Input()
 {

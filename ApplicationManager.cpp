@@ -29,7 +29,14 @@ ActionType ApplicationManager::GetUserAction()
 
 void ApplicationManager::ExecuteAction(ActionType ActType)
 {
+	bool drawGate = true, drawConnection = false;
+
 	Action* pAct = NULL;
+	string msg = "Press ESCAPE to stop";
+	string error_msg = "Please select point within workspace avoiding overlaping!";
+	GraphicsInfo Gfx_info;
+	Gfx_info.x1 = Gfx_info.y1 = -1;
+
 	switch (ActType)
 	{
 		case ADD_AND_GATE_2:

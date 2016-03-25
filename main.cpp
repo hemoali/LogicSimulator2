@@ -4,7 +4,6 @@
 #include <cmath>
 
 #include "ApplicationManager.h"
-//Ahmed ..Copy That
 int main()
 {
 
