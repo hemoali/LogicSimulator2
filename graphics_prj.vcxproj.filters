@@ -141,6 +141,42 @@
       <Filter>CMUgraphics Library</Filter>
     </ClCompile>
     <ClCompile Include="Utils.cpp" />
+    <ClCompile Include="AddANDgate3.cpp">
+      <Filter>Actions</Filter>
+    </ClCompile>
+    <ClCompile Include="AddBUFFER.cpp">
+      <Filter>Actions</Filter>
+    </ClCompile>
+    <ClCompile Include="AddNOTgate.cpp">
+      <Filter>Actions</Filter>
+    </ClCompile>
+    <ClCompile Include="AddORgate2.cpp">
+      <Filter>Actions</Filter>
+    </ClCompile>
+    <ClCompile Include="AddXORgate2.cpp">
+      <Filter>Actions</Filter>
+    </ClCompile>
+    <ClCompile Include="AddXORgate3.cpp">
+      <Filter>Actions</Filter>
+    </ClCompile>
+    <ClCompile Include="AddLED.cpp">
+      <Filter>Actions</Filter>
+    </ClCompile>
+    <ClCompile Include="AddNORgate2.cpp">
+      <Filter>Actions</Filter>
+    </ClCompile>
+    <ClCompile Include="AddNANDgate2.cpp">
+      <Filter>Actions</Filter>
+    </ClCompile>
+    <ClCompile Include="AddNORgate3.cpp">
+      <Filter>Actions</Filter>
+    </ClCompile>
+    <ClCompile Include="AddSWITCH.cpp">
+      <Filter>Actions</Filter>
+    </ClCompile>
+    <ClCompile Include="AddXNORgate2.cpp">
+      <Filter>Actions</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Defs.H" />
@@ -244,6 +280,42 @@
       <Filter>CMUgraphics Library</Filter>
     </ClInclude>
     <ClInclude Include="Utils.h" />
+    <ClInclude Include="AddANDgate3.h">
+      <Filter>Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="AddBUFFER.h">
+      <Filter>Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="AddNOTgate.h">
+      <Filter>Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="AddORgate2.h">
+      <Filter>Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="AddXORgate2.h">
+      <Filter>Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="AddXORgate3.h">
+      <Filter>Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="AddLED.h">
+      <Filter>Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="AddNORgate2.h">
+      <Filter>Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="AddNANDgate2.h">
+      <Filter>Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="AddNORgate3.h">
+      <Filter>Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="AddSWITCH.h">
+      <Filter>Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="AddXNORgate2.h">
+      <Filter>Actions</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
