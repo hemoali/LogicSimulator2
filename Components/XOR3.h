@@ -1,20 +1,20 @@
-#ifndef _AND2_H
-#define _AND2_H
+#ifndef _XOR3_H
+#define _XOR3_H
 
 /*
-  Class AND2
-  -----------
-  represent the 2-input AND gate
+Class XOR3
+-----------
+represent the 3-input XOR gate
 */
 
-#include "Gate.h"
+#include"Gate.h"
 
-class AND2:public Gate
+class XOR3 :public Gate
 {
 public:
-	AND2(const GraphicsInfo &r_GfxInfo, int r_FanOut);
-	virtual void Operate();	//Calculates the output of the AND gate
-	virtual void Draw(Output* pOut);	//Draws 2-input gate
+	XOR3(const GraphicsInfo &r_GfxInfo, int r_FanOut);
+	virtual void Operate();	//Calculates the output of the XOR gate
+	virtual void Draw(Output* pOut);	//Draws 3-input gate
 
 	virtual int GetOutPinStatus();	//returns status of outputpin if LED, return -1
 	virtual int GetInputPinStatus(int n);	//returns status of Inputpin # n if SWITCH, return -1

@@ -1,19 +1,19 @@
-#ifndef _AND2_H
-#define _AND2_H
+#ifndef _NOR2_H
+#define _NOR2_H
 
 /*
-  Class AND2
-  -----------
-  represent the 2-input AND gate
+Class NOR2
+-----------
+represent the 2-input NOR gate
 */
 
-#include "Gate.h"
+#include"Gate.h"
 
-class AND2:public Gate
+class NOR2 :public Gate
 {
 public:
-	AND2(const GraphicsInfo &r_GfxInfo, int r_FanOut);
-	virtual void Operate();	//Calculates the output of the AND gate
+	NOR2(const GraphicsInfo &r_GfxInfo, int r_FanOut);
+	virtual void Operate();	//Calculates the output of the NOR gate
 	virtual void Draw(Output* pOut);	//Draws 2-input gate
 
 	virtual int GetOutPinStatus();	//returns status of outputpin if LED, return -1

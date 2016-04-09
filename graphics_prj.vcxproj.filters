@@ -141,41 +141,35 @@
       <Filter>CMUgraphics Library</Filter>
     </ClCompile>
     <ClCompile Include="Utils.cpp" />
-    <ClCompile Include="AddANDgate3.cpp">
-      <Filter>Actions</Filter>
+    <ClCompile Include="Components\AND3.cpp">
+      <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="AddBUFFER.cpp">
-      <Filter>Actions</Filter>
+    <ClCompile Include="Components\NAND2.cpp">
+      <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="AddNOTgate.cpp">
-      <Filter>Actions</Filter>
+    <ClCompile Include="Components\NOR2.cpp">
+      <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="AddORgate2.cpp">
-      <Filter>Actions</Filter>
+    <ClCompile Include="Components\NOR3.cpp">
+      <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="AddXORgate2.cpp">
-      <Filter>Actions</Filter>
+    <ClCompile Include="Components\NOT.cpp">
+      <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="AddXORgate3.cpp">
-      <Filter>Actions</Filter>
+    <ClCompile Include="Components\OR2.cpp">
+      <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="AddLED.cpp">
-      <Filter>Actions</Filter>
+    <ClCompile Include="Components\XNOR2.cpp">
+      <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="AddNORgate2.cpp">
-      <Filter>Actions</Filter>
+    <ClCompile Include="Components\XOR2.cpp">
+      <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="AddNANDgate2.cpp">
-      <Filter>Actions</Filter>
+    <ClCompile Include="Components\XOR3.cpp">
+      <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="AddNORgate3.cpp">
-      <Filter>Actions</Filter>
-    </ClCompile>
-    <ClCompile Include="AddSWITCH.cpp">
-      <Filter>Actions</Filter>
-    </ClCompile>
-    <ClCompile Include="AddXNORgate2.cpp">
-      <Filter>Actions</Filter>
+    <ClCompile Include="Components\BUFFER.cpp">
+      <Filter>Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -205,9 +199,6 @@
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="Components\Connection.h">
-      <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Components\Gate.h">
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="CMUgraphicsLib\error.h">
@@ -280,6 +271,39 @@
       <Filter>CMUgraphics Library</Filter>
     </ClInclude>
     <ClInclude Include="Utils.h" />
+    <ClInclude Include="Components\AND3.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\NAND2.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\NOR2.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\NOR3.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\NOT.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\OR2.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\XNOR2.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\XOR2.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\XOR3.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Gate.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\BUFFER.h">
+      <Filter>Components</Filter>
+    </ClInclude>
     <ClInclude Include="AddANDgate3.h">
       <Filter>Actions</Filter>
     </ClInclude>
