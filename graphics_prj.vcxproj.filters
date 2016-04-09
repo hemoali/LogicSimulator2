@@ -141,6 +141,16 @@
       <Filter>CMUgraphics Library</Filter>
     </ClCompile>
     <ClCompile Include="Utils.cpp" />
+    <ClCompile Include="OR2.cpp" />
+    <ClCompile Include="AND3.cpp" />
+    <ClCompile Include="NOT.cpp" />
+    <ClCompile Include="BUFFER.cpp" />
+    <ClCompile Include="NOR2.cpp" />
+    <ClCompile Include="NOR3.cpp" />
+    <ClCompile Include="NAND2.cpp" />
+    <ClCompile Include="XOR2.cpp" />
+    <ClCompile Include="XOR3.cpp" />
+    <ClCompile Include="XNOR2.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Defs.H" />
@@ -244,6 +254,16 @@
       <Filter>CMUgraphics Library</Filter>
     </ClInclude>
     <ClInclude Include="Utils.h" />
+    <ClInclude Include="OR2.h" />
+    <ClInclude Include="AND3.h" />
+    <ClInclude Include="NOT.h" />
+    <ClInclude Include="BUFFER.h" />
+    <ClInclude Include="NOR2.h" />
+    <ClInclude Include="NOR3.h" />
+    <ClInclude Include="NAND2.h" />
+    <ClInclude Include="XOR2.h" />
+    <ClInclude Include="XOR3.h" />
+    <ClInclude Include="XNOR2.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

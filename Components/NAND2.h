@@ -1,19 +1,19 @@
-#ifndef _AND2_H
-#define _AND2_H
+#ifndef _NAND2_H
+#define _NAND2_H
 
 /*
-  Class AND2
-  -----------
-  represent the 2-input AND gate
+Class NAND2
+-----------
+represent the 2-input NAND gate
 */
 
-#include "Gate.h"
+#include"Components\Gate.h"
 
-class AND2:public Gate
+class NAND2 :public Gate
 {
 public:
-	AND2(const GraphicsInfo &r_GfxInfo, int r_FanOut);
-	virtual void Operate();	//Calculates the output of the AND gate
+	NAND2(const GraphicsInfo &r_GfxInfo, int r_FanOut);
+	virtual void Operate();	//Calculates the output of the NAND gate
 	virtual void Draw(Output* pOut);	//Draws 2-input gate
 
 	virtual int GetOutPinStatus();	//returns status of outputpin if LED, return -1

@@ -127,6 +127,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Actions\AddANDgate2.cpp" />
+    <ClCompile Include="AND3.cpp" />
+    <ClCompile Include="BUFFER.cpp" />
     <ClCompile Include="CMUgraphicsLib\auxil.cpp" />
     <ClCompile Include="CMUgraphicsLib\CMUgraphics.cpp" />
     <ClCompile Include="CMUgraphicsLib\image.cpp" />
@@ -173,11 +175,21 @@
     <ClCompile Include="GUI\Input.cpp" />
     <ClCompile Include="GUI\Output.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="NAND2.cpp" />
+    <ClCompile Include="NOR2.cpp" />
+    <ClCompile Include="NOR3.cpp" />
+    <ClCompile Include="NOT.cpp" />
+    <ClCompile Include="OR2.cpp" />
     <ClCompile Include="Utils.cpp" />
+    <ClCompile Include="XNOR2.cpp" />
+    <ClCompile Include="XOR2.cpp" />
+    <ClCompile Include="XOR3.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actions\Action.h" />
     <ClInclude Include="Actions\AddANDgate2.h" />
+    <ClInclude Include="AND3.h" />
+    <ClInclude Include="BUFFER.h" />
     <ClInclude Include="CMUgraphicsLib\auxil.h" />
     <ClInclude Include="CMUgraphicsLib\CMUgraphics.h" />
     <ClInclude Include="CMUgraphicsLib\colors.h" />
@@ -210,7 +222,15 @@
     <ClInclude Include="GUI\Input.h" />
     <ClInclude Include="GUI\Output.h" />
     <ClInclude Include="GUI\UI_Info.h" />
+    <ClInclude Include="NAND2.h" />
+    <ClInclude Include="NOR2.h" />
+    <ClInclude Include="NOR3.h" />
+    <ClInclude Include="NOT.h" />
+    <ClInclude Include="OR2.h" />
     <ClInclude Include="Utils.h" />
+    <ClInclude Include="XNOR2.h" />
+    <ClInclude Include="XOR2.h" />
+    <ClInclude Include="XOR3.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
