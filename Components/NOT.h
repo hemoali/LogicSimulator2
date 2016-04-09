@@ -7,7 +7,7 @@ Class NOT
 represent the NOT gate
 */
 
-#include"Components\Gate.h"
+#include"Gate.h"
 
 class NOT :public Gate
 {

@@ -7,7 +7,7 @@ Class AND3
 represent the 3-input AND gate
 */
 
-#include"Components\Gate.h"
+#include"Gate.h"
 
 class AND3 :public Gate
 {

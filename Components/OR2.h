@@ -7,7 +7,7 @@ Class OR2
 represent the 2-input OR gate
 */
 
-#include"Components\Gate.h"
+#include"Gate.h"
 
 class OR2 :public Gate
 {

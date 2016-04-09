@@ -7,7 +7,7 @@ Class NOR2
 represent the 2-input NOR gate
 */
 
-#include"Components\Gate.h"
+#include"Gate.h"
 
 class NOR2 :public Gate
 {

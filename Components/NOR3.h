@@ -7,7 +7,7 @@ Class NOR3
 represent the 3-input NOR gate
 */
 
-#include"Components\Gate.h"
+#include"Gate.h"
 
 class NOR3 :public Gate
 {

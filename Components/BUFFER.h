@@ -7,7 +7,7 @@ Class BUFFER
 represent the BUFFER gate
 */
 
-#include"Components\Gate.h"
+#include"Gate.h"
 
 class BUFFER :public Gate
 {

@@ -7,7 +7,7 @@ Class XOR3
 represent the 3-input XOR gate
 */
 
-#include"Components\Gate.h"
+#include"Gate.h"
 
 class XOR3 :public Gate
 {

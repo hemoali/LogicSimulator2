@@ -7,7 +7,7 @@ Class XNOR2
 represent the 2-input XNOR gate
 */
 
-#include"Components\Gate.h"
+#include"Gate.h"
 
 class XNOR2 :public Gate
 {

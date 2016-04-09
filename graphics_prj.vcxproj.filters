@@ -141,16 +141,33 @@
       <Filter>CMUgraphics Library</Filter>
     </ClCompile>
     <ClCompile Include="Utils.cpp" />
-    <ClCompile Include="OR2.cpp" />
-    <ClCompile Include="AND3.cpp" />
-    <ClCompile Include="NOT.cpp" />
-    <ClCompile Include="BUFFER.cpp" />
-    <ClCompile Include="NOR2.cpp" />
-    <ClCompile Include="NOR3.cpp" />
-    <ClCompile Include="NAND2.cpp" />
-    <ClCompile Include="XOR2.cpp" />
-    <ClCompile Include="XOR3.cpp" />
-    <ClCompile Include="XNOR2.cpp" />
+    <ClCompile Include="Components\AND3.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\NAND2.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\NOR2.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\NOR3.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\NOT.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\OR2.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\XNOR2.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\XOR2.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\XOR3.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Defs.H" />
@@ -179,9 +196,6 @@
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="Components\Connection.h">
-      <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Components\Gate.h">
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="CMUgraphicsLib\error.h">
@@ -254,16 +268,39 @@
       <Filter>CMUgraphics Library</Filter>
     </ClInclude>
     <ClInclude Include="Utils.h" />
-    <ClInclude Include="OR2.h" />
-    <ClInclude Include="AND3.h" />
-    <ClInclude Include="NOT.h" />
-    <ClInclude Include="BUFFER.h" />
-    <ClInclude Include="NOR2.h" />
-    <ClInclude Include="NOR3.h" />
-    <ClInclude Include="NAND2.h" />
-    <ClInclude Include="XOR2.h" />
-    <ClInclude Include="XOR3.h" />
-    <ClInclude Include="XNOR2.h" />
+    <ClInclude Include="Components\AND3.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\BUFFER.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\NAND2.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\NOR2.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\NOR3.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\NOT.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\OR2.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\XNOR2.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\XOR2.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\XOR3.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Gate.h">
+      <Filter>Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

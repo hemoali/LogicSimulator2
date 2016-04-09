@@ -30,7 +30,7 @@ const int ciDefWindYPos = 0;
 const char ccDefWindClassName[] = "CMUgraphics Library";
 const char ccDefWindTitle[] = "Graphics Window";
 
-const int ciDefBrushSize = 1;
+const int ciDefBrushSize = 2;
 
 enum drawstyle {
 	NONE,
