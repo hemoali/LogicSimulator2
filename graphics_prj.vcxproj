@@ -164,6 +164,7 @@
     <ClCompile Include="CMUgraphicsLib\jpeg\jutils.c" />
     <ClCompile Include="Components\AND2.cpp" />
     <ClCompile Include="Components\AND3.cpp" />
+    <ClCompile Include="Components\BUFFER.cpp" />
     <ClCompile Include="Components\Component.cpp" />
     <ClCompile Include="Components\Connection.cpp" />
     <ClCompile Include="Components\Gate.cpp" />

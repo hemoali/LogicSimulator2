@@ -168,6 +168,9 @@
     <ClCompile Include="Components\XOR3.cpp">
       <Filter>Components</Filter>
     </ClCompile>
+    <ClCompile Include="Components\BUFFER.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Defs.H" />
@@ -271,9 +274,6 @@
     <ClInclude Include="Components\AND3.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="Components\BUFFER.h">
-      <Filter>Components</Filter>
-    </ClInclude>
     <ClInclude Include="Components\NAND2.h">
       <Filter>Components</Filter>
     </ClInclude>
@@ -299,6 +299,9 @@
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="Components\Gate.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\BUFFER.h">
       <Filter>Components</Filter>
     </ClInclude>
   </ItemGroup>
