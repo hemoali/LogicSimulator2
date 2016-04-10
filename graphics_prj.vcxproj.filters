@@ -171,19 +171,12 @@
     <ClCompile Include="Components\BUFFER.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="AddLED.cpp" />
-    <ClCompile Include="AddNORgate2.cpp" />
-    <ClCompile Include="AddANDgate3.cpp" />
-    <ClCompile Include="AddBUFFER.cpp" />
-    <ClCompile Include="AddNANDgate2.cpp" />
-    <ClCompile Include="AddNORgate3.cpp" />
-    <ClCompile Include="AddNOTgate.cpp" />
-    <ClCompile Include="AddORgate2.cpp" />
-    <ClCompile Include="AddSWITCH.cpp" />
-    <ClCompile Include="AddXNORgate2.cpp" />
-    <ClCompile Include="AddXORgate2.cpp" />
-    <ClCompile Include="AddXORgate3.cpp" />
-    <ClCompile Include="AddCONNECTION.cpp" />
+    <ClCompile Include="Components\LED.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\SWICH.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Defs.H" />

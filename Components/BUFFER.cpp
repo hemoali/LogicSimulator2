@@ -31,13 +31,13 @@ int BUFFER::GetOutPinStatus()
 }
 
 //returns status of the Inputpin 
-int BUFFER::GetInputPinStatus()
+int BUFFER::GetInputPinStatus(int n)
 {
-	return m_InputPins[0].getStatus();
+	return m_InputPins[n - 1].getStatus();
 }
 
 //Set status of the input pin to HIGH or LOW
-void BUFFER::setInputPinStatus(STATUS s)
+void BUFFER::setInputPinStatus(int n, STATUS s)
 {
 	m_InputPins[0].setStatus(s);
 }
