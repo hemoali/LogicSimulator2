@@ -4,7 +4,6 @@
 #include "OutputPin.h"
 class LED : public Component
 {
-	OutputPin* outkey;
 	InputPin* inkey;
 public:
 	LED(const GraphicsInfo &r_GfxInfo, int r_FanOut);

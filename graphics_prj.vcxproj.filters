@@ -171,8 +171,6 @@
     <ClCompile Include="Components\BUFFER.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="Components\LED.cpp" />
-    <ClCompile Include="Components\SWICH.cpp" />
     <ClCompile Include="Actions\AddANDgate3.cpp">
       <Filter>Actions</Filter>
     </ClCompile>
@@ -211,6 +209,12 @@
     </ClCompile>
     <ClCompile Include="Actions\AddCONNECTION.cpp">
       <Filter>Actions</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\LED.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\SWITCH.cpp">
+      <Filter>Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -343,8 +347,6 @@
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="AddCONNECTION.h" />
-    <ClInclude Include="Components\LED.h" />
-    <ClInclude Include="Components\SWICH.h" />
     <ClInclude Include="Actions\AddANDgate2.h">
       <Filter>Actions</Filter>
     </ClInclude>
@@ -386,6 +388,12 @@
     </ClInclude>
     <ClInclude Include="Actions\AddNOTgate.h">
       <Filter>Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\LED.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\SWITCH.h">
+      <Filter>Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
