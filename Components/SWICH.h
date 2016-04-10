@@ -1,7 +1,12 @@
 #pragma once
-#include"Gate.h"
-class SWICH : public Gate
+#include"Component.h"
+#include"InputPin.h"
+#include"OutputPin.h"
+class SWICH : public Component
 {
+
+	OutputPin* outkey;
+	InputPin* inkey;
 public:
 	SWICH(const GraphicsInfo &r_GfxInfo, int r_FanOut);
 	virtual void Operate();	//Calculates the output according to the inputs
