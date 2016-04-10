@@ -41,3 +41,6 @@ void SWICH::setInputPinStatus(int n, STATUS s)
 	inkey[n - 1].setStatus(s);
 	outkey[n-1].setStatus(s);
 }
+SWICH::~SWICH(){
+
+}

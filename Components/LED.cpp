@@ -41,3 +41,6 @@ void LED::setInputPinStatus(int n, STATUS s)
 	outkey[n - 1].setStatus(s);
 	inkey[n-1].setStatus(s);
 }
+LED::~LED(){
+
+}
