@@ -1,5 +1,5 @@
 #pragma once
-#include"Components\Gate.h"
+#include"Gate.h"
 class LED : public Gate
 {
 public:

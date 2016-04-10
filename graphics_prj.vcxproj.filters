@@ -171,8 +171,12 @@
     <ClCompile Include="Components\BUFFER.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="LED.cpp" />
-    <ClCompile Include="SWICH.cpp" />
+    <ClCompile Include="Components\LED.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\SWICH.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Defs.H" />
@@ -306,8 +310,12 @@
     <ClInclude Include="Components\BUFFER.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="LED.h" />
-    <ClInclude Include="SWICH.h" />
+    <ClInclude Include="Components\LED.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\SWICH.h">
+      <Filter>Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
