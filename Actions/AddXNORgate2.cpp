@@ -1,20 +1,20 @@
-#include "AddBUFFER.h"
-AddBUFFER::AddBUFFER(ApplicationManager *pApp) :Action(pApp)
+#include "AddXNORgate2.h"
+AddXNORgate2::AddXNORgate2(ApplicationManager *pApp) :Action(pApp)
 {
 }
 
-AddBUFFER::~AddBUFFER(void)
+AddXNORgate2::~AddXNORgate2(void)
 {
 }
 
-void AddBUFFER::ReadActionParameters()
+void AddXNORgate2::ReadActionParameters()
 {
 	//Get a Pointer to the Input / Output Interfaces
 	Output* pOut = pManager->GetOutput();
 	Input* pIn = pManager->GetInput();
 
 	//Print Action Message
-	pOut->PrintMsg("BUFFER : Click to add the gate");
+	pOut->PrintMsg(" 2-Input XNOR gate : Click to add the gate");
 
 	//Wait for User Input
 	pIn->GetPointClicked(Cx, Cy);
@@ -24,7 +24,7 @@ void AddBUFFER::ReadActionParameters()
 
 }
 
-void AddBUFFER::Execute()
+void AddXNORgate2::Execute()
 {
 	//Get Center point of the Gate
 	ReadActionParameters();
@@ -39,12 +39,12 @@ void AddBUFFER::Execute()
 	GInfo.x2 = Cx + Len / 2;
 	GInfo.y1 = Cy - Wdth / 2;
 	GInfo.y2 = Cy + Wdth / 2;
-	AND2 *pA = new AND2(GInfo, AND2_FANOUT);
+	 XNOR2*pA = new XNOR2(GInfo, AND2_FANOUT);
 	pManager->AddComponent(pA);
 }
 
-void AddBUFFER::Undo()
+void AddXNORgate2::Undo()
 {}
 
-void AddBUFFER::Redo()
+void AddXNORgate2::Redo()
 {}

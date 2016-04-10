@@ -17,9 +17,9 @@ public:
 	virtual void Draw(Output* pOut);	//Draws NOT gate
 
 	virtual int GetOutPinStatus();	//returns status of outputpin if LED, return -1
-	virtual int GetInputPinStatus();	//returns status of the Inputpin if SWITCH, return -1
+	virtual int GetInputPinStatus(int n);	//returns status of the Inputpin if SWITCH, return -1
 
-	virtual void setInputPinStatus(STATUS s);	//set status of the Inputpin , to be used by connection class.
+	virtual void setInputPinStatus(int n,STATUS s);	//set status of the Inputpin , to be used by connection class.
 
 };
 

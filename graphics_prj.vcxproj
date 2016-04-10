@@ -126,6 +126,7 @@
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AddCONNECTION.cpp" />
     <ClCompile Include="AddLED.cpp" />
     <ClCompile Include="AddNORgate2.cpp" />
     <ClCompile Include="Actions\AddANDgate2.cpp" />
@@ -198,6 +199,7 @@
     <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AddCONNECTION.h" />
     <ClInclude Include="AddLED.h" />
     <ClInclude Include="AddNORgate2.h" />
     <ClInclude Include="Actions\Action.h" />

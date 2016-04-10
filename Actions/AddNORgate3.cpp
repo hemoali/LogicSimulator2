@@ -1,20 +1,20 @@
-#include "AddNOTgate.h"
-AddNOTgate::AddNOTgate(ApplicationManager *pApp) :Action(pApp)
+#include "AddNORgate3.h"
+AddNORgate3::AddNORgate3(ApplicationManager *pApp) :Action(pApp)
 {
 }
 
-AddNOTgate::~AddNOTgate(void)
+AddNORgate3::~AddNORgate3(void)
 {
 }
 
-void AddNOTgate::ReadActionParameters()
+void AddNORgate3::ReadActionParameters()
 {
 	//Get a Pointer to the Input / Output Interfaces
 	Output* pOut = pManager->GetOutput();
 	Input* pIn = pManager->GetInput();
 
 	//Print Action Message
-	pOut->PrintMsg(" NOT gate : Click to add the gate");
+	pOut->PrintMsg(" 3-Input NOR gate : Click to add the gate");
 
 	//Wait for User Input
 	pIn->GetPointClicked(Cx, Cy);
@@ -24,7 +24,7 @@ void AddNOTgate::ReadActionParameters()
 
 }
 
-void AddNOTgate::Execute()
+void AddNORgate3::Execute()
 {
 	//Get Center point of the Gate
 	ReadActionParameters();
@@ -39,12 +39,12 @@ void AddNOTgate::Execute()
 	GInfo.x2 = Cx + Len / 2;
 	GInfo.y1 = Cy - Wdth / 2;
 	GInfo.y2 = Cy + Wdth / 2;
-	AND2 *pA = new AND2(GInfo, AND2_FANOUT);
+	NOR3 *pA = new NOR3(GInfo, AND2_FANOUT);
 	pManager->AddComponent(pA);
 }
 
-void AddNOTgate::Undo()
+void AddNORgate3::Undo()
 {}
 
-void AddNOTgate::Redo()
+void AddNORgate3::Redo()
 {}

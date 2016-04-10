@@ -1,30 +1,30 @@
-#include "AddNANDgate2.h"
-AddNANDgate2::AddNANDgate2(ApplicationManager *pApp) :Action(pApp)
+#include "AddCONNECTION.h"
+AddCONNECTION::AddCONNECTION(ApplicationManager *pApp) :Action(pApp)
 {
 }
 
-AddNANDgate2::~AddNANDgate2(void)
+AddCONNECTION::~AddCONNECTION(void)
 {
 }
 
-void AddNANDgate2::ReadActionParameters()
+void AddCONNECTION::ReadActionParameters()
 {
 	//Get a Pointer to the Input / Output Interfaces
 	Output* pOut = pManager->GetOutput();
 	Input* pIn = pManager->GetInput();
 
 	//Print Action Message
-	pOut->PrintMsg(" 2-Input NAND gate : Click to add the gate");
+	pOut->PrintMsg("Connection : Click to the Source and the Destination");
 
 	//Wait for User Input
-	pIn->GetPointClicked(Cx, Cy);
-
+	pIn->GetPointClicked(Cx1, Cy1);
+	pIn->GetPointClicked(Cx2, Cy2);
 	//Clear Status Bar
 	pOut->ClearStatusBar();
 
 }
 
-void AddNANDgate2::Execute()
+void AddCONNECTION::Execute()
 {
 	//Get Center point of the Gate
 	ReadActionParameters();
@@ -39,12 +39,12 @@ void AddNANDgate2::Execute()
 	GInfo.x2 = Cx + Len / 2;
 	GInfo.y1 = Cy - Wdth / 2;
 	GInfo.y2 = Cy + Wdth / 2;
-	AND2 *pA = new AND2(GInfo, AND2_FANOUT);
+	Connection *pA = new Connection(GInfo, AND2_FANOUT);
 	pManager->AddComponent(pA);
 }
 
-void AddNANDgate2::Undo()
+void AddCONNECTION::Undo()
 {}
 
-void AddNANDgate2::Redo()
+void AddCONNECTION::Redo()
 {}

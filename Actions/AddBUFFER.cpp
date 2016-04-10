@@ -1,22 +1,20 @@
-#include "AddANDgate3.h"
-#include"Components\AND2.h"
-#include"ApplicationManager.h"
-AddANDgate3::AddANDgate3(ApplicationManager *pApp) :Action(pApp)
+#include "AddBUFFER.h"
+AddBUFFER::AddBUFFER(ApplicationManager *pApp) :Action(pApp)
 {
 }
 
-AddANDgate3::~AddANDgate3(void)
+AddBUFFER::~AddBUFFER(void)
 {
 }
 
-void AddANDgate3::ReadActionParameters()
+void AddBUFFER::ReadActionParameters()
 {
 	//Get a Pointer to the Input / Output Interfaces
 	Output* pOut = pManager->GetOutput();
 	Input* pIn = pManager->GetInput();
 
 	//Print Action Message
-	pOut->PrintMsg("3-Input AND Gate: Click to add the gate");
+	pOut->PrintMsg("BUFFER : Click to add the gate");
 
 	//Wait for User Input
 	pIn->GetPointClicked(Cx, Cy);
@@ -26,7 +24,7 @@ void AddANDgate3::ReadActionParameters()
 
 }
 
-void AddANDgate3::Execute()
+void AddBUFFER::Execute()
 {
 	//Get Center point of the Gate
 	ReadActionParameters();
@@ -41,13 +39,12 @@ void AddANDgate3::Execute()
 	GInfo.x2 = Cx + Len / 2;
 	GInfo.y1 = Cy - Wdth / 2;
 	GInfo.y2 = Cy + Wdth / 2;
-	AND2 *pA = new AND2(GInfo, AND2_FANOUT);
+	BUFFER *pA = new BUFFER(GInfo, AND2_FANOUT);
 	pManager->AddComponent(pA);
 }
 
-void AddANDgate3::Undo()
+void AddBUFFER::Undo()
 {}
 
-void AddANDgate3::Redo()
+void AddBUFFER::Redo()
 {}
-

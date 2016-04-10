@@ -1,16 +1,16 @@
 #pragma once
 #include"Actions\Action.h"
-#include"Components\AND2.h"
+#include"Components\BUFFER.h"
 #include"ApplicationManager.h"
-class AddNORgate3:public Action
+class AddBUFFER:public Action
 {
 private:
 	//Parameters for rectangular area to be occupied by the gate
 	int Cx, Cy;	//Center point of the gate
 	int x1, y1, x2, y2;	//Two corners of the rectangluar area
 public:
-	AddNORgate3(ApplicationManager *pApp);
-	virtual ~AddNORgate3(void);
+	AddBUFFER(ApplicationManager *pApp);
+	virtual ~AddBUFFER(void);
 
 	//Reads parameters required for action to execute
 	virtual void ReadActionParameters();
@@ -20,5 +20,6 @@ public:
 	virtual void Undo();
 	virtual void Redo();
 
+	
 };
 
