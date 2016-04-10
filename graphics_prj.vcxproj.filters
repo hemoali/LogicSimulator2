@@ -171,6 +171,8 @@
     <ClCompile Include="Components\BUFFER.cpp">
       <Filter>Components</Filter>
     </ClCompile>
+    <ClCompile Include="LED.cpp" />
+    <ClCompile Include="SWICH.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Defs.H" />
@@ -304,6 +306,8 @@
     <ClInclude Include="Components\BUFFER.h">
       <Filter>Components</Filter>
     </ClInclude>
+    <ClInclude Include="LED.h" />
+    <ClInclude Include="SWICH.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
