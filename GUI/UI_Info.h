@@ -34,7 +34,7 @@ struct UI_Info	//User Interface Info.
 		GATE_Width = GRID_SIZE * 3,
 		GATE_Height = GRID_SIZE * 3,
 		GRID_WIDTH = width / GRID_SIZE - 1,
-		GRID_HEIGHT = height / GRID_SIZE - 1;		//AND2 Gate Image default height
+		GRID_HEIGHT = height / GRID_SIZE - 1;
 
 }UI;	//create a single global object UI
 

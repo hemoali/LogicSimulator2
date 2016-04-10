@@ -17,8 +17,12 @@ void AddORgate2::ReadActionParameters()
 	//Print Action Message
 	pOut->PrintMsg("2-Input OR Gate: Click to add the gate");
 
-	//Wait for User Input
-	pIn->GetPointClicked(Cx, Cy);
+	if (pOut->SetDragImage(ADD_OR_GATE_2, GInfo)){
+		string s = "Please enter gate label: ";
+		pOut->PrintMsg(s);
+		gateLabel = pIn->GetSrting(pOut, s);
+	}
+
 
 	//Clear Status Bar
 	pOut->ClearStatusBar();
@@ -34,13 +38,14 @@ void AddORgate2::Execute()
 	int Len = UI.GATE_Width;
 	int Wdth = UI.GATE_Height;
 
-	GraphicsInfo GInfo; //Gfx info to be used to construct the AND2 gate
+	//Gfx info to be used to construct the AND2 gate
+	GraphicsInfo GInfotmp;
 
-	GInfo.x1 = Cx - Len / 2;
-	GInfo.x2 = Cx + Len / 2;
-	GInfo.y1 = Cy - Wdth / 2;
-	GInfo.y2 = Cy + Wdth / 2;
-	OR2 *pA = new OR2(GInfo, AND2_FANOUT);
+	GInfotmp.x1 = GInfo.x1 - Len / 2;
+	GInfotmp.x2 = GInfo.x1 + Len / 2;
+	GInfotmp.y1 = GInfo.y1 - Wdth / 2;
+	GInfotmp.y2 = GInfo.y1 + Wdth / 2;
+	OR2 *pA = new OR2(GInfotmp, AND2_FANOUT);
 	pManager->AddComponent(pA);
 }
 

@@ -16,11 +16,14 @@ void AddANDgate2::ReadActionParameters()
 	Input* pIn = pManager->GetInput();
 
 	//Print Action Message
-	pOut->PrintMsg("2-Input AND Gate: Click to add the gate");
+	pOut->PrintMsg("2-Input AND Gate: Click to add the gate, ESCAPE to stop");
 
-	//Wait for User Input
-	pIn->GetPointClicked(Cx, Cy);
-	
+	if (pOut->SetDragImage(ADD_AND_GATE_2, GInfo)){
+		string s = "Please enter gate label: ";
+		pOut->PrintMsg(s);
+		gateLabel = pIn->GetSrting(pOut, s);
+	}
+
 	//Clear Status Bar
 	pOut->ClearStatusBar();
 	
@@ -35,13 +38,15 @@ void AddANDgate2::Execute()
 	int Len = UI.GATE_Width;
 	int Wdth = UI.GATE_Height;
 	
-	GraphicsInfo GInfo; //Gfx info to be used to construct the AND2 gate
-	
-	GInfo.x1 = Cx - Len/2;
-	GInfo.x2 = Cx + Len/2;
-	GInfo.y1 = Cy - Wdth/2;
-	GInfo.y2 = Cy + Wdth/2;
-	AND2 *pA=new AND2(GInfo, AND2_FANOUT); 
+	//Gfx info to be used to construct the AND2 gate
+	GraphicsInfo GInfotmp;
+
+	GInfotmp.x1 = GInfo.x1 - Len / 2;
+	GInfotmp.x2 = GInfo.x1 + Len / 2;
+	GInfotmp.y1 = GInfo.y1 - Wdth / 2;
+	GInfotmp.y2 = GInfo.y1 + Wdth / 2;
+	AND2 *pA = new AND2(GInfotmp, AND2_FANOUT);
+	pA->setLabel(gateLabel);
 	pManager->AddComponent(pA);
 }
 

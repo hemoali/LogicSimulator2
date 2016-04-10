@@ -19,9 +19,9 @@ Output::Output()
 	UI.ConnColor = RED;
 	UI.MsgColor = BLUE;
 	UI.BkGrndColor = WHITE;
-	
+
 	//Create the drawing window
-	pWind = CreateWind(UI.width, UI.height, UI.wx, UI.wy);	
+	pWind = CreateWind(UI.width, UI.height, UI.wx, UI.wy);
 	ChangeTitle("Programming Techniques Project");
 
 	DrawGrid();
@@ -73,8 +73,8 @@ void Output::PrintMsg(string msg) const
 	int MsgY = UI.StatusBarHeight - 10;
 
 	// Print the Message
-    pWind->SetFont(20, BOLD | ITALICIZED, BY_NAME, "Arial"); 
-	pWind->SetPen(UI.MsgColor); 
+	pWind->SetFont(20, BOLD | ITALICIZED, BY_NAME, "Arial");
+	pWind->SetPen(UI.MsgColor);
 	pWind->DrawString(MsgX, UI.height - MsgY, msg);
 }
 //////////////////////////////////////////////////////////////////////////////////
@@ -221,7 +221,7 @@ bfs_node* Output::bfs(bfs_node* bf, int requX, int requY, vector<bfs_node*> allN
 		if (tmp->x == requX && tmp->y == requY){
 			return tmp;
 		}
-		if (CheckPointForConnections((tmp->x + 1)* UI.GRID_SIZE, tmp->y * UI.GRID_SIZE) && tmp->x + 1 <= 74 && vis[tmp->y][tmp->x + 1] < 0 && Output::usedPixels[tmp->y][tmp->x + 1] != INTERSECTION && (Output::usedPixels[tmp->y][tmp->x + 1] == EMPTY || (Output::usedPixels[tmp->y][tmp->x + 1] == VERTICAL && Output::usedPixels[tmp->y][tmp->x + 1] != END_CONNECTION)))
+		if (Utils::CheckPointForConnections((tmp->x + 1)* UI.GRID_SIZE, tmp->y * UI.GRID_SIZE, usedPixels) && tmp->x + 1 <= 74 && vis[tmp->y][tmp->x + 1] < 0 && Output::usedPixels[tmp->y][tmp->x + 1] != INTERSECTION && (Output::usedPixels[tmp->y][tmp->x + 1] == EMPTY || (Output::usedPixels[tmp->y][tmp->x + 1] == VERTICAL && Output::usedPixels[tmp->y][tmp->x + 1] != END_CONNECTION)))
 		{
 			vis[tmp->y][tmp->x + 1] = vis[tmp->y][tmp->x] + 1;
 			bfs_node* newNode = new bfs_node;
@@ -235,7 +235,7 @@ bfs_node* Output::bfs(bfs_node* bf, int requX, int requY, vector<bfs_node*> allN
 				arrayOfIntersections[tmp->y][tmp->x + 1] = 0;
 			}
 		}
-		if (CheckPointForConnections((tmp->x)* UI.GRID_SIZE, (tmp->y + 1) * UI.GRID_SIZE) && tmp->y + 1 <= 44 && vis[tmp->y + 1][tmp->x] < 0 && Output::usedPixels[tmp->y + 1][tmp->x] != INTERSECTION && (Output::usedPixels[tmp->y + 1][tmp->x] == EMPTY || (Output::usedPixels[tmp->y + 1][tmp->x] == HORIZONTAL && Output::usedPixels[tmp->y + 1][tmp->x] != END_CONNECTION)))
+		if (Utils::CheckPointForConnections((tmp->x)* UI.GRID_SIZE, (tmp->y + 1) * UI.GRID_SIZE, usedPixels) && tmp->y + 1 <= 44 && vis[tmp->y + 1][tmp->x] < 0 && Output::usedPixels[tmp->y + 1][tmp->x] != INTERSECTION && (Output::usedPixels[tmp->y + 1][tmp->x] == EMPTY || (Output::usedPixels[tmp->y + 1][tmp->x] == HORIZONTAL && Output::usedPixels[tmp->y + 1][tmp->x] != END_CONNECTION)))
 		{
 
 			vis[tmp->y + 1][tmp->x] = vis[tmp->y][tmp->x] + 1;
@@ -250,7 +250,7 @@ bfs_node* Output::bfs(bfs_node* bf, int requX, int requY, vector<bfs_node*> allN
 				arrayOfIntersections[tmp->y + 1][tmp->x] = 1;
 			}
 		}
-		if (CheckPointForConnections((tmp->x - 1)* UI.GRID_SIZE, tmp->y * UI.GRID_SIZE) && tmp->x - 1 >= 0 && vis[tmp->y][tmp->x - 1] < 0 && Output::usedPixels[tmp->y][tmp->x - 1] != INTERSECTION && (Output::usedPixels[tmp->y][tmp->x - 1] == EMPTY || (Output::usedPixels[tmp->y][tmp->x - 1] == VERTICAL && Output::usedPixels[tmp->y][tmp->x - 1] != END_CONNECTION)))
+		if (Utils::CheckPointForConnections((tmp->x - 1)* UI.GRID_SIZE, tmp->y * UI.GRID_SIZE, usedPixels) && tmp->x - 1 >= 0 && vis[tmp->y][tmp->x - 1] < 0 && Output::usedPixels[tmp->y][tmp->x - 1] != INTERSECTION && (Output::usedPixels[tmp->y][tmp->x - 1] == EMPTY || (Output::usedPixels[tmp->y][tmp->x - 1] == VERTICAL && Output::usedPixels[tmp->y][tmp->x - 1] != END_CONNECTION)))
 		{
 			vis[tmp->y][tmp->x - 1] = vis[tmp->y][tmp->x] + 1;
 			bfs_node* newNode = new bfs_node;
@@ -265,7 +265,7 @@ bfs_node* Output::bfs(bfs_node* bf, int requX, int requY, vector<bfs_node*> allN
 			}
 		}
 
-		if (CheckPointForConnections((tmp->x)* UI.GRID_SIZE, (tmp->y - 1) * UI.GRID_SIZE) && tmp->y - 1 >= 0 && vis[tmp->y - 1][tmp->x] < 0 && Output::usedPixels[tmp->y - 1][tmp->x] != INTERSECTION && (Output::usedPixels[tmp->y - 1][tmp->x] == EMPTY || (Output::usedPixels[tmp->y - 1][tmp->x] == HORIZONTAL && Output::usedPixels[tmp->y - 1][tmp->x] != END_CONNECTION)))
+		if (Utils::CheckPointForConnections((tmp->x)* UI.GRID_SIZE, (tmp->y - 1) * UI.GRID_SIZE, usedPixels) && tmp->y - 1 >= 0 && vis[tmp->y - 1][tmp->x] < 0 && Output::usedPixels[tmp->y - 1][tmp->x] != INTERSECTION && (Output::usedPixels[tmp->y - 1][tmp->x] == EMPTY || (Output::usedPixels[tmp->y - 1][tmp->x] == HORIZONTAL && Output::usedPixels[tmp->y - 1][tmp->x] != END_CONNECTION)))
 		{
 			vis[tmp->y - 1][tmp->x] = vis[tmp->y][tmp->x] + 1;
 			bfs_node* newNode = new bfs_node;
@@ -472,14 +472,13 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo GfxInfo){
 	int RectULY = iYOld - UI.GATE_Height / 2;
 
 
-	bool draw = true;
+	bool draw = true, isOriginalDrawn = false;
 
 	image* storedImg = new image;
 	image* storedDrawingImg = new image;
 	pWind->StoreImage(storedImg, 0, 0, pWind->GetWidth(), pWind->GetHeight());
 	pWind->StoreImage(storedDrawingImg, 0, UI.ToolBarHeight, pWind->GetWidth(), pWind->GetHeight() - UI.StatusBarHeight);
 
-	pWind->SetBuffering(true);
 	pWind->SetPen(BLUE, 2);
 	while (true)
 	{
@@ -487,10 +486,15 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo GfxInfo){
 		pWind->GetMouseCoord(x, y);
 
 		Utils::correctPointClicked(x, y, true, false);
-		if (!CheckPoint(x, y)){
-			pWind->DrawImage(storedImg, 0, 0, pWind->GetWidth(), pWind->GetHeight());
+		if (!Utils::CheckPoint(x, y, usedPixels)){
+			if (!isOriginalDrawn){
+				pWind->DrawImage(storedImg, 0, 0, pWind->GetWidth(), pWind->GetHeight());
+				isOriginalDrawn = true;
+			}
 		}
 		else{
+			isOriginalDrawn = false;
+
 			if (x != iXOld || y != iYOld){
 				pWind->DrawImage(storedDrawingImg, 0, UI.ToolBarHeight, pWind->GetWidth(), pWind->GetHeight() - UI.StatusBarHeight);
 
@@ -668,13 +672,13 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo GfxInfo){
 			break;
 		}
 		else if (pWind->GetMouseClick(GfxInfo.x1, GfxInfo.y1) == LEFT_CLICK){
+			pWind->FlushMouseQueue();
 			Utils::correctPointClicked(GfxInfo.x1, GfxInfo.y1, true, false);
-			if (!CheckPoint(GfxInfo)){
+			if (!Utils::CheckPoint(GfxInfo, usedPixels)){
 				PrintMsg("Please select point within workspace and avoid overlaping!, press ESCAPE to stop");
 			}
 			else{
-
-				pWind->SetBuffering(false);
+				draw = true;
 				break;
 			}
 		}
@@ -689,53 +693,15 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo GfxInfo){
 	}
 	pWind->FlushMouseQueue();
 	PrintMsg("");
+	delete storedDrawingImg;
+	delete storedImg;
 	return draw;
-}
-bool Output::CheckPoint(GraphicsInfo r_GfxInfo) const{
-	int xbegin = (r_GfxInfo.x1 - UI.GATE_Width / 2.0) / UI.GRID_SIZE, xend = (r_GfxInfo.x1 + UI.GATE_Width / 2.0) / UI.GRID_SIZE, ybegin = (r_GfxInfo.y1 - UI.GATE_Height / 2.0) / UI.GRID_SIZE, yend = (r_GfxInfo.y1 + UI.GATE_Height / 2.0) / UI.GRID_SIZE;
-	for (int i = ybegin; i <= yend; i++)
-	{
-		for (int j = xbegin; j <= xend; j++)
-		{
-			if (usedPixels[i][j] == GATE || (usedPixels[i][j] == HORIZONTAL || usedPixels[i][j] == VERTICAL)){
-				if ((i == yend || i == ybegin) && (usedPixels[i][j] == HORIZONTAL || usedPixels[i][j] == END_CONNECTION))
-				{
-
-				}
-				else if ((j == xend || j == xbegin) && (usedPixels[i][j] == VERTICAL || usedPixels[i][j] == END_CONNECTION)){}
-				else
-					return 0;
-			}
-		}
-	}
-	if ((r_GfxInfo.x1 - UI.GATE_Width / 2.0)<0 || (r_GfxInfo.y1 - UI.GATE_Height / 2.0) <= UI.ToolBarHeight || (r_GfxInfo.x1 + UI.GATE_Width / 2.0)>UI.width || (r_GfxInfo.y1 + UI.GATE_Height / 2.0) >= UI.height - UI.StatusBarHeight)return 0;
-	for (int i = ybegin + 1; i <= yend - 1; i++)
-	{
-		for (int j = xbegin + 1; j <= xend - 1; j++)
-		{
-			usedPixels[i][j] = GATE;
-		}
-	}
-	return 1;
-}
-bool Output::CheckPoint(int x, int y) const{
-	if ((x - UI.GATE_Width / 2.0)<0 || (y - UI.GATE_Height / 2.0) <= (UI.ToolBarHeight + 20) || (x + UI.GATE_Width / 2.0)>UI.width || (y + UI.GATE_Height / 2.0) >= (UI.height - UI.StatusBarHeight)){
-		pWind->FlushMouseQueue();
-		return 0;
-	}
-	return 1;
-}
-bool Output::CheckPointForConnections(int x, int y) const{
-	if (x< 20 || y <= (UI.ToolBarHeight + 20) || (x)>UI.width - 20 || (y) >= (UI.height - UI.StatusBarHeight - 20)){
-		return 0;
-	}
-	return 1;
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //You Send a Centre Point (cx,cy) ,this means when you call Draw image Function , x and y sent should be cx-24, cy-24
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-image* Output::DrawAnd_Nand(GraphicsInfo g, int in, bool isNand, bool highlighted) const{
+void Output::DrawAnd_Nand(GraphicsInfo g, int in, bool isNand, bool highlighted) const{
 
 	// Points
 	int cx = g.x1, cy = g.y1; //Centre Point
@@ -791,12 +757,9 @@ image* Output::DrawAnd_Nand(GraphicsInfo g, int in, bool isNand, bool highlighte
 		pWind->DrawBezier(p2x + 8, p2y, p2x + 10 + 3 + 4, p2y - 4, p2x + 10 + 9 + 4, p2y - 12, outx + 4, outy, FRAME);
 		//pWind->DrawPixel(, );
 	}
-	image *GateImg = new image;
-	pWind->StoreImage(GateImg, cx - 24, cy - 24, 3 * 16, 3 * 16);
-	return GateImg;
 }
 
-image* Output::DrawNot_Buffer(GraphicsInfo g, bool isBuffer, bool highlighted) const{
+void Output::DrawNot_Buffer(GraphicsInfo g, bool isBuffer, bool highlighted) const{
 	int cx = g.x1, cy = g.y1; //Centre Point
 	int p1x, p1y, p2x, p2y, inx, iny, outx, outy; //Vertices of Triangle and input/output Points
 
@@ -828,12 +791,12 @@ image* Output::DrawNot_Buffer(GraphicsInfo g, bool isBuffer, bool highlighted) c
 		//Darwing Bubble
 		pWind->DrawCircle(outx + 2 * ciDefBrushSize, outy, 2 * ciDefBrushSize, FILLED);
 	}
-	image *GateImg = new image;
-	pWind->StoreImage(GateImg, cx - 24, cy - 24, 3 * 16, 3 * 16);
-	return GateImg;
+	
+	
+	
 }
 
-image* Output::DrawOr_Nor(GraphicsInfo g, int in, bool isNor, bool highlighted) const{
+void Output::DrawOr_Nor(GraphicsInfo g, int in, bool isNor, bool highlighted) const{
 	int cx = g.x1, cy = g.y1; //Centre Point
 	int p1x, p1y, p2x, p2y, hx1, hx2, hy1, hy2, kx, ky, ky2; //Helping Points
 	int in1x, in1y, in2x, in2y, outx, outy; // the 2 Inputs & Output
@@ -893,12 +856,12 @@ image* Output::DrawOr_Nor(GraphicsInfo g, int in, bool isNor, bool highlighted) 
 		pWind->DrawBezier(p2x, p2y, hx2, hy2, kx, ky2, outx, outy, FRAME);
 		pWind->DrawBezier(p1x, p1y, in1x + 8, in1y, in2x + 8, in2y, p2x, p2y, FRAME);
 	}
-	image *GateImg = new image;
-	pWind->StoreImage(GateImg, cx - 24, cy - 24, 3 * 16, 3 * 16);
-	return GateImg;
+	
+	
+	
 }
 
-image* Output::DrawXor_Xnor(GraphicsInfo g, int in, bool isXNor, bool highlighted) const
+void Output::DrawXor_Xnor(GraphicsInfo g, int in, bool isXNor, bool highlighted) const
 {
 	int cx = g.x1, cy = g.y1; //Centre Points
 	int in1x, in1y, in2x, in2y, outx, outy; // the 2 Inputs And Output
@@ -962,11 +925,11 @@ image* Output::DrawXor_Xnor(GraphicsInfo g, int in, bool isXNor, bool highlighte
 		//draw the xor Bezier with delta x slightly different than the previous to avoid collision
 		pWind->DrawBezier(p1x + (2 * ciDefBrushSize), p1y, in1x + (2 * ciDefBrushSize), in1y, in2x + (2 * ciDefBrushSize), in2y, p2x + (2 * ciDefBrushSize), p2y, FRAME);
 	}
-	image *GateImg = new image;
-	pWind->StoreImage(GateImg, cx - 24, cy - 24, 3 * 16, 3 * 16);
-	return GateImg;
+	
+	
+	
 }
-image* Output::DrawLed(GraphicsInfo g, bool isON, bool highlighted) const
+void Output::DrawLed(GraphicsInfo g, bool isON, bool highlighted) const
 {
 	if (highlighted) pWind->SetPen(BLUE);
 	else pWind->SetPen(BROWN);
@@ -996,11 +959,11 @@ image* Output::DrawLed(GraphicsInfo g, bool isON, bool highlighted) const
 	//left down
 	pWind->DrawLine(cx - radius*(1 / sqrt(2)), cy + radius*(1 / sqrt(2)), cx - (radius + 4)*(1 / sqrt(2)), cy + (radius + 4)*(1 / sqrt(2)), FRAME);
 
-	image *GateImg = new image;
-	pWind->StoreImage(GateImg, cx - 24, cy - 24, 3 * 16, 3 * 16);
-	return GateImg;
+	
+	
+	
 }
-image* Output::DrawSwtich(GraphicsInfo g, bool isON, bool highlighted) const
+void Output::DrawSwtich(GraphicsInfo g, bool isON, bool highlighted) const
 {
 	if (highlighted) pWind->SetPen(BLUE);
 	else pWind->SetPen(BROWN);
@@ -1017,9 +980,9 @@ image* Output::DrawSwtich(GraphicsInfo g, bool isON, bool highlighted) const
 	//the output line
 	pWind->DrawLine(cx + 12, cy, cx + 22, cy);
 
-	image *GateImg = new image;
-	pWind->StoreImage(GateImg, cx - 24, cy - 24, 3 * 16, 3 * 16);
-	return GateImg;
+	
+	
+	
 }
 Output::~Output()
 {

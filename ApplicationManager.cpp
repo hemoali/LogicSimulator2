@@ -95,7 +95,7 @@ void ApplicationManager::ExecuteAction(ActionType ActType)
 
 
 	case EXIT:
-		///TODO: create ExitAction here
+		// Exit action here
 		break;
 	}
 	if (pAct)
