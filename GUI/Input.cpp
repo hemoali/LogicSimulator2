@@ -32,7 +32,7 @@ string Input::GetSrting(Output *pOut, string sOriginal = "")
 		pOut->PrintMsg(sOriginal + " " + s);
 	}
 	pOut->PrintMsg("");
-
+	pWind->FlushMouseQueue();
 	return s;
 }
 

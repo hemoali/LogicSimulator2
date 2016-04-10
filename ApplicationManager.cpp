@@ -12,6 +12,7 @@
 #include"Actions\AddXNORgate2.h"
 #include"Actions\AddXORgate2.h"
 #include"Actions\AddXORgate3.h"
+#include"Actions\AddCONNECTION.h"
 ApplicationManager::ApplicationManager()
 {
 	CompCount = 0;
@@ -90,7 +91,7 @@ void ApplicationManager::ExecuteAction(ActionType ActType)
 		break;
 
 	case ADD_CONNECTION:
-		//TODO: Create AddConection Action here
+		pAct = new AddCONNECTION(this);
 		break;
 
 
