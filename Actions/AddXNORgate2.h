@@ -1,7 +1,6 @@
 #pragma once
-#include"Actions\Action.h"
-#include"Components\XNOR2.h"
-#include"ApplicationManager.h"
+#include"..\Components\XNOR2.h"
+#include"..\ApplicationManager.h"
 class AddXNORgate2:public Action
 {
 private:

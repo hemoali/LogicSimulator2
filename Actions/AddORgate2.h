@@ -1,7 +1,6 @@
 #pragma once
-#include"Actions\Action.h"
-#include"Components\OR2.h"
-#include"ApplicationManager.h"
+#include"..\Components\OR2.h"
+#include"..\ApplicationManager.h"
 class AddORgate2:public Action
 {
 private:

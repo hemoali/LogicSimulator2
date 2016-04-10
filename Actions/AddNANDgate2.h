@@ -1,7 +1,7 @@
 #pragma once
-#include"Actions\Action.h"
-#include"Components\NAND2.h"
-#include"ApplicationManager.h"
+#include"Action.h"
+#include"..\Components\NAND2.h"
+#include"..\ApplicationManager.h"
 class AddNANDgate2:public Action
 {
 private:

@@ -126,20 +126,20 @@
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="AddCONNECTION.cpp" />
-    <ClCompile Include="AddLED.cpp" />
-    <ClCompile Include="AddNORgate2.cpp" />
     <ClCompile Include="Actions\AddANDgate2.cpp" />
-    <ClCompile Include="AddANDgate3.cpp" />
-    <ClCompile Include="AddBUFFER.cpp" />
-    <ClCompile Include="AddNANDgate2.cpp" />
-    <ClCompile Include="AddNORgate3.cpp" />
-    <ClCompile Include="AddNOTgate.cpp" />
-    <ClCompile Include="AddORgate2.cpp" />
-    <ClCompile Include="AddSWITCH.cpp" />
-    <ClCompile Include="AddXNORgate2.cpp" />
-    <ClCompile Include="AddXORgate2.cpp" />
-    <ClCompile Include="AddXORgate3.cpp" />
+    <ClCompile Include="Actions\AddANDgate3.cpp" />
+    <ClCompile Include="Actions\AddBUFFER.cpp" />
+    <ClCompile Include="Actions\AddCONNECTION.cpp" />
+    <ClCompile Include="Actions\AddLED.cpp" />
+    <ClCompile Include="Actions\AddNANDgate2.cpp" />
+    <ClCompile Include="Actions\AddNORgate2.cpp" />
+    <ClCompile Include="Actions\AddNORgate3.cpp" />
+    <ClCompile Include="Actions\AddNOTgate.cpp" />
+    <ClCompile Include="Actions\AddORgate2.cpp" />
+    <ClCompile Include="Actions\AddSWITCH.cpp" />
+    <ClCompile Include="Actions\AddXNORgate2.cpp" />
+    <ClCompile Include="Actions\AddXORgate2.cpp" />
+    <ClCompile Include="Actions\AddXORgate3.cpp" />
     <ClCompile Include="CMUgraphicsLib\auxil.cpp" />
     <ClCompile Include="CMUgraphicsLib\CMUgraphics.cpp" />
     <ClCompile Include="CMUgraphicsLib\image.cpp" />
@@ -201,21 +201,22 @@
     <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AddCONNECTION.h" />
-    <ClInclude Include="AddLED.h" />
-    <ClInclude Include="AddNORgate2.h" />
-    <ClInclude Include="Actions\Action.h" />
     <ClInclude Include="Actions\AddANDgate2.h" />
-    <ClInclude Include="AddANDgate3.h" />
-    <ClInclude Include="AddBUFFER.h" />
-    <ClInclude Include="AddNANDgate2.h" />
-    <ClInclude Include="AddNORgate3.h" />
-    <ClInclude Include="AddNOTgate.h" />
-    <ClInclude Include="AddORgate2.h" />
-    <ClInclude Include="AddSWITCH.h" />
-    <ClInclude Include="AddXNORgate2.h" />
-    <ClInclude Include="AddXORgate2.h" />
-    <ClInclude Include="AddXORgate3.h" />
+    <ClInclude Include="Actions\AddANDgate3.h" />
+    <ClInclude Include="Actions\AddBUFFER.h" />
+    <ClInclude Include="Actions\AddCONNECTION.h" />
+    <ClInclude Include="Actions\AddLED.h" />
+    <ClInclude Include="Actions\AddNANDgate2.h" />
+    <ClInclude Include="Actions\AddNORgate2.h" />
+    <ClInclude Include="Actions\AddNORgate3.h" />
+    <ClInclude Include="Actions\AddNOTgate.h" />
+    <ClInclude Include="Actions\AddORgate2.h" />
+    <ClInclude Include="Actions\AddSWITCH.h" />
+    <ClInclude Include="Actions\AddXNORgate2.h" />
+    <ClInclude Include="Actions\AddXORgate2.h" />
+    <ClInclude Include="Actions\AddXORgate3.h" />
+    <ClInclude Include="AddCONNECTION.h" />
+    <ClInclude Include="Actions\Action.h" />
     <ClInclude Include="CMUgraphicsLib\auxil.h" />
     <ClInclude Include="CMUgraphicsLib\CMUgraphics.h" />
     <ClInclude Include="CMUgraphicsLib\colors.h" />

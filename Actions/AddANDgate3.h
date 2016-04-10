@@ -1,7 +1,7 @@
 #pragma once
-#include"Actions\Action.h"
-#include"Components\AND3.h"
-#include"ApplicationManager.h"
+#include"Action.h"
+#include"..\Components\AND3.h"
+#include"..\ApplicationManager.h"
 class AddANDgate3 : public Action
 {
 	private:

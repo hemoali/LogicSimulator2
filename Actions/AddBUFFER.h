@@ -1,7 +1,7 @@
 #pragma once
-#include"Actions\Action.h"
-#include"Components\BUFFER.h"
-#include"ApplicationManager.h"
+#include"Action.h"
+#include"..\Components\BUFFER.h"
+#include"..\ApplicationManager.h"
 class AddBUFFER:public Action
 {
 private:

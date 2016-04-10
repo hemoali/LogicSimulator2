@@ -1,7 +1,6 @@
 #pragma once
-#include"Actions\Action.h"
-#include"Components\NOT.h"
-#include"ApplicationManager.h"
+#include"..\Components\NOT.h"
+#include"..\ApplicationManager.h"
 class AddNOTgate:public Action
 {
 private:

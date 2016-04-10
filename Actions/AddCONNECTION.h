@@ -1,6 +1,6 @@
 #pragma once
-#include"ApplicationManager.h"
-#include"Components\Connection.h"
+#include"..\ApplicationManager.h"
+#include"..\Components\Connection.h"
 class AddCONNECTION:public Action
 {
 private:

@@ -19,7 +19,7 @@ void SWICH::Operate()
 void SWICH::Draw(Output* pOut)
 {
 	//Call output class and pass SWICH drawing info to it.
-	pOut->DrawSwtich(m_GfxInfo, (outkey[0].getStatus() == HIGH) ? true : false);
+	pOut->DrawSwtich(m_GfxInfo,false);
 }
 
 //returns status of outputpin
