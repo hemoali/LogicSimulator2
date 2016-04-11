@@ -35,19 +35,16 @@ public:
 	
 	// Draw  
 	bool SetDragImage(ActionType ActType, GraphicsInfo GfxInfo);
-	image* DrawNot_Buffer(GraphicsInfo, bool = false, bool = false) const;
-	image* DrawAnd_Nand(GraphicsInfo, int = 2, bool = false, bool = false) const;
-	image* DrawOr_Nor(GraphicsInfo, int = 2, bool = false, bool = false) const;
-	image* DrawXor_Xnor(GraphicsInfo, int = 2, bool = false, bool = false) const;
-	image* DrawLed(GraphicsInfo, bool = false, bool = false) const;
-	image* DrawSwtich(GraphicsInfo, bool = false, bool = false) const;
+	void DrawNot_Buffer(GraphicsInfo, bool = false, bool = false) const;
+	void DrawAnd_Nand(GraphicsInfo, int = 2, bool = false, bool = false) const;
+	void DrawOr_Nor(GraphicsInfo, int = 2, bool = false, bool = false) const;
+	void DrawXor_Xnor(GraphicsInfo, int = 2, bool = false, bool = false) const;
+	void DrawLed(GraphicsInfo, bool = false, bool = false) const;
+	void DrawSwtich(GraphicsInfo, bool = false, bool = false) const;
 
 	bool DrawConnection(GraphicsInfo r_GfxInfo, bool selected = false) const;
 	bfs_node* bfs(bfs_node* bf, int requX, int requY, vector<bfs_node*> allNodes) const;
-	bool CheckPoint(GraphicsInfo) const;
-	bool CheckPoint(int x, int y) const;
-	bool CheckPointForConnections(int x, int y) const;
-
+	
 	void PrintMsg(string msg) const;	//Print a message on Status bar
 
 

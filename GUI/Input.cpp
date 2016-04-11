@@ -14,14 +14,14 @@ void Input::GetPointClicked(int &x, int &y, bool DrawGate, bool DrawConnection)
 
 }
 
-string Input::GetSrting(Output *pOut)
+string Input::GetSrting(Output *pOut, string sOriginal = "")
 {
 	string s = "";
 	char ch;
 	keytype k;
 	while ((k = pWind->WaitKeyPress(ch)) != '\n' && (int)ch != 13){
 		if (k == ESCAPE){
-			s = "";
+			pOut->PrintMsg(sOriginal);
 		}
 		else if (k == ASCII && (int)ch == 8){
 			s = s.substr(0, s.size() - 1);
@@ -29,10 +29,10 @@ string Input::GetSrting(Output *pOut)
 		else if (k == ASCII && (int)ch != 27){
 			s += ch;
 		}
-		pOut->PrintMsg(s);
+		pOut->PrintMsg(sOriginal + " " + s);
 	}
 	pOut->PrintMsg("");
-
+	pWind->FlushMouseQueue();
 	return s;
 }
 

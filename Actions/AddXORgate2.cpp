@@ -16,8 +16,11 @@ void AddXORgate2::ReadActionParameters()
 	//Print Action Message
 	pOut->PrintMsg("2-Input XOR Gate: Click to add the gate");
 
-	//Wait for User Input
-	pIn->GetPointClicked(Cx, Cy);
+	if (pOut->SetDragImage(ADD_XOR_GATE_2, GInfo)){
+		string s = "Please enter gate label: ";
+		pOut->PrintMsg(s);
+		gateLabel = pIn->GetSrting(pOut, s);
+	}
 
 	//Clear Status Bar
 	pOut->ClearStatusBar();
@@ -25,23 +28,22 @@ void AddXORgate2::ReadActionParameters()
 }
 
 void AddXORgate2::Execute()
-{
-	//Get Center point of the Gate
+{	//Get Center point of the Gate
 	ReadActionParameters();
 
 	//Calculate the rectangle Corners
 	int Len = UI.GATE_Width;
 	int Wdth = UI.GATE_Height;
 
-	GraphicsInfo GInfo; //Gfx info to be used to construct the AND2 gate
+	//Gfx info to be used to construct the AND2 gate
+	GraphicsInfo GInfotmp;
 
-	GInfo.x1 = Cx - Len / 2;
-	GInfo.x2 = Cx + Len / 2;
-	GInfo.y1 = Cy - Wdth / 2;
-	GInfo.y2 = Cy + Wdth / 2;
-	XOR2*pA = new XOR2(GInfo, AND2_FANOUT);
-	pManager->vec.push_back(GInfo);
-    pManager->AddComponent(pA);
+	GInfotmp.x1 = GInfo.x1 - Len / 2;
+	GInfotmp.x2 = GInfo.x1 + Len / 2;
+	GInfotmp.y1 = GInfo.y1 - Wdth / 2;
+	GInfotmp.y2 = GInfo.y1 + Wdth / 2;
+	 XOR2*pA = new XOR2(GInfotmp, AND2_FANOUT);
+	pManager->AddComponent(pA);
 }
 
 void AddXORgate2::Undo()

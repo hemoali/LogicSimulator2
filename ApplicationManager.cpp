@@ -17,7 +17,7 @@ ApplicationManager::ApplicationManager()
 {
 	CompCount = 0;
 
-	for(int i=0; i<MaxCompCount; i++)
+	for (int i = 0; i < MaxCompCount; i++)
 		CompList[i] = NULL;
 
 	//Creates the Input / Output Objects & Initialize the GUI
@@ -27,7 +27,7 @@ ApplicationManager::ApplicationManager()
 ////////////////////////////////////////////////////////////////////
 void ApplicationManager::AddComponent(Component* pComp)
 {
-	CompList[CompCount++] = pComp;
+	CompList[CompCount++] = pComp;		
 }
 ////////////////////////////////////////////////////////////////////
 
@@ -54,7 +54,7 @@ void ApplicationManager::ExecuteAction(ActionType ActType)
 		    pAct = new AddBUFFER(this);
 		    break;
 		case ADD_INV:
-			pAct= new AddNOTgate(this);
+		pAct = new AddNOTgate(this);
 			break;
 		case ADD_AND_GATE_2:
 			pAct = new AddANDgate2(this);
@@ -91,14 +91,13 @@ void ApplicationManager::ExecuteAction(ActionType ActType)
 			break;
 
 		case ADD_CONNECTION:
-			//TODO: Create AddConection Action here
-			pAct = new AddCONNECTION(this);
+		pAct = new AddCONNECTION(this);
 			break;
 		case EXIT:
-			///TODO: create ExitAction here
+		// Exit action here
 			break;
 	}
-	if(pAct)
+	if (pAct)
 	{
 		pAct->Execute();
 		delete pAct;
@@ -109,7 +108,7 @@ void ApplicationManager::ExecuteAction(ActionType ActType)
 
 void ApplicationManager::UpdateInterface()
 {
-		for(int i=0; i<CompCount; i++)
+	for (int i = 0; i < CompCount; i++)
 			CompList[i]->Draw(OutputInterface);
 
 }
@@ -133,7 +132,7 @@ Component *const ApplicationManager::getGate(int idx) const
 }
 ApplicationManager::~ApplicationManager()
 {
-	for(int i=0; i<CompCount; i++)
+	for (int i = 0; i < CompCount; i++)
 		delete CompList[i];
 	delete OutputInterface;
 	delete InputInterface;
