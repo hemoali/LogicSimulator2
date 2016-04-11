@@ -39,7 +39,8 @@ void AddSWITCH::Execute()
 	GInfo.x2 = Cx + Len / 2;
 	GInfo.y1 = Cy - Wdth / 2;
 	GInfo.y2 = Cy + Wdth / 2;
-	SWICH *pA = new SWICH(GInfo, AND2_FANOUT);
+	SWITCH *pA = new SWITCH(GInfo, AND2_FANOUT);
+	pManager->vec.push_back(GInfo);
 	pManager->AddComponent(pA);
 }
 

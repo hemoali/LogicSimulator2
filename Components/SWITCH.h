@@ -2,13 +2,12 @@
 #include"Component.h"
 #include"InputPin.h"
 #include"OutputPin.h"
-class SWICH : public Component
+class SWITCH : public Component
 {
 
 	OutputPin* outkey;
-	InputPin* inkey;
 public:
-	SWICH(const GraphicsInfo &r_GfxInfo, int r_FanOut);
+	SWITCH(const GraphicsInfo &r_GfxInfo, int r_FanOut);
 	virtual void Operate();	//Calculates the output according to the inputs
 	virtual void Draw(Output* pOut);	//for each component to Draw itself
 
@@ -17,11 +16,10 @@ public:
 	virtual int GetInputPinStatus(int n);	//returns status of Inputpin # n if SWITCH, return -1
 
 	virtual void setInputPinStatus(int n, STATUS s);	//set status of Inputpin # n, to be used by connection class.
-
-
-	SWICH();
+	OutputPin*getoutpin();
+	SWITCH();
 
 	//Destructor must be virtual
-	virtual ~SWICH();
+	virtual ~SWITCH();
 };
 

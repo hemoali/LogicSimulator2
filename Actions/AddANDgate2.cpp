@@ -1,6 +1,7 @@
 #include "AddANDgate2.h"
 #include "..\ApplicationManager.h"
-
+#include<iostream>
+using namespace std;
 AddANDgate2::AddANDgate2(ApplicationManager *pApp):Action(pApp)
 {
 }
@@ -38,10 +39,15 @@ void AddANDgate2::Execute()
 	GraphicsInfo GInfo; //Gfx info to be used to construct the AND2 gate
 	
 	GInfo.x1 = Cx - Len/2;
+	cout <<"X1 "<< GInfo.x1 << endl;
 	GInfo.x2 = Cx + Len/2;
+	cout << "X2 "<<GInfo.x2 << endl;
 	GInfo.y1 = Cy - Wdth/2;
+	cout << "Y1 "<<GInfo.y1 << endl;
 	GInfo.y2 = Cy + Wdth/2;
+	cout << "Y2 "<<GInfo.y2 << endl;
 	AND2 *pA=new AND2(GInfo, AND2_FANOUT); 
+	pManager->vec.push_back(GInfo);
 	pManager->AddComponent(pA);
 }
 

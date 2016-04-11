@@ -1,5 +1,5 @@
 #pragma once
-#include"../Components/SWICH.h"
+#include"../Components/SWITCH.h"
 #include"..\ApplicationManager.h"
 #include"Action.h"
 class AddSWITCH:public Action

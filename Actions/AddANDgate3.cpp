@@ -40,6 +40,7 @@ void AddANDgate3::Execute()
 	GInfo.y1 = Cy - Wdth / 2;
 	GInfo.y2 = Cy + Wdth / 2;
 	AND3 *pA = new AND3(GInfo, AND2_FANOUT);
+	pManager->vec.push_back(GInfo);
 	pManager->AddComponent(pA);
 }
 

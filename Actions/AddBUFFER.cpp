@@ -40,6 +40,7 @@ void AddBUFFER::Execute()
 	GInfo.y1 = Cy - Wdth / 2;
 	GInfo.y2 = Cy + Wdth / 2;
 	BUFFER *pA = new BUFFER(GInfo, AND2_FANOUT);
+	pManager->vec.push_back(GInfo); 
 	pManager->AddComponent(pA);
 }
 

@@ -12,6 +12,7 @@
 #include"Actions\AddXNORgate2.h"
 #include"Actions\AddXORgate2.h"
 #include"Actions\AddXORgate3.h"
+#include"Actions\AddCONNECTION.h"
 ApplicationManager::ApplicationManager()
 {
 	CompCount = 0;
@@ -26,7 +27,7 @@ ApplicationManager::ApplicationManager()
 ////////////////////////////////////////////////////////////////////
 void ApplicationManager::AddComponent(Component* pComp)
 {
-	CompList[CompCount++] = pComp;		
+	CompList[CompCount++] = pComp;
 }
 ////////////////////////////////////////////////////////////////////
 
@@ -91,9 +92,8 @@ void ApplicationManager::ExecuteAction(ActionType ActType)
 
 		case ADD_CONNECTION:
 			//TODO: Create AddConection Action here
+			pAct = new AddCONNECTION(this);
 			break;
-	
-
 		case EXIT:
 			///TODO: create ExitAction here
 			break;
@@ -127,7 +127,10 @@ Output* ApplicationManager::GetOutput()
 }
 
 ////////////////////////////////////////////////////////////////////
-
+Component *const ApplicationManager::getGate(int idx) const
+{
+	return CompList[idx];
+}
 ApplicationManager::~ApplicationManager()
 {
 	for(int i=0; i<CompCount; i++)

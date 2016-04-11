@@ -191,10 +191,11 @@
     <ClCompile Include="Components\OutputPin.cpp" />
     <ClCompile Include="Components\Pin.cpp" />
     <ClCompile Include="ApplicationManager.cpp" />
-    <ClCompile Include="Components\SWICH.cpp" />
+    <ClCompile Include="Components\SWITCH.cpp" />
     <ClCompile Include="Components\XNOR2.cpp" />
     <ClCompile Include="Components\XOR2.cpp" />
     <ClCompile Include="Components\XOR3.cpp" />
+    <ClCompile Include="GetComponent.cpp" />
     <ClCompile Include="GUI\Input.cpp" />
     <ClCompile Include="GUI\Output.cpp" />
     <ClCompile Include="main.cpp" />
@@ -215,7 +216,6 @@
     <ClInclude Include="Actions\AddXNORgate2.h" />
     <ClInclude Include="Actions\AddXORgate2.h" />
     <ClInclude Include="Actions\AddXORgate3.h" />
-    <ClInclude Include="AddCONNECTION.h" />
     <ClInclude Include="Actions\Action.h" />
     <ClInclude Include="CMUgraphicsLib\auxil.h" />
     <ClInclude Include="CMUgraphicsLib\CMUgraphics.h" />
@@ -253,11 +253,12 @@
     <ClInclude Include="Components\OutputPin.h" />
     <ClInclude Include="Components\Pin.h" />
     <ClInclude Include="ApplicationManager.h" />
-    <ClInclude Include="Components\SWICH.h" />
+    <ClInclude Include="Components\SWITCH.h" />
     <ClInclude Include="Components\XNOR2.h" />
     <ClInclude Include="Components\XOR2.h" />
     <ClInclude Include="Components\XOR3.h" />
     <ClInclude Include="Defs.H" />
+    <ClInclude Include="GetComponent.h" />
     <ClInclude Include="GUI\Input.h" />
     <ClInclude Include="GUI\Output.h" />
     <ClInclude Include="GUI\UI_Info.h" />

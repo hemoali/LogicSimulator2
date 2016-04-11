@@ -40,6 +40,7 @@ void AddNORgate2::Execute()
 	GInfo.y1 = Cy - Wdth / 2;
 	GInfo.y2 = Cy + Wdth / 2;
 	NOR2 *pA = new NOR2(GInfo, AND2_FANOUT);
+	pManager->vec.push_back(GInfo);
 	pManager->AddComponent(pA);
 }
 
