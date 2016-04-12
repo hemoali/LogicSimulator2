@@ -3,12 +3,15 @@
 
 #include "..\Defs.h"
 #include "..\GUI\Output.h"
-
+#include <iostream>
+using namespace std;
 //Base class for classes Gate, Switch, and LED.
 class Component
 {
 private:
 	string m_Label;
+	bool deleted;
+	image* smallCleanImageBeforeAddingComp;
 protected:
 	GraphicsInfo m_GfxInfo;	//The parameters required to draw a component
 	GraphicsInfo m_CenterInfo;
@@ -23,7 +26,15 @@ public:
 
 	virtual void setInputPinStatus(int n, STATUS s)=0;	//set status of Inputpin # n, to be used by connection class.
 	void setLabel(string s);
-	
+	string getLabel();
+
+	void setDelete(bool d);
+	bool getDelete();
+
+	void setNewLocation(GraphicsInfo GfxInfo);
+
+	void setSmallCleanImageBeforeAddingComp(image* i);
+	image* getSmallCleanImageBeforeAddingComp();
 	Component();	
 	
 	//Destructor must be virtual

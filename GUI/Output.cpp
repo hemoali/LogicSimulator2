@@ -461,8 +461,11 @@ bool Output::DrawConnection(GraphicsInfo GfxInfo, bool selected) const
 	}
 	return true;
 }
-
-bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo){
+void Output::DrawCleanImage(image* img, int x, int y)
+{
+	pWind->DrawImage(img, x - UI.GATE_Width / 2 + 1, y - UI.GRID_HEIGHT / 2 , UI.GATE_Width - 1 , UI.GATE_Height -5);
+}
+bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smallCleanImageBeforeAddingGate, bool moving){
 	int iXOld = 0;
 	int iYOld = 0;
 	pWind->GetMouseCoord(iXOld, iXOld);
@@ -509,6 +512,9 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo){
 				GraphicsInfo Gfx;
 				Gfx.x1 = RectULX + UI.GATE_Width / 2;
 				Gfx.y1 = RectULY + UI.GATE_Height / 2;
+
+				pWind->StoreImage(smallCleanImageBeforeAddingGate, Gfx.x1 - UI.GATE_Width / 2 + 1, Gfx.y1 - UI.GATE_Height / 2 + 1, UI.GATE_Width-1, UI.GATE_Height-1);
+
 				switch (ActType){
 				case ADD_Buff:{
 								  DrawNot_Buffer(Gfx, true);
@@ -671,7 +677,7 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo){
 			draw = false;
 			break;
 		}
-		else if (pWind->GetMouseClick(GfxInfo.x1, GfxInfo.y1) == LEFT_CLICK){
+		else if (pWind->GetMouseClick(GfxInfo.x1, GfxInfo.y1) == LEFT_CLICK || (moving && (pWind->GetButtonState(LEFT_BUTTON, GfxInfo.x1, GfxInfo.y1) == BUTTON_UP))){
 			pWind->FlushMouseQueue();
 			Utils::correctPointClicked(GfxInfo.x1, GfxInfo.y1, true, false);
 			if (!Utils::CheckPoint(GfxInfo, usedPixels)){
@@ -791,9 +797,9 @@ void Output::DrawNot_Buffer(GraphicsInfo g, bool isBuffer, bool highlighted) con
 		//Darwing Bubble
 		pWind->DrawCircle(outx + 2 * ciDefBrushSize, outy, 2 * ciDefBrushSize, FILLED);
 	}
-	
-	
-	
+
+
+
 }
 
 void Output::DrawOr_Nor(GraphicsInfo g, int in, bool isNor, bool highlighted) const{
@@ -856,9 +862,9 @@ void Output::DrawOr_Nor(GraphicsInfo g, int in, bool isNor, bool highlighted) co
 		pWind->DrawBezier(p2x, p2y, hx2, hy2, kx, ky2, outx, outy, FRAME);
 		pWind->DrawBezier(p1x, p1y, in1x + 8, in1y, in2x + 8, in2y, p2x, p2y, FRAME);
 	}
-	
-	
-	
+
+
+
 }
 
 void Output::DrawXor_Xnor(GraphicsInfo g, int in, bool isXNor, bool highlighted) const
@@ -925,9 +931,9 @@ void Output::DrawXor_Xnor(GraphicsInfo g, int in, bool isXNor, bool highlighted)
 		//draw the xor Bezier with delta x slightly different than the previous to avoid collision
 		pWind->DrawBezier(p1x + (2 * ciDefBrushSize), p1y, in1x + (2 * ciDefBrushSize), in1y, in2x + (2 * ciDefBrushSize), in2y, p2x + (2 * ciDefBrushSize), p2y, FRAME);
 	}
-	
-	
-	
+
+
+
 }
 void Output::DrawLed(GraphicsInfo g, bool isON, bool highlighted) const
 {
@@ -959,9 +965,9 @@ void Output::DrawLed(GraphicsInfo g, bool isON, bool highlighted) const
 	//left down
 	pWind->DrawLine(cx - radius*(1 / sqrt(2)), cy + radius*(1 / sqrt(2)), cx - (radius + 4)*(1 / sqrt(2)), cy + (radius + 4)*(1 / sqrt(2)), FRAME);
 
-	
-	
-	
+
+
+
 }
 void Output::DrawSwtich(GraphicsInfo g, bool isON, bool highlighted) const
 {
@@ -980,9 +986,9 @@ void Output::DrawSwtich(GraphicsInfo g, bool isON, bool highlighted) const
 	//the output line
 	pWind->DrawLine(cx + 12, cy, cx + 22, cy);
 
-	
-	
-	
+
+
+
 }
 Output::~Output()
 {

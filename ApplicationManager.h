@@ -7,6 +7,7 @@
 #include "Actions\Action.h"
 #include "Components\Component.h"
 
+
 //Main class that manages everything in the application.
 class ApplicationManager
 {

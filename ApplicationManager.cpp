@@ -13,6 +13,8 @@
 #include"Actions\AddXORgate2.h"
 #include"Actions\AddXORgate3.h"
 #include"Actions\AddCONNECTION.h"
+#include "Actions\Select.h"
+#include "Actions\Move.h"
 ApplicationManager::ApplicationManager()
 {
 	CompCount = 0;
@@ -92,6 +94,9 @@ void ApplicationManager::ExecuteAction(ActionType ActType)
 
 		case ADD_CONNECTION:
 		pAct = new AddCONNECTION(this);
+			break;
+		case MOVE:
+			pAct = new Move(this);
 			break;
 		case EXIT:
 		// Exit action here

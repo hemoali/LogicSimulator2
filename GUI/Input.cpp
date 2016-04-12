@@ -13,7 +13,9 @@ void Input::GetPointClicked(int &x, int &y, bool DrawGate, bool DrawConnection)
 	Utils::correctPointClicked(x, y, DrawGate, DrawConnection);
 
 }
-
+buttonstate Input::GetButtonStatus(const button btMouse, int &iX, int &iY) const{
+	return pWind->GetButtonState(btMouse, iX, iY);
+}
 string Input::GetSrting(Output *pOut, string sOriginal = "")
 {
 	string s = "";
@@ -39,9 +41,19 @@ string Input::GetSrting(Output *pOut, string sOriginal = "")
 //This function reads the position where the user clicks to determine the desired action
 ActionType Input::GetUserAction() const
 {
-	int x, y;
-	clicktype s;
-	s = pWind->WaitMouseClick(x, y);	//Get the coordinates of the user click
+	int x=0, y=0, xT, yT;
+	while (true){
+		if (pWind->GetButtonState(LEFT_BUTTON, xT, yT) == BUTTON_DOWN && yT >= UI.ToolBarHeight && yT < UI.height - UI.StatusBarHeight){
+			return MOVE;
+		}
+		else{
+			break;
+		}
+	}
+
+	clicktype s = LEFT_CLICK;
+	s = pWind->GetMouseClick(x, y);	//Get the coordinates of the user click
+
 	if (UI.AppMode == DESIGN)	//application is in design mode
 	{
 		//[1] If user clicks on the Toolbar

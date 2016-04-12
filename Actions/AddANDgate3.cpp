@@ -17,7 +17,7 @@ bool AddANDgate3::ReadActionParameters()
 	//Print Action Message
 	pOut->PrintMsg("3-Input AND Gate: Click to add the gate");
 
-	if (pOut->SetDragImage(ADD_AND_GATE_3, GInfo)){
+	if (pOut->SetDragImage(ADD_AND_GATE_3, GInfo, NULL)){
 		string s = "Please enter gate label: ";
 		pOut->PrintMsg(s);
 		gateLabel = pIn->GetSrting(pOut, s);

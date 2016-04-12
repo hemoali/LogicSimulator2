@@ -18,7 +18,7 @@ bool AddXORgate2::ReadActionParameters()
 	//Print Action Message
 	pOut->PrintMsg("2-Input XOR Gate: Click to add the gate");
 
-	if (pOut->SetDragImage(ADD_XOR_GATE_2, GInfo)){
+	if (pOut->SetDragImage(ADD_XOR_GATE_2, GInfo, NULL)){
 		string s = "Please enter gate label: ";
 		pOut->PrintMsg(s);
 		gateLabel = pIn->GetSrting(pOut, s);

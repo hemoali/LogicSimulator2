@@ -216,6 +216,13 @@
     <ClCompile Include="Components\SWITCH.cpp">
       <Filter>Components</Filter>
     </ClCompile>
+    <ClCompile Include="GetComponent.cpp" />
+    <ClCompile Include="Actions\Select.cpp">
+      <Filter>Actions</Filter>
+    </ClCompile>
+    <ClCompile Include="Actions\Move.cpp">
+      <Filter>Actions</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Defs.H" />
@@ -346,7 +353,6 @@
     <ClInclude Include="Components\BUFFER.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="AddCONNECTION.h" />
     <ClInclude Include="Actions\AddANDgate2.h">
       <Filter>Actions</Filter>
     </ClInclude>
@@ -394,6 +400,13 @@
     </ClInclude>
     <ClInclude Include="Components\SWITCH.h">
       <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="GetComponent.h" />
+    <ClInclude Include="Actions\Select.h">
+      <Filter>Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="Actions\Move.h">
+      <Filter>Actions</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -9,8 +9,11 @@ AddANDgate2::AddANDgate2(ApplicationManager *pApp) :Action(pApp)
 AddANDgate2::~AddANDgate2(void)
 {
 }
-
 bool AddANDgate2::ReadActionParameters()
+{
+	return false;
+}
+bool AddANDgate2::ReadActionParameters(image * smallImageBeforeAddingComponent)
 {
 	bool done = false;
 	//Get a Pointer to the Input / Output Interfaces
@@ -19,8 +22,7 @@ bool AddANDgate2::ReadActionParameters()
 
 	//Print Action Message
 	pOut->PrintMsg("2-Input AND Gate: Click to add the gate, ESCAPE to stop");
-
-	if (pOut->SetDragImage(ADD_AND_GATE_2, GInfo)){
+	if (pOut->SetDragImage(ADD_AND_GATE_2, GInfo, smallImageBeforeAddingComponent)){
 
 		string s = "Please enter gate label: ";
 		pOut->PrintMsg(s);
@@ -37,7 +39,9 @@ bool AddANDgate2::ReadActionParameters()
 void AddANDgate2::Execute()
 {
 	//Get Center point of the Gate
-	if (ReadActionParameters()){
+	image* smallImageBeforeAddingComponent = new image;
+
+	if (ReadActionParameters(smallImageBeforeAddingComponent)){
 
 		//Calculate the rectangle Corners
 		int Len = UI.GATE_Width;
@@ -53,6 +57,7 @@ void AddANDgate2::Execute()
 		AND2 *pA = new AND2(GInfotmp, AND2_FANOUT);
 		pA->setLabel(gateLabel);
 		pManager->AddComponent(pA);
+		pA->setSmallCleanImageBeforeAddingComp(smallImageBeforeAddingComponent);
 	}
 }
 

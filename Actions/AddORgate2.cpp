@@ -19,7 +19,7 @@ bool AddORgate2::ReadActionParameters()
 	//Print Action Message
 	pOut->PrintMsg("2-Input OR Gate: Click to add the gate");
 
-	if (pOut->SetDragImage(ADD_OR_GATE_2, GInfo)){
+	if (pOut->SetDragImage(ADD_OR_GATE_2, GInfo, NULL)){
 		string s = "Please enter gate label: ";
 		pOut->PrintMsg(s);
 		gateLabel = pIn->GetSrting(pOut, s);

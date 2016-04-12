@@ -14,6 +14,7 @@ public:
 	virtual ~AddANDgate2(void);
 
 	//Reads parameters required for action to execute
+	virtual bool  ReadActionParameters(image* );
 	virtual bool  ReadActionParameters();
 	//Execute action (code depends on action type)
 	virtual void Execute();

@@ -17,7 +17,7 @@ bool AddSWITCH::ReadActionParameters()
 	//Print Action Message
 	pOut->PrintMsg(" SWITCH : Click to add the gate");
 
-	if (pOut->SetDragImage(ADD_Switch, GInfo)){
+	if (pOut->SetDragImage(ADD_Switch, GInfo, NULL)){
 		string s = "Please enter gate label: ";
 		pOut->PrintMsg(s);
 		gateLabel = pIn->GetSrting(pOut, s);

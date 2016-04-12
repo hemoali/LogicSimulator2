@@ -1,6 +1,7 @@
 #pragma once
 #include "..\Defs.h"
 #include "Input.h"
+#include "..\Components\Component.h"
 #include<vector>
 
 struct bfs_node
@@ -34,14 +35,15 @@ public:
 	void DrawGrid() const;
 	
 	// Draw  
-	bool SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo);
+	bool SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image*, bool moving=false);
+
 	void DrawNot_Buffer(GraphicsInfo, bool = false, bool = false) const;
 	void DrawAnd_Nand(GraphicsInfo, int = 2, bool = false, bool = false) const;
 	void DrawOr_Nor(GraphicsInfo, int = 2, bool = false, bool = false) const;
 	void DrawXor_Xnor(GraphicsInfo, int = 2, bool = false, bool = false) const;
 	void DrawLed(GraphicsInfo, bool = false, bool = false) const;
 	void DrawSwtich(GraphicsInfo, bool = false, bool = false) const;
-
+	void DrawCleanImage(image*, int x,int y);
 	bool DrawConnection(GraphicsInfo r_GfxInfo, bool selected = false) const;
 	bfs_node* bfs(bfs_node* bf, int requX, int requY, vector<bfs_node*> allNodes) const;
 	

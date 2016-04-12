@@ -18,7 +18,7 @@ bool AddNOTgate::ReadActionParameters()
 	//Print Action Message
 	pOut->PrintMsg(" NOT gate : Click to add the gate");
 
-	if (pOut->SetDragImage(ADD_INV, GInfo)){
+	if (pOut->SetDragImage(ADD_INV, GInfo, NULL)){
 		string s = "Please enter gate label: ";
 		pOut->PrintMsg(s);
 		gateLabel = pIn->GetSrting(pOut, s);
