@@ -7,7 +7,7 @@ AddXORgate3::~AddXORgate3(void)
 {
 }
 
-void AddXORgate3::ReadActionParameters()
+bool AddXORgate3::ReadActionParameters()
 {
 	//Get a Pointer to the Input / Output Interfaces
 	Output* pOut = pManager->GetOutput();

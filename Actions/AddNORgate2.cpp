@@ -7,7 +7,7 @@ AddNORgate2::~AddNORgate2(void)
 {
 }
 
-void AddNORgate2::ReadActionParameters()
+bool AddNORgate2::ReadActionParameters()
 {
 	//Get a Pointer to the Input / Output Interfaces
 	Output* pOut = pManager->GetOutput();

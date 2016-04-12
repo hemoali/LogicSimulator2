@@ -7,7 +7,7 @@ AddNOTgate::~AddNOTgate(void)
 {
 }
 
-void AddNOTgate::ReadActionParameters()
+bool AddNOTgate::ReadActionParameters()
 {
 	//Get a Pointer to the Input / Output Interfaces
 	Output* pOut = pManager->GetOutput();

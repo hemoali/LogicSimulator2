@@ -7,7 +7,7 @@ AddCONNECTION::~AddCONNECTION(void)
 {
 }
 
-void AddCONNECTION::ReadActionParameters()
+bool AddCONNECTION::ReadActionParameters()
 {
 	//Get a Pointer to the Input / Output Interfaces
 	Output* pOut = pManager->GetOutput();

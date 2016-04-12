@@ -7,7 +7,7 @@ AddBUFFER::~AddBUFFER(void)
 {
 }
 
-void AddBUFFER::ReadActionParameters()
+bool AddBUFFER::ReadActionParameters()
 {
 	//Get a Pointer to the Input / Output Interfaces
 	Output* pOut = pManager->GetOutput();

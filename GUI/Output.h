@@ -34,7 +34,7 @@ public:
 	void DrawGrid() const;
 	
 	// Draw  
-	bool SetDragImage(ActionType ActType, GraphicsInfo GfxInfo);
+	bool SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo);
 	void DrawNot_Buffer(GraphicsInfo, bool = false, bool = false) const;
 	void DrawAnd_Nand(GraphicsInfo, int = 2, bool = false, bool = false) const;
 	void DrawOr_Nor(GraphicsInfo, int = 2, bool = false, bool = false) const;

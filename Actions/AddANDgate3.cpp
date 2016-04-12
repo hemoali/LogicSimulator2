@@ -7,7 +7,7 @@ AddANDgate3::~AddANDgate3(void)
 {
 }
 
-void AddANDgate3::ReadActionParameters()
+bool AddANDgate3::ReadActionParameters()
 {
 	//Get a Pointer to the Input / Output Interfaces
 	Output* pOut = pManager->GetOutput();

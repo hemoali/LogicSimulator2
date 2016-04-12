@@ -462,7 +462,7 @@ bool Output::DrawConnection(GraphicsInfo GfxInfo, bool selected) const
 	return true;
 }
 
-bool Output::SetDragImage(ActionType ActType, GraphicsInfo GfxInfo){
+bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo){
 	int iXOld = 0;
 	int iYOld = 0;
 	pWind->GetMouseCoord(iXOld, iXOld);
@@ -508,7 +508,7 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo GfxInfo){
 				}
 				GraphicsInfo Gfx;
 				Gfx.x1 = RectULX + UI.GATE_Width / 2;
-				Gfx.y1 = RectULY + UI.GATE_Width / 2;
+				Gfx.y1 = RectULY + UI.GATE_Height / 2;
 				switch (ActType){
 				case ADD_Buff:{
 								  DrawNot_Buffer(Gfx, true);

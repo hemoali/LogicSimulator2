@@ -7,7 +7,7 @@ AddNANDgate2::~AddNANDgate2(void)
 {
 }
 
-void AddNANDgate2::ReadActionParameters()
+bool AddNANDgate2::ReadActionParameters()
 {
 	//Get a Pointer to the Input / Output Interfaces
 	Output* pOut = pManager->GetOutput();
