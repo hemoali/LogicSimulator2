@@ -1,6 +1,7 @@
 #include "AddANDgate2.h"
 #include "..\ApplicationManager.h"
-
+#include<iostream>
+using namespace std;
 AddANDgate2::AddANDgate2(ApplicationManager *pApp):Action(pApp)
 {
 }
@@ -37,22 +38,22 @@ void AddANDgate2::Execute()
 {
 	//Get Center point of the Gate
 	if (ReadActionParameters()){
+	
+	//Calculate the rectangle Corners
+	int Len = UI.GATE_Width;
+	int Wdth = UI.GATE_Height;
+	
+	//Gfx info to be used to construct the AND2 gate
+	GraphicsInfo GInfotmp;
 
-		//Calculate the rectangle Corners
-		int Len = UI.GATE_Width;
-		int Wdth = UI.GATE_Height;
-
-		//Gfx info to be used to construct the AND2 gate
-		GraphicsInfo GInfotmp;
-
-		GInfotmp.x1 = GInfo.x1 - Len / 2;
-		GInfotmp.x2 = GInfo.x1 + Len / 2;
-		GInfotmp.y1 = GInfo.y1 - Wdth / 2;
-		GInfotmp.y2 = GInfo.y1 + Wdth / 2;
-		AND2 *pA = new AND2(GInfotmp, AND2_FANOUT);
-		pA->setLabel(gateLabel);
-		pManager->AddComponent(pA);
-	}
+	GInfotmp.x1 = GInfo.x1 - Len / 2;
+	GInfotmp.x2 = GInfo.x1 + Len / 2;
+	GInfotmp.y1 = GInfo.y1 - Wdth / 2;
+	GInfotmp.y2 = GInfo.y1 + Wdth / 2;
+	AND2 *pA = new AND2(GInfotmp, AND2_FANOUT);
+	pA->setLabel(gateLabel);
+	pManager->AddComponent(pA);
+}
 }
 
 void AddANDgate2::Undo()

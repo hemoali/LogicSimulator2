@@ -41,7 +41,8 @@ public:
 
 	//Adds a new component to the list of components
 	void AddComponent(Component* pComp);
-
+	vector<GraphicsInfo>vec;
+	Component*const getGate(int)const;
 	//destructor
 	~ApplicationManager();
 };

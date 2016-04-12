@@ -27,14 +27,14 @@ ApplicationManager::ApplicationManager()
 ////////////////////////////////////////////////////////////////////
 void ApplicationManager::AddComponent(Component* pComp)
 {
-	CompList[CompCount++] = pComp;
+	CompList[CompCount++] = pComp;		
 }
 ////////////////////////////////////////////////////////////////////
 
 ActionType ApplicationManager::GetUserAction()
 {
 	//Call input to get what action is reuired from the user
-	return InputInterface->GetUserAction();
+	return InputInterface->GetUserAction(); 	
 }
 ////////////////////////////////////////////////////////////////////
 
@@ -50,54 +50,52 @@ void ApplicationManager::ExecuteAction(ActionType ActType)
 
 	switch (ActType)
 	{
-	case ADD_Buff:
-		pAct = new AddBUFFER(this);
-		break;
-	case ADD_INV:
+	    case ADD_Buff:
+		    pAct = new AddBUFFER(this);
+		    break;
+		case ADD_INV:
 		pAct = new AddNOTgate(this);
-		break;
-	case ADD_AND_GATE_2:
-		pAct = new AddANDgate2(this);
-		break;
-	case ADD_OR_GATE_2:
-		pAct = new AddORgate2(this);
-		break;
-	case ADD_NAND_GATE_2:
-		pAct = new AddNANDgate2(this);
-		break;
-	case ADD_NOR_GATE_2:
-		pAct = new AddNORgate2(this);
-		break;
-	case ADD_XOR_GATE_2:
-		pAct = new AddXORgate2(this);
-		break;
-	case ADD_XNOR_GATE_2:
-		pAct = new AddXNORgate2(this);
-		break;
-	case ADD_AND_GATE_3:
-		pAct = new AddANDgate3(this);
-		break;
-	case ADD_NOR_GATE_3:
-		pAct = new AddNORgate3(this);
-		break;
-	case ADD_XOR_GATE_3:
-		pAct = new AddXORgate3(this);
-		break;
-	case ADD_Switch:
-		pAct = new AddSWITCH(this);
-		break;
-	case ADD_LED:
-		pAct = new AddLED(this);
-		break;
+			break;
+		case ADD_AND_GATE_2:
+			pAct = new AddANDgate2(this);
+			break;
+		case ADD_OR_GATE_2:
+			pAct = new AddORgate2(this);
+			break;
+		case ADD_NAND_GATE_2:
+			pAct = new AddNANDgate2(this);
+			break;
+		case ADD_NOR_GATE_2:
+			pAct = new AddNORgate2(this);
+			break;
+		case ADD_XOR_GATE_2:
+			pAct = new AddXORgate2(this);
+			break;
+		case ADD_XNOR_GATE_2:
+			pAct = new AddXNORgate2(this);
+			break;
+		case ADD_AND_GATE_3:
+			pAct = new AddANDgate3(this);
+			break;
+		case ADD_NOR_GATE_3:
+			pAct = new AddNORgate3(this);
+			break;
+		case ADD_XOR_GATE_3:
+			pAct = new AddXORgate3(this);
+			break;
+		case ADD_Switch:
+			pAct = new AddSWITCH(this);
+			break;
+		case ADD_LED:
+			pAct = new AddLED(this);
+			break;
 
-	case ADD_CONNECTION:
+		case ADD_CONNECTION:
 		pAct = new AddCONNECTION(this);
-		break;
-
-
-	case EXIT:
+			break;
+		case EXIT:
 		// Exit action here
-		break;
+			break;
 	}
 	if (pAct)
 	{
@@ -111,7 +109,7 @@ void ApplicationManager::ExecuteAction(ActionType ActType)
 void ApplicationManager::UpdateInterface()
 {
 	for (int i = 0; i < CompCount; i++)
-		CompList[i]->Draw(OutputInterface);
+			CompList[i]->Draw(OutputInterface);
 
 }
 
@@ -128,12 +126,15 @@ Output* ApplicationManager::GetOutput()
 }
 
 ////////////////////////////////////////////////////////////////////
-
+Component *const ApplicationManager::getGate(int idx) const
+{
+	return CompList[idx];
+}
 ApplicationManager::~ApplicationManager()
 {
 	for (int i = 0; i < CompCount; i++)
 		delete CompList[i];
 	delete OutputInterface;
 	delete InputInterface;
-
+	
 }

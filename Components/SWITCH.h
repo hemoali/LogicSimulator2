@@ -20,6 +20,8 @@ public:
 	void SWITCH::setOutputPinStatus(int n, STATUS s);
 
 	SWITCH();
+	OutputPin*getoutpin();
+	SWITCH();
 
 	//Destructor must be virtual
 	virtual ~SWITCH();

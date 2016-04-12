@@ -46,6 +46,10 @@ void SWITCH::setInputPinStatus(int n, STATUS s)
 {
 	return;
 }
+OutputPin*SWITCH::getoutpin()
+{
+	return outkey;
+}
 SWITCH::~SWITCH(){
 
 }

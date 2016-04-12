@@ -40,6 +40,10 @@ void LED::setInputPinStatus(int n, STATUS s)
 {
 	inkey->setStatus(s);
 }
+InputPin*LED::getinppin()
+{
+	return inkey;
+}
 LED::~LED(){
 
 }
