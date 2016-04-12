@@ -8,7 +8,7 @@ AddORgate2::~AddORgate2(void)
 {
 }
 
-bool AddORgate2::ReadActionParameters()
+bool AddORgate2::ReadActionParameters(image * smallImageBeforeAddingComponent)
 {
 	bool done = false;
 
@@ -19,7 +19,7 @@ bool AddORgate2::ReadActionParameters()
 	//Print Action Message
 	pOut->PrintMsg("2-Input OR Gate: Click to add the gate");
 
-	if (pOut->SetDragImage(ADD_OR_GATE_2, GInfo, NULL)){
+	if (pOut->SetDragImage(ADD_OR_GATE_2, GInfo, smallImageBeforeAddingComponent)){
 		string s = "Please enter gate label: ";
 		pOut->PrintMsg(s);
 		gateLabel = pIn->GetSrting(pOut, s);
@@ -36,7 +36,7 @@ bool AddORgate2::ReadActionParameters()
 void AddORgate2::Execute()
 {
 	//Get Center point of the Gate
-	 if (ReadActionParameters()){
+	  image* smallImageBeforeAddingComponent = new image; if (ReadActionParameters(smallImageBeforeAddingComponent)){
 
 	//Calculate the rectangle Corners
 	int Len = UI.GATE_Width;
@@ -50,7 +50,7 @@ void AddORgate2::Execute()
 	GInfotmp.y1 = GInfo.y1 - Wdth / 2;
 	GInfotmp.y2 = GInfo.y1 + Wdth / 2;
 	OR2 *pA = new OR2(GInfotmp, AND2_FANOUT);
-	pManager->AddComponent(pA);}
+	pManager->vec.push_back(GInfotmp);pManager->AddComponent(pA);pA->setSmallCleanImageBeforeAddingComp(smallImageBeforeAddingComponent);}
 }
 
 void AddORgate2::Undo()

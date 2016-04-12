@@ -5,5 +5,6 @@ class GetComponent
 public:
 	Component * const  ptr;
 	GetComponent(Component*const);
+
 	~GetComponent();
 };

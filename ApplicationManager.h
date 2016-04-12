@@ -21,10 +21,6 @@ private:
 	Output* OutputInterface; //pointer to the Output Clase Interface
 	Input* InputInterface; //pointer to the Input Clase Interface
 
-
-public:
-
-
 public:	
 	ApplicationManager(); //constructor
 

@@ -1,6 +1,6 @@
 #ifndef _ACTION_H
 #define _ACTION_H
-
+#include "..\ApplicationManager.h" 
 class ApplicationManager; //forward class declaration
 
 
@@ -13,7 +13,7 @@ public:
 	Action(ApplicationManager *pApp) { pManager = pApp; }	//constructor
 	
 	//Reads parameters required for action to execute
-	virtual bool ReadActionParameters()=0;
+	virtual bool ReadActionParameters(image *)=0;
 	
 	//Execute action (code depends on action type)
 	virtual void Execute()=0;

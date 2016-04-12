@@ -11,7 +11,7 @@ public:
 	virtual ~AddNOTgate(void);
 
 	//Reads parameters required for action to execute
-	virtual bool  ReadActionParameters();
+	virtual bool  ReadActionParameters(image * );
 	//Execute action (code depends on action type)
 	virtual void Execute();
 

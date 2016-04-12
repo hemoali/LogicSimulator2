@@ -3,6 +3,7 @@
 
 #include "..\Defs.h"
 #include "..\GUI\Output.h"
+#include "..\Utils.h"
 #include <iostream>
 using namespace std;
 //Base class for classes Gate, Switch, and LED.
@@ -12,6 +13,8 @@ private:
 	string m_Label;
 	bool deleted;
 	image* smallCleanImageBeforeAddingComp;
+	int m_Inputs;		//No. of input pins of that Gate.
+
 protected:
 	GraphicsInfo m_GfxInfo;	//The parameters required to draw a component
 	GraphicsInfo m_CenterInfo;
@@ -32,11 +35,12 @@ public:
 	bool getDelete();
 
 	void setNewLocation(GraphicsInfo GfxInfo);
-
+	GraphicsInfo getCenterLocation();
 	void setSmallCleanImageBeforeAddingComp(image* i);
 	image* getSmallCleanImageBeforeAddingComp();
-	Component();	
-	
+	void Component::setnumofinputs(int n);
+	int getnumofinputs()const;
+	Component();		
 	//Destructor must be virtual
 	virtual ~Component();
 };

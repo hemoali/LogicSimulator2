@@ -1,23 +1,31 @@
 #include "Connection.h"
 
-Connection::Connection(const GraphicsInfo &r_GfxInfo, OutputPin *pSrcPin,InputPin *pDstPin):Component(r_GfxInfo)	
-	
+Connection::Connection(const GraphicsInfo &r_GfxInfo, OutputPin *pSrcPin, InputPin *pDstPin) :Component(r_GfxInfo)
+
 {
 	SrcPin = pSrcPin;
 	DstPin = pDstPin;
 }
 void Connection::setSourcePin(OutputPin *pSrcPin)
-{	SrcPin = pSrcPin;	}   
+{
+	SrcPin = pSrcPin;
+}
 
 OutputPin* Connection::getSourcePin()
-{	return SrcPin;	}
+{
+	return SrcPin;
+}
 
 
 void Connection::setDestPin(InputPin *pDstPin)
-{	DstPin = pDstPin;	}
+{
+	DstPin = pDstPin;
+}
 
 InputPin* Connection::getDestPin()
-{	return DstPin;	}
+{
+	return DstPin;
+}
 
 
 void Connection::Operate()
@@ -28,7 +36,7 @@ void Connection::Operate()
 
 void Connection::Draw(Output* pOut)
 {
-	pOut->DrawConnection(m_GfxInfo);
+//	pOut->DrawConnection(m_GfxInfo);
 }
 
 int Connection::GetOutPinStatus()	//returns status of outputpin if LED, return -1

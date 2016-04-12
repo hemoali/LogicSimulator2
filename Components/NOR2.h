@@ -1,5 +1,4 @@
-#ifndef _NOR2_H
-#define _NOR2_H
+#pragma once
 
 /*
 Class NOR2
@@ -22,5 +21,3 @@ public:
 	virtual void setInputPinStatus(int n, STATUS s);	//set status of Inputpin # n, to be used by connection class.
 
 };
-
-#endif

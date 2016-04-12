@@ -22,7 +22,10 @@ void SWITCH::Operate()
 void SWITCH::Draw(Output* pOut)
 {
 	//Call output class and pass SWITCH drawing info to it.
-	pOut->DrawSwtich(m_CenterInfo, (outkey->getStatus() == HIGH) ? true : false);
+	if (!getDelete())pOut->DrawSwtich(m_CenterInfo, (outkey->getStatus() == HIGH) ? true : false);
+	else {
+		pOut->DrawCleanImage(getSmallCleanImageBeforeAddingComp(), m_CenterInfo.x1, m_CenterInfo.y1);
+	}
 }
 
 //returns status of outputpin

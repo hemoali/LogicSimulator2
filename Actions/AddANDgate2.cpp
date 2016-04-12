@@ -9,10 +9,6 @@ AddANDgate2::AddANDgate2(ApplicationManager *pApp) :Action(pApp)
 AddANDgate2::~AddANDgate2(void)
 {
 }
-bool AddANDgate2::ReadActionParameters()
-{
-	return false;
-}
 bool AddANDgate2::ReadActionParameters(image * smallImageBeforeAddingComponent)
 {
 	bool done = false;
@@ -43,19 +39,16 @@ void AddANDgate2::Execute()
 
 	if (ReadActionParameters(smallImageBeforeAddingComponent)){
 
-		//Calculate the rectangle Corners
-		int Len = UI.GATE_Width;
-		int Wdth = UI.GATE_Height;
-
 		//Gfx info to be used to construct the AND2 gate
 		GraphicsInfo GInfotmp;
 
-		GInfotmp.x1 = GInfo.x1 - Len / 2;
-		GInfotmp.x2 = GInfo.x1 + Len / 2;
-		GInfotmp.y1 = GInfo.y1 - Wdth / 2;
-		GInfotmp.y2 = GInfo.y1 + Wdth / 2;
+		GInfotmp.x1 = GInfo.x1 - UI.GATE_Width / 2;
+		GInfotmp.x2 = GInfo.x1 + UI.GATE_Width / 2;
+		GInfotmp.y1 = GInfo.y1 - UI.GATE_Height / 2;
+		GInfotmp.y2 = GInfo.y1 + UI.GATE_Height / 2;
 		AND2 *pA = new AND2(GInfotmp, AND2_FANOUT);
 		pA->setLabel(gateLabel);
+		pManager->vec.push_back(GInfotmp);
 		pManager->AddComponent(pA);
 		pA->setSmallCleanImageBeforeAddingComp(smallImageBeforeAddingComponent);
 	}

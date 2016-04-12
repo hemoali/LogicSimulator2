@@ -7,7 +7,7 @@ AddBUFFER::~AddBUFFER(void)
 {
 }
 
-bool AddBUFFER::ReadActionParameters()
+bool AddBUFFER::ReadActionParameters(image * smallImageBeforeAddingComponent)
 {
 	bool done = false;
 
@@ -18,7 +18,7 @@ bool AddBUFFER::ReadActionParameters()
 	//Print Action Message
 	pOut->PrintMsg("BUFFER : Click to add the gate");
 
-	if (pOut->SetDragImage(ADD_Buff, GInfo, NULL)){
+	if (pOut->SetDragImage(ADD_Buff, GInfo, smallImageBeforeAddingComponent)){
 		string s = "Please enter gate label: ";
 		pOut->PrintMsg(s);
 		gateLabel = pIn->GetSrting(pOut, s);
@@ -35,7 +35,7 @@ bool AddBUFFER::ReadActionParameters()
 void AddBUFFER::Execute()
 {
 	//Get Center point of the Gate
-	if (ReadActionParameters()){
+	 image* smallImageBeforeAddingComponent = new image; if (ReadActionParameters(smallImageBeforeAddingComponent)){
 
 		//Calculate the rectangle Corners
 		int Len = UI.GATE_Width;
@@ -49,7 +49,7 @@ void AddBUFFER::Execute()
 		GInfotmp.y1 = GInfo.y1 - Wdth / 2;
 		GInfotmp.y2 = GInfo.y1 + Wdth / 2;
 		BUFFER *pA = new BUFFER(GInfotmp, AND2_FANOUT);
-		pManager->AddComponent(pA);
+		pManager->vec.push_back(GInfotmp);pManager->AddComponent(pA);pA->setSmallCleanImageBeforeAddingComp(smallImageBeforeAddingComponent);
 	}
 }
 

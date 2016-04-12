@@ -7,7 +7,7 @@ AddXORgate2::~AddXORgate2(void)
 {
 }
 
-bool AddXORgate2::ReadActionParameters()
+bool AddXORgate2::ReadActionParameters(image * smallImageBeforeAddingComponent)
 {
 	bool done = false;
 
@@ -18,7 +18,7 @@ bool AddXORgate2::ReadActionParameters()
 	//Print Action Message
 	pOut->PrintMsg("2-Input XOR Gate: Click to add the gate");
 
-	if (pOut->SetDragImage(ADD_XOR_GATE_2, GInfo, NULL)){
+	if (pOut->SetDragImage(ADD_XOR_GATE_2, GInfo, smallImageBeforeAddingComponent)){
 		string s = "Please enter gate label: ";
 		pOut->PrintMsg(s);
 		gateLabel = pIn->GetSrting(pOut, s);
@@ -33,7 +33,7 @@ bool AddXORgate2::ReadActionParameters()
 
 void AddXORgate2::Execute()
 {	//Get Center point of the Gate
-	 if (ReadActionParameters()){
+	  image* smallImageBeforeAddingComponent = new image; if (ReadActionParameters(smallImageBeforeAddingComponent)){
 
 	//Calculate the rectangle Corners
 	int Len = UI.GATE_Width;
@@ -47,7 +47,7 @@ void AddXORgate2::Execute()
 	GInfotmp.y1 = GInfo.y1 - Wdth / 2;
 	GInfotmp.y2 = GInfo.y1 + Wdth / 2;
 	 XOR2*pA = new XOR2(GInfotmp, AND2_FANOUT);
-	pManager->AddComponent(pA);}
+	pManager->vec.push_back(GInfotmp);pManager->AddComponent(pA);pA->setSmallCleanImageBeforeAddingComp(smallImageBeforeAddingComponent);}
 }
 
 void AddXORgate2::Undo()

@@ -7,7 +7,7 @@ AddANDgate3::~AddANDgate3(void)
 {
 }
 
-bool AddANDgate3::ReadActionParameters()
+bool AddANDgate3::ReadActionParameters(image * smallImageBeforeAddingComponent)
 {
 	bool done = false;
 	//Get a Pointer to the Input / Output Interfaces
@@ -17,7 +17,7 @@ bool AddANDgate3::ReadActionParameters()
 	//Print Action Message
 	pOut->PrintMsg("3-Input AND Gate: Click to add the gate");
 
-	if (pOut->SetDragImage(ADD_AND_GATE_3, GInfo, NULL)){
+	if (pOut->SetDragImage(ADD_AND_GATE_3, GInfo, smallImageBeforeAddingComponent)){
 		string s = "Please enter gate label: ";
 		pOut->PrintMsg(s);
 		gateLabel = pIn->GetSrting(pOut, s);
@@ -34,7 +34,9 @@ bool AddANDgate3::ReadActionParameters()
 void AddANDgate3::Execute()
 {
 	//Get Center point of the Gate
-	if (ReadActionParameters()){
+	image* smallImageBeforeAddingComponent = new image; 
+	
+	if (ReadActionParameters(smallImageBeforeAddingComponent)){
 
 		//Calculate the rectangle Corners
 		int Len = UI.GATE_Width;
@@ -48,7 +50,7 @@ void AddANDgate3::Execute()
 		GInfotmp.y1 = GInfo.y1 - Wdth / 2;
 		GInfotmp.y2 = GInfo.y1 + Wdth / 2;
 		AND3 *pA = new AND3(GInfotmp, AND2_FANOUT);
-		pManager->AddComponent(pA);
+		pManager->vec.push_back(GInfotmp); pManager->AddComponent(pA); pA->setSmallCleanImageBeforeAddingComp(smallImageBeforeAddingComponent);
 	}
 }
 

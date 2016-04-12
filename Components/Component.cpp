@@ -3,6 +3,8 @@
 Component::Component(const GraphicsInfo &r_GfxInfo)
 {
 	m_GfxInfo = r_GfxInfo;
+	deleted = false;
+	smallCleanImageBeforeAddingComp = NULL;
 }
 void Component::setLabel(string s){
 	m_Label = s;
@@ -16,6 +18,7 @@ bool Component::getDelete(){ return deleted; }
 Component::Component()
 {
 	deleted = false;
+	smallCleanImageBeforeAddingComp = NULL;
 }
 
 void Component::setSmallCleanImageBeforeAddingComp(image* i){
@@ -34,7 +37,17 @@ void Component::setNewLocation(GraphicsInfo GfxInfo){
 	m_GfxInfo.y1 = m_CenterInfo.y1 - UI.GATE_Height / 2;
 	m_GfxInfo.y2 = m_CenterInfo.y1 + UI.GATE_Height / 2;
 }
-
+GraphicsInfo Component::getCenterLocation(){
+	return m_CenterInfo;
+}
+int Component::getnumofinputs()const
+{
+	return m_Inputs;
+}
+void Component::setnumofinputs(int n)
+{
+	m_Inputs = n;
+}
 Component::~Component()
 {}
 

@@ -160,6 +160,7 @@ ActionType Input::GetUserAction() const
 		//[3] User clicks on the status bar
 		return STATUS_BAR;
 	}
+	pWind->FlushMouseQueue();
 
 }
 

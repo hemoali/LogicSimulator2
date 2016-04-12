@@ -7,7 +7,7 @@ AddSWITCH::~AddSWITCH(void)
 {
 }
 
-bool AddSWITCH::ReadActionParameters()
+bool AddSWITCH::ReadActionParameters(image * smallImageBeforeAddingComponent)
 {bool done = false;
 
 	//Get a Pointer to the Input / Output Interfaces
@@ -17,7 +17,7 @@ bool AddSWITCH::ReadActionParameters()
 	//Print Action Message
 	pOut->PrintMsg(" SWITCH : Click to add the gate");
 
-	if (pOut->SetDragImage(ADD_Switch, GInfo, NULL)){
+	if (pOut->SetDragImage(ADD_Switch, GInfo, smallImageBeforeAddingComponent)){
 		string s = "Please enter gate label: ";
 		pOut->PrintMsg(s);
 		gateLabel = pIn->GetSrting(pOut, s);
@@ -33,7 +33,7 @@ bool AddSWITCH::ReadActionParameters()
 void AddSWITCH::Execute()
 {
 	//Get Center point of the Gate
-	 if (ReadActionParameters()){
+	  image* smallImageBeforeAddingComponent = new image; if (ReadActionParameters(smallImageBeforeAddingComponent)){
 
 	//Calculate the rectangle Corners
 	int Len = UI.GATE_Width;
@@ -47,7 +47,7 @@ void AddSWITCH::Execute()
 	GInfotmp.y1 = GInfo.y1 - Wdth / 2;
 	GInfotmp.y2 = GInfo.y1 + Wdth / 2;
 	SWITCH *pA = new SWITCH(GInfotmp, AND2_FANOUT);
-	pManager->AddComponent(pA);}
+	pManager->vec.push_back(GInfotmp);pManager->AddComponent(pA);pA->setSmallCleanImageBeforeAddingComp(smallImageBeforeAddingComponent);}
 }
 
 void AddSWITCH::Undo()

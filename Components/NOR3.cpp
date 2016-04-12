@@ -24,7 +24,10 @@ void NOR3::Operate()
 void NOR3::Draw(Output* pOut)
 {
 	//Call output class and pass gate drawing info to it.
-	pOut->DrawOr_Nor(m_CenterInfo, 3, true);
+	if (!getDelete()) pOut->DrawOr_Nor(m_CenterInfo, 3, true);
+	else {
+		pOut->DrawCleanImage(getSmallCleanImageBeforeAddingComp(), m_CenterInfo.x1, m_CenterInfo.y1);
+	}
 }
 
 //returns status of outputpin

@@ -23,7 +23,10 @@ void BUFFER::Operate()
 void BUFFER::Draw(Output* pOut)
 {
 	//Call output class and pass gate drawing info to it.
-	pOut->DrawNot_Buffer(m_CenterInfo, true);
+	if (!getDelete()) 	pOut->DrawNot_Buffer(m_CenterInfo, true);
+	else {
+		pOut->DrawCleanImage(getSmallCleanImageBeforeAddingComp(), m_CenterInfo.x1, m_CenterInfo.y1);
+	}
 }
 
 //returns status of outputpin

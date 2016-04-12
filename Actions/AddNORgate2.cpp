@@ -7,7 +7,7 @@ AddNORgate2::~AddNORgate2(void)
 {
 }
 
-bool AddNORgate2::ReadActionParameters()
+bool AddNORgate2::ReadActionParameters(image * smallImageBeforeAddingComponent)
 {
 	bool done = false;
 
@@ -18,7 +18,7 @@ bool AddNORgate2::ReadActionParameters()
 	//Print Action Message
 	pOut->PrintMsg(" 2-Input NOR gate : Click to add the gate");
 
-	if (pOut->SetDragImage(ADD_NOR_GATE_2, GInfo, NULL)){
+	if (pOut->SetDragImage(ADD_NOR_GATE_2, GInfo, smallImageBeforeAddingComponent)){
 		string s = "Please enter gate label: ";
 		pOut->PrintMsg(s);
 		gateLabel = pIn->GetSrting(pOut, s);
@@ -35,7 +35,7 @@ bool AddNORgate2::ReadActionParameters()
 void AddNORgate2::Execute()
 {
 	//Get Center point of the Gate
-	 if (ReadActionParameters()){
+	  image* smallImageBeforeAddingComponent = new image; if (ReadActionParameters(smallImageBeforeAddingComponent)){
 
 	//Calculate the rectangle Corners
 	int Len = UI.GATE_Width;
@@ -49,7 +49,7 @@ void AddNORgate2::Execute()
 	GInfotmp.y1 = GInfo.y1 - Wdth / 2;
 	GInfotmp.y2 = GInfo.y1 + Wdth / 2;
 	NOR2 *pA = new NOR2(GInfotmp, AND2_FANOUT);
-	pManager->AddComponent(pA);}
+	pManager->vec.push_back(GInfotmp);pManager->AddComponent(pA);pA->setSmallCleanImageBeforeAddingComp(smallImageBeforeAddingComponent);}
 }
 
 void AddNORgate2::Undo()

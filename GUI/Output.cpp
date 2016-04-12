@@ -459,11 +459,12 @@ bool Output::DrawConnection(GraphicsInfo GfxInfo, bool selected) const
 		delete tmp;
 		tmp = NULL;
 	}
+	pWind->FlushMouseQueue();
 	return true;
 }
 void Output::DrawCleanImage(image* img, int x, int y)
 {
-	pWind->DrawImage(img, x - UI.GATE_Width / 2 + 1, y - UI.GRID_HEIGHT / 2 , UI.GATE_Width - 1 , UI.GATE_Height -5);
+	pWind->DrawImage(img, x - UI.GATE_Width / 2 + 1, y - UI.GRID_HEIGHT / 2, UI.GATE_Width - 1, UI.GATE_Height - 5);
 }
 bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smallCleanImageBeforeAddingGate, bool moving){
 	int iXOld = 0;
@@ -473,7 +474,13 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 	char cKeyData;
 	int RectULX = iXOld - UI.GATE_Width / 2;
 	int RectULY = iYOld - UI.GATE_Height / 2;
-
+	if (!moving)
+	{
+		PrintMsg("Please select point within workspace and avoid overlaping!, press ESCAPE to stop");
+	}
+	else{
+		PrintMsg("Please select point within workspace and avoid overlaping!");
+	}
 
 	bool draw = true, isOriginalDrawn = false;
 
@@ -487,17 +494,21 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 	{
 		int x, y;
 		pWind->GetMouseCoord(x, y);
-
+		bool wrong = false;
 		Utils::correctPointClicked(x, y, true, false);
-		if (!Utils::CheckPoint(x, y, usedPixels)){
-			if (!isOriginalDrawn){
-				pWind->DrawImage(storedImg, 0, 0, pWind->GetWidth(), pWind->GetHeight());
-				isOriginalDrawn = true;
-			}
+		GraphicsInfo tmpGraphicsInfo; tmpGraphicsInfo.x1 = x; tmpGraphicsInfo.y1 = y;
+		if (!Utils::CheckPoint(tmpGraphicsInfo, usedPixels, false)){
+			//	if (!isOriginalDrawn){
+			//pWind->DrawImage(storedImg, 0, 0, pWind->GetWidth(), pWind->GetHeight());
+			//}
+			wrong = true;
 		}
-		else{
-			isOriginalDrawn = false;
 
+		else{
+			wrong = false;
+
+		}
+		if (Utils::CheckPoint(x, y, usedPixels)){
 			if (x != iXOld || y != iYOld){
 				pWind->DrawImage(storedDrawingImg, 0, UI.ToolBarHeight, pWind->GetWidth(), pWind->GetHeight() - UI.StatusBarHeight);
 
@@ -513,47 +524,47 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 				Gfx.x1 = RectULX + UI.GATE_Width / 2;
 				Gfx.y1 = RectULY + UI.GATE_Height / 2;
 
-				pWind->StoreImage(smallCleanImageBeforeAddingGate, Gfx.x1 - UI.GATE_Width / 2 + 1, Gfx.y1 - UI.GATE_Height / 2 + 1, UI.GATE_Width-1, UI.GATE_Height-1);
+				pWind->StoreImage(smallCleanImageBeforeAddingGate, Gfx.x1 - UI.GATE_Width / 2 + 1, Gfx.y1 - UI.GATE_Height / 2 + 1, UI.GATE_Width - 1, UI.GATE_Height - 1);
 
 				switch (ActType){
 				case ADD_Buff:{
-								  DrawNot_Buffer(Gfx, true);
+								  DrawNot_Buffer(Gfx, true, false ,wrong);
 								  break;
 				}
 				case ADD_INV:
 				{
 
-								DrawNot_Buffer(Gfx, false);
+								DrawNot_Buffer(Gfx, false, false, wrong);
 
 								break;
 				}
 				case ADD_AND_GATE_2:
 				{
 
-									   DrawAnd_Nand(Gfx, 2, false);
+									   DrawAnd_Nand(Gfx, 2, false, false, wrong);
 									   break;
 				}
 				case ADD_AND_GATE_3:
 				{
-									   DrawAnd_Nand(Gfx, 3, false);
+									   DrawAnd_Nand(Gfx, 3, false, false, wrong);
 									   break;
 				}
 
 				case ADD_NAND_GATE_2:
 				{
 
-										DrawAnd_Nand(Gfx, 2, true);
+										DrawAnd_Nand(Gfx, 2, true, false, wrong);
 										break;
 				}
 				case ADD_OR_GATE_2:
 				{
-									  DrawOr_Nor(Gfx, 2, false);
+									  DrawOr_Nor(Gfx, 2, false, false, wrong);
 									  break;
 				}
 
 				case ADD_NOR_GATE_2:
 				{
-									   DrawOr_Nor(Gfx, 2, true);
+									   DrawOr_Nor(Gfx, 2, true, false, wrong);
 
 									   break;
 				}
@@ -561,75 +572,75 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 				case ADD_XOR_GATE_2:
 				{
 
-									   DrawXor_Xnor(Gfx, 2, false);
+									   DrawXor_Xnor(Gfx, 2, false, false, wrong);
 									   break;
 				}
 				case ADD_XOR_GATE_3:
 				{
-									   DrawXor_Xnor(Gfx, 3, false);
+									   DrawXor_Xnor(Gfx, 3, false, false, wrong);
 									   break;
 				}
 
 				case ADD_XNOR_GATE_2:
 				{
 
-										DrawXor_Xnor(Gfx, 2, true);
+										DrawXor_Xnor(Gfx, 2, true, false, wrong);
 										break;
 				}
 				case ADD_NOR_GATE_3:
 				{
 
-									   DrawOr_Nor(Gfx, 3, true);
+									   DrawOr_Nor(Gfx, 3, true, false, wrong);
 									   break;
 				}
 				case ADD_Switch:
 				{
-								   DrawSwtich(Gfx, true);
+								   DrawSwtich(Gfx, true, false, wrong);
 								   break;
 				}
 				case ADD_LED:
 				{
-								DrawLed(Gfx, false);
+								DrawLed(Gfx, false, false, wrong);
 								break;
 				}
 				case ADD_Buff_H:{
-									DrawNot_Buffer(Gfx, true, true);
+									DrawNot_Buffer(Gfx, true, true, wrong);
 									break;
 				}
 				case ADD_INV_H:
 				{
 
-								  DrawNot_Buffer(Gfx, false, true);
+								  DrawNot_Buffer(Gfx, false, true, wrong);
 
 								  break;
 				}
 				case ADD_AND_GATE_2_H:
 				{
 
-										 DrawAnd_Nand(Gfx, 2, false, true);
+										 DrawAnd_Nand(Gfx, 2, false, true, wrong);
 										 break;
 				}
 				case ADD_AND_GATE_3_H:
 				{
-										 DrawAnd_Nand(Gfx, 3, false, true);
+										 DrawAnd_Nand(Gfx, 3, false, true, wrong);
 										 break;
 				}
 
 				case ADD_NAND_GATE_2_H:
 				{
 
-										  DrawAnd_Nand(Gfx, 2, true, true);
+										  DrawAnd_Nand(Gfx, 2, true, true, wrong);
 										  break;
 				}
 				case ADD_OR_GATE_2_H:
 				{
-										DrawOr_Nor(Gfx, 2, false, true);
+										DrawOr_Nor(Gfx, 2, false, true, wrong);
 										break;
 				}
 
 				case ADD_NOR_GATE_2_H:
 				{
-										 DrawOr_Nor(Gfx, 2, true, true);
+										 DrawOr_Nor(Gfx, 2, true, true, wrong);
 
 										 break;
 				}
@@ -637,42 +648,42 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 				case ADD_XOR_GATE_2_H:
 				{
 
-										 DrawXor_Xnor(Gfx, 2, false, true);
+										 DrawXor_Xnor(Gfx, 2, false, true, wrong);
 										 break;
 				}
 				case ADD_XOR_GATE_3_H:
 				{
-										 DrawXor_Xnor(Gfx, 3, false, true);
+										 DrawXor_Xnor(Gfx, 3, false, true, wrong);
 										 break;
 				}
 
 				case ADD_XNOR_GATE_2_H:
 				{
 
-										  DrawXor_Xnor(Gfx, 2, true, true);
+										  DrawXor_Xnor(Gfx, 2, true, true, wrong);
 										  break;
 				}
 				case ADD_NOR_GATE_3_H:
 				{
 
-										 DrawOr_Nor(Gfx, 3, true, true);
+										 DrawOr_Nor(Gfx, 3, true, true, wrong);
 										 break;
 				}
 				case ADD_Switch_H:
 				{
-									 DrawSwtich(Gfx, true, true);
+									 DrawSwtich(Gfx, true, true, wrong);
 									 break;
 				}
 				case ADD_LED_H:
 				{
-								  DrawLed(Gfx, false, true);
+								  DrawLed(Gfx, false, true, wrong);
 								  break;
 				}
 				}
 				pWind->UpdateBuffer();
 			}
 		}
-		if (pWind->GetKeyPress(cKeyData) == ESCAPE){
+		if (!moving && pWind->GetKeyPress(cKeyData) == ESCAPE){
 			pWind->DrawImage(storedImg, 0, 0, pWind->GetWidth(), pWind->GetHeight());
 			draw = false;
 			break;
@@ -680,12 +691,14 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 		else if (pWind->GetMouseClick(GfxInfo.x1, GfxInfo.y1) == LEFT_CLICK || (moving && (pWind->GetButtonState(LEFT_BUTTON, GfxInfo.x1, GfxInfo.y1) == BUTTON_UP))){
 			pWind->FlushMouseQueue();
 			Utils::correctPointClicked(GfxInfo.x1, GfxInfo.y1, true, false);
-			if (!Utils::CheckPoint(GfxInfo, usedPixels)){
-				PrintMsg("Please select point within workspace and avoid overlaping!, press ESCAPE to stop");
-			}
-			else{
+			if (Utils::CheckPoint(GfxInfo, usedPixels)){
 				draw = true;
 				break;
+			}
+			else{
+				//pWind->DrawImage(storedImg, 0, 0, pWind->GetWidth(), pWind->GetHeight());
+				draw = false;
+				//break;
 			}
 		}
 	}
@@ -707,7 +720,7 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //You Send a Centre Point (cx,cy) ,this means when you call Draw image Function , x and y sent should be cx-24, cy-24
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-void Output::DrawAnd_Nand(GraphicsInfo g, int in, bool isNand, bool highlighted) const{
+void Output::DrawAnd_Nand(GraphicsInfo g, int in, bool isNand, bool highlighted, bool notValid) const{
 
 	// Points
 	int cx = g.x1, cy = g.y1; //Centre Point
@@ -719,7 +732,7 @@ void Output::DrawAnd_Nand(GraphicsInfo g, int in, bool isNand, bool highlighted)
 	outy = cy;
 	p1y = cy - 20; p2y = cy + 21;
 
-	if (highlighted) pWind->SetPen(BLUE);
+	if (highlighted) pWind->SetPen(BLUE);else if (notValid) pWind->SetPen(RED);
 	else pWind->SetPen(BROWN);
 
 	if (isNand){
@@ -730,7 +743,7 @@ void Output::DrawAnd_Nand(GraphicsInfo g, int in, bool isNand, bool highlighted)
 		pWind->DrawLine(p2x, p2y, p2x + 8, p2y, FRAME);
 		pWind->DrawLine(in1x - 6 - (2 * ciDefBrushSize), in1y, in1x - 6, in1y, FRAME); //The Input1-Line
 		pWind->DrawLine(in2x - 6 - (2 * ciDefBrushSize), in2y, in2x - 6, in2y, FRAME); //The Input2-Line
-		pWind->DrawLine(outx + 3, outy, outx + 7 + (2 * ciDefBrushSize), outy, FRAME); //The Output-Line
+		pWind->DrawLine(outx + 3 * ciDefBrushSize - 1, outy, outx + 7 + (2 * ciDefBrushSize), outy, FRAME); //The Output-Line
 		pWind->DrawLine(p1x, p1y - 1, p2x, p2y, FRAME);
 		if (in == 3){ //Checking for 3 input Gate 
 			int in3x = in1x, in3y = cy;
@@ -741,7 +754,7 @@ void Output::DrawAnd_Nand(GraphicsInfo g, int in, bool isNand, bool highlighted)
 		pWind->DrawBezier(p2x + 8, p2y, p2x + 10 + 3 + 4, p2y - 4, p2x + 10 + 9 + 4, p2y - 12, outx, outy, FRAME);
 
 		//Drawing Buuble
-		pWind->DrawCircle(outx - ciDefBrushSize + 2 * ciDefBrushSize, outy, 2 * ciDefBrushSize, FILLED);
+		pWind->DrawCircle(outx - ciDefBrushSize + 2 * ciDefBrushSize, outy, 2 * ciDefBrushSize, FRAME);
 
 	}
 	else{
@@ -765,7 +778,7 @@ void Output::DrawAnd_Nand(GraphicsInfo g, int in, bool isNand, bool highlighted)
 	}
 }
 
-void Output::DrawNot_Buffer(GraphicsInfo g, bool isBuffer, bool highlighted) const{
+void Output::DrawNot_Buffer(GraphicsInfo g, bool isBuffer, bool highlighted, bool notValid) const{
 	int cx = g.x1, cy = g.y1; //Centre Point
 	int p1x, p1y, p2x, p2y, inx, iny, outx, outy; //Vertices of Triangle and input/output Points
 
@@ -773,7 +786,8 @@ void Output::DrawNot_Buffer(GraphicsInfo g, bool isBuffer, bool highlighted) con
 	p1y = cy + 21; p2y = cy - 21;
 	iny = outy = cy;
 
-	if (highlighted) pWind->SetPen(BLUE);
+	if (highlighted) pWind->SetPen(BLUE);else if (notValid) pWind->SetPen(RED);
+	else if (notValid) pWind->SetPen(RED);
 	else pWind->SetPen(BROWN);
 
 	if (isBuffer){
@@ -783,26 +797,23 @@ void Output::DrawNot_Buffer(GraphicsInfo g, bool isBuffer, bool highlighted) con
 		pWind->DrawLine(inx - 6 - (2 * ciDefBrushSize), iny, inx, iny, FRAME); //The Input-Line
 		pWind->DrawLine(outx, outy, outx + 6 + (2 * ciDefBrushSize), outy, FRAME); //The Output-Line
 		//Drawing Trianlge
-		pWind->DrawTriangle(p1x, p1y, p2x, p2y, outx, outy);
+		pWind->DrawTriangle(p1x, p1y, p2x, p2y, outx, outy, FRAME);
 	}
 	else{
 		// NOT GATE
 		outx = cx + 14 - (2 * ciDefBrushSize);
 		//Drawing lines 
 		pWind->DrawLine(inx - 6 - (2 * ciDefBrushSize), iny, inx, iny, FRAME); //The Input-Line
-		pWind->DrawLine(outx, outy, outx + 7 + (2 * ciDefBrushSize), outy, FRAME);//The Output-Line
+		pWind->DrawLine(outx + 4 * ciDefBrushSize - 1, outy, outx + 7 + (2 * ciDefBrushSize), outy, FRAME);//The Output-Line
 
 		//Drawing Trianlge
-		pWind->DrawTriangle(p1x, p1y, p2x, p2y, outx, outy);
+		pWind->DrawTriangle(p1x, p1y, p2x, p2y, outx, outy, FRAME);
 		//Darwing Bubble
-		pWind->DrawCircle(outx + 2 * ciDefBrushSize, outy, 2 * ciDefBrushSize, FILLED);
-	}
-
-
-
+		pWind->DrawCircle(outx + 2 * ciDefBrushSize, outy, 2 * ciDefBrushSize, FRAME);
+	}	
 }
 
-void Output::DrawOr_Nor(GraphicsInfo g, int in, bool isNor, bool highlighted) const{
+void Output::DrawOr_Nor(GraphicsInfo g, int in, bool isNor, bool highlighted, bool notValid) const{
 	int cx = g.x1, cy = g.y1; //Centre Point
 	int p1x, p1y, p2x, p2y, hx1, hx2, hy1, hy2, kx, ky, ky2; //Helping Points
 	int in1x, in1y, in2x, in2y, outx, outy; // the 2 Inputs & Output
@@ -816,7 +827,7 @@ void Output::DrawOr_Nor(GraphicsInfo g, int in, bool isNor, bool highlighted) co
 	p1y = hy1 = cy - 21;
 	hx1 = hx2 = cx;
 
-	if (highlighted) pWind->SetPen(BLUE);
+	if (highlighted) pWind->SetPen(BLUE);else if (notValid) pWind->SetPen(RED);
 	else pWind->SetPen(BROWN);
 
 	if (isNor){
@@ -829,13 +840,13 @@ void Output::DrawOr_Nor(GraphicsInfo g, int in, bool isNor, bool highlighted) co
 		//Draw lines
 		pWind->DrawLine(in1x - 6 - (2 * ciDefBrushSize), in1y, in1x, in1y, FRAME); //The Input1-Line
 		pWind->DrawLine(in2x - 6 - (2 * ciDefBrushSize), in2y, in2x, in2y, FRAME); //The Input2-Line
-		pWind->DrawLine(outx, outy, outx + 7 + (2 * ciDefBrushSize), outy, FRAME); //The Output-Line
+		pWind->DrawLine(outx + 4 * ciDefBrushSize - 1, outy, outx + 7 + (2 * ciDefBrushSize), outy, FRAME); //The Output-Line
 		if (in == 3){ //Checking for 3 input Gate 
 			int in3x = in1x + 2 * (ciDefBrushSize == 1 ? 2 : 1), in3y = cy;
 			pWind->DrawLine(in3x - 8 - (2 * ciDefBrushSize), in3y, in3x, in3y, FRAME); //The Input3-Line
 		}
 		//Draw Buuble
-		pWind->DrawCircle(outx + 2 * ciDefBrushSize, outy, 2 * ciDefBrushSize, FILLED);
+		pWind->DrawCircle(outx + 2 * ciDefBrushSize, outy, 2 * ciDefBrushSize, FRAME);
 		//Draw Bezier
 		pWind->DrawBezier(p1x, p1y, hx1, hy1, kx, ky, outx, outy, FRAME);
 		pWind->DrawBezier(p2x, p2y, hx2, hy2, kx, ky2, outx, outy, FRAME);
@@ -867,7 +878,7 @@ void Output::DrawOr_Nor(GraphicsInfo g, int in, bool isNor, bool highlighted) co
 
 }
 
-void Output::DrawXor_Xnor(GraphicsInfo g, int in, bool isXNor, bool highlighted) const
+void Output::DrawXor_Xnor(GraphicsInfo g, int in, bool isXNor, bool highlighted, bool notValid) const
 {
 	int cx = g.x1, cy = g.y1; //Centre Points
 	int in1x, in1y, in2x, in2y, outx, outy; // the 2 Inputs And Output
@@ -883,7 +894,7 @@ void Output::DrawXor_Xnor(GraphicsInfo g, int in, bool isXNor, bool highlighted)
 	hx1 = hx2 = cx;
 	int xi = 10; //X-Increment
 
-	if (highlighted) pWind->SetPen(BLUE);
+	if (highlighted) pWind->SetPen(BLUE);else if (notValid) pWind->SetPen(RED);
 	else pWind->SetPen(BROWN);
 
 	if (isXNor){
@@ -895,7 +906,7 @@ void Output::DrawXor_Xnor(GraphicsInfo g, int in, bool isXNor, bool highlighted)
 		//Draw lines
 		pWind->DrawLine(in1x - 6 - (2 * ciDefBrushSize), in1y, in1x, in1y, FRAME); //The Input1-Line
 		pWind->DrawLine(in2x - 6 - (2 * ciDefBrushSize), in2y, in2x, in2y, FRAME); //The Input2-Line
-		pWind->DrawLine(outx, outy, outx + 7 + (2 * ciDefBrushSize), outy, FRAME); //The Output-Line
+		pWind->DrawLine(outx + 4 * ciDefBrushSize - 1, outy, outx + 7 + (2 * ciDefBrushSize), outy, FRAME); //The Output-Line
 		if (in == 3){ //Checking for 3 input Gate 
 			int in3x = in1x, in3y = cy;
 			pWind->DrawLine(in3x - 6 - (2 * ciDefBrushSize), in3y, in3x, in3y, FRAME); //The Input3-Line
@@ -907,7 +918,7 @@ void Output::DrawXor_Xnor(GraphicsInfo g, int in, bool isXNor, bool highlighted)
 		//draw the xor Bezier with Delta x slightly different than the previous to avoid collision
 		pWind->DrawBezier(p1x + (2 * ciDefBrushSize), p1y, in1x + (2 * ciDefBrushSize), in1y, in2x + (2 * ciDefBrushSize), in2y, p2x + (2 * ciDefBrushSize), p2y, FRAME);
 		//Drawing Bubble
-		pWind->DrawCircle(outx + 2 * ciDefBrushSize, outy, 2 * ciDefBrushSize, FILLED);
+		pWind->DrawCircle(outx + 2 * ciDefBrushSize, outy, 2 * ciDefBrushSize, FRAME);
 
 	}
 	else{
@@ -935,9 +946,9 @@ void Output::DrawXor_Xnor(GraphicsInfo g, int in, bool isXNor, bool highlighted)
 
 
 }
-void Output::DrawLed(GraphicsInfo g, bool isON, bool highlighted) const
+void Output::DrawLed(GraphicsInfo g, bool isON, bool highlighted, bool notValid) const
 {
-	if (highlighted) pWind->SetPen(BLUE);
+	if (highlighted) pWind->SetPen(BLUE);else if (notValid) pWind->SetPen(RED);
 	else pWind->SetPen(BROWN);
 	int cx = g.x1, cy = g.y1, radius = 12; //Centre Points
 	if (!isON)
@@ -969,9 +980,9 @@ void Output::DrawLed(GraphicsInfo g, bool isON, bool highlighted) const
 
 
 }
-void Output::DrawSwtich(GraphicsInfo g, bool isON, bool highlighted) const
+void Output::DrawSwtich(GraphicsInfo g, bool isON, bool highlighted, bool notValid) const
 {
-	if (highlighted) pWind->SetPen(BLUE);
+	if (highlighted) pWind->SetPen(BLUE);else if (notValid) pWind->SetPen(RED);
 	else pWind->SetPen(BROWN);
 	int cx = g.x1, cy = g.y1; //Centre Points
 	//the rectangle
@@ -989,6 +1000,9 @@ void Output::DrawSwtich(GraphicsInfo g, bool isON, bool highlighted) const
 
 
 
+}
+void Output::setUsedPixel(int i, int j, CellType c){
+	usedPixels[i][j] = c;
 }
 Output::~Output()
 {

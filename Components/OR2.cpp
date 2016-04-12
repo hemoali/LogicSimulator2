@@ -23,7 +23,11 @@ void OR2::Operate()
 void OR2::Draw(Output* pOut)
 {
 	//Call output class and pass gate drawing info to it.
-	pOut->DrawOr_Nor(m_CenterInfo);
+	
+	if (!getDelete())pOut->DrawOr_Nor(m_CenterInfo, 2, false);
+	else {
+		pOut->DrawCleanImage(getSmallCleanImageBeforeAddingComp(), m_CenterInfo.x1, m_CenterInfo.y1);
+	}
 }
 
 //returns status of outputpin

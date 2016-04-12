@@ -23,7 +23,11 @@ void LED::Operate()
 void LED::Draw(Output* pOut)
 {
 	//Call output class and pass LED drawing info to it.
-	pOut->DrawLed(m_CenterInfo, (inkey->getStatus() == HIGH) ? true : false);
+	if (!getDelete()) pOut->DrawLed(m_CenterInfo, (inkey->getStatus() == HIGH) ? true : false);
+
+	else {
+		pOut->DrawCleanImage(getSmallCleanImageBeforeAddingComp(), m_CenterInfo.x1, m_CenterInfo.y1);
+	}
 }
 int LED::GetOutPinStatus()
 {

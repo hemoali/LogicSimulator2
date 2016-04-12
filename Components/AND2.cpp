@@ -23,8 +23,10 @@ void AND2::Operate()
 // Draws 2-input AND gate
 void AND2::Draw(Output* pOut)
 {
-	if (!getDelete()) pOut->DrawAnd_Nand(m_CenterInfo);
-	else pOut->DrawCleanImage(getSmallCleanImageBeforeAddingComp(), m_CenterInfo.x1, m_CenterInfo.y1);
+	if (!getDelete()) pOut->DrawAnd_Nand(m_CenterInfo, 2, false);
+	else {		
+		pOut->DrawCleanImage(getSmallCleanImageBeforeAddingComp(), m_CenterInfo.x1, m_CenterInfo.y1);
+	}
 }
 
 //returns status of outputpin
