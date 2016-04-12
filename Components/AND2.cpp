@@ -20,8 +20,7 @@ void AND2::Operate()
 // Draws 2-input AND gate
 void AND2::Draw(Output* pOut)
 {
-	//Call output class and pass gate drawing info to it.
-	pOut->DrawAnd_Nand(m_GfxInfo);
+	pOut->DrawAnd_Nand(m_CenterInfo);
 }
 
 //returns status of outputpin

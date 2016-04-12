@@ -21,7 +21,7 @@ void LED::Operate()
 void LED::Draw(Output* pOut)
 {
 	//Call output class and pass LED drawing info to it.
-	pOut->DrawLed(m_GfxInfo,(inkey->getStatus()==HIGH)?true:false);
+	pOut->DrawLed(m_CenterInfo, (inkey->getStatus() == HIGH) ? true : false);
 }
 int LED::GetOutPinStatus()
 {

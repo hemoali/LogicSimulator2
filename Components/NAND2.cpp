@@ -22,7 +22,7 @@ void NAND2::Operate()
 void NAND2::Draw(Output* pOut)
 {
 	//Call output class and pass gate drawing info to it.
-	pOut->DrawAnd_Nand(m_GfxInfo,true);
+	pOut->DrawAnd_Nand(m_CenterInfo, true);
 }
 
 //returns status of outputpin

@@ -11,6 +11,7 @@ private:
 	string m_Label;
 protected:
 	GraphicsInfo m_GfxInfo;	//The parameters required to draw a component
+	GraphicsInfo m_CenterInfo;
 public:
 	Component(const GraphicsInfo &r_GfxInfo);
 	virtual void Operate() = 0;	//Calculates the output according to the inputs

@@ -21,8 +21,6 @@ public:
 
 	SWITCH();
 	OutputPin*getoutpin();
-	SWITCH();
-
 	//Destructor must be virtual
 	virtual ~SWITCH();
 };

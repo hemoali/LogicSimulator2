@@ -9,6 +9,8 @@ AddNANDgate2::~AddNANDgate2(void)
 
 bool AddNANDgate2::ReadActionParameters()
 {
+	bool done = false;
+
 	//Get a Pointer to the Input / Output Interfaces
 	Output* pOut = pManager->GetOutput();
 	Input* pIn = pManager->GetInput();
@@ -20,18 +22,20 @@ bool AddNANDgate2::ReadActionParameters()
 		string s = "Please enter gate label: ";
 		pOut->PrintMsg(s);
 		gateLabel = pIn->GetSrting(pOut, s);
+		done = true;
 	}
 
 
 	//Clear Status Bar
 	pOut->ClearStatusBar();
+	return done;
 
 }
 
 void AddNANDgate2::Execute()
 {
 	//Get Center point of the Gate
-	ReadActionParameters();
+	 if (ReadActionParameters()){
 
 	//Calculate the rectangle Corners
 	int Len = UI.GATE_Width;
@@ -45,7 +49,7 @@ void AddNANDgate2::Execute()
 	GInfotmp.y1 = GInfo.y1 - Wdth / 2;
 	GInfotmp.y2 = GInfo.y1 + Wdth / 2;
 	NAND2 *pA = new NAND2(GInfotmp, AND2_FANOUT);
-	pManager->AddComponent(pA);
+	pManager->AddComponent(pA);}
 }
 
 void AddNANDgate2::Undo()

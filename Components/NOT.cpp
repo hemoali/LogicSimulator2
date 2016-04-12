@@ -21,7 +21,7 @@ void NOT::Operate()
 void NOT::Draw(Output* pOut)
 {
 	//Call output class and pass gate drawing info to it.
-	pOut->DrawNot_Buffer(m_GfxInfo);
+	pOut->DrawNot_Buffer(m_CenterInfo);
 }
 
 //returns status of outputpin

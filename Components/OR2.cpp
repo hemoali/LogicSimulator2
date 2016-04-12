@@ -21,7 +21,7 @@ void OR2::Operate()
 void OR2::Draw(Output* pOut)
 {
 	//Call output class and pass gate drawing info to it.
-	pOut->DrawOr_Nor(m_GfxInfo);
+	pOut->DrawOr_Nor(m_CenterInfo);
 }
 
 //returns status of outputpin

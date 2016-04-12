@@ -21,7 +21,7 @@ void SWITCH::Operate()
 void SWITCH::Draw(Output* pOut)
 {
 	//Call output class and pass SWITCH drawing info to it.
-	pOut->DrawSwtich(m_GfxInfo, (outkey->getStatus() == HIGH) ? true : false);
+	pOut->DrawSwtich(m_CenterInfo, (outkey->getStatus() == HIGH) ? true : false);
 }
 
 //returns status of outputpin

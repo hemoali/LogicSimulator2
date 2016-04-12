@@ -13,7 +13,7 @@ public:
 	virtual ~AddANDgate3(void);
 
 	//Reads parameters required for action to execute
-	virtual bool ReadActionParameters();
+	virtual bool  ReadActionParameters();
 	//Execute action (code depends on action type)
 	virtual void Execute();
 

@@ -27,7 +27,7 @@ void XOR3::Operate()
 void XOR3::Draw(Output* pOut)
 {
 	//Call output class and pass gate drawing info to it.
-	pOut->DrawXor_Xnor(m_GfxInfo,3);
+	pOut->DrawXor_Xnor(m_CenterInfo, 3);
 }
 
 //returns status of outputpin

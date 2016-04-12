@@ -22,7 +22,7 @@ void NOR2::Operate()
 void NOR2::Draw(Output* pOut)
 {
 	//Call output class and pass gate drawing info to it.
-	pOut->DrawOr_Nor(m_GfxInfo,true);
+	pOut->DrawOr_Nor(m_CenterInfo, true);
 }
 
 //returns status of outputpin

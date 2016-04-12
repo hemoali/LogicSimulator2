@@ -9,6 +9,8 @@ AddNORgate3::~AddNORgate3(void)
 
 bool AddNORgate3::ReadActionParameters()
 {
+	bool done = false;
+
 	//Get a Pointer to the Input / Output Interfaces
 	Output* pOut = pManager->GetOutput();
 	Input* pIn = pManager->GetInput();
@@ -20,18 +22,20 @@ bool AddNORgate3::ReadActionParameters()
 		string s = "Please enter gate label: ";
 		pOut->PrintMsg(s);
 		gateLabel = pIn->GetSrting(pOut, s);
+		done = true;
 	}
 
 
 	//Clear Status Bar
 	pOut->ClearStatusBar();
+	return done;
 
 }
 
 void AddNORgate3::Execute()
 {
 	//Get Center point of the Gate
-	ReadActionParameters();
+	 if (ReadActionParameters()){
 
 	//Calculate the rectangle Corners
 	int Len = UI.GATE_Width;
@@ -45,7 +49,7 @@ void AddNORgate3::Execute()
 	GInfotmp.y1 = GInfo.y1 - Wdth / 2;
 	GInfotmp.y2 = GInfo.y1 + Wdth / 2;
 	NOR3 *pA = new NOR3(GInfotmp, AND2_FANOUT);
-	pManager->AddComponent(pA);
+	pManager->AddComponent(pA);}
 }
 
 void AddNORgate3::Undo()

@@ -22,12 +22,13 @@ bool AddCONNECTION::ReadActionParameters()
 	//Clear Status Bar
 	pOut->ClearStatusBar();
 
+	return true;
 }
 
 void AddCONNECTION::Execute()
 {
 	//Get Center point of the Gate
-	ReadActionParameters();
+	 if (ReadActionParameters()){
 
 	GraphicsInfo GInfo; //Gfx info to be used to construct the AND2 gate
 
@@ -38,7 +39,7 @@ void AddCONNECTION::Execute()
 
 	Connection *pA = new Connection(GInfo, NULL, NULL); // ToDo : add pins to connection object
 
-	pManager->AddComponent(pA);
+	pManager->AddComponent(pA);}
 }
 
 void AddCONNECTION::Undo()
