@@ -45,6 +45,7 @@ enum ActionType
 	Change_Switch,		//Change Switch Status in Simulation Mode // ????? TODO:
 
 	SELECT,		//Select a Component, a Connection
+	MULTI_SELECT,		//Select many Components, a Connection
 	DEL,		//Delete a Component, a Connection
 	MOVE,		//Move a Component, a Connection
 

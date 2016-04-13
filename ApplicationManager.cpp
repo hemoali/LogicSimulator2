@@ -36,7 +36,7 @@ void ApplicationManager::AddComponent(Component* pComp)
 ActionType ApplicationManager::GetUserAction()
 {
 	//Call input to get what action is reuired from the user
-	return InputInterface->GetUserAction(); 	
+	return InputInterface->GetUserAction(this); 	
 }
 ////////////////////////////////////////////////////////////////////
 

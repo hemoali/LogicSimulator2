@@ -1,5 +1,8 @@
 #pragma once
 #include "Defs.H"
+#include "Components\Component.h"
+#include "Components\Connection.h"
+#include "ApplicationManager.h"
 class Utils
 {
 public:
@@ -9,7 +12,6 @@ public:
 	static bool CheckPoint(int x, int y, CellType[44][74]);
 	static bool CheckPointForConnections(int x, int y, CellType[44][74]);
 	static GraphicsInfo* Utils::getOutputDirections(GraphicsInfo GInfo, CellType usedPixels[44][74], int noOfOutputs = 4);
-
 	~Utils();
 };
 

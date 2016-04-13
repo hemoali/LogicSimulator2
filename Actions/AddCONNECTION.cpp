@@ -44,13 +44,13 @@ void AddCONNECTION::Execute()
 	int numofinputs = 0;
 	int indxofinpgate;
 	SWITCH*temp2 = NULL;  Gate*temp1 = NULL; Gate*temp3 = NULL; LED*temp4 = NULL;
-	for (int i = 0; i < pManager->vec.size(); i++)
+	for (int i = 0; i < pManager->allComponentsCorners.size(); i++)
 	{
 		if (dynamic_cast<Connection*>(pManager->getGate(i)))
 			continue;
-		if (Cx1 >= pManager->vec[i].x1&&Cx1 <= pManager->vec[i].x2&& Cy1 >= pManager->vec[i].y1&&Cy1 <= pManager->vec[i].y2)
+		if (Cx1 >= pManager->allComponentsCorners[i].x1&&Cx1 <= pManager->allComponentsCorners[i].x2&& Cy1 >= pManager->allComponentsCorners[i].y1&&Cy1 <= pManager->allComponentsCorners[i].y2)
 		{
-			if (Cx1 < (pManager->vec[i].x1 + UI.GATE_Width / 2))
+			if (Cx1 < (pManager->allComponentsCorners[i].x1 + UI.GATE_Width / 2))
 			{
 				pinput =pManager->getGate(i);
 				indxofinpgate = i;
@@ -60,9 +60,9 @@ void AddCONNECTION::Execute()
 				poutput = pManager->getGate(i);
 			}
 		}
-		if (Cx2 >= pManager->vec[i].x1&&Cx2 <= pManager->vec[i].x2&& Cy2 >= pManager->vec[i].y1&&Cy2 <= pManager->vec[i].y2)
+		if (Cx2 >= pManager->allComponentsCorners[i].x1&&Cx2 <= pManager->allComponentsCorners[i].x2&& Cy2 >= pManager->allComponentsCorners[i].y1&&Cy2 <= pManager->allComponentsCorners[i].y2)
 		{
-			if (Cx2 < (pManager->vec[i].x1 + UI.GATE_Width / 2))
+			if (Cx2 < (pManager->allComponentsCorners[i].x1 + UI.GATE_Width / 2))
 			{
 				pinput = pManager->getGate(i);
 				indxofinpgate = i;
@@ -81,14 +81,14 @@ void AddCONNECTION::Execute()
 		numofinputs = temp1->getnumofinputs();
 		if (numofinputs == 3)
 		{
-			if (Cy2 <= pManager->vec[indxofinpgate].y2 - UI.GATE_Height / 2 - 6)numofinputs = 0;
-			else if (Cy2 >= pManager->vec[indxofinpgate].y2 - UI.GATE_Height / 2 + 6)numofinputs = 2;
+			if (Cy2 <= pManager->allComponentsCorners[indxofinpgate].y2 - UI.GATE_Height / 2 - 6)numofinputs = 0;
+			else if (Cy2 >= pManager->allComponentsCorners[indxofinpgate].y2 - UI.GATE_Height / 2 + 6)numofinputs = 2;
 			else numofinputs = 1;
 		}
 		else if (numofinputs == 2)
 		{
-			if (Cy2 <= pManager->vec[indxofinpgate].y2 - UI.GATE_Height / 2)numofinputs = 0;
-			else if (Cy2 >= pManager->vec[indxofinpgate].y2 - UI.GATE_Height / 2)numofinputs = 2;
+			if (Cy2 <= pManager->allComponentsCorners[indxofinpgate].y2 - UI.GATE_Height / 2)numofinputs = 0;
+			else if (Cy2 >= pManager->allComponentsCorners[indxofinpgate].y2 - UI.GATE_Height / 2)numofinputs = 2;
 		}
 		else numofinputs = 2;
 	}
@@ -145,7 +145,7 @@ void AddCONNECTION::Execute()
 		{
 			Connection *pA = new Connection(GInfo, (temp3 == NULL) ? temp2->getoutpin() : temp3->getoutpin(), (temp1 == NULL) ? temp4->getinppin() : temp1->getinppin(numofinputs));
 			pManager->AddComponent(pA);
-			pManager->vec.push_back(GInfo);
+			pManager->allComponentsCorners.push_back(GInfo);
 		}
 		else{
 			pManager->GetOutput()->PrintMsg("No Available Connection");

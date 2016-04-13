@@ -35,9 +35,9 @@ void Move::Execute()
 	Component* Comp = NULL;
 	while (pIn->GetButtonStatus(LEFT_BUTTON, x, y) == BUTTON_DOWN) {
 		int compIdx;
-		for (int i = 0; i < pManager->vec.size(); i++)
+		for (int i = 0; i < pManager->allComponentsCorners.size(); i++)
 		{
-			if (x >= pManager->vec[i].x1 && x <= pManager->vec[i].x2 && y >= pManager->vec[i].y1&&y <= pManager->vec[i].y2)
+			if (x >= pManager->allComponentsCorners[i].x1 && x <= pManager->allComponentsCorners[i].x2 && y >= pManager->allComponentsCorners[i].y1&&y <= pManager->allComponentsCorners[i].y2)
 			{
 				compIdx = i;
 				Comp = pManager->getGate(i);
@@ -115,10 +115,10 @@ void Move::Execute()
 			if (pManager->GetOutput()->SetDragImage(ActType, newCoor, newSmallImageForGate, true)){
 
 				Comp->setNewLocation(newCoor);
-				pManager->vec[compIdx].x1 = newCoor.x1 - UI.GATE_Width / 2;
-				pManager->vec[compIdx].y1 = newCoor.y1 - UI.GATE_Height / 2;
-				pManager->vec[compIdx].x2 = newCoor.x1 + UI.GATE_Width / 2;
-				pManager->vec[compIdx].y2 = newCoor.y1 + UI.GATE_Height / 2;
+				pManager->allComponentsCorners[compIdx].x1 = newCoor.x1 - UI.GATE_Width / 2;
+				pManager->allComponentsCorners[compIdx].y1 = newCoor.y1 - UI.GATE_Height / 2;
+				pManager->allComponentsCorners[compIdx].x2 = newCoor.x1 + UI.GATE_Width / 2;
+				pManager->allComponentsCorners[compIdx].y2 = newCoor.y1 + UI.GATE_Height / 2;
 				Comp->setSmallCleanImageBeforeAddingComp(newSmallImageForGate);
 			}
 			else{

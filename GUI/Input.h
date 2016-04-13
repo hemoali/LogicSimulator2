@@ -14,7 +14,7 @@ public:
 	void GetPointClicked(int &, int &, bool drawImage = false, bool drawConnection = false);	//Get coordinate where user clicks
 	buttonstate Input::GetButtonStatus(const button btMouse, int &iX, int &iY) const;
 	string GetSrting(Output*, string);		//Returns a string entered by the user
-	ActionType GetUserAction() const; //Reads the user click and maps it to an action
+	ActionType GetUserAction(ApplicationManager* pManager) const; //Reads the user click and maps it to an action
 
 	~Input();
 };

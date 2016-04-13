@@ -14,7 +14,7 @@ class Output	//The application manager should have a pointer to this class
 {
 private:
 	window* pWind;	//Pointer to the Graphics Window
-	mutable vector < pair <int, int> >vec;
+	mutable vector < pair <int, int> >allComponentsCorners;
 	static CellType Output::usedPixels[44][74];
 
 public:

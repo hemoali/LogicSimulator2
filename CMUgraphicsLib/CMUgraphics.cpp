@@ -539,7 +539,7 @@ keytype window::GetKeyPress(char &cKey) {
 	}
 }
 
-clicktype window::WaitMouseClick(int &iX, int &iY) {
+clicktype window::WaitMouseClick(int &iX, int &iY, bool dequeue) {
 
 	mqueuenode* mqueTmp;
     clicktype ctTmp;
@@ -548,13 +548,17 @@ clicktype window::WaitMouseClick(int &iX, int &iY) {
         ProcessMessage(); // Kludge
 
 	    mqueTmp = mqueInput.Remove();
-	    if(mqueTmp != NULL) {
+		if (mqueTmp != NULL && dequeue) {
 	        iX = mqueTmp->iX;
 		    iY = mqueTmp->iY;
             ctTmp = mqueTmp->ctInfo;
 
 		    delete mqueTmp;
 		    return ctTmp;
+		}
+		else{
+			iX = mqueTmp->iX;
+			iY = mqueTmp->iY;
 		}
 	}
 }

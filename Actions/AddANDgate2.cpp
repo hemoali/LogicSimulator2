@@ -48,7 +48,7 @@ void AddANDgate2::Execute()
 		GInfotmp.y2 = GInfo.y1 + UI.GATE_Height / 2;
 		AND2 *pA = new AND2(GInfotmp, AND2_FANOUT);
 		pA->setLabel(gateLabel);
-		pManager->vec.push_back(GInfotmp);
+		pManager->allComponentsCorners.push_back(GInfotmp);
 		pManager->AddComponent(pA);
 		pA->setSmallCleanImageBeforeAddingComp(smallImageBeforeAddingComponent);
 	}

@@ -39,12 +39,25 @@ string Input::GetSrting(Output *pOut, string sOriginal = "")
 }
 
 //This function reads the position where the user clicks to determine the desired action
-ActionType Input::GetUserAction() const
+ActionType Input::GetUserAction(ApplicationManager *pManager) const
 {
 	int x=0, y=0, xT, yT;
 	while (true){
 		if (pWind->GetButtonState(LEFT_BUTTON, xT, yT) == BUTTON_DOWN && yT >= UI.ToolBarHeight && yT < UI.height - UI.StatusBarHeight){
-			return MOVE;
+			Component* comp = NULL;
+			for (int i = 0; i < pManager->allComponentsCorners.size(); i++)
+			{
+				if (dynamic_cast<Connection*>(pManager->getGate(i)))
+					continue;
+				if (x >= pManager->allComponentsCorners[i].x1&&Cx1 <= pManager->allComponentsCorners[i].x2&& y >= pManager->allComponentsCorners[i].y1&&Cy1 <= pManager->allComponentsCorners[i].y2)
+				{
+					comp = pManager->getGate(i);
+				}
+			}
+			if (comp == NULL)
+				return MOVE;
+			else
+				return MULTI_SELECT;
 		}
 		else{
 			break;

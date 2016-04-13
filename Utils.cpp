@@ -103,7 +103,6 @@ bool Utils::CheckPointForConnections(int x, int y, CellType usedPixels[44][74]) 
 	}
 	return 1;
 }
-
 Utils::~Utils()
 {
 }
