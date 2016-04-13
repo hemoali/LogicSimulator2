@@ -44,7 +44,7 @@ public:
 	void DrawLed(GraphicsInfo, bool = false, bool = false, bool = false) const;
 	void DrawSwtich(GraphicsInfo, bool = false, bool = false, bool = false) const;
 	void DrawCleanImage(image*, int x,int y);
-	bool DrawConnection(GraphicsInfo r_GfxInfo, bool selected = false) const;
+	bool DrawConnection(GraphicsInfo r_GfxInfo, int noOfImputs, Component* const,bool selected = false) const;
 	bfs_node* bfs(bfs_node* bf, int requX, int requY, vector<bfs_node*> allNodes) const;
 	
 	void PrintMsg(string msg) const;	//Print a message on Status bar

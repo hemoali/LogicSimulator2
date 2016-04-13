@@ -124,7 +124,7 @@ enum CellType{
 	HORIZONTAL,
 	INTERSECTION,
 	END_CONNECTION,
-	AVAILABE_FOR_CONNECTIONS
+	PIN
 };
 
 //Maximum number of input pins that can be connected to any output pin

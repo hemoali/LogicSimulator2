@@ -125,9 +125,6 @@
     <ClCompile Include="CMUgraphicsLib\keyqueue.cpp">
       <Filter>CMUgraphics Library</Filter>
     </ClCompile>
-    <ClCompile Include="GUI\Output.cpp">
-      <Filter>GUI</Filter>
-    </ClCompile>
     <ClCompile Include="Components\OutputPin.cpp">
       <Filter>Pins</Filter>
     </ClCompile>
@@ -223,6 +220,9 @@
     <ClCompile Include="Actions\Move.cpp">
       <Filter>Actions</Filter>
     </ClCompile>
+    <ClCompile Include="GUI\Output.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Defs.H" />
@@ -297,9 +297,6 @@
     </ClInclude>
     <ClInclude Include="CMUgraphicsLib\keyqueue.h">
       <Filter>CMUgraphics Library</Filter>
-    </ClInclude>
-    <ClInclude Include="GUI\Output.h">
-      <Filter>GUI</Filter>
     </ClInclude>
     <ClInclude Include="Components\OutputPin.h">
       <Filter>Pins</Filter>
@@ -407,6 +404,9 @@
     </ClInclude>
     <ClInclude Include="Actions\Move.h">
       <Filter>Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Output.h">
+      <Filter>GUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

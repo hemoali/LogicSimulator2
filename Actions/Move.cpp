@@ -49,9 +49,9 @@ void Move::Execute()
 			getComp->ptr->Draw(pManager->GetOutput());
 
 			int xbegin = (getComp->ptr->getCenterLocation().x1 - UI.GATE_Width / 2.0) / UI.GRID_SIZE, xend = (getComp->ptr->getCenterLocation().x1 + UI.GATE_Width / 2.0) / UI.GRID_SIZE, ybegin = (getComp->ptr->getCenterLocation().y1 - UI.GATE_Height / 2.0) / UI.GRID_SIZE, yend = (getComp->ptr->getCenterLocation().y1 + UI.GATE_Height / 2.0) / UI.GRID_SIZE;
-			for (int i = ybegin + 1; i <= yend - 1; i++)
+			for (int i = ybegin+1; i <= yend; i++)
 			{
-				for (int j = xbegin + 1; j <= xend - 1; j++)
+				for (int j = xbegin + 1 ; j <= xend; j++)
 				{
 					pOut->setUsedPixel(i, j, EMPTY);
 				}
@@ -125,9 +125,9 @@ void Move::Execute()
 			else{
 
 				int xbegin = (getComp->ptr->getCenterLocation().x1 - UI.GATE_Width / 2.0) / UI.GRID_SIZE, xend = (getComp->ptr->getCenterLocation().x1 + UI.GATE_Width / 2.0) / UI.GRID_SIZE, ybegin = (getComp->ptr->getCenterLocation().y1 - UI.GATE_Height / 2.0) / UI.GRID_SIZE, yend = (getComp->ptr->getCenterLocation().y1 + UI.GATE_Height / 2.0) / UI.GRID_SIZE;
-				for (int i = ybegin + 1; i <= yend - 1; i++)
+				for (int i = ybegin+1; i <= yend; i++)
 				{
-					for (int j = xbegin + 1; j <= xend - 1; j++)
+					for (int j = xbegin + 1; j <= xend; j++)
 					{
 						pOut->setUsedPixel(i, j, GATE);
 					}

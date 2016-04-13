@@ -282,7 +282,7 @@ bfs_node* Output::bfs(bfs_node* bf, int requX, int requY, vector<bfs_node*> allN
 	}
 	return NULL;
 }
-bool Output::DrawConnection(GraphicsInfo GfxInfo, bool selected) const
+bool Output::DrawConnection(GraphicsInfo GfxInfo, int noOfImputs, Component* const comp, bool selected) const
 {
 	vector<bfs_node*> allNodes;
 	bfs_node* current = new bfs_node;

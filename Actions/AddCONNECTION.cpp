@@ -86,9 +86,9 @@ void AddCONNECTION::Execute()
 		else if (numofinputs == 2)
 		{
 			if ((abs(Cy2 - pManager->vec[indxofinpgate].y1) < UI.GATE_Height / 2))numofinputs = 0;
-			else if ((abs(Cy2 - pManager->vec[indxofinpgate].y2) < UI.GATE_Height / 2))numofinputs = 1;
+			else if ((abs(Cy2 - pManager->vec[indxofinpgate].y2) < UI.GATE_Height / 2))numofinputs = 2;
 		}
-		else numofinputs = 1;
+		else numofinputs = 2;
 	}
 	else if (pinput != NULL && pinput->ptr != NULL && dynamic_cast<LED*>((pinput->ptr)))
 	{
@@ -139,7 +139,7 @@ void AddCONNECTION::Execute()
 		else{
 			GInfo.y2 = pinput->ptr->getCenterLocation().y1;
 		}
-		if (pManager->GetOutput()->DrawConnection(GInfo))
+		if (pManager->GetOutput()->DrawConnection(GInfo, numofinputs, pinput->ptr))
 		{
 			Connection *pA = new Connection(GInfo, (temp3 == NULL) ? temp2->getoutpin() : temp3->getoutpin(), (temp1 == NULL) ? temp4->getinppin() : temp1->getinppin(numofinputs));
 			pManager->AddComponent(pA);

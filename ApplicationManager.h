@@ -6,7 +6,7 @@
 #include "GUI\Input.h"
 #include "Actions\Action.h"
 #include "Components\Component.h"
-
+#include <vector>
 
 //Main class that manages everything in the application.
 class ApplicationManager
