@@ -278,7 +278,7 @@ bfs_node* Output::bfs(bfs_node* bf, int requX, int requY, vector<bfs_node*> allN
 	}
 	return NULL;
 }
-bool Output::DrawConnection(GraphicsInfo GfxInfo, int inputPin, Component* const comp, bool selected) const
+bool Output::DrawConnection(GraphicsInfo GfxInfo, int inputPin, GraphicsInfo compCenterLocation, bool selected) const
 {
 	vector<bfs_node*> allNodes;
 	bfs_node* current = new bfs_node;
@@ -313,13 +313,13 @@ bool Output::DrawConnection(GraphicsInfo GfxInfo, int inputPin, Component* const
 
 	if (inputPin == 0)
 	{
-		pWind->DrawLine(destX * UI.GRID_SIZE, destY * UI.GRID_SIZE, comp->getCenterLocation().x1 - UI.GATE_Width / 2 + 3, comp->getCenterLocation().y1 - 13);
+		pWind->DrawLine(destX * UI.GRID_SIZE, destY * UI.GRID_SIZE, compCenterLocation.x1 - UI.GATE_Width / 2 + 3, compCenterLocation.y1 - 13);
 	}
 	else if (inputPin == 1){
-		pWind->DrawLine(destX * UI.GRID_SIZE, comp->getCenterLocation().y1, comp->getCenterLocation().x1 - UI.GATE_Width / 2 + 3, comp->getCenterLocation().y1);
+		pWind->DrawLine(destX * UI.GRID_SIZE, compCenterLocation.y1, compCenterLocation.x1 - UI.GATE_Width / 2 + 3, compCenterLocation.y1);
 	}
 	else{
-		pWind->DrawLine(destX * UI.GRID_SIZE, destY * UI.GRID_SIZE, comp->getCenterLocation().x1 - UI.GATE_Width / 2 + 3, comp->getCenterLocation().y1 + 13);
+		pWind->DrawLine(destX * UI.GRID_SIZE, destY * UI.GRID_SIZE, compCenterLocation.x1 - UI.GATE_Width / 2 + 3, compCenterLocation.y1 + 13);
 	}
 
 	bfs_node* target = bfs(current, destX, destY, allNodes);
@@ -966,9 +966,7 @@ void Output::DrawXor_Xnor(GraphicsInfo g, int in, bool isXNor, bool highlighted,
 		//draw the xor Bezier with delta x slightly different than the previous to avoid collision
 		pWind->DrawBezier(p1x + (2 * ciDefBrushSize), p1y, in1x + (2 * ciDefBrushSize), in1y, in2x + (2 * ciDefBrushSize), in2y, p2x + (2 * ciDefBrushSize), p2y, FRAME);
 	}
-
-
-
+	
 }
 void Output::DrawLed(GraphicsInfo g, bool isON, bool highlighted, bool notValid) const
 {
@@ -999,9 +997,6 @@ void Output::DrawLed(GraphicsInfo g, bool isON, bool highlighted, bool notValid)
 	pWind->DrawLine(cx - radius*(1 / sqrt(2)), cy - radius*(1 / sqrt(2)), cx - (radius + 4)*(1 / sqrt(2)), cy - (radius + 4)*(1 / sqrt(2)), FRAME);
 	//left down
 	pWind->DrawLine(cx - radius*(1 / sqrt(2)), cy + radius*(1 / sqrt(2)), cx - (radius + 4)*(1 / sqrt(2)), cy + (radius + 4)*(1 / sqrt(2)), FRAME);
-
-
-
 
 }
 void Output::DrawSwtich(GraphicsInfo g, bool isON, bool highlighted, bool notValid) const

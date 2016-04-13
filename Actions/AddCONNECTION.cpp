@@ -39,8 +39,8 @@ void AddCONNECTION::Execute()
 	GInfo.y1 = Cy1;
 	GInfo.y2 = Cy2;
 
-	GetComponent*poutput = NULL;
-	GetComponent*pinput = NULL;
+	Component* poutput = NULL;
+	Component*pinput = NULL;
 	int numofinputs = 0;
 	int indxofinpgate;
 	SWITCH*temp2 = NULL;  Gate*temp1 = NULL; Gate*temp3 = NULL; LED*temp4 = NULL;
@@ -50,32 +50,32 @@ void AddCONNECTION::Execute()
 		{
 			if (Cx1 < (pManager->vec[i].x1 + UI.GATE_Width / 2))
 			{
-				pinput = new GetComponent(pManager->getGate(i));
+				pinput =pManager->getGate(i);
 				indxofinpgate = i;
 			}
 			else
 			{
-				poutput = new GetComponent(pManager->getGate(i));
+				poutput = pManager->getGate(i);
 			}
 		}
 		if (Cx2 >= pManager->vec[i].x1&&Cx2 <= pManager->vec[i].x2&& Cy2 >= pManager->vec[i].y1&&Cy2 <= pManager->vec[i].y2)
 		{
 			if (Cx2 < (pManager->vec[i].x1 + UI.GATE_Width / 2))
 			{
-				pinput = new GetComponent(pManager->getGate(i));
+				pinput = pManager->getGate(i);
 				indxofinpgate = i;
 			}
 			else
 			{
-				poutput = new GetComponent(pManager->getGate(i));
+				poutput = pManager->getGate(i);
 			}
 		}
 	}
 
 
-	if (pinput != NULL && pinput->ptr != NULL && dynamic_cast<Gate*>((pinput->ptr)))
+	if (pinput != NULL && pinput != NULL && dynamic_cast<Gate*>((pinput)))
 	{
-		temp1 = ((Gate*)pinput->ptr);
+		temp1 = ((Gate*)pinput);
 		numofinputs = temp1->getnumofinputs();
 		if (numofinputs == 3)
 		{
@@ -90,56 +90,56 @@ void AddCONNECTION::Execute()
 		}
 		else numofinputs = 2;
 	}
-	else if (pinput != NULL && pinput->ptr != NULL && dynamic_cast<LED*>((pinput->ptr)))
+	else if (pinput != NULL && pinput != NULL && dynamic_cast<LED*>((pinput)))
 	{
-		temp4 = ((LED*)pinput->ptr);
+		temp4 = ((LED*)pinput);
 		numofinputs = 1;
 	}
 	else{
 		validConnection = false;
 	}
-	if (poutput != NULL && poutput->ptr != NULL && dynamic_cast<Gate*>((poutput->ptr)))
+	if (poutput != NULL && poutput != NULL && dynamic_cast<Gate*>((poutput)))
 	{
-		temp3 = ((Gate*)poutput->ptr);
+		temp3 = ((Gate*)poutput);
 	}
-	else if (poutput != NULL && poutput->ptr != NULL && dynamic_cast<SWITCH*>((poutput->ptr)))
+	else if (poutput != NULL && poutput != NULL && dynamic_cast<SWITCH*>((poutput)))
 	{
-		temp2 = ((SWITCH*)poutput->ptr);
+		temp2 = ((SWITCH*)poutput);
 	}
 	else{
 		validConnection = false;
 	}
-	if (validConnection && pinput->ptr != poutput->ptr)
+	if (validConnection && pinput != poutput)
 	{
-		GInfo.x1 = poutput->ptr->getCenterLocation().x1 + UI.GATE_Width / 2 - 2;
-		GInfo.y1 = poutput->ptr->getCenterLocation().y1;
-		GInfo.x2 = pinput->ptr->getCenterLocation().x1 - UI.GATE_Width / 2 - 2;
-		if (pinput->ptr->getnumofinputs() == 3)
+		GInfo.x1 = poutput->getCenterLocation().x1 + UI.GATE_Width / 2 - 2;
+		GInfo.y1 = poutput->getCenterLocation().y1;
+		GInfo.x2 = pinput->getCenterLocation().x1 - UI.GATE_Width / 2 - 2;
+		if (pinput->getnumofinputs() == 3)
 		{
 			if (numofinputs == 0)
 			{
-				GInfo.y2 = pinput->ptr->getCenterLocation().y1 - UI.GATE_Height / 2 + 13;
+				GInfo.y2 = pinput->getCenterLocation().y1 - UI.GATE_Height / 2 + 13;
 			}
 			else if (numofinputs == 1){
-				GInfo.y2 = pinput->ptr->getCenterLocation().y1;
+				GInfo.y2 = pinput->getCenterLocation().y1;
 			}
 			else{
-				GInfo.y2 = pinput->ptr->getCenterLocation().y1 + UI.GATE_Height / 2 - 2;
+				GInfo.y2 = pinput->getCenterLocation().y1 + UI.GATE_Height / 2 - 2;
 			}
 		}
-		else if (pinput->ptr->getnumofinputs() == 2){
+		else if (pinput->getnumofinputs() == 2){
 			if (numofinputs == 0)
 			{
-				GInfo.y2 = pinput->ptr->getCenterLocation().y1 - UI.GATE_Height / 2 + 13;
+				GInfo.y2 = pinput->getCenterLocation().y1 - UI.GATE_Height / 2 + 13;
 			}
 			else{
-				GInfo.y2 = pinput->ptr->getCenterLocation().y1 + UI.GATE_Height / 2 - 13;
+				GInfo.y2 = pinput->getCenterLocation().y1 + UI.GATE_Height / 2 - 13;
 			}
 		}
 		else{
-			GInfo.y2 = pinput->ptr->getCenterLocation().y1;
+			GInfo.y2 = pinput->getCenterLocation().y1;
 		}
-		if (pManager->GetOutput()->DrawConnection(GInfo, numofinputs, pinput->ptr))
+		if (pManager->GetOutput()->DrawConnection(GInfo, numofinputs, pinput->getCenterLocation()))
 		{
 			Connection *pA = new Connection(GInfo, (temp3 == NULL) ? temp2->getoutpin() : temp3->getoutpin(), (temp1 == NULL) ? temp4->getinppin() : temp1->getinppin(numofinputs));
 			pManager->AddComponent(pA);

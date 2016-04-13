@@ -1,6 +1,5 @@
 #include "Move.h"
 #include "..\ApplicationManager.h"
-#include "..\GetComponent.h"
 #include "..\Components\NOR3.h"
 #include "..\Components\AND2.h"
 #include "..\Components\AND3.h"
@@ -33,7 +32,7 @@ void Move::Execute()
 	Input* pIn = pManager->GetInput();
 
 	int x, y;
-	GetComponent* getComp = NULL;
+	Component* Comp = NULL;
 	while (pIn->GetButtonStatus(LEFT_BUTTON, x, y) == BUTTON_DOWN) {
 		int compIdx;
 		for (int i = 0; i < pManager->vec.size(); i++)
@@ -41,14 +40,14 @@ void Move::Execute()
 			if (x >= pManager->vec[i].x1 && x <= pManager->vec[i].x2 && y >= pManager->vec[i].y1&&y <= pManager->vec[i].y2)
 			{
 				compIdx = i;
-				getComp = new GetComponent(pManager->getGate(i));
+				Comp = pManager->getGate(i);
 			}
 		}
-		if (getComp != NULL && getComp->ptr != NULL){
-			getComp->ptr->setDelete(true);
-			getComp->ptr->Draw(pManager->GetOutput());
+		if (Comp != NULL){
+			Comp->setDelete(true);
+			Comp->Draw(pManager->GetOutput());
 
-			int xbegin = (getComp->ptr->getCenterLocation().x1 - UI.GATE_Width / 2.0) / UI.GRID_SIZE, xend = (getComp->ptr->getCenterLocation().x1 + UI.GATE_Width / 2.0) / UI.GRID_SIZE, ybegin = (getComp->ptr->getCenterLocation().y1 - UI.GATE_Height / 2.0) / UI.GRID_SIZE, yend = (getComp->ptr->getCenterLocation().y1 + UI.GATE_Height / 2.0) / UI.GRID_SIZE;
+			int xbegin = (Comp->getCenterLocation().x1 - UI.GATE_Width / 2.0) / UI.GRID_SIZE, xend = (Comp->getCenterLocation().x1 + UI.GATE_Width / 2.0) / UI.GRID_SIZE, ybegin = (Comp->getCenterLocation().y1 - UI.GATE_Height / 2.0) / UI.GRID_SIZE, yend = (Comp->getCenterLocation().y1 + UI.GATE_Height / 2.0) / UI.GRID_SIZE;
 			for (int i = ybegin+1; i <= yend; i++)
 			{
 				for (int j = xbegin; j <= xend; j++)
@@ -58,55 +57,55 @@ void Move::Execute()
 			}
 			//Get Action type
 			ActionType ActType;
-			if (dynamic_cast<AND2*> (getComp->ptr))
+			if (dynamic_cast<AND2*> (Comp))
 			{
 				ActType = ADD_AND_GATE_2;
 			}
-			else if (dynamic_cast<AND3*> (getComp->ptr))
+			else if (dynamic_cast<AND3*> (Comp))
 			{
 				ActType = ADD_AND_GATE_3;
 			}
-			else if (dynamic_cast<BUFFER*> (getComp->ptr))
+			else if (dynamic_cast<BUFFER*> (Comp))
 			{
 				ActType = ADD_Buff;
 			}
-			else if (dynamic_cast<LED*> (getComp->ptr))
+			else if (dynamic_cast<LED*> (Comp))
 			{
 				ActType = ADD_LED;
 			}
-			else if (dynamic_cast<NAND2*> (getComp->ptr))
+			else if (dynamic_cast<NAND2*> (Comp))
 			{
 				ActType = ADD_NAND_GATE_2;
 			}
-			else if (dynamic_cast<NOR2*> (getComp->ptr))
+			else if (dynamic_cast<NOR2*> (Comp))
 			{
 				ActType = ADD_NOR_GATE_2;
 			}
-			else if (dynamic_cast<NOR3*> (getComp->ptr))
+			else if (dynamic_cast<NOR3*> (Comp))
 			{
 				ActType = ADD_NOR_GATE_3;
 			}
-			else if (dynamic_cast<NOT*> (getComp->ptr))
+			else if (dynamic_cast<NOT*> (Comp))
 			{
 				ActType = ADD_INV;
 			}
-			else if (dynamic_cast<OR2*> (getComp->ptr))
+			else if (dynamic_cast<OR2*> (Comp))
 			{
 				ActType = ADD_OR_GATE_2;
 			}
-			else if (dynamic_cast<SWITCH*> (getComp->ptr))
+			else if (dynamic_cast<SWITCH*> (Comp))
 			{
 				ActType = ADD_Switch;
 			}
-			else if (dynamic_cast<XNOR2*> (getComp->ptr))
+			else if (dynamic_cast<XNOR2*> (Comp))
 			{
 				ActType = ADD_XNOR_GATE_2;
 			}
-			else if (dynamic_cast<XOR2*> (getComp->ptr))
+			else if (dynamic_cast<XOR2*> (Comp))
 			{
 				ActType = ADD_XOR_GATE_2;
 			}
-			else if (dynamic_cast<XOR3*> (getComp->ptr))
+			else if (dynamic_cast<XOR3*> (Comp))
 			{
 				ActType = ADD_XOR_GATE_3;
 			}
@@ -115,16 +114,16 @@ void Move::Execute()
 			image* newSmallImageForGate = new image;
 			if (pManager->GetOutput()->SetDragImage(ActType, newCoor, newSmallImageForGate, true)){
 
-				getComp->ptr->setNewLocation(newCoor);
+				Comp->setNewLocation(newCoor);
 				pManager->vec[compIdx].x1 = newCoor.x1 - UI.GATE_Width / 2;
 				pManager->vec[compIdx].y1 = newCoor.y1 - UI.GATE_Height / 2;
 				pManager->vec[compIdx].x2 = newCoor.x1 + UI.GATE_Width / 2;
 				pManager->vec[compIdx].y2 = newCoor.y1 + UI.GATE_Height / 2;
-				getComp->ptr->setSmallCleanImageBeforeAddingComp(newSmallImageForGate);
+				Comp->setSmallCleanImageBeforeAddingComp(newSmallImageForGate);
 			}
 			else{
 
-				int xbegin = (getComp->ptr->getCenterLocation().x1 - UI.GATE_Width / 2.0) / UI.GRID_SIZE, xend = (getComp->ptr->getCenterLocation().x1 + UI.GATE_Width / 2.0) / UI.GRID_SIZE, ybegin = (getComp->ptr->getCenterLocation().y1 - UI.GATE_Height / 2.0) / UI.GRID_SIZE, yend = (getComp->ptr->getCenterLocation().y1 + UI.GATE_Height / 2.0) / UI.GRID_SIZE;
+				int xbegin = (Comp->getCenterLocation().x1 - UI.GATE_Width / 2.0) / UI.GRID_SIZE, xend = (Comp->getCenterLocation().x1 + UI.GATE_Width / 2.0) / UI.GRID_SIZE, ybegin = (Comp->getCenterLocation().y1 - UI.GATE_Height / 2.0) / UI.GRID_SIZE, yend = (Comp->getCenterLocation().y1 + UI.GATE_Height / 2.0) / UI.GRID_SIZE;
 				for (int i = ybegin + 1; i <= yend; i++)
 				{
 					for (int j = xbegin; j <= xend; j++)
@@ -141,9 +140,9 @@ void Move::Execute()
 
 		}
 	}
-	if (getComp != NULL && getComp->ptr != NULL){
-		getComp->ptr->setDelete(false);
-		getComp->ptr->Draw(pManager->GetOutput());
+	if (Comp != NULL){
+		Comp->setDelete(false);
+		Comp->Draw(pManager->GetOutput());
 	}
 
 }

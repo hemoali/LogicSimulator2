@@ -2,7 +2,6 @@
 #include"..\ApplicationManager.h"
 #include"..\Components\Connection.h"
 #include"..\Components\Gate.h"
-#include"..\GetComponent.h"
 #include"..\Components\LED.h"
 #include"..\Components\SWITCH.h"
 class AddCONNECTION:public Action

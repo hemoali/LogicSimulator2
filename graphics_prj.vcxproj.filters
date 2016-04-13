@@ -213,7 +213,6 @@
     <ClCompile Include="Components\SWITCH.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="GetComponent.cpp" />
     <ClCompile Include="Actions\Select.cpp">
       <Filter>Actions</Filter>
     </ClCompile>
@@ -398,7 +397,6 @@
     <ClInclude Include="Components\SWITCH.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="GetComponent.h" />
     <ClInclude Include="Actions\Select.h">
       <Filter>Actions</Filter>
     </ClInclude>
