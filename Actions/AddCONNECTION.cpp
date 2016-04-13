@@ -46,6 +46,8 @@ void AddCONNECTION::Execute()
 	SWITCH*temp2 = NULL;  Gate*temp1 = NULL; Gate*temp3 = NULL; LED*temp4 = NULL;
 	for (int i = 0; i < pManager->vec.size(); i++)
 	{
+		if (dynamic_cast<Connection*>(pManager->getGate(i)))
+			continue;
 		if (Cx1 >= pManager->vec[i].x1&&Cx1 <= pManager->vec[i].x2&& Cy1 >= pManager->vec[i].y1&&Cy1 <= pManager->vec[i].y2)
 		{
 			if (Cx1 < (pManager->vec[i].x1 + UI.GATE_Width / 2))
@@ -143,6 +145,7 @@ void AddCONNECTION::Execute()
 		{
 			Connection *pA = new Connection(GInfo, (temp3 == NULL) ? temp2->getoutpin() : temp3->getoutpin(), (temp1 == NULL) ? temp4->getinppin() : temp1->getinppin(numofinputs));
 			pManager->AddComponent(pA);
+			pManager->vec.push_back(GInfo);
 		}
 		else{
 			pManager->GetOutput()->PrintMsg("No Available Connection");
