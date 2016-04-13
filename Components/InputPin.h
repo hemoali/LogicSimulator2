@@ -1,6 +1,5 @@
 #ifndef _INPUTPIN_H
 #define _INPUTPIN_H
-
 #include "Pin.h"
 class Component; //Forward class declaration
 

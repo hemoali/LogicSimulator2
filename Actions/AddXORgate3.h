@@ -1,4 +1,5 @@
-#pragma once
+#ifndef XOR3_Header
+#define XOR3_Header
 #include"..\Components\XOR3.h"
 #include"..\ApplicationManager.h"
 #include"Action.h"
@@ -22,3 +23,4 @@ public:
 
 };
 
+#endif

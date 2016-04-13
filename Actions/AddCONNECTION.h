@@ -1,4 +1,6 @@
-#pragma once
+#ifndef CONNECTION_Header
+#define CONNECTION_Header
+
 #include"..\ApplicationManager.h"
 #include"..\Components\Connection.h"
 #include"..\Components\Gate.h"
@@ -26,3 +28,4 @@ public:
 
 };
 
+#endif

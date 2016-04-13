@@ -1,4 +1,5 @@
-#pragma once
+#ifndef AND3_Header
+#define AND3_Header
 #include"Action.h"
 #include"..\Components\AND3.h"
 #include"..\ApplicationManager.h"
@@ -22,3 +23,4 @@ public:
 
 };
 
+#endif

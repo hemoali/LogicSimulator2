@@ -1,4 +1,5 @@
-#pragma once
+#ifndef _LED_H
+#define _LED_H
 #include"Component.h"
 #include "InputPin.h"
 #include "OutputPin.h"
@@ -22,3 +23,4 @@ public:
 	virtual ~LED();
 };
 
+#endif

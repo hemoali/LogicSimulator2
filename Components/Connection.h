@@ -1,8 +1,8 @@
-#pragma once
-#include "component.h"
-#include "InputPin.h"
+#ifndef _CONNECTIONS_H
+#define _CONNECTIONS_H
+#include "Component.h"
 #include "OutputPin.h"
-
+#include "InputPin.h"
 class Connection :	public Component
 {
 	//Component*	SrcCmpnt;	//Connection source component
@@ -31,3 +31,4 @@ public:
 
 
 };
+#endif

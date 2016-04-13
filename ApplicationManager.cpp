@@ -131,7 +131,7 @@ Output* ApplicationManager::GetOutput()
 }
 
 ////////////////////////////////////////////////////////////////////
-Component *const ApplicationManager::getGate(int idx) const
+Component * ApplicationManager::getGate(int idx)
 {
 	return CompList[idx];
 }

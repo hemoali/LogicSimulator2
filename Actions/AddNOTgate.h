@@ -1,4 +1,5 @@
-#pragma once
+#ifndef NOT_Header
+#define NOT_Header
 #include"..\Components\NOT.h"
 #include"..\ApplicationManager.h"
 class AddNOTgate:public Action
@@ -20,3 +21,4 @@ public:
 
 };
 
+#endif

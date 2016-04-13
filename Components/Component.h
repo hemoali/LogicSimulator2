@@ -1,9 +1,7 @@
 #ifndef _COMPONENT_H
 #define _COMPONENT_H
-#include "..\Defs.h"
 #include "..\GUI\Output.h"
-#include "..\Utils.h"
-#include <iostream>
+//#include "..\Utils.h"
 using namespace std;
 //Base class for classes Gate, Switch, and LED.
 class Component

@@ -1,4 +1,6 @@
-#pragma once
+#ifndef _SWITCH_H
+#define _SWITCH_H
+
 #include"Component.h"
 #include"InputPin.h"
 #include"OutputPin.h"
@@ -25,3 +27,4 @@ public:
 	virtual ~SWITCH();
 };
 
+#endif

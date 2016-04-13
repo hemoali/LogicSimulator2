@@ -1,9 +1,8 @@
-#pragma once
-#include "..\Defs.h"
+#ifndef _OUTPUT_H
+#define _OUTPUT_H
 #include "Input.h"
-#include "..\Components\Component.h"
 #include<vector>
-
+class Component;
 struct bfs_node
 {
 	int x;
@@ -53,3 +52,4 @@ public:
 
 	~Output();
 };
+#endif

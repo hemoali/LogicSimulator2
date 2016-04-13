@@ -1,4 +1,5 @@
-#pragma once
+#ifndef _UTILS_H
+#define _UTILS_H
 #include "Defs.H"
 #include "Components\Component.h"
 #include "Components\Connection.h"
@@ -15,3 +16,4 @@ public:
 	~Utils();
 };
 
+#endif

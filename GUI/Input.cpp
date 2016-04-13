@@ -1,7 +1,6 @@
 #include "Input.h"
 #include "Output.h"
 #include "..\Utils.h"
-#include <iostream>
 Input::Input(window* pW)
 {
 	pWind = pW; //point to the passed window
@@ -49,7 +48,7 @@ ActionType Input::GetUserAction(ApplicationManager *pManager) const
 			{
 				if (dynamic_cast<Connection*>(pManager->getGate(i)))
 					continue;
-				if (x >= pManager->allComponentsCorners[i].x1&&Cx1 <= pManager->allComponentsCorners[i].x2&& y >= pManager->allComponentsCorners[i].y1&&Cy1 <= pManager->allComponentsCorners[i].y2)
+				if (x >= pManager->allComponentsCorners[i].x1&&x <= pManager->allComponentsCorners[i].x2&& y >= pManager->allComponentsCorners[i].y1&&y <= pManager->allComponentsCorners[i].y2)
 				{
 					comp = pManager->getGate(i);
 				}

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef NOR_Header
+#define NOR_Header
 #include"Action.h"
 #include"..\Components\NOR2.h"
 #include"..\ApplicationManager.h"
@@ -20,3 +21,4 @@ public:
 	virtual void Redo();
 
 };
+#endif

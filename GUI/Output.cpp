@@ -1,6 +1,5 @@
 #include "Output.h"
 #include "..\Utils.h"
-#include <iostream>
 #include <vector>
 #include <queue>
 #include <cstring>
@@ -740,14 +739,14 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 			}
 		}
 	}
-	for (size_t i = 0; i < 44; i++)
+	/*for (size_t i = 0; i < 44; i++)
 	{
 		for (size_t j = 0; j < 74; j++)
 		{
 			cout << usedPixels[i][j] << " ";
 		}
 		cout << endl;
-	}
+	}*/
 	pWind->FlushMouseQueue();
 	PrintMsg("");
 	delete storedDrawingImg;

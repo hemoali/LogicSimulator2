@@ -1,4 +1,5 @@
-#pragma once
+#ifndef NAND2_Header
+#define NAND2_Header
 #include"Action.h"
 #include"..\Components\NAND2.h"
 #include"..\ApplicationManager.h"
@@ -21,3 +22,4 @@ public:
 
 };
 
+#endif

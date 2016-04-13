@@ -1,4 +1,5 @@
-#pragma once
+#ifndef MOVE_Header
+#define MOVE_Header
 #include "Action.h"
 class Move :
 	public Action
@@ -17,3 +18,4 @@ public:
 
 };
 
+#endif

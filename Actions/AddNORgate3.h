@@ -1,4 +1,5 @@
-#pragma once
+#ifndef NOR3_Header
+#define NOR3_Header
 #include"Action.h"
 #include"..\Components\NOR3.h"
 #include"..\ApplicationManager.h"
@@ -21,3 +22,4 @@ public:
 
 };
 
+#endif

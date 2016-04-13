@@ -1,4 +1,5 @@
-#pragma once
+#ifndef XOR2_Header
+#define XOR2_Header
 #include"..\Components/XOR2.h"
 #include"..\ApplicationManager.h"
 #include"Action.h"
@@ -21,3 +22,4 @@ public:
 
 };
 
+#endif

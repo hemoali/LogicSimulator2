@@ -1,4 +1,5 @@
-#pragma once
+#ifndef LED_Header
+#define LED_Header
 #include"Action.h"
 #include"..\Components\LED.h"
 #include"..\ApplicationManager.h"
@@ -20,3 +21,4 @@ public:
 
 };
 
+#endif

@@ -5,8 +5,8 @@
 #include "GUI\Output.h"
 #include "GUI\Input.h"
 #include "Actions\Action.h"
-#include "Components\Component.h"
 #include <vector>
+class Component;
 
 //Main class that manages everything in the application.
 class ApplicationManager
@@ -39,7 +39,7 @@ public:
 	//Adds a new component to the list of components
 	void AddComponent(Component* pComp);
 	vector<GraphicsInfo>allComponentsCorners;
-	Component*const getGate(int)const;
+	Component* getGate(int);
 	//destructor
 	~ApplicationManager();
 };

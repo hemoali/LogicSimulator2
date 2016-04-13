@@ -1,4 +1,5 @@
-#pragma once
+#ifndef OR2_Header
+#define OR2_Header
 #include"..\Components\OR2.h"
 #include"..\ApplicationManager.h"
 class AddORgate2:public Action
@@ -20,3 +21,4 @@ public:
 
 };
 
+#endif

@@ -556,7 +556,7 @@ clicktype window::WaitMouseClick(int &iX, int &iY, bool dequeue) {
 		    delete mqueTmp;
 		    return ctTmp;
 		}
-		else{
+		else if (mqueTmp != NULL && !dequeue){
 			iX = mqueTmp->iX;
 			iY = mqueTmp->iY;
 		}

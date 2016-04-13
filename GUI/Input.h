@@ -1,8 +1,8 @@
-#pragma once
+#ifndef _INPUT_H
+#define _INPUT_H
 
-#include "..\CMUgraphicsLib\CMUgraphics.h"
 #include "UI_Info.h"
-
+class ApplicationManager;
 class Output;
 class Input		//The application manager should have a pointer to this class
 {
@@ -18,3 +18,4 @@ public:
 
 	~Input();
 };
+#endif

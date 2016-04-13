@@ -1,5 +1,5 @@
-#ifndef _ADD_AND_GATE_H
-#define _ADD_AND_GATE_H
+#ifndef AND2_Header
+#define AND2_Header
 
 #include "action.h"
 #include "..\Components\AND2.h"

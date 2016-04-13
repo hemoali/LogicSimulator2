@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SELECT_Header
+#define SELECT__Header
 #include "Action.h"
 class Select :
 	public Action
@@ -17,3 +18,4 @@ public:
 
 };
 
+#endif;

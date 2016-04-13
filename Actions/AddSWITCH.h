@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SWITCH_Header
+#define SWITCH_Header
 #include"../Components/SWITCH.h"
 #include"..\ApplicationManager.h"
 #include"Action.h"
@@ -20,3 +21,4 @@ public:
 
 };
 
+#endif

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef XNOR2_Header
+#define XNOR2_Header
 #include"..\Components\XNOR2.h"
 #include"..\ApplicationManager.h"
 class AddXNORgate2:public Action
@@ -19,3 +20,4 @@ public:
 
 };
 
+#endif

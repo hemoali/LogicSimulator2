@@ -1,4 +1,6 @@
-#pragma once
+#ifndef BUFFER_Header
+#define BUFFER_Header
+
 #include"Action.h"
 #include"..\Components\BUFFER.h"
 #include"..\ApplicationManager.h"
@@ -22,3 +24,4 @@ public:
 	
 };
 
+#endif

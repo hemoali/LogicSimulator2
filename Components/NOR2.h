@@ -1,11 +1,5 @@
-#pragma once
-
-/*
-Class NOR2
------------
-represent the 2-input NOR gate
-*/
-
+#ifndef _NOR2s_H
+#define _NOR2s_H
 #include"Gate.h"
 
 class NOR2 :public Gate
@@ -21,3 +15,4 @@ public:
 	virtual void setInputPinStatus(int n, STATUS s);	//set status of Inputpin # n, to be used by connection class.
 
 };
+#endif
