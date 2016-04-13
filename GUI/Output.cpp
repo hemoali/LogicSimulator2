@@ -307,19 +307,19 @@ bool Output::DrawConnection(GraphicsInfo GfxInfo, int inputPin, GraphicsInfo com
 	int remindX2 = GfxInfo.x2 % UI.GRID_SIZE;
 	int remindY2 = GfxInfo.y2 % UI.GRID_SIZE;
 
-	int destX = GfxInfo.x2 / UI.GRID_SIZE + ((remindX2 > UI.GRID_SIZE / 2) ? 1 : 0);
-	int destY = GfxInfo.y2 / UI.GRID_SIZE + ((remindY2 > UI.GRID_SIZE / 2) ? 1 : 0);
-	if (!selected)pWind->SetPen(color(23, 79, 181), 2);	else pWind->SetPen(BLUE, 2);
+	GfxInfo.x2 = compCenterLocation.x1 - UI.GATE_Width / 2 - 2;
 
+	int destX = GfxInfo.x2 / UI.GRID_SIZE + ((remindX2 > UI.GRID_SIZE / 2) ? 1 : 0);
+	int destY;
 	if (inputPin == 0)
 	{
-		pWind->DrawLine(destX * UI.GRID_SIZE, destY * UI.GRID_SIZE, compCenterLocation.x1 - UI.GATE_Width / 2 + 3, compCenterLocation.y1 - 13);
+		destY = compCenterLocation.y1 / UI.GRID_SIZE - 1;
 	}
 	else if (inputPin == 1){
-		pWind->DrawLine(destX * UI.GRID_SIZE, compCenterLocation.y1, compCenterLocation.x1 - UI.GATE_Width / 2 + 3, compCenterLocation.y1);
+		destY = compCenterLocation.y1 / UI.GRID_SIZE;
 	}
 	else{
-		pWind->DrawLine(destX * UI.GRID_SIZE, destY * UI.GRID_SIZE, compCenterLocation.x1 - UI.GATE_Width / 2 + 3, compCenterLocation.y1 + 13);
+		destY = compCenterLocation.y1 / UI.GRID_SIZE + 1;
 	}
 
 	bfs_node* target = bfs(current, destX, destY, allNodes);
@@ -330,6 +330,20 @@ bool Output::DrawConnection(GraphicsInfo GfxInfo, int inputPin, GraphicsInfo com
 
 		return false;
 	}
+	if (!selected)pWind->SetPen(color(23, 79, 181), 2);	else pWind->SetPen(BLUE, 2);
+
+	if (inputPin == 0)
+	{
+		pWind->DrawLine(destX * UI.GRID_SIZE, destY* UI.GRID_SIZE, compCenterLocation.x1 - UI.GATE_Width / 2 + 3, compCenterLocation.y1 - 13);
+	}
+	else if (inputPin == 1){
+		pWind->DrawLine(destX * UI.GRID_SIZE - 1, compCenterLocation.y1, compCenterLocation.x1 - UI.GATE_Width / 2 + 3, compCenterLocation.y1);
+	}
+	else{
+		pWind->DrawLine(destX * UI.GRID_SIZE, destY* UI.GRID_SIZE, compCenterLocation.x1 - UI.GATE_Width / 2 + 3, compCenterLocation.y1 + 13);
+	}
+
+	
 
 	//Draw small lines
 
