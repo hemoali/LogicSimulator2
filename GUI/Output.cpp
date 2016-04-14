@@ -3,6 +3,7 @@
 #include <vector>
 #include <queue>
 #include <cstring>
+#include <iostream>
 using namespace std;
 CellType Output::usedPixels[44][74];
 int arrayOfIntersections[44][74];
@@ -233,7 +234,7 @@ bfs_node* Output::bfs(bfs_node* bf, int requX, int requY, vector<bfs_node*> allN
 				arrayOfIntersections[tmp->y][tmp->x + 1] = 0;
 			}
 		}
-		if (Utils::CheckPointForConnections((tmp->x)* UI.GRID_SIZE, (tmp->y + 1) * UI.GRID_SIZE, usedPixels) && tmp->y + 1 <= 44 && vis[tmp->y + 1][tmp->x] < 0 && Output::usedPixels[tmp->y + 1][tmp->x] != INTERSECTION && (Output::usedPixels[tmp->y + 1][tmp->x] == EMPTY || (tmp->y + 1 == requY && tmp->x == requX &&  Output::usedPixels[tmp->y + 1][tmp->x] == PIN) || (Output::usedPixels[tmp->y + 1][tmp->x] == HORIZONTAL && Output::usedPixels[tmp->y + 1][tmp->x] != END_CONNECTION)))
+		if (Utils::CheckPointForConnections((tmp->x)* UI.GRID_SIZE, (tmp->y + 1) * UI.GRID_SIZE, usedPixels) && tmp->y + 1 <= 44 && vis[tmp->y + 1][tmp->x] < 0 && Output::usedPixels[tmp->y + 1][tmp->x] != INTERSECTION && (Output::usedPixels[tmp->y + 1][tmp->x] == EMPTY || (tmp->y + 1 == requY && tmp->x == requX &&  Output::usedPixels[tmp->y + 1][tmp->x] == PIN) || (abs((tmp->y + 1) - bf->y)== 1 && tmp->x == bf->x &&  Output::usedPixels[tmp->y + 1][tmp->x] == PIN) || (Output::usedPixels[tmp->y + 1][tmp->x] == HORIZONTAL && Output::usedPixels[tmp->y + 1][tmp->x] != END_CONNECTION)))
 		{
 
 			vis[tmp->y + 1][tmp->x] = vis[tmp->y][tmp->x] + 1;
@@ -263,7 +264,7 @@ bfs_node* Output::bfs(bfs_node* bf, int requX, int requY, vector<bfs_node*> allN
 			}
 		}
 
-		if (Utils::CheckPointForConnections((tmp->x)* UI.GRID_SIZE, (tmp->y - 1) * UI.GRID_SIZE, usedPixels) && tmp->y - 1 >= 0 && vis[tmp->y - 1][tmp->x] < 0 && Output::usedPixels[tmp->y - 1][tmp->x] != INTERSECTION && (Output::usedPixels[tmp->y - 1][tmp->x] == EMPTY || (tmp->y - 1 == requY && tmp->x == requX &&  Output::usedPixels[tmp->y - 1][tmp->x] == PIN) || (Output::usedPixels[tmp->y - 1][tmp->x] == HORIZONTAL && Output::usedPixels[tmp->y - 1][tmp->x] != END_CONNECTION)))
+		if (Utils::CheckPointForConnections((tmp->x)* UI.GRID_SIZE, (tmp->y - 1) * UI.GRID_SIZE, usedPixels) && tmp->y - 1 >= 0 && vis[tmp->y - 1][tmp->x] < 0 && Output::usedPixels[tmp->y - 1][tmp->x] != INTERSECTION && (Output::usedPixels[tmp->y - 1][tmp->x] == EMPTY || (tmp->y - 1 == requY && tmp->x == requX &&  Output::usedPixels[tmp->y - 1][tmp->x] == PIN) || (abs((tmp->y - 1) - bf->y) == 1 && tmp->x == bf->x &&  Output::usedPixels[tmp->y - 1][tmp->x] == PIN) || (Output::usedPixels[tmp->y - 1][tmp->x] == HORIZONTAL && Output::usedPixels[tmp->y - 1][tmp->x] != END_CONNECTION)))
 		{
 			vis[tmp->y - 1][tmp->x] = vis[tmp->y][tmp->x] + 1;
 			bfs_node* newNode = new bfs_node;
@@ -284,28 +285,9 @@ bool Output::DrawConnection(GraphicsInfo GfxInfo, int inputPin, GraphicsInfo com
 {
 	vector<bfs_node*> allNodes;
 	bfs_node* current = new bfs_node;
-	GraphicsInfo* outPut = Utils::getOutputDirections(GfxInfo, usedPixels, 3);
-	bool availableConnection = false;
-	bool freeOutputCells[] = { 0, 0, 0 };
-	for (size_t i = 0; i < 3; i++)
-	{
-		if (usedPixels[outPut[i].y1 / UI.GRID_SIZE][outPut[i].x1 / UI.GRID_SIZE] == EMPTY){
-			current->x = outPut[i].x1 / UI.GRID_SIZE;
-			current->y = outPut[i].y1 / UI.GRID_SIZE;
-			availableConnection = true;
-			freeOutputCells[i] = 1;
-		}
-	}
-	for (size_t i = 0; i < 3; i++)
-	{
-		if (inputPin == i && freeOutputCells[i])
-		{
-			current->x = outPut[i].x1 / UI.GRID_SIZE;
-			current->y = outPut[i].y1 / UI.GRID_SIZE;
-			break;
-		}
-	}
 	
+	current->x = (GfxInfo.x1 - (GfxInfo.x1 % UI.GRID_SIZE)) / UI.GRID_SIZE;
+	current->y = GfxInfo.y1 / UI.GRID_SIZE;
 	int remindX2 = GfxInfo.x2 % UI.GRID_SIZE;
 	int remindY2 = GfxInfo.y2 % UI.GRID_SIZE;
 
@@ -322,10 +304,6 @@ bool Output::DrawConnection(GraphicsInfo GfxInfo, int inputPin, GraphicsInfo com
 	}
 	else{
 		destY = compCenterLocation.y1 / UI.GRID_SIZE + 1;
-	}
-	if (!availableConnection)
-	{
-		current = NULL;
 	}
 	if (current == NULL)
 	{
@@ -354,7 +332,7 @@ bool Output::DrawConnection(GraphicsInfo GfxInfo, int inputPin, GraphicsInfo com
 		pWind->DrawLine(destX * UI.GRID_SIZE, destY* UI.GRID_SIZE, compCenterLocation.x1 - UI.GATE_Width / 2 + 3, compCenterLocation.y1 + 13);
 	}
 
-	
+
 
 	//Draw small lines
 
@@ -449,7 +427,7 @@ bool Output::DrawConnection(GraphicsInfo GfxInfo, int inputPin, GraphicsInfo com
 				{
 					for (size_t i = target->y; i >= parent->y; i--)
 					{
-						if (usedPixels[i][target->x] != INTERSECTION)
+						if (usedPixels[i][target->x] != INTERSECTION && usedPixels[i][target->x] != PIN)
 						{
 							usedPixels[i][target->x] = VERTICAL;
 						}
@@ -458,7 +436,7 @@ bool Output::DrawConnection(GraphicsInfo GfxInfo, int inputPin, GraphicsInfo com
 				else{
 					for (size_t i = target->y; i <= parent->y; i++)
 					{
-						if (usedPixels[i][target->x] != INTERSECTION)
+						if (usedPixels[i][target->x] != INTERSECTION && usedPixels[i][target->x] != PIN)
 						{
 							usedPixels[i][target->x] = VERTICAL;
 						}
@@ -471,7 +449,7 @@ bool Output::DrawConnection(GraphicsInfo GfxInfo, int inputPin, GraphicsInfo com
 				{
 					for (int i = target->x; i >= parent->x; i--)
 					{
-						if (usedPixels[target->y][i] != INTERSECTION)
+						if (usedPixels[target->y][i] != INTERSECTION&&usedPixels[target->y][i] != PIN)
 						{
 							usedPixels[target->y][i] = HORIZONTAL;
 						}
@@ -480,7 +458,7 @@ bool Output::DrawConnection(GraphicsInfo GfxInfo, int inputPin, GraphicsInfo com
 				else{
 					for (int i = target->x; i <= parent->x; i++)
 					{
-						if (usedPixels[target->y][i] != INTERSECTION)
+						if (usedPixels[target->y][i] != INTERSECTION && usedPixels[target->y][i] != PIN)
 						{
 							usedPixels[target->y][i] = HORIZONTAL;
 						}
@@ -751,14 +729,14 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 			}
 		}
 	}
-	/*for (size_t i = 0; i < 44; i++)
+	for (size_t i = 0; i < 44; i++)
 	{
-		for (size_t j = 0; j < 74; j++)
-		{
-			cout << usedPixels[i][j] << " ";
-		}
-		cout << endl;
-	}*/
+	for (size_t j = 0; j < 74; j++)
+	{
+	cout << usedPixels[i][j] << " ";
+	}
+	cout << endl;
+	}
 	pWind->FlushMouseQueue();
 	PrintMsg("");
 	delete storedDrawingImg;
@@ -991,7 +969,7 @@ void Output::DrawXor_Xnor(GraphicsInfo g, int in, bool isXNor, bool highlighted,
 		//draw the xor Bezier with delta x slightly different than the previous to avoid collision
 		pWind->DrawBezier(p1x + (2 * ciDefBrushSize), p1y, in1x + (2 * ciDefBrushSize), in1y, in2x + (2 * ciDefBrushSize), in2y, p2x + (2 * ciDefBrushSize), p2y, FRAME);
 	}
-	
+
 }
 void Output::DrawLed(GraphicsInfo g, bool isON, bool highlighted, bool notValid) const
 {

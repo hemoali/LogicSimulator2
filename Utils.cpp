@@ -80,7 +80,7 @@ bool Utils::CheckPoint(GraphicsInfo r_GfxInfo, CellType usedPixels[44][74], bool
 		{
 			for (int j = xbegin; j <= xend; j++)
 			{
-				if (xbegin == j)
+				if (xbegin == j || xend == j)
 				{
 					usedPixels[i][j] = PIN;
 					continue;

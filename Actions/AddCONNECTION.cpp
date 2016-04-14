@@ -141,11 +141,35 @@ void AddCONNECTION::Execute()
 		else{
 			GInfo.y2 = pinput->getCenterLocation().y1;
 		}
-		if (pManager->GetOutput()->DrawConnection(GInfo, numofinputs, pinput->getCenterLocation()))
+		if (poutput != NULL && dynamic_cast<Gate*>((poutput)))
+		{
+			if (((Gate*)poutput)->getoutpin()->connectedConnectionsCount() == 3){
+				pManager->GetOutput()->PrintMsg("Invalid Connection"); validConnection = false;
+			}
+		}
+		else if (poutput != NULL && dynamic_cast<SWITCH*>((poutput)))
+		{
+			if (((SWITCH*)poutput)->getoutpin()->connectedConnectionsCount() == 3){
+				pManager->GetOutput()->PrintMsg("Invalid Connection"); validConnection = false;
+			}
+		}
+
+		if (pManager->GetOutput()->DrawConnection(GInfo, numofinputs, pinput->getCenterLocation()) && validConnection)
 		{
 			Connection *pA = new Connection(GInfo, (temp3 == NULL) ? temp2->getoutpin() : temp3->getoutpin(), (temp1 == NULL) ? temp4->getinppin() : temp1->getinppin(numofinputs));
 			pManager->AddComponent(pA);
 			pManager->allComponentsCorners.push_back(GInfo);
+
+			if (poutput != NULL && dynamic_cast<Gate*>((poutput)))
+			{
+				((Gate*)poutput)->getoutpin()->ConnectTo(pA);
+			}
+			else if (poutput != NULL && dynamic_cast<SWITCH*>((poutput)))
+			{
+				((SWITCH*)poutput)->getoutpin()->ConnectTo(pA);
+			}
+
+
 		}
 		else{
 			pManager->GetOutput()->PrintMsg("No Available Connection");
