@@ -201,7 +201,10 @@ bool Output::DrawString(string s, GraphicsInfo Gfx_info) const{
 
 
 bfs_node* Output::bfs(bfs_node* bf, int requX, int requY, vector<bfs_node*> allNodes) const{
-
+	if (bf == NULL)
+	{
+		return NULL;
+	}
 	int vis[46][74];
 	memset(vis, -1, sizeof vis);
 	queue<bfs_node*> q;
@@ -216,7 +219,7 @@ bfs_node* Output::bfs(bfs_node* bf, int requX, int requY, vector<bfs_node*> allN
 		if (tmp->x == requX && tmp->y == requY){
 			return tmp;
 		}
-		if (Utils::CheckPointForConnections((tmp->x + 1)* UI.GRID_SIZE, tmp->y * UI.GRID_SIZE, usedPixels) && tmp->x + 1 <= 74 && vis[tmp->y][tmp->x + 1] < 0 && Output::usedPixels[tmp->y][tmp->x + 1] != INTERSECTION && (Output::usedPixels[tmp->y][tmp->x + 1] == EMPTY || Output::usedPixels[tmp->y][tmp->x + 1] == PIN || (Output::usedPixels[tmp->y][tmp->x + 1] == VERTICAL && Output::usedPixels[tmp->y][tmp->x + 1] != END_CONNECTION)))
+		if (Utils::CheckPointForConnections((tmp->x + 1)* UI.GRID_SIZE, tmp->y * UI.GRID_SIZE, usedPixels) && tmp->x + 1 <= 74 && vis[tmp->y][tmp->x + 1] < 0 && Output::usedPixels[tmp->y][tmp->x + 1] != INTERSECTION && (Output::usedPixels[tmp->y][tmp->x + 1] == EMPTY || (tmp->y == requY && tmp->x + 1 == requX && Output::usedPixels[tmp->y][tmp->x + 1] == PIN) || (Output::usedPixels[tmp->y][tmp->x + 1] == VERTICAL && Output::usedPixels[tmp->y][tmp->x + 1] != END_CONNECTION)))
 		{
 			vis[tmp->y][tmp->x + 1] = vis[tmp->y][tmp->x] + 1;
 			bfs_node* newNode = new bfs_node;
@@ -230,7 +233,7 @@ bfs_node* Output::bfs(bfs_node* bf, int requX, int requY, vector<bfs_node*> allN
 				arrayOfIntersections[tmp->y][tmp->x + 1] = 0;
 			}
 		}
-		if (Utils::CheckPointForConnections((tmp->x)* UI.GRID_SIZE, (tmp->y + 1) * UI.GRID_SIZE, usedPixels) && tmp->y + 1 <= 44 && vis[tmp->y + 1][tmp->x] < 0 && Output::usedPixels[tmp->y + 1][tmp->x] != INTERSECTION && (Output::usedPixels[tmp->y + 1][tmp->x] == EMPTY || (Output::usedPixels[tmp->y + 1][tmp->x] == HORIZONTAL && Output::usedPixels[tmp->y + 1][tmp->x] != END_CONNECTION)))
+		if (Utils::CheckPointForConnections((tmp->x)* UI.GRID_SIZE, (tmp->y + 1) * UI.GRID_SIZE, usedPixels) && tmp->y + 1 <= 44 && vis[tmp->y + 1][tmp->x] < 0 && Output::usedPixels[tmp->y + 1][tmp->x] != INTERSECTION && (Output::usedPixels[tmp->y + 1][tmp->x] == EMPTY || (tmp->y + 1 == requY && tmp->x == requX &&  Output::usedPixels[tmp->y + 1][tmp->x] == PIN) || (Output::usedPixels[tmp->y + 1][tmp->x] == HORIZONTAL && Output::usedPixels[tmp->y + 1][tmp->x] != END_CONNECTION)))
 		{
 
 			vis[tmp->y + 1][tmp->x] = vis[tmp->y][tmp->x] + 1;
@@ -260,7 +263,7 @@ bfs_node* Output::bfs(bfs_node* bf, int requX, int requY, vector<bfs_node*> allN
 			}
 		}
 
-		if (Utils::CheckPointForConnections((tmp->x)* UI.GRID_SIZE, (tmp->y - 1) * UI.GRID_SIZE, usedPixels) && tmp->y - 1 >= 0 && vis[tmp->y - 1][tmp->x] < 0 && Output::usedPixels[tmp->y - 1][tmp->x] != INTERSECTION && (Output::usedPixels[tmp->y - 1][tmp->x] == EMPTY || (Output::usedPixels[tmp->y - 1][tmp->x] == HORIZONTAL && Output::usedPixels[tmp->y - 1][tmp->x] != END_CONNECTION)))
+		if (Utils::CheckPointForConnections((tmp->x)* UI.GRID_SIZE, (tmp->y - 1) * UI.GRID_SIZE, usedPixels) && tmp->y - 1 >= 0 && vis[tmp->y - 1][tmp->x] < 0 && Output::usedPixels[tmp->y - 1][tmp->x] != INTERSECTION && (Output::usedPixels[tmp->y - 1][tmp->x] == EMPTY || (tmp->y - 1 == requY && tmp->x == requX &&  Output::usedPixels[tmp->y - 1][tmp->x] == PIN) || (Output::usedPixels[tmp->y - 1][tmp->x] == HORIZONTAL && Output::usedPixels[tmp->y - 1][tmp->x] != END_CONNECTION)))
 		{
 			vis[tmp->y - 1][tmp->x] = vis[tmp->y][tmp->x] + 1;
 			bfs_node* newNode = new bfs_node;
@@ -320,10 +323,19 @@ bool Output::DrawConnection(GraphicsInfo GfxInfo, int inputPin, GraphicsInfo com
 	else{
 		destY = compCenterLocation.y1 / UI.GRID_SIZE + 1;
 	}
+	if (!availableConnection)
+	{
+		current = NULL;
+	}
+	if (current == NULL)
+	{
+		pWind->FlushMouseQueue();
 
+		return false;
+	}
 	bfs_node* target = bfs(current, destX, destY, allNodes);
 
-	if (!availableConnection || target == NULL)
+	if (target == NULL)
 	{
 		pWind->FlushMouseQueue();
 

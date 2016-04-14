@@ -128,7 +128,7 @@ void Move::Execute()
 				{
 					for (int j = xbegin; j <= xend; j++)
 					{
-						if (xbegin == j)
+						if (xbegin == j || xend == j)
 						{
 							pOut->setUsedPixel(i, j, PIN); 
 							continue;
