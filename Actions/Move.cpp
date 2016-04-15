@@ -13,6 +13,7 @@
 #include "..\Components\XNOR2.h"
 #include "..\Components\XOR3.h"
 #include "..\Components\XOR2.h"
+#include "..\Components\Connection.h"
 #include<iostream>
 using namespace std;
 
@@ -37,7 +38,7 @@ void Move::Execute()
 		int compIdx;
 		for (int i = 0; i < pManager->allComponentsCorners.size(); i++)
 		{
-			if (x >= pManager->allComponentsCorners[i].x1 && x <= pManager->allComponentsCorners[i].x2 && y >= pManager->allComponentsCorners[i].y1&&y <= pManager->allComponentsCorners[i].y2)
+			if (x >= pManager->allComponentsCorners[i].x1 && x <= pManager->allComponentsCorners[i].x2 && y >= pManager->allComponentsCorners[i].y1&&y <= pManager->allComponentsCorners[i].y2 && !dynamic_cast<Connection*> (pManager->getGate(i)))
 			{
 				compIdx = i;
 				Comp = pManager->getGate(i);
@@ -112,8 +113,7 @@ void Move::Execute()
 			//Drag
 			GraphicsInfo newCoor;
 			image* newSmallImageForGate = new image;
-			if (pManager->GetOutput()->SetDragImage(ActType, newCoor, newSmallImageForGate, true)){
-
+			if (pManager->GetOutput()->SetDragImage(ActType, newCoor, newSmallImageForGate, true, Comp)){
 				Comp->setNewLocation(newCoor);
 				pManager->allComponentsCorners[compIdx].x1 = newCoor.x1 - UI.GATE_Width / 2;
 				pManager->allComponentsCorners[compIdx].y1 = newCoor.y1 - UI.GATE_Height / 2;
@@ -122,7 +122,6 @@ void Move::Execute()
 				Comp->setSmallCleanImageBeforeAddingComp(newSmallImageForGate);
 			}
 			else{
-
 				int xbegin = (Comp->getCenterLocation().x1 - UI.GATE_Width / 2.0) / UI.GRID_SIZE, xend = (Comp->getCenterLocation().x1 + UI.GATE_Width / 2.0) / UI.GRID_SIZE, ybegin = (Comp->getCenterLocation().y1 - UI.GATE_Height / 2.0) / UI.GRID_SIZE, yend = (Comp->getCenterLocation().y1 + UI.GATE_Height / 2.0) / UI.GRID_SIZE;
 				for (int i = ybegin + 1; i <= yend; i++)
 				{

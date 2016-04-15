@@ -4,6 +4,7 @@
 #include <queue>
 #include <cstring>
 #include <iostream>
+#include "..\Components\Gate.h"
 using namespace std;
 CellType Output::usedPixels[44][74];
 int arrayOfIntersections[44][74];
@@ -500,7 +501,7 @@ void Output::DrawCleanImage(image* img, int x, int y)
 {
 	pWind->DrawImage(img, x - UI.GATE_Width / 2 + 1, y - UI.GRID_HEIGHT / 2, UI.GATE_Width - 1, UI.GATE_Height - 5);
 }
-bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smallCleanImageBeforeAddingGate, bool moving){
+bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smallCleanImageBeforeAddingGate, bool moving, Component* comp){
 	int iXOld = 0;
 	int iYOld = 0;
 	pWind->GetMouseCoord(iXOld, iXOld);
@@ -710,7 +711,10 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 				}
 				}
 				//move connections with gate
+				if (moving)
+				{
 
+				}
 				pWind->UpdateBuffer();
 			}
 		}
