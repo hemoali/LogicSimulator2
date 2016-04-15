@@ -1,13 +1,13 @@
-#include "AddCONNECTION.h"
-AddCONNECTION::AddCONNECTION(ApplicationManager *pApp) :Action(pApp)
+#include "AddConnection.h"
+AddConnection::AddConnection(ApplicationManager *pApp) :Action(pApp)
 {
 }
 
-AddCONNECTION::~AddCONNECTION(void)
+AddConnection::~AddConnection(void)
 {
 }
 
-bool AddCONNECTION::ReadActionParameters(image * smallImageBeforeAddingComponent)
+bool AddConnection::ReadActionParameters(image * smallImageBeforeAddingComponent)
 {
 	//Get a Pointer to the Input / Output Interfaces
 	Output* pOut = pManager->GetOutput();
@@ -25,7 +25,7 @@ bool AddCONNECTION::ReadActionParameters(image * smallImageBeforeAddingComponent
 	return true;
 }
 
-void AddCONNECTION::Execute()
+void AddConnection::Execute()
 {
 	bool validConnection = true;
 	//Get Center point of the Gate
@@ -52,7 +52,7 @@ void AddCONNECTION::Execute()
 		{
 			if (Cx1 < (pManager->allComponentsCorners[i].x1 + UI.GATE_Width / 2))
 			{
-				pinput =pManager->getGate(i);
+				pinput = pManager->getGate(i);
 				indxofinpgate = i;
 			}
 			else
@@ -144,13 +144,13 @@ void AddCONNECTION::Execute()
 		if (poutput != NULL && dynamic_cast<Gate*>((poutput)))
 		{
 			if (((Gate*)poutput)->getoutpin()->connectedConnectionsCount() == 3){
-				pManager->GetOutput()->PrintMsg("Invalid Connection"); validConnection = false;
+				validConnection = false;
 			}
 		}
 		else if (poutput != NULL && dynamic_cast<SWITCH*>((poutput)))
 		{
 			if (((SWITCH*)poutput)->getoutpin()->connectedConnectionsCount() == 3){
-				pManager->GetOutput()->PrintMsg("Invalid Connection"); validConnection = false;
+				validConnection = false;
 			}
 		}
 
@@ -159,21 +159,39 @@ void AddCONNECTION::Execute()
 			Connection *pA = new Connection(GInfo, (temp3 == NULL) ? temp2->getoutpin() : temp3->getoutpin(), (temp1 == NULL) ? temp4->getinppin() : temp1->getinppin(numofinputs));
 			pManager->AddComponent(pA);
 			pManager->allComponentsCorners.push_back(GInfo);
-
+			
 			if (poutput != NULL && dynamic_cast<Gate*>((poutput)))
 			{
 				((Gate*)poutput)->getoutpin()->ConnectTo(pA);
+				pA->setSourcePin(((Gate*)poutput)->getoutpin());
 			}
 			else if (poutput != NULL && dynamic_cast<SWITCH*>((poutput)))
 			{
 				((SWITCH*)poutput)->getoutpin()->ConnectTo(pA);
+				pA->setSourcePin(((SWITCH*)poutput)->getoutpin());
 			}
 
+			if (pinput != NULL && dynamic_cast<Gate*>((pinput)))
+			{
+				int idxOfInputPin = numofinputs;
 
+				if (pinput->getnumofinputs() == 2 && numofinputs == 2){
+					idxOfInputPin = 1;
+				}
+				pA->setDestPin(((Gate*)pinput)->getinppin(idxOfInputPin));
+				((Gate*)pinput)->getinppin(idxOfInputPin)->setPosition(numofinputs);
+				((Gate*)pinput)->getinppin(idxOfInputPin)->setConnection(pA);
+			}
+			else if (pinput != NULL && dynamic_cast<LED*>((pinput)))
+			{
+				((LED*)pinput)->getinppin()->setPosition(numofinputs);
+				pA->setDestPin(((LED*)pinput)->getinppin());
+				((LED*)pinput)->getinppin()->setConnection(pA);
+			}
 		}
 		else{
 			pManager->GetOutput()->PrintMsg("No Available Connection");
-		}		
+		}
 	}
 	else{
 		pManager->GetOutput()->PrintMsg("Invalid Connection");
@@ -182,8 +200,8 @@ void AddCONNECTION::Execute()
 
 
 
-void AddCONNECTION::Undo()
+void AddConnection::Undo()
 {}
 
-void AddCONNECTION::Redo()
+void AddConnection::Redo()
 {}

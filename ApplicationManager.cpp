@@ -12,7 +12,7 @@
 #include"Actions\AddXNORgate2.h"
 #include"Actions\AddXORgate2.h"
 #include"Actions\AddXORgate3.h"
-#include"Actions\AddCONNECTION.h"
+#include"Actions\AddConnection.h"
 #include "Actions\Select.h"
 #include "Actions\Move.h"
 ApplicationManager::ApplicationManager()
@@ -93,7 +93,7 @@ void ApplicationManager::ExecuteAction(ActionType ActType)
 			break;
 
 		case ADD_CONNECTION:
-		pAct = new AddCONNECTION(this);
+		pAct = new AddConnection(this);
 			break;
 		case MOVE:
 			pAct = new Move(this);

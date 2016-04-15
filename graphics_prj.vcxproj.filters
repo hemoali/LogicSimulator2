@@ -204,9 +204,6 @@
     <ClCompile Include="Actions\AddXORgate3.cpp">
       <Filter>Actions</Filter>
     </ClCompile>
-    <ClCompile Include="Actions\AddCONNECTION.cpp">
-      <Filter>Actions</Filter>
-    </ClCompile>
     <ClCompile Include="Components\LED.cpp">
       <Filter>Components</Filter>
     </ClCompile>
@@ -221,6 +218,9 @@
     </ClCompile>
     <ClCompile Include="GUI\Output.cpp">
       <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Actions\AddConnection.cpp">
+      <Filter>Actions</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -358,9 +358,6 @@
     <ClInclude Include="Actions\AddBUFFER.h">
       <Filter>Actions</Filter>
     </ClInclude>
-    <ClInclude Include="Actions\AddCONNECTION.h">
-      <Filter>Actions</Filter>
-    </ClInclude>
     <ClInclude Include="Actions\AddLED.h">
       <Filter>Actions</Filter>
     </ClInclude>
@@ -405,6 +402,9 @@
     </ClInclude>
     <ClInclude Include="GUI\Output.h">
       <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Actions\AddConnection.h">
+      <Filter>Actions</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
