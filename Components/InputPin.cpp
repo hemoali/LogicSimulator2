@@ -1,7 +1,8 @@
 #include "InputPin.h"
 
-InputPin::InputPin()
-{}
+InputPin::InputPin() 
+{
+}
 
 void InputPin::setComponent(Component *pCmp)
 {

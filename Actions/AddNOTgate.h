@@ -1,12 +1,9 @@
 #ifndef NOT_Header
 #define NOT_Header
+#include"Action.h"
 #include"..\Components\NOT.h"
-#include"..\ApplicationManager.h"
 class AddNOTgate:public Action
 {
-private:
-	 string gateLabel;
-	GraphicsInfo GInfo;
 public:
 	AddNOTgate(ApplicationManager *pApp);
 	virtual ~AddNOTgate(void);

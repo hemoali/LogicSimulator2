@@ -471,11 +471,11 @@ bool Output::DrawConnection(GraphicsInfo GfxInfo, int inputPin, GraphicsInfo com
 			{
 				usedPixels[parent->y][parent->x] = INTERSECTION;
 			}
-			if (parent->parent == NULL)
+			if (parent->parent == NULL && usedPixels[parent->y][parent->x] != PIN)
 			{
 				usedPixels[parent->y][parent->x] = END_CONNECTION;
 			}
-			if (i == 0)
+			if (i == 0 && usedPixels[parent->y][parent->x] != PIN)
 			{
 				usedPixels[target->y][target->x] = END_CONNECTION;
 			}

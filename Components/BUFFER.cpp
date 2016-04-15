@@ -1,6 +1,6 @@
 #include "BUFFER.h"
 
-BUFFER::BUFFER(const GraphicsInfo &r_GfxInfo, int r_FanOut) :Gate(1, r_FanOut)
+BUFFER::BUFFER(const GraphicsInfo &r_GfxInfo, int r_FanOut) :Gate(1, r_FanOut, r_GfxInfo)
 {
 	m_GfxInfo.x1 = r_GfxInfo.x1;
 	m_GfxInfo.y1 = r_GfxInfo.y1;

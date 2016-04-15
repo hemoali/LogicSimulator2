@@ -9,8 +9,6 @@
 
 #include "Pin.h"
 class Connection;	//Forward class declartion
-
-
 class OutputPin: public Pin	//inherited from class Pin
 {
 private:

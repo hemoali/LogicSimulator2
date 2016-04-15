@@ -1,8 +1,14 @@
 #include "Component.h"
 
-Component::Component(const GraphicsInfo &r_GfxInfo)
+Component::Component(const GraphicsInfo &r_GfxInfo, int r_FanOut) :m_OutputPin(r_FanOut)
 {
-	m_GfxInfo = r_GfxInfo;
+	m_GfxInfo.x1 = r_GfxInfo.x1;
+	m_GfxInfo.x2 = r_GfxInfo.x1;
+	m_GfxInfo.y1 = r_GfxInfo.y1;
+	m_GfxInfo.y2 = r_GfxInfo.y1;
+	m_CenterInfo.x1 = m_GfxInfo.x1 + UI.GATE_Width / 2;
+	m_CenterInfo.y1 = m_GfxInfo.y1 + UI.GATE_Height / 2;
+
 	deleted = false;
 	smallCleanImageBeforeAddingComp = NULL;
 }
@@ -15,11 +21,6 @@ void Component::setDelete(bool d){
 	deleted = d;
 }
 bool Component::getDelete(){ return deleted; }
-Component::Component()
-{
-	deleted = false;
-	smallCleanImageBeforeAddingComp = NULL;
-}
 
 void Component::setSmallCleanImageBeforeAddingComp(image* i){
 	smallCleanImageBeforeAddingComp = i;
@@ -27,8 +28,7 @@ void Component::setSmallCleanImageBeforeAddingComp(image* i){
 image* Component::getSmallCleanImageBeforeAddingComp(){
 	return smallCleanImageBeforeAddingComp;
 }
-
-void Component::setNewLocation(GraphicsInfo GfxInfo){
+void Component::setNewCenterLocation(GraphicsInfo GfxInfo){
 	m_CenterInfo.x1 = GfxInfo.x1;
 	m_CenterInfo.y1 = GfxInfo.y1;
 
@@ -40,11 +40,23 @@ void Component::setNewLocation(GraphicsInfo GfxInfo){
 GraphicsInfo Component::getCenterLocation(){
 	return m_CenterInfo;
 }
-int Component::getnumofinputs()const
+int Component::getNumOfInputs()const
 {
 	return m_Inputs;
 }
-void Component::setnumofinputs(int n)
+OutputPin*Component::getOutputPin()
+{
+	OutputPin*ptr = &m_OutputPin;
+	return ptr;
+}
+
+InputPin*Component::getInputPin(int idx)
+{
+	InputPin*ptr = &m_InputPins[idx];
+	return ptr;
+}
+
+void Component::setNumOfInputs(int n)
 {
 	m_Inputs = n;
 }

@@ -35,21 +35,25 @@ bool AddLED::ReadActionParameters(image * smallImageBeforeAddingComponent)
 void AddLED::Execute()
 {
 	//Get Center point of the Gate
-	  image* smallImageBeforeAddingComponent = new image; if (ReadActionParameters(smallImageBeforeAddingComponent)){
+	image* smallImageBeforeAddingComponent = new image;
+	if (ReadActionParameters(smallImageBeforeAddingComponent)){
 
-	//Calculate the rectangle Corners
-	int Len = UI.GATE_Width;
-	int Wdth = UI.GATE_Height;
+		//Calculate the rectangle Corners
+		int Len = UI.GATE_Width;
+		int Wdth = UI.GATE_Height;
 
-	//Gfx info to be used to construct the AND2 gate
-	GraphicsInfo GInfotmp;
 
-	GInfotmp.x1 = GInfo.x1 - Len / 2;
-	GInfotmp.x2 = GInfo.x1 + Len / 2;
-	GInfotmp.y1 = GInfo.y1 - Wdth / 2;
-	GInfotmp.y2 = GInfo.y1 + Wdth / 2;
-	LED *pA = new LED(GInfotmp, AND2_FANOUT);
-	pManager->allComponentsCorners.push_back(GInfotmp);pManager->AddComponent(pA);pA->setSmallCleanImageBeforeAddingComp(smallImageBeforeAddingComponent);}
+		GraphicsInfo GInfotmp;
+
+		GInfotmp.x1 = GInfo.x1 - Len / 2;
+		GInfotmp.x2 = GInfo.x1 + Len / 2;
+		GInfotmp.y1 = GInfo.y1 - Wdth / 2;
+		GInfotmp.y2 = GInfo.y1 + Wdth / 2;
+		LED *pA = new LED(GInfotmp, FANOUT);
+		pManager->allComponentsCorners.push_back(GInfotmp); 
+		pManager->AddComponent(pA);
+		pA->setSmallCleanImageBeforeAddingComp(smallImageBeforeAddingComponent);
+	}
 }
 
 void AddLED::Undo()

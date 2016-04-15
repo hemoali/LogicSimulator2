@@ -38,10 +38,10 @@ void Move::Execute()
 		int compIdx;
 		for (int i = 0; i < pManager->allComponentsCorners.size(); i++)
 		{
-			if (x >= pManager->allComponentsCorners[i].x1 && x <= pManager->allComponentsCorners[i].x2 && y >= pManager->allComponentsCorners[i].y1&&y <= pManager->allComponentsCorners[i].y2 && !dynamic_cast<Connection*> (pManager->getGate(i)))
+			if (x >= pManager->allComponentsCorners[i].x1 && x <= pManager->allComponentsCorners[i].x2 && y >= pManager->allComponentsCorners[i].y1&&y <= pManager->allComponentsCorners[i].y2 && !dynamic_cast<Connection*> (pManager->getComponent(i)))
 			{
 				compIdx = i;
-				Comp = pManager->getGate(i);
+				Comp = pManager->getComponent(i);
 			}
 		}
 		if (Comp != NULL){
@@ -114,7 +114,7 @@ void Move::Execute()
 			GraphicsInfo newCoor;
 			image* newSmallImageForGate = new image;
 			if (pManager->GetOutput()->SetDragImage(ActType, newCoor, newSmallImageForGate, true, Comp)){
-				Comp->setNewLocation(newCoor);
+				Comp->setNewCenterLocation(newCoor);
 				pManager->allComponentsCorners[compIdx].x1 = newCoor.x1 - UI.GATE_Width / 2;
 				pManager->allComponentsCorners[compIdx].y1 = newCoor.y1 - UI.GATE_Height / 2;
 				pManager->allComponentsCorners[compIdx].x2 = newCoor.x1 + UI.GATE_Width / 2;

@@ -22,6 +22,7 @@ string Input::GetSrting(Output *pOut, string sOriginal = "")
 	keytype k;
 	while ((k = pWind->WaitKeyPress(ch)) != '\n' && (int)ch != 13){
 		if (k == ESCAPE){
+			s = "";
 			pOut->PrintMsg(sOriginal);
 		}
 		else if (k == ASCII && (int)ch == 8){
@@ -46,11 +47,11 @@ ActionType Input::GetUserAction(ApplicationManager *pManager) const
 			Component* comp = NULL;
 			for (int i = 0; i < pManager->allComponentsCorners.size(); i++)
 			{
-				if (dynamic_cast<Connection*>(pManager->getGate(i)))
+				if (dynamic_cast<Connection*>(pManager->getComponent(i)))
 					continue;
 				if (x >= pManager->allComponentsCorners[i].x1&&x <= pManager->allComponentsCorners[i].x2&& y >= pManager->allComponentsCorners[i].y1&&y <= pManager->allComponentsCorners[i].y2)
 				{
-					comp = pManager->getGate(i);
+					comp = pManager->getComponent(i);
 				}
 			}
 			if (comp == NULL)

@@ -142,13 +142,21 @@
     <ClCompile Include="Actions\AddXORgate3.cpp" />
     <ClCompile Include="Actions\Move.cpp" />
     <ClCompile Include="Actions\Select.cpp" />
-    <ClCompile Include="CMUgraphicsLib\auxil.cpp" />
-    <ClCompile Include="CMUgraphicsLib\CMUgraphics.cpp" />
-    <ClCompile Include="CMUgraphicsLib\image.cpp" />
-    <ClCompile Include="CMUgraphicsLib\jpegload.c" />
-    <ClCompile Include="CMUgraphicsLib\keyqueue.cpp" />
-    <ClCompile Include="CMUgraphicsLib\mousequeue.cpp" />
-    <ClCompile Include="CMUgraphicsLib\windowinput.cpp" />
+    <ClCompile Include="CMUgraphicsLib\auxil.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="CMUgraphicsLib\CMUgraphics.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="CMUgraphicsLib\colors.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="CMUgraphicsLib\image.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="CMUgraphicsLib\jpegload.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="CMUgraphicsLib\jpeg\jcomapi.c" />
     <ClCompile Include="CMUgraphicsLib\jpeg\jcparam.c" />
     <ClCompile Include="CMUgraphicsLib\jpeg\jdapimin.c" />
@@ -177,6 +185,15 @@
     <ClCompile Include="CMUgraphicsLib\jpeg\jquant1.c" />
     <ClCompile Include="CMUgraphicsLib\jpeg\jquant2.c" />
     <ClCompile Include="CMUgraphicsLib\jpeg\jutils.c" />
+    <ClCompile Include="CMUgraphicsLib\keyqueue.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="CMUgraphicsLib\mousequeue.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="CMUgraphicsLib\windowinput.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="Components\AND2.cpp" />
     <ClCompile Include="Components\AND3.cpp" />
     <ClCompile Include="Components\BUFFER.cpp" />
@@ -220,16 +237,24 @@
     <ClInclude Include="Actions\Action.h" />
     <ClInclude Include="Actions\Move.h" />
     <ClInclude Include="Actions\Select.h" />
-    <ClInclude Include="CMUgraphicsLib\auxil.h" />
-    <ClInclude Include="CMUgraphicsLib\CMUgraphics.h" />
-    <ClInclude Include="CMUgraphicsLib\colors.h" />
-    <ClInclude Include="CMUgraphicsLib\error.h" />
-    <ClInclude Include="CMUgraphicsLib\image.h" />
-    <ClInclude Include="CMUgraphicsLib\jpegload.h" />
-    <ClInclude Include="CMUgraphicsLib\keyqueue.h" />
-    <ClInclude Include="CMUgraphicsLib\mousequeue.h" />
-    <ClInclude Include="CMUgraphicsLib\version.h" />
-    <ClInclude Include="CMUgraphicsLib\windowinput.h" />
+    <ClInclude Include="CMUgraphicsLib\auxil.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="CMUgraphicsLib\CMUgraphics.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="CMUgraphicsLib\colors.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="CMUgraphicsLib\error.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="CMUgraphicsLib\image.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="CMUgraphicsLib\jpegload.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="CMUgraphicsLib\jpeg\jconfig.h" />
     <ClInclude Include="CMUgraphicsLib\jpeg\jdct.h" />
     <ClInclude Include="CMUgraphicsLib\jpeg\jdhuff.h" />
@@ -240,6 +265,18 @@
     <ClInclude Include="CMUgraphicsLib\jpeg\jpegint.h" />
     <ClInclude Include="CMUgraphicsLib\jpeg\jpeglib.h" />
     <ClInclude Include="CMUgraphicsLib\jpeg\jversion.h" />
+    <ClInclude Include="CMUgraphicsLib\keyqueue.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="CMUgraphicsLib\mousequeue.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="CMUgraphicsLib\version.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="CMUgraphicsLib\windowinput.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="Components\AND2.h" />
     <ClInclude Include="Components\AND3.h" />
     <ClInclude Include="Components\BUFFER.h" />
@@ -268,6 +305,14 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="CMUgraphicsLib\Manual.txt">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+    </Text>
+    <Text Include="CMUgraphicsLib\Readme.txt">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+    </Text>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

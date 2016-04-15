@@ -1,13 +1,7 @@
 #include "XOR3.h"
 
-XOR3::XOR3(const GraphicsInfo &r_GfxInfo, int r_FanOut) :Gate(3, r_FanOut)
+XOR3::XOR3(const GraphicsInfo &r_GfxInfo, int r_FanOut) :Gate(3, r_FanOut,r_GfxInfo)
 {
-	m_GfxInfo.x1 = r_GfxInfo.x1;
-	m_GfxInfo.y1 = r_GfxInfo.y1;
-	m_GfxInfo.x2 = r_GfxInfo.x2;
-	m_GfxInfo.y2 = r_GfxInfo.y2;
-	m_CenterInfo.x1 = m_GfxInfo.x1 + UI.GATE_Width / 2;
-	m_CenterInfo.y1 = m_GfxInfo.y1 + UI.GATE_Height / 2;
 }
 
 

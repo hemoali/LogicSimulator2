@@ -1,9 +1,9 @@
 #ifndef _COMPONENT_H
 #define _COMPONENT_H
 #include "..\GUI\Output.h"
-//#include "..\Utils.h"
-using namespace std;
-//Base class for classes Gate, Switch, and LED.
+#include "InputPin.h"
+#include "OutputPin.h"
+
 class Component
 {
 private:
@@ -15,29 +15,39 @@ private:
 protected:
 	GraphicsInfo m_GfxInfo;	//The parameters required to draw a component
 	GraphicsInfo m_CenterInfo;
+	InputPin* m_InputPins;	//Array of input pins of the Gate
+	OutputPin m_OutputPin;	//The Gate output pin
 public:
-	Component(const GraphicsInfo &r_GfxInfo);
+	Component(const GraphicsInfo &r_GfxInfo, int r_FanOut);
+
 	virtual void Operate() = 0;	//Calculates the output according to the inputs
 	virtual void Draw(Output* pOut) = 0;	//for each component to Draw itself
 	
-	
-	virtual int GetOutPinStatus()=0;	//returns status of outputpin if LED, return -1
-	virtual int GetInputPinStatus(int n)=0;	//returns status of Inputpin # n if SWITCH, return -1
+	virtual int GetOutPinStatus() = 0;	//returns status of outputpin if LED, return -1
+	virtual int GetInputPinStatus(int n) = 0;	//returns status of Inputpin # n if SWITCH, return -1
 
-	virtual void setInputPinStatus(int n, STATUS s)=0;	//set status of Inputpin # n, to be used by connection class.
+	virtual void setInputPinStatus(int n, STATUS s) = 0;	//set status of Inputpin # n, to be used by connection class.
+	
 	void setLabel(string s);
 	string getLabel();
 
 	void setDelete(bool d);
 	bool getDelete();
 
-	void setNewLocation(GraphicsInfo GfxInfo);
+	void setNewCenterLocation(GraphicsInfo GfxInfo);
 	GraphicsInfo getCenterLocation();
+
+
 	void setSmallCleanImageBeforeAddingComp(image* i);
 	image* getSmallCleanImageBeforeAddingComp();
-	void Component::setnumofinputs(int n);
-	int getnumofinputs()const;
-	Component();		
+
+
+	void Component::setNumOfInputs(int n);
+	int getNumOfInputs()const;
+
+	OutputPin* getOutputPin();
+	InputPin* getInputPin(int);
+
 	//Destructor must be virtual
 	virtual ~Component();
 };

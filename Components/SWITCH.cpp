@@ -1,14 +1,7 @@
 #include "SWITCH.h"
 
-SWITCH::SWITCH(const GraphicsInfo &r_GfxInfo, int r_FanOut) :Component(r_GfxInfo)
+SWITCH::SWITCH(const GraphicsInfo &r_GfxInfo, int r_FanOut) :Component(r_GfxInfo, r_FanOut)
 {
-	m_GfxInfo.x1 = r_GfxInfo.x1;
-	m_GfxInfo.y1 = r_GfxInfo.y1;
-	m_GfxInfo.x2 = r_GfxInfo.x2;
-	m_GfxInfo.y2 = r_GfxInfo.y2;
-	m_CenterInfo.x1 = m_GfxInfo.x1 + UI.GATE_Width / 2;
-	m_CenterInfo.y1 = m_GfxInfo.y1 + UI.GATE_Height / 2;
-	outkey = new OutputPin(r_FanOut);
 }
 
 
@@ -22,7 +15,7 @@ void SWITCH::Operate()
 void SWITCH::Draw(Output* pOut)
 {
 	//Call output class and pass SWITCH drawing info to it.
-	if (!getDelete())pOut->DrawSwtich(m_CenterInfo, (outkey->getStatus() == HIGH) ? true : false);
+	if (!getDelete())pOut->DrawSwtich(m_CenterInfo, (getOutputPin()->getStatus() == HIGH) ? true : false);
 	else {
 		pOut->DrawCleanImage(getSmallCleanImageBeforeAddingComp(), m_CenterInfo.x1, m_CenterInfo.y1);
 	}
@@ -31,7 +24,7 @@ void SWITCH::Draw(Output* pOut)
 //returns status of outputpin
 int SWITCH::GetOutPinStatus()
 {
-	return outkey->getStatus();
+	return getOutputPin()->getStatus();
 }
 
 
@@ -44,15 +37,11 @@ int SWITCH::GetInputPinStatus(int n)
 //Set status of an input pin to HIGH or LOW
 void SWITCH::setOutputPinStatus(int n, STATUS s)
 {
-	outkey->setStatus(s);
+	getOutputPin()->setStatus(s);
 }
 void SWITCH::setInputPinStatus(int n, STATUS s)
 {
 	return;
-}
-OutputPin*SWITCH::getoutpin()
-{
-	return outkey;
 }
 SWITCH::~SWITCH(){
 

@@ -6,8 +6,6 @@
 #include"OutputPin.h"
 class SWITCH : public Component
 {
-
-	OutputPin* outkey;
 public:
 	SWITCH(const GraphicsInfo &r_GfxInfo, int r_FanOut);
 	virtual void Operate();	//Calculates the output according to the inputs
@@ -19,11 +17,9 @@ public:
 
 	virtual void setInputPinStatus(int n, STATUS s);	//set status of Inputpin # n, to be used by connection class.
 
-	void SWITCH::setOutputPinStatus(int n, STATUS s);
+	void setOutputPinStatus(int n, STATUS s);
 
 	SWITCH();
-	OutputPin*getoutpin();
-	//Destructor must be virtual
 	virtual ~SWITCH();
 };
 

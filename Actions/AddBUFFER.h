@@ -3,12 +3,8 @@
 
 #include"Action.h"
 #include"..\Components\BUFFER.h"
-#include"..\ApplicationManager.h"
 class AddBUFFER:public Action
 {
-private:
-	 string gateLabel;
-	GraphicsInfo GInfo;
 public:
 	AddBUFFER(ApplicationManager *pApp);
 	virtual ~AddBUFFER(void);

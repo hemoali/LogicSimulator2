@@ -1,7 +1,7 @@
 #ifndef CONNECTION_Header
 #define CONNECTION_Header
 
-#include"..\ApplicationManager.h"
+#include"Action.h"
 #include"..\Components\Connection.h"
 #include"..\Components\Gate.h"
 #include"..\Components\LED.h"
@@ -9,7 +9,6 @@
 class AddConnection:public Action
 {
 private:
-	 string gateLabel;
 	int Cx1,Cy1,Cx2,Cy2;// start and end point for Connections
 
 public:

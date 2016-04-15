@@ -27,177 +27,103 @@ bool AddConnection::ReadActionParameters(image * smallImageBeforeAddingComponent
 
 void AddConnection::Execute()
 {
-	bool validConnection = true;
 	//Get Center point of the Gate
 	ReadActionParameters(NULL);
 
-	//Calculate the rectangle Corners
-	GraphicsInfo GInfo; //Gfx info to be used to construct the AND2 gate
+	Component* outputComponent = NULL;
+	Component*inputComponent = NULL;
 
-	GInfo.x1 = Cx1;
-	GInfo.x2 = Cx2;
-	GInfo.y1 = Cy1;
-	GInfo.y2 = Cy2;
+	int numOfInputs = 0;
+	int indxOfInputComponent;
 
-	Component* poutput = NULL;
-	Component*pinput = NULL;
-	int numofinputs = 0;
-	int indxofinpgate;
-	SWITCH*temp2 = NULL;  Gate*temp1 = NULL; Gate*temp3 = NULL; LED*temp4 = NULL;
 	for (int i = 0; i < pManager->allComponentsCorners.size(); i++)
 	{
-		if (dynamic_cast<Connection*>(pManager->getGate(i)))
+		if (dynamic_cast<Connection*>(pManager->getComponent(i)))
 			continue;
 		if (Cx1 >= pManager->allComponentsCorners[i].x1&&Cx1 <= pManager->allComponentsCorners[i].x2&& Cy1 >= pManager->allComponentsCorners[i].y1&&Cy1 <= pManager->allComponentsCorners[i].y2)
 		{
 			if (Cx1 < (pManager->allComponentsCorners[i].x1 + UI.GATE_Width / 2))
 			{
-				pinput = pManager->getGate(i);
-				indxofinpgate = i;
+				inputComponent = pManager->getComponent(i);
+				indxOfInputComponent = i;
 			}
 			else
 			{
-				poutput = pManager->getGate(i);
+				outputComponent = pManager->getComponent(i);
 			}
 		}
 		if (Cx2 >= pManager->allComponentsCorners[i].x1&&Cx2 <= pManager->allComponentsCorners[i].x2&& Cy2 >= pManager->allComponentsCorners[i].y1&&Cy2 <= pManager->allComponentsCorners[i].y2)
 		{
 			if (Cx2 < (pManager->allComponentsCorners[i].x1 + UI.GATE_Width / 2))
 			{
-				pinput = pManager->getGate(i);
-				indxofinpgate = i;
+				inputComponent = pManager->getComponent(i);
+				indxOfInputComponent = i;
 			}
 			else
 			{
-				poutput = pManager->getGate(i);
+				outputComponent = pManager->getComponent(i);
 			}
 		}
 	}
 
-
-	if (pinput != NULL && dynamic_cast<Gate*>((pinput)))
+	if (inputComponent == NULL || outputComponent == NULL || inputComponent == outputComponent || dynamic_cast<SWITCH*> (inputComponent) || dynamic_cast<LED*> (outputComponent))
 	{
-		temp1 = ((Gate*)pinput);
-		numofinputs = temp1->getnumofinputs();
-		if (numofinputs == 3)
-		{
-			if (Cy2 <= pManager->allComponentsCorners[indxofinpgate].y2 - UI.GATE_Height / 2 - 6)numofinputs = 0;
-			else if (Cy2 >= pManager->allComponentsCorners[indxofinpgate].y2 - UI.GATE_Height / 2 + 6)numofinputs = 2;
-			else numofinputs = 1;
-		}
-		else if (numofinputs == 2)
-		{
-			if (Cy2 <= pManager->allComponentsCorners[indxofinpgate].y2 - UI.GATE_Height / 2)numofinputs = 0;
-			else if (Cy2 >= pManager->allComponentsCorners[indxofinpgate].y2 - UI.GATE_Height / 2)numofinputs = 2;
-		}
-		else numofinputs = 2;
-	}
-	else if (pinput != NULL&& dynamic_cast<LED*>((pinput)))
-	{
-		temp4 = ((LED*)pinput);
-		numofinputs = 1;
-	}
-	else{
-		validConnection = false;
-	}
-	if (poutput != NULL&& dynamic_cast<Gate*>((poutput)))
-	{
-		temp3 = ((Gate*)poutput);
-	}
-	else if (poutput != NULL  && dynamic_cast<SWITCH*>((poutput)))
-	{
-		temp2 = ((SWITCH*)poutput);
-	}
-	else{
-		validConnection = false;
-	}
-	if (validConnection && pinput != poutput)
-	{
-		GInfo.x1 = poutput->getCenterLocation().x1 + UI.GATE_Width / 2 - 2;
-		GInfo.y1 = poutput->getCenterLocation().y1;
-		GInfo.x2 = pinput->getCenterLocation().x1 - UI.GATE_Width / 2 - 2;
-		if (pinput->getnumofinputs() == 3)
-		{
-			if (numofinputs == 0)
-			{
-				GInfo.y2 = pinput->getCenterLocation().y1 - UI.GATE_Height / 2 + 13;
-			}
-			else if (numofinputs == 1){
-				GInfo.y2 = pinput->getCenterLocation().y1;
-			}
-			else{
-				GInfo.y2 = pinput->getCenterLocation().y1 + UI.GATE_Height / 2 - 2;
-			}
-		}
-		else if (pinput->getnumofinputs() == 2){
-			if (numofinputs == 0)
-			{
-				GInfo.y2 = pinput->getCenterLocation().y1 - UI.GATE_Height / 2 + 13;
-			}
-			else{
-				GInfo.y2 = pinput->getCenterLocation().y1 + UI.GATE_Height / 2 - 13;
-			}
-		}
-		else{
-			GInfo.y2 = pinput->getCenterLocation().y1;
-		}
-		if (poutput != NULL && dynamic_cast<Gate*>((poutput)))
-		{
-			if (((Gate*)poutput)->getoutpin()->connectedConnectionsCount() == 3){
-				validConnection = false;
-			}
-		}
-		else if (poutput != NULL && dynamic_cast<SWITCH*>((poutput)))
-		{
-			if (((SWITCH*)poutput)->getoutpin()->connectedConnectionsCount() == 3){
-				validConnection = false;
-			}
-		}
-
-		if (pManager->GetOutput()->DrawConnection(GInfo, numofinputs, pinput->getCenterLocation()) && validConnection)
-		{
-			Connection *pA = new Connection(GInfo, (temp3 == NULL) ? temp2->getoutpin() : temp3->getoutpin(), (temp1 == NULL) ? temp4->getinppin() : temp1->getinppin(numofinputs));
-			pManager->AddComponent(pA);
-			pManager->allComponentsCorners.push_back(GInfo);
-			
-			if (poutput != NULL && dynamic_cast<Gate*>((poutput)))
-			{
-				((Gate*)poutput)->getoutpin()->ConnectTo(pA);
-				pA->setSourcePin(((Gate*)poutput)->getoutpin());
-			}
-			else if (poutput != NULL && dynamic_cast<SWITCH*>((poutput)))
-			{
-				((SWITCH*)poutput)->getoutpin()->ConnectTo(pA);
-				pA->setSourcePin(((SWITCH*)poutput)->getoutpin());
-			}
-
-			if (pinput != NULL && dynamic_cast<Gate*>((pinput)))
-			{
-				int idxOfInputPin = numofinputs;
-
-				if (pinput->getnumofinputs() == 2 && numofinputs == 2){
-					idxOfInputPin = 1;
-				}
-				pA->setDestPin(((Gate*)pinput)->getinppin(idxOfInputPin));
-				((Gate*)pinput)->getinppin(idxOfInputPin)->setPosition(numofinputs);
-				((Gate*)pinput)->getinppin(idxOfInputPin)->setConnection(pA);
-			}
-			else if (pinput != NULL && dynamic_cast<LED*>((pinput)))
-			{
-				((LED*)pinput)->getinppin()->setPosition(numofinputs);
-				pA->setDestPin(((LED*)pinput)->getinppin());
-				((LED*)pinput)->getinppin()->setConnection(pA);
-			}
-		}
-		else{
-			pManager->GetOutput()->PrintMsg("No Available Connection");
-		}
-	}
-	else{
 		pManager->GetOutput()->PrintMsg("Invalid Connection");
 	}
-}
+	else{
+		numOfInputs = inputComponent->getNumOfInputs();
+		int inputPin;
+		if (numOfInputs == 3)
+		{
+			if (Cy2 <= pManager->allComponentsCorners[indxOfInputComponent].y2 - UI.GATE_Height / 2 - 6)numOfInputs = inputPin = 0;
+			else if (Cy2 >= pManager->allComponentsCorners[indxOfInputComponent].y2 - UI.GATE_Height / 2 + 6)numOfInputs = inputPin = 2;
+			else numOfInputs = inputPin = 1;
+		}
+		else if (numOfInputs == 2)
+		{
+			if (Cy2 <= pManager->allComponentsCorners[indxOfInputComponent].y2 - UI.GATE_Height / 2)numOfInputs = inputPin = 0;
+			else if (Cy2 >= pManager->allComponentsCorners[indxOfInputComponent].y2 - UI.GATE_Height / 2){
+				numOfInputs = 2; inputPin = 1;
+			}
+		}
+		else{ numOfInputs = 1; inputPin = 0; }
 
+		if (inputComponent->getInputPin(inputPin)->getConnection() != NULL || outputComponent->getOutputPin()->connectedConnectionsCount() == FANOUT)
+		{
+			pManager->GetOutput()->PrintMsg("Invalid Connection");
+		}
+		else{
+			GraphicsInfo GInfo;
+			GInfo.x1 = outputComponent->getCenterLocation().x1 + UI.GATE_Width / 2 - 2;
+			GInfo.y1 = outputComponent->getCenterLocation().y1;
+			GInfo.x2 = inputComponent->getCenterLocation().x1 - UI.GATE_Width / 2 - 2;
+
+			if (numOfInputs == 0)
+			{
+				GInfo.y2 = inputComponent->getCenterLocation().y1 - UI.GATE_Height / 2 + 13;
+			}
+			else if (numOfInputs == 1){
+				GInfo.y2 = inputComponent->getCenterLocation().y1;
+			}
+			else{
+				GInfo.y2 = inputComponent->getCenterLocation().y1 + UI.GATE_Height / 2 - 2;
+			}
+			if (pManager->GetOutput()->DrawConnection(GInfo, numOfInputs, inputComponent->getCenterLocation()) && !(outputComponent->getOutputPin()->connectedConnectionsCount() == FANOUT))
+			{
+				Connection *pA = new Connection(GInfo, outputComponent->getOutputPin(), inputComponent->getInputPin(inputPin));
+				pManager->AddComponent(pA);
+				pManager->allComponentsCorners.push_back(GInfo);
+				pA->setSourcePin(outputComponent->getOutputPin());
+				pA->setDestPin(inputComponent->getInputPin(inputPin));
+				outputComponent->getOutputPin()->ConnectTo(pA);
+				inputComponent->getInputPin(inputPin)->setConnection(pA);
+			}
+			else{
+				pManager->GetOutput()->PrintMsg("No Available Connection");
+			}
+		}
+	}
+}
 
 
 void AddConnection::Undo()

@@ -132,10 +132,8 @@ enum CellType{
 #define MAX_CONNS 20
 
 //assume fan out is 5 for now it can be read from the user or can be predefined as const
-enum FANOUT
-{
-	AND2_FANOUT = 5	//Default fan out of 2-input AND gate
-};
+
+#define	FANOUT 3
 
 //A structure to contain drawing parameters for each component
 //Each component occupies a rectangluar area so it needs 2 points to represent that area

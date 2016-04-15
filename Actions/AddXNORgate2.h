@@ -1,12 +1,9 @@
 #ifndef XNOR2_Header
 #define XNOR2_Header
+#include"Action.h"
 #include"..\Components\XNOR2.h"
-#include"..\ApplicationManager.h"
 class AddXNORgate2:public Action
 {
-private:
-	 string gateLabel;
-	GraphicsInfo GInfo;
 public:
 	AddXNORgate2(ApplicationManager *pApp);
 	virtual ~AddXNORgate2(void);

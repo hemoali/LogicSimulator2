@@ -42,15 +42,17 @@ void AddANDgate3::Execute()
 		int Len = UI.GATE_Width;
 		int Wdth = UI.GATE_Height;
 
-		//Gfx info to be used to construct the AND2 gate
+		
 		GraphicsInfo GInfotmp;
 
 		GInfotmp.x1 = GInfo.x1 - Len / 2;
 		GInfotmp.x2 = GInfo.x1 + Len / 2;
 		GInfotmp.y1 = GInfo.y1 - Wdth / 2;
 		GInfotmp.y2 = GInfo.y1 + Wdth / 2;
-		AND3 *pA = new AND3(GInfotmp, AND2_FANOUT);
-		pManager->allComponentsCorners.push_back(GInfotmp); pManager->AddComponent(pA); pA->setSmallCleanImageBeforeAddingComp(smallImageBeforeAddingComponent);
+		AND3 *pA = new AND3(GInfotmp, FANOUT);
+		pA->setSmallCleanImageBeforeAddingComp(smallImageBeforeAddingComponent);
+		pManager->allComponentsCorners.push_back(GInfotmp);
+		pManager->AddComponent(pA); 
 	}
 }
 

@@ -131,7 +131,7 @@ Output* ApplicationManager::GetOutput()
 }
 
 ////////////////////////////////////////////////////////////////////
-Component * ApplicationManager::getGate(int idx)
+Component * ApplicationManager::getComponent(int idx)
 {
 	return CompList[idx];
 }
