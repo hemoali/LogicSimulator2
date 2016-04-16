@@ -309,13 +309,13 @@ bool Output::DrawConnection(GraphicsInfo GfxInfo, int inputPin, GraphicsInfo com
 	if (current == NULL)
 	{
 		pWind->FlushMouseQueue();
-
 		return false;
 	}
 	bfs_node* target = bfs(current, destX, destY, allNodes);
 
 	if (target == NULL)
 	{
+		cout << endl << "NO way	 " << current->x << "   " << current->y << "   " <<  destX <<"    " << destY  << endl;
 		pWind->FlushMouseQueue();
 
 		return false;
@@ -427,7 +427,7 @@ bool Output::DrawConnection(GraphicsInfo GfxInfo, int inputPin, GraphicsInfo com
 				//cellsBeforeAddingConnection.push_back({ target->x , target->y, usedPixels[target->y][target->x] });
 				//usedPixels[target->y][target->x] = PIN;
 				//}
-				if (i!=0)
+				if (i != 0)
 				{
 					if (target->x == parent->x)
 					{
@@ -478,11 +478,12 @@ bool Output::DrawConnection(GraphicsInfo GfxInfo, int inputPin, GraphicsInfo com
 						}
 					}
 
-					if (parent->parent != NULL && ((target->x == parent->x && parent->parent->x != parent->x) || (target->y == parent->y && parent->parent->y != parent->y)))
-					{
-						cellsBeforeAddingConnection.push_back({ parent->x , parent->y, usedPixels[parent->y][parent->x] });
-						usedPixels[parent->y][parent->x] = INTERSECTION;
-					}
+					
+				}
+				if (parent->parent != NULL && ((target->x == parent->x && parent->parent->x != parent->x) || (target->y == parent->y && parent->parent->y != parent->y)))
+				{
+					cellsBeforeAddingConnection.push_back({ parent->x , parent->y, usedPixels[parent->y][parent->x] });
+					usedPixels[parent->y][parent->x] = INTERSECTION;
 				}
 				/*
 				if (parent->parent == NULL)
@@ -552,10 +553,9 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 		Utils::correctPointClicked(x, y, true, false);
 		GraphicsInfo tmpGraphicsInfo; tmpGraphicsInfo.x1 = x; tmpGraphicsInfo.y1 = y;
 
-		//vector<Connection*> allInputConnections, allOutputConnections;
 		vector<Connection*> allInputConnections, allOutputConnections;
 
-		if (moving &&( x != iXOld || y != iYOld))
+		if (moving && (x != iXOld || y != iYOld))
 		{
 			//Clear connections
 			comp->getAllInputConnections(allInputConnections);
@@ -565,6 +565,9 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 				for (size_t j = 0; j < allOutputConnections[i]->getCellsBeforeAddingConnection().size(); j++)
 				{
 					Cell cell = allOutputConnections[i]->getCellsBeforeAddingConnection()[j];
+
+					arrayOfIntersections[cell.y][cell.x] = -1;
+
 					usedPixels[cell.y][cell.x] = cell.cellType;
 				}
 				allOutputConnections[i]->getCellsBeforeAddingConnection().clear();
@@ -574,11 +577,13 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 				for (size_t j = 0; j < allInputConnections[i]->getCellsBeforeAddingConnection().size(); j++)
 				{
 					Cell cell = allInputConnections[i]->getCellsBeforeAddingConnection()[j];
+
+					arrayOfIntersections[cell.y][cell.x] = -1;
+
 					usedPixels[cell.y][cell.x] = cell.cellType;
 				}
 				allInputConnections[i]->getCellsBeforeAddingConnection().clear();
-			}
-			
+			}			
 		}
 		if (!Utils::CheckPoint(tmpGraphicsInfo, usedPixels, false)) {
 			wrong = true;
@@ -761,37 +766,56 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 				//move connections with gate
 				if (moving && !wrong)
 				{
-
+					int xbegin = (originalX - UI.GATE_Width / 2.0) / UI.GRID_SIZE, xend = (originalX + UI.GATE_Width / 2.0) / UI.GRID_SIZE, ybegin = (originalY - UI.GATE_Height / 2.0) / UI.GRID_SIZE, yend = (originalY + UI.GATE_Height / 2.0) / UI.GRID_SIZE;
+					for (int i = ybegin + 1; i <= yend; i++)
+					{
+						for (int j = xbegin; j <= xend; j++)
+						{
+							if (xbegin == j || xend == j)
+							{
+								setUsedPixel(i, j, PIN);
+								continue;
+							}
+							setUsedPixel(i, j, GATE);
+						}
+					}
 					//Reconnect
 					comp->getAllInputConnections(allInputConnections);
 					comp->getAllOutputConnections(allOutputConnections);
 					for (size_t i = 0; i < allInputConnections.size(); i++)
 					{
-						for (size_t j = 0; j < allInputConnections[i]->getCellsBeforeAddingConnection().size(); j++)
+						/*for (size_t j = 0; j < allInputConnections[i]->getCellsBeforeAddingConnection().size(); j++)
 						{
 							Cell cell = allInputConnections[i]->getCellsBeforeAddingConnection()[j];
+
+							arrayOfIntersections[cell.y][cell.x] = -1;
+
 							usedPixels[cell.y][cell.x] = cell.cellType;
 						}
 						allInputConnections[i]->getCellsBeforeAddingConnection().clear();
-
+*/
 						GraphicsInfo currentGfx = allInputConnections[i]->getCornersLocation();
 						currentGfx.x2 = currentGfx.x2 + (Gfx.x1 - originalX);
 						currentGfx.y2 = currentGfx.y2 + (Gfx.y1 - originalY);
 						allInputConnections[i]->setCornersLocation({ currentGfx.x1 ,currentGfx.y1,currentGfx.x2 ,currentGfx.y2 });
-
+						cout << "GFX " << Gfx.x1<< " " << Gfx.y1 << endl;
+						
 						DrawConnection(currentGfx, allInputConnections[i]->getDestPin()->getPosition(), { Gfx.x1, Gfx.y1,0,0 }, allInputConnections[i]->getCellsBeforeAddingConnection());
 					}
-					
+
 					for (size_t i = 0; i < allOutputConnections.size(); i++)
 					{
-						
-						for (size_t j = 0; j < allOutputConnections[i]->getCellsBeforeAddingConnection().size(); j++)
+
+						/*for (size_t j = 0; j < allOutputConnections[i]->getCellsBeforeAddingConnection().size(); j++)
 						{
 							Cell cell = allOutputConnections[i]->getCellsBeforeAddingConnection()[j];
+
+							arrayOfIntersections[cell.y][cell.x] = -1;
+
 							usedPixels[cell.y][cell.x] = cell.cellType;
 						}
 						allOutputConnections[i]->getCellsBeforeAddingConnection().clear();
-						
+*/
 						GraphicsInfo currentGfx = allOutputConnections[i]->getCornersLocation();
 						currentGfx.x1 = currentGfx.x1 + (Gfx.x1 - originalX);
 						currentGfx.y1 = currentGfx.y1 + (Gfx.y1 - originalY);
@@ -801,6 +825,15 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 					}
 					originalX = Gfx.x1;
 					originalY = Gfx.y1;
+					//Clear gate/led/switch
+					for (int i = ybegin + 1; i <= yend; i++)
+					{
+						for (int j = xbegin; j <= xend; j++)
+						{
+							setUsedPixel(i, j, EMPTY);
+						}
+					}
+					
 				}
 				pWind->UpdateBuffer();
 			}
