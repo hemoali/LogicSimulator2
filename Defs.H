@@ -142,7 +142,10 @@ struct GraphicsInfo
 {
 	int x1,y1, x2, y2;
 };
-
+struct Cell {
+	int x, y;
+	CellType cellType;
+};
 #ifndef NULL
 #define NULL 0
 #endif

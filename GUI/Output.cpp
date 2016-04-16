@@ -282,7 +282,7 @@ bfs_node* Output::bfs(bfs_node* bf, int requX, int requY, vector<bfs_node*> allN
 	}
 	return NULL;
 }
-bool Output::DrawConnection(GraphicsInfo GfxInfo, int inputPin, GraphicsInfo compCenterLocation, bool selected) const
+bool Output::DrawConnection(GraphicsInfo GfxInfo, int inputPin, GraphicsInfo compCenterLocation, vector<Cell>& cellsBeforeAddingConnection, bool selected) const
 {
 	vector<bfs_node*> allNodes;
 	bfs_node* current = new bfs_node;
@@ -426,19 +426,21 @@ bool Output::DrawConnection(GraphicsInfo GfxInfo, int inputPin, GraphicsInfo com
 				{
 					if (target->y > parent->y)
 					{
-						for (size_t i = target->y; i >= parent->y; i--)
+						for (size_t i = target->y; i > parent->y; i--)
 						{
 							if (usedPixels[i][target->x] != INTERSECTION/* && usedPixels[i][target->x] != PIN*/)
 							{
+								cellsBeforeAddingConnection.push_back({ target->x , (int)i, usedPixels[i][target->x] });
 								usedPixels[i][target->x] = VERTICAL;
 							}
 						}
 					}
 					else {
-						for (size_t i = target->y; i <= parent->y; i++)
+						for (size_t i = target->y; i < parent->y; i++)
 						{
 							if (usedPixels[i][target->x] != INTERSECTION/* && usedPixels[i][target->x] != PIN*/)
 							{
+								cellsBeforeAddingConnection.push_back({ target->x , (int)i, usedPixels[i][target->x] });
 								usedPixels[i][target->x] = VERTICAL;
 							}
 						}
@@ -448,19 +450,21 @@ bool Output::DrawConnection(GraphicsInfo GfxInfo, int inputPin, GraphicsInfo com
 				else if (target->y == parent->y) {
 					if (target->x > parent->x)
 					{
-						for (int i = target->x; i >= parent->x; i--)
+						for (int i = target->x; i > parent->x; i--)
 						{
 							if (usedPixels[target->y][i] != INTERSECTION/*&&usedPixels[target->y][i] != PIN*/)
 							{
+								cellsBeforeAddingConnection.push_back({ (int)i , target->y,usedPixels[target->y][i] });
 								usedPixels[target->y][i] = HORIZONTAL;
 							}
 						}
 					}
 					else {
-						for (int i = target->x; i <= parent->x; i++)
+						for (int i = target->x; i < parent->x; i++)
 						{
 							if (usedPixels[target->y][i] != INTERSECTION /*&& usedPixels[target->y][i] != PIN*/)
 							{
+								cellsBeforeAddingConnection.push_back({ (int)i , target->y, usedPixels[target->y][i] });
 								usedPixels[target->y][i] = HORIZONTAL;
 							}
 						}
@@ -469,6 +473,7 @@ bool Output::DrawConnection(GraphicsInfo GfxInfo, int inputPin, GraphicsInfo com
 
 				if (parent->parent != NULL && ((target->x == parent->x && parent->parent->x != parent->x) || (target->y == parent->y && parent->parent->y != parent->y)))
 				{
+					cellsBeforeAddingConnection.push_back({ parent->x , parent->y, usedPixels[parent->y][parent->x] });
 					usedPixels[parent->y][parent->x] = INTERSECTION;
 				}
 				/*
@@ -479,6 +484,7 @@ bool Output::DrawConnection(GraphicsInfo GfxInfo, int inputPin, GraphicsInfo com
 				*/
 				if (i == 0)
 				{
+					cellsBeforeAddingConnection.push_back({ target->x , target->y, usedPixels[target->y][target->x] });
 					usedPixels[target->y][target->x] = END_CONNECTION;
 				}
 		}

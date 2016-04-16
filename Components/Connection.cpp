@@ -54,3 +54,16 @@ void Connection::setInputPinStatus(int n, STATUS s)
 {
 	SrcPin->setStatus(s);
 }
+
+void Connection::setCellsBeforeAddingConnection(vector<Cell> cellsBeforeAddingConnection)
+{
+	for (size_t i = 0; i < cellsBeforeAddingConnection.size(); i++)
+	{
+		this->cellsBeforeAddingConnection.push_back({cellsBeforeAddingConnection[i].x ,cellsBeforeAddingConnection[i].y,cellsBeforeAddingConnection[i].cellType });
+	}
+}
+
+vector<Cell> Connection::getCellsBeforeAddingConnection()
+{
+	return cellsBeforeAddingConnection;
+}
