@@ -51,7 +51,7 @@ void AddBUFFER::Execute()
 		BUFFER *pA = new BUFFER(GInfotmp, FANOUT);
 		pA->setSmallCleanImageBeforeAddingComp(smallImageBeforeAddingComponent);
 		pManager->allComponentsCorners.push_back(GInfotmp);
-		pManager->AddComponent(pA);
+		pManager->AddComponent(pA);pA->setLabel(gateLabel);
 	}
 }
 

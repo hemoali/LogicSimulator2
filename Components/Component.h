@@ -37,6 +37,8 @@ public:
 	void setNewCenterLocation(GraphicsInfo GfxInfo);
 	GraphicsInfo getCenterLocation();
 
+	void setCornersLocation(GraphicsInfo GfxInfo);
+	GraphicsInfo getCornersLocation();
 
 	void setSmallCleanImageBeforeAddingComp(image* i);
 	image* getSmallCleanImageBeforeAddingComp();
@@ -48,6 +50,8 @@ public:
 	OutputPin* getOutputPin();
 	InputPin* getInputPin(int);
 
+	void getAllInputConnections(vector<Connection*>& allConnections);
+	void getAllOutputConnections(vector<Connection*>& allOutputConnections);
 	//Destructor must be virtual
 	virtual ~Component();
 };

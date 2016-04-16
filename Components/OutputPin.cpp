@@ -23,3 +23,16 @@ bool OutputPin::ConnectTo(Connection *r_Conn)
 int OutputPin::connectedConnectionsCount(){
 	return m_Conn;
 }
+Connection* OutputPin::getConnection(int idx) {
+	return m_Connections[idx];
+}
+
+void OutputPin::setComponent(Component *pCmp)
+{
+	this->pComp = pCmp;
+}
+
+Component* OutputPin::getComponent()
+{
+	return pComp;
+}

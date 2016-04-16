@@ -2,6 +2,8 @@
 
 SWITCH::SWITCH(const GraphicsInfo &r_GfxInfo, int r_FanOut) :Component(r_GfxInfo, r_FanOut)
 {
+	m_OutputPin.setComponent(this);
+	
 }
 
 

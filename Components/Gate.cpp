@@ -16,4 +16,6 @@ Gate::Gate(int r_Inputs, int r_FanOut, GraphicsInfo r_GfxInfo) :Component(r_GfxI
 	{
 		m_InputPins[i].setConnection(NULL);
 	}
+
+	m_OutputPin.setComponent(this);
 }

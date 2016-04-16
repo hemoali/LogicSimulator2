@@ -51,7 +51,7 @@ void AddLED::Execute()
 		GInfotmp.y2 = GInfo.y1 + Wdth / 2;
 		LED *pA = new LED(GInfotmp, FANOUT);
 		pManager->allComponentsCorners.push_back(GInfotmp); 
-		pManager->AddComponent(pA);
+		pManager->AddComponent(pA);pA->setLabel(gateLabel);
 		pA->setSmallCleanImageBeforeAddingComp(smallImageBeforeAddingComponent);
 	}
 }

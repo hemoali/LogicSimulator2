@@ -49,7 +49,7 @@ void AddNOTgate::Execute()
 	GInfotmp.y1 = GInfo.y1 - Wdth / 2;
 	GInfotmp.y2 = GInfo.y1 + Wdth / 2;
 	NOT *pA = new NOT(GInfotmp, FANOUT);
-	pManager->allComponentsCorners.push_back(GInfotmp);pManager->AddComponent(pA);pA->setSmallCleanImageBeforeAddingComp(smallImageBeforeAddingComponent);}
+	pManager->allComponentsCorners.push_back(GInfotmp);pManager->AddComponent(pA);pA->setLabel(gateLabel);pA->setSmallCleanImageBeforeAddingComp(smallImageBeforeAddingComponent);}
 }
 
 void AddNOTgate::Undo()

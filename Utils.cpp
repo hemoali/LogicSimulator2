@@ -1,6 +1,6 @@
 #include "Utils.h"
 #include "GUI\UI_Info.h"
-
+#include <iostream>
 Utils::Utils()
 {
 }
@@ -63,8 +63,9 @@ bool Utils::CheckPoint(GraphicsInfo r_GfxInfo, CellType usedPixels[44][74], bool
 			if (usedPixels[i][j] == GATE || (usedPixels[i][j] == HORIZONTAL || usedPixels[i][j] == VERTICAL)){
 				if ((i == yend || i == ybegin) && (usedPixels[i][j] == HORIZONTAL || usedPixels[i][j] == END_CONNECTION)){}
 				//else if ((j == xend || j == xbegin) && (usedPixels[i][j] == VERTICAL || usedPixels[i][j] == END_CONNECTION)){}
-				else
+				else {
 					return 0;
+				}
 			}
 		}
 	}

@@ -52,7 +52,7 @@ void AddANDgate3::Execute()
 		AND3 *pA = new AND3(GInfotmp, FANOUT);
 		pA->setSmallCleanImageBeforeAddingComp(smallImageBeforeAddingComponent);
 		pManager->allComponentsCorners.push_back(GInfotmp);
-		pManager->AddComponent(pA); 
+		pManager->AddComponent(pA);pA->setLabel(gateLabel); 
 	}
 }
 

@@ -4,6 +4,7 @@ LED::LED(const GraphicsInfo &r_GfxInfo, int r_FanOut) :Component(r_GfxInfo, r_Fa
 {
 	m_InputPins = new InputPin[0];
 	m_InputPins[0].setConnection(NULL);
+	m_InputPins[0].setComponent(this);
 }
 void LED::Operate()
 {

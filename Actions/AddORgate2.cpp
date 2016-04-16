@@ -50,7 +50,7 @@ void AddORgate2::Execute()
 	GInfotmp.y1 = GInfo.y1 - Wdth / 2;
 	GInfotmp.y2 = GInfo.y1 + Wdth / 2;
 	OR2 *pA = new OR2(GInfotmp, FANOUT);
-	pManager->allComponentsCorners.push_back(GInfotmp);pManager->AddComponent(pA);pA->setSmallCleanImageBeforeAddingComp(smallImageBeforeAddingComponent);}
+	pManager->allComponentsCorners.push_back(GInfotmp);pManager->AddComponent(pA);pA->setLabel(gateLabel);pA->setSmallCleanImageBeforeAddingComp(smallImageBeforeAddingComponent);}
 }
 
 void AddORgate2::Undo()

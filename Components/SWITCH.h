@@ -19,7 +19,6 @@ public:
 
 	void setOutputPinStatus(int n, STATUS s);
 
-	SWITCH();
 	virtual ~SWITCH();
 };
 

@@ -63,7 +63,7 @@ void Connection::setCellsBeforeAddingConnection(vector<Cell> cellsBeforeAddingCo
 	}
 }
 
-vector<Cell> Connection::getCellsBeforeAddingConnection()
+vector<Cell>& Connection::getCellsBeforeAddingConnection()
 {
 	return cellsBeforeAddingConnection;
 }

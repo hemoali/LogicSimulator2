@@ -48,7 +48,7 @@ void AddSWITCH::Execute()
 	GInfotmp.y2 = GInfo.y1 + Wdth / 2;
 	SWITCH *pA = new SWITCH(GInfotmp, FANOUT);
 	pManager->allComponentsCorners.push_back(GInfotmp);
-	pManager->AddComponent(pA);
+	pManager->AddComponent(pA);pA->setLabel(gateLabel);
 	pA->setSmallCleanImageBeforeAddingComp(smallImageBeforeAddingComponent);}
 }
 

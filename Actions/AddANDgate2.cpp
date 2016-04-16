@@ -47,7 +47,7 @@ void AddANDgate2::Execute()
 		pA->setLabel(gateLabel);
 		pA->setSmallCleanImageBeforeAddingComp(smallImageBeforeAddingComponent);
 		pManager->allComponentsCorners.push_back(GInfotmp);
-		pManager->AddComponent(pA);
+		pManager->AddComponent(pA);pA->setLabel(gateLabel);
 	}
 }
 
