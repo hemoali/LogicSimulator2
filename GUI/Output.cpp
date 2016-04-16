@@ -90,7 +90,7 @@ void Output::ClearStatusBar()const
 	pWind->SetBrush(UI.BkGrndColor);
 	pWind->DrawRectangle(MsgX, UI.height - MsgY, UI.width, UI.height);
 }
-void Output::DrawGrid()const{
+void Output::DrawGrid()const {
 	pWind->SetPen(BLACK, 1);
 	for (size_t i = 0; i < UI.height; i += UI.GRID_SIZE) // Hori
 	{
@@ -192,7 +192,7 @@ void Output::CreateSimulationToolBar() const
 
 }
 
-bool Output::DrawString(string s, GraphicsInfo Gfx_info) const{
+bool Output::DrawString(string s, GraphicsInfo Gfx_info) const {
 	pWind->DrawString(Gfx_info.x1, Gfx_info.y1, s);
 	return true;
 }
@@ -202,7 +202,7 @@ bool Output::DrawString(string s, GraphicsInfo Gfx_info) const{
 //======================================================================================//
 
 
-bfs_node* Output::bfs(bfs_node* bf, int requX, int requY, vector<bfs_node*> allNodes) const{
+bfs_node* Output::bfs(bfs_node* bf, int requX, int requY, vector<bfs_node*> allNodes) const {
 	if (bf == NULL)
 	{
 		return NULL;
@@ -218,10 +218,10 @@ bfs_node* Output::bfs(bfs_node* bf, int requX, int requY, vector<bfs_node*> allN
 	{
 		tmp = q.front();
 		q.pop();
-		if (tmp->x == requX && tmp->y == requY){
+		if (tmp->x == requX && tmp->y == requY) {
 			return tmp;
 		}
-		if (Utils::CheckPointForConnections((tmp->x + 1)* UI.GRID_SIZE, tmp->y * UI.GRID_SIZE, usedPixels) && tmp->x + 1 <= 74 && vis[tmp->y][tmp->x + 1] < 0 && Output::usedPixels[tmp->y][tmp->x + 1] != INTERSECTION && (Output::usedPixels[tmp->y][tmp->x + 1] == EMPTY || (tmp->y == requY && tmp->x + 1 == requX && Output::usedPixels[tmp->y][tmp->x + 1] == PIN) || (Output::usedPixels[tmp->y][tmp->x + 1] == VERTICAL && Output::usedPixels[tmp->y][tmp->x + 1] != END_CONNECTION)))
+		if (Utils::CheckPointForConnections((tmp->x + 1)* UI.GRID_SIZE, tmp->y * UI.GRID_SIZE, usedPixels) && tmp->x + 1 <= 74 && vis[tmp->y][tmp->x + 1] < 0 && Output::usedPixels[tmp->y][tmp->x + 1] != INTERSECTION && (Output::usedPixels[tmp->y][tmp->x + 1] == EMPTY || ((Output::usedPixels[tmp->y][tmp->x] == EMPTY || Output::usedPixels[tmp->y][tmp->x] == VERTICAL) && tmp->y == requY && tmp->x + 1 == requX && Output::usedPixels[tmp->y][tmp->x + 1] == PIN) || (Output::usedPixels[tmp->y][tmp->x + 1] == VERTICAL && Output::usedPixels[tmp->y][tmp->x + 1] != END_CONNECTION)))
 		{
 			vis[tmp->y][tmp->x + 1] = vis[tmp->y][tmp->x] + 1;
 			bfs_node* newNode = new bfs_node;
@@ -235,7 +235,7 @@ bfs_node* Output::bfs(bfs_node* bf, int requX, int requY, vector<bfs_node*> allN
 				arrayOfIntersections[tmp->y][tmp->x + 1] = 0;
 			}
 		}
-		if (Utils::CheckPointForConnections((tmp->x)* UI.GRID_SIZE, (tmp->y + 1) * UI.GRID_SIZE, usedPixels) && tmp->y + 1 <= 44 && vis[tmp->y + 1][tmp->x] < 0 && Output::usedPixels[tmp->y + 1][tmp->x] != INTERSECTION && (Output::usedPixels[tmp->y + 1][tmp->x] == EMPTY || (tmp->y + 1 == requY && tmp->x == requX &&  Output::usedPixels[tmp->y + 1][tmp->x] == PIN) || (abs((tmp->y + 1) - bf->y) == 1 && tmp->x == bf->x &&  Output::usedPixels[tmp->y + 1][tmp->x] == PIN) || (Output::usedPixels[tmp->y + 1][tmp->x] == HORIZONTAL && Output::usedPixels[tmp->y + 1][tmp->x] != END_CONNECTION)))
+		if (Utils::CheckPointForConnections((tmp->x)* UI.GRID_SIZE, (tmp->y + 1) * UI.GRID_SIZE, usedPixels) && tmp->y + 1 <= 44 && vis[tmp->y + 1][tmp->x] < 0 && Output::usedPixels[tmp->y + 1][tmp->x] != INTERSECTION && (Output::usedPixels[tmp->y + 1][tmp->x] == EMPTY || ((Output::usedPixels[tmp->y][tmp->x] == EMPTY || Output::usedPixels[tmp->y][tmp->x] == HORIZONTAL) && tmp->y + 1 == requY && tmp->x == requX &&  Output::usedPixels[tmp->y + 1][tmp->x] == PIN) || (abs((tmp->y + 1) - bf->y) == 1 && tmp->x == bf->x &&  Output::usedPixels[tmp->y + 1][tmp->x] == PIN) || (Output::usedPixels[tmp->y + 1][tmp->x] == HORIZONTAL && Output::usedPixels[tmp->y + 1][tmp->x] != END_CONNECTION)))
 		{
 
 			vis[tmp->y + 1][tmp->x] = vis[tmp->y][tmp->x] + 1;
@@ -265,7 +265,7 @@ bfs_node* Output::bfs(bfs_node* bf, int requX, int requY, vector<bfs_node*> allN
 			}
 		}
 
-		if (Utils::CheckPointForConnections((tmp->x)* UI.GRID_SIZE, (tmp->y - 1) * UI.GRID_SIZE, usedPixels) && tmp->y - 1 >= 0 && vis[tmp->y - 1][tmp->x] < 0 && Output::usedPixels[tmp->y - 1][tmp->x] != INTERSECTION && (Output::usedPixels[tmp->y - 1][tmp->x] == EMPTY || (tmp->y - 1 == requY && tmp->x == requX &&  Output::usedPixels[tmp->y - 1][tmp->x] == PIN) || (abs((tmp->y - 1) - bf->y) == 1 && tmp->x == bf->x &&  Output::usedPixels[tmp->y - 1][tmp->x] == PIN) || (Output::usedPixels[tmp->y - 1][tmp->x] == HORIZONTAL && Output::usedPixels[tmp->y - 1][tmp->x] != END_CONNECTION)))
+		if (Utils::CheckPointForConnections((tmp->x)* UI.GRID_SIZE, (tmp->y - 1) * UI.GRID_SIZE, usedPixels) && tmp->y - 1 >= 0 && vis[tmp->y - 1][tmp->x] < 0 && Output::usedPixels[tmp->y - 1][tmp->x] != INTERSECTION && (Output::usedPixels[tmp->y - 1][tmp->x] == EMPTY || ((Output::usedPixels[tmp->y][tmp->x] == EMPTY || Output::usedPixels[tmp->y][tmp->x] == HORIZONTAL) && tmp->y - 1 == requY && tmp->x == requX &&  Output::usedPixels[tmp->y - 1][tmp->x] == PIN) || (abs((tmp->y - 1) - bf->y) == 1 && tmp->x == bf->x &&  Output::usedPixels[tmp->y - 1][tmp->x] == PIN) || (Output::usedPixels[tmp->y - 1][tmp->x] == HORIZONTAL && Output::usedPixels[tmp->y - 1][tmp->x] != END_CONNECTION)))
 		{
 			vis[tmp->y - 1][tmp->x] = vis[tmp->y][tmp->x] + 1;
 			bfs_node* newNode = new bfs_node;
@@ -289,9 +289,9 @@ bool Output::DrawConnection(GraphicsInfo GfxInfo, int inputPin, GraphicsInfo com
 
 	current->x = (GfxInfo.x1 - (GfxInfo.x1 % UI.GRID_SIZE)) / UI.GRID_SIZE;
 	current->y = GfxInfo.y1 / UI.GRID_SIZE;
-	
+
 	int remindX2 = GfxInfo.x2 % UI.GRID_SIZE;
-	
+
 	GfxInfo.x2 = compCenterLocation.x1 - UI.GATE_Width / 2 - 2;
 
 	int destX = GfxInfo.x2 / UI.GRID_SIZE + ((remindX2 > UI.GRID_SIZE / 2) ? 1 : 0);
@@ -300,10 +300,10 @@ bool Output::DrawConnection(GraphicsInfo GfxInfo, int inputPin, GraphicsInfo com
 	{
 		destY = compCenterLocation.y1 / UI.GRID_SIZE - 1;
 	}
-	else if (inputPin == 1){
+	else if (inputPin == 1) {
 		destY = compCenterLocation.y1 / UI.GRID_SIZE;
 	}
-	else{
+	else {
 		destY = compCenterLocation.y1 / UI.GRID_SIZE + 1;
 	}
 	if (current == NULL)
@@ -326,10 +326,10 @@ bool Output::DrawConnection(GraphicsInfo GfxInfo, int inputPin, GraphicsInfo com
 	{
 		pWind->DrawLine(destX * UI.GRID_SIZE, destY* UI.GRID_SIZE, compCenterLocation.x1 - UI.GATE_Width / 2 + 3, compCenterLocation.y1 - 13);
 	}
-	else if (inputPin == 1){
+	else if (inputPin == 1) {
 		pWind->DrawLine(destX * UI.GRID_SIZE - 1, compCenterLocation.y1, compCenterLocation.x1 - UI.GATE_Width / 2 + 3, compCenterLocation.y1);
 	}
-	else{
+	else {
 		pWind->DrawLine(destX * UI.GRID_SIZE, destY* UI.GRID_SIZE, compCenterLocation.x1 - UI.GATE_Width / 2 + 3, compCenterLocation.y1 + 13);
 	}
 
@@ -337,21 +337,21 @@ bool Output::DrawConnection(GraphicsInfo GfxInfo, int inputPin, GraphicsInfo com
 
 	//Draw small lines
 
-	pWind->DrawLine(current->x * UI.GRID_SIZE, current->y * UI.GRID_SIZE, GfxInfo.x1, GfxInfo.y1);
+	//pWind->DrawLine(current->x * UI.GRID_SIZE, current->y * UI.GRID_SIZE, GfxInfo.x1, GfxInfo.y1);
 
 	bfs_node* parent = target->parent;
 	bool draw = true, skip_next = false, PreviousIsIntersection = false;
 	int i = 0;
-	while (parent != NULL){
+	while (parent != NULL) {
 
-		if (draw && !skip_next){
+		if (draw && !skip_next) {
 			if (target->x == parent->x && arrayOfIntersections[parent->y][parent->x] == 1)
 			{
 				usedPixels[parent->y][parent->x] = INTERSECTION;
-				if (parent->y < target->y){
+				if (parent->y < target->y) {
 					if (!PreviousIsIntersection)
 						pWind->DrawLine(target->x * UI.GRID_SIZE, target->y*UI.GRID_SIZE, target->x * UI.GRID_SIZE, target->y*UI.GRID_SIZE - 10);
-					else{
+					else {
 						pWind->DrawLine(target->x * UI.GRID_SIZE, target->y*UI.GRID_SIZE - 6, target->x * UI.GRID_SIZE, target->y*UI.GRID_SIZE - 10);
 					}
 					pWind->SetPen(color(14, 36, 75), 2);
@@ -360,11 +360,11 @@ bool Output::DrawConnection(GraphicsInfo GfxInfo, int inputPin, GraphicsInfo com
 					if (parent->parent != NULL && arrayOfIntersections[parent->parent->y][parent->parent->x] != 1)
 						pWind->DrawLine(target->x * UI.GRID_SIZE, target->y*UI.GRID_SIZE - 22, target->x * UI.GRID_SIZE, target->y*UI.GRID_SIZE - 32);
 				}
-				else{
-					if (!PreviousIsIntersection){
+				else {
+					if (!PreviousIsIntersection) {
 						pWind->DrawLine(target->x * UI.GRID_SIZE, target->y*UI.GRID_SIZE, target->x * UI.GRID_SIZE, target->y*UI.GRID_SIZE + 10);
 					}
-					else{
+					else {
 						pWind->DrawLine(target->x * UI.GRID_SIZE, target->y*UI.GRID_SIZE + 6, target->x * UI.GRID_SIZE, target->y*UI.GRID_SIZE + 10);
 					}
 					pWind->SetPen(color(14, 36, 75), 2);
@@ -382,105 +382,107 @@ bool Output::DrawConnection(GraphicsInfo GfxInfo, int inputPin, GraphicsInfo com
 				}
 			}
 			else
-			if (target->y == parent->y && arrayOfIntersections[parent->y][parent->x] == 0){
-				usedPixels[parent->y][parent->x] = INTERSECTION;
-				if (parent->x < target->x){
-					if (!PreviousIsIntersection)
-						pWind->DrawLine(target->x * UI.GRID_SIZE, target->y*UI.GRID_SIZE, target->x * UI.GRID_SIZE - 10, target->y*UI.GRID_SIZE);
-					else{
-						pWind->DrawLine(target->x * UI.GRID_SIZE - 6, target->y*UI.GRID_SIZE, target->x * UI.GRID_SIZE - 10, target->y*UI.GRID_SIZE);
+				if (target->y == parent->y && arrayOfIntersections[parent->y][parent->x] == 0) {
+					usedPixels[parent->y][parent->x] = INTERSECTION;
+					if (parent->x < target->x) {
+						if (!PreviousIsIntersection)
+							pWind->DrawLine(target->x * UI.GRID_SIZE, target->y*UI.GRID_SIZE, target->x * UI.GRID_SIZE - 10, target->y*UI.GRID_SIZE);
+						else {
+							pWind->DrawLine(target->x * UI.GRID_SIZE - 6, target->y*UI.GRID_SIZE, target->x * UI.GRID_SIZE - 10, target->y*UI.GRID_SIZE);
+						}
+						pWind->SetPen(color(14, 36, 75), 2);
+						pWind->DrawBezier(target->x * UI.GRID_SIZE - 10, target->y*UI.GRID_SIZE, target->x * UI.GRID_SIZE - 14, target->y*UI.GRID_SIZE - 6, target->x * UI.GRID_SIZE - 18, target->y*UI.GRID_SIZE - 8, target->x * UI.GRID_SIZE - 22, target->y*UI.GRID_SIZE);
+						if (!selected)pWind->SetPen(color(23, 79, 181), 2);	else pWind->SetPen(BLUE, 2);
+						if (parent->parent != NULL && arrayOfIntersections[parent->parent->y][parent->parent->x] != 0)
+							pWind->DrawLine(target->x * UI.GRID_SIZE - 22, target->y*UI.GRID_SIZE, target->x * UI.GRID_SIZE - 32, target->y*UI.GRID_SIZE);
 					}
-					pWind->SetPen(color(14, 36, 75), 2);
-					pWind->DrawBezier(target->x * UI.GRID_SIZE - 10, target->y*UI.GRID_SIZE, target->x * UI.GRID_SIZE - 14, target->y*UI.GRID_SIZE - 6, target->x * UI.GRID_SIZE - 18, target->y*UI.GRID_SIZE - 8, target->x * UI.GRID_SIZE - 22, target->y*UI.GRID_SIZE);
-					if (!selected)pWind->SetPen(color(23, 79, 181), 2);	else pWind->SetPen(BLUE, 2);
-					if (parent->parent != NULL && arrayOfIntersections[parent->parent->y][parent->parent->x] != 0)
-						pWind->DrawLine(target->x * UI.GRID_SIZE - 22, target->y*UI.GRID_SIZE, target->x * UI.GRID_SIZE - 32, target->y*UI.GRID_SIZE);
-				}
-				else{
-					if (!PreviousIsIntersection)
-						pWind->DrawLine(target->x * UI.GRID_SIZE, target->y*UI.GRID_SIZE, target->x * UI.GRID_SIZE + 10, target->y*UI.GRID_SIZE);
-					else{
-						pWind->DrawLine(target->x * UI.GRID_SIZE + 6, target->y*UI.GRID_SIZE, target->x * UI.GRID_SIZE + 10, target->y*UI.GRID_SIZE);
+					else {
+						if (!PreviousIsIntersection)
+							pWind->DrawLine(target->x * UI.GRID_SIZE, target->y*UI.GRID_SIZE, target->x * UI.GRID_SIZE + 10, target->y*UI.GRID_SIZE);
+						else {
+							pWind->DrawLine(target->x * UI.GRID_SIZE + 6, target->y*UI.GRID_SIZE, target->x * UI.GRID_SIZE + 10, target->y*UI.GRID_SIZE);
+						}
+						pWind->SetPen(color(14, 36, 75), 2);
+						pWind->DrawBezier(target->x * UI.GRID_SIZE + 10, target->y*UI.GRID_SIZE, target->x * UI.GRID_SIZE + 14, target->y*UI.GRID_SIZE - 6, target->x * UI.GRID_SIZE + 18, target->y*UI.GRID_SIZE - 8, target->x * UI.GRID_SIZE + 22, target->y*UI.GRID_SIZE);
+						if (!selected)pWind->SetPen(color(23, 79, 181), 2);	else pWind->SetPen(BLUE, 2);
+						if (parent->parent != NULL && arrayOfIntersections[parent->parent->y][parent->parent->x] != 0)
+							pWind->DrawLine(target->x * UI.GRID_SIZE + 22, target->y*UI.GRID_SIZE, target->x * UI.GRID_SIZE + 32, target->y*UI.GRID_SIZE);
 					}
-					pWind->SetPen(color(14, 36, 75), 2);
-					pWind->DrawBezier(target->x * UI.GRID_SIZE + 10, target->y*UI.GRID_SIZE, target->x * UI.GRID_SIZE + 14, target->y*UI.GRID_SIZE - 6, target->x * UI.GRID_SIZE + 18, target->y*UI.GRID_SIZE - 8, target->x * UI.GRID_SIZE + 22, target->y*UI.GRID_SIZE);
-					if (!selected)pWind->SetPen(color(23, 79, 181), 2);	else pWind->SetPen(BLUE, 2);
-					if (parent->parent != NULL && arrayOfIntersections[parent->parent->y][parent->parent->x] != 0)
-						pWind->DrawLine(target->x * UI.GRID_SIZE + 22, target->y*UI.GRID_SIZE, target->x * UI.GRID_SIZE + 32, target->y*UI.GRID_SIZE);
-				}
-				PreviousIsIntersection = true;
+					PreviousIsIntersection = true;
 
-				if (parent->parent != NULL && arrayOfIntersections[parent->parent->y][parent->parent->x] != 0)
-				{
-					skip_next = true;
+					if (parent->parent != NULL && arrayOfIntersections[parent->parent->y][parent->parent->x] != 0)
+					{
+						skip_next = true;
+						PreviousIsIntersection = false;
+					}
+				}
+				else {
+					pWind->DrawLine(target->x*UI.GRID_SIZE, target->y*UI.GRID_SIZE, parent->x*UI.GRID_SIZE, parent->y*UI.GRID_SIZE);
+
 					PreviousIsIntersection = false;
+
 				}
-			}
-			else{
-				pWind->DrawLine(target->x*UI.GRID_SIZE, target->y*UI.GRID_SIZE, parent->x*UI.GRID_SIZE, parent->y*UI.GRID_SIZE);
-
-				PreviousIsIntersection = false;
-
-			}
-			if (target->x == parent->x)
-			{
-				if (target->y > parent->y)
+				if (target->x == parent->x)
 				{
-					for (size_t i = target->y; i >= parent->y; i--)
+					if (target->y > parent->y)
 					{
-						if (usedPixels[i][target->x] != INTERSECTION && usedPixels[i][target->x] != PIN)
+						for (size_t i = target->y; i >= parent->y; i--)
 						{
-							usedPixels[i][target->x] = VERTICAL;
+							if (usedPixels[i][target->x] != INTERSECTION/* && usedPixels[i][target->x] != PIN*/)
+							{
+								usedPixels[i][target->x] = VERTICAL;
+							}
 						}
 					}
-				}
-				else{
-					for (size_t i = target->y; i <= parent->y; i++)
-					{
-						if (usedPixels[i][target->x] != INTERSECTION && usedPixels[i][target->x] != PIN)
+					else {
+						for (size_t i = target->y; i <= parent->y; i++)
 						{
-							usedPixels[i][target->x] = VERTICAL;
+							if (usedPixels[i][target->x] != INTERSECTION/* && usedPixels[i][target->x] != PIN*/)
+							{
+								usedPixels[i][target->x] = VERTICAL;
+							}
+						}
+					}
+
+				}
+				else if (target->y == parent->y) {
+					if (target->x > parent->x)
+					{
+						for (int i = target->x; i >= parent->x; i--)
+						{
+							if (usedPixels[target->y][i] != INTERSECTION/*&&usedPixels[target->y][i] != PIN*/)
+							{
+								usedPixels[target->y][i] = HORIZONTAL;
+							}
+						}
+					}
+					else {
+						for (int i = target->x; i <= parent->x; i++)
+						{
+							if (usedPixels[target->y][i] != INTERSECTION /*&& usedPixels[target->y][i] != PIN*/)
+							{
+								usedPixels[target->y][i] = HORIZONTAL;
+							}
 						}
 					}
 				}
 
-			}
-			else if (target->y == parent->y){
-				if (target->x > parent->x)
+				if (parent->parent != NULL && ((target->x == parent->x && parent->parent->x != parent->x) || (target->y == parent->y && parent->parent->y != parent->y)))
 				{
-					for (int i = target->x; i >= parent->x; i--)
-					{
-						if (usedPixels[target->y][i] != INTERSECTION&&usedPixels[target->y][i] != PIN)
-						{
-							usedPixels[target->y][i] = HORIZONTAL;
-						}
-					}
+					usedPixels[parent->y][parent->x] = INTERSECTION;
 				}
-				else{
-					for (int i = target->x; i <= parent->x; i++)
-					{
-						if (usedPixels[target->y][i] != INTERSECTION && usedPixels[target->y][i] != PIN)
-						{
-							usedPixels[target->y][i] = HORIZONTAL;
-						}
-					}
+				/*
+				if (parent->parent == NULL)
+				{
+					usedPixels[parent->y][parent->x] = INTERSECTION;
 				}
-			}
-
-			if (parent->parent != NULL && ((target->x == parent->x && parent->parent->x != parent->x) || (target->y == parent->y && parent->parent->y != parent->y)))
-			{
-				usedPixels[parent->y][parent->x] = INTERSECTION;
-			}
-			if (parent->parent == NULL && usedPixels[parent->y][parent->x] != PIN)
-			{
-				usedPixels[parent->y][parent->x] = END_CONNECTION;
-			}
-			if (i == 0 && usedPixels[parent->y][parent->x] != PIN)
-			{
-				usedPixels[target->y][target->x] = END_CONNECTION;
-			}
+				*/
+				if (i == 0)
+				{
+					usedPixels[target->y][target->x] = END_CONNECTION;
+				}
 		}
-		else{
+		else {
 			draw = true;
 			skip_next = false;
 		}
@@ -499,9 +501,9 @@ bool Output::DrawConnection(GraphicsInfo GfxInfo, int inputPin, GraphicsInfo com
 }
 void Output::DrawCleanImage(image* img, int x, int y)
 {
-	pWind->DrawImage(img, x - UI.GATE_Width / 2 + 1, y - UI.GRID_HEIGHT / 2, UI.GATE_Width - 1, UI.GATE_Height - 5);
+	pWind->DrawImage(img, x - UI.GRID_SIZE - 5, y - UI.GRID_SIZE - 5, 2 * UI.GRID_SIZE +4, UI.GATE_Height + 5);
 }
-bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smallCleanImageBeforeAddingGate, bool moving, Component* comp){
+bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smallCleanImageBeforeAddingGate, bool moving, Component* comp) {
 	int iXOld = 0;
 	int iYOld = 0;
 	pWind->GetMouseCoord(iXOld, iXOld);
@@ -513,7 +515,7 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 	{
 		PrintMsg("Please select point within workspace and avoid overlaping!, press ESCAPE to stop");
 	}
-	else{
+	else {
 		PrintMsg("Please select point within workspace and avoid overlaping!");
 	}
 
@@ -532,14 +534,14 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 		bool wrong = false;
 		Utils::correctPointClicked(x, y, true, false);
 		GraphicsInfo tmpGraphicsInfo; tmpGraphicsInfo.x1 = x; tmpGraphicsInfo.y1 = y;
-		if (!Utils::CheckPoint(tmpGraphicsInfo, usedPixels, false)){
+		if (!Utils::CheckPoint(tmpGraphicsInfo, usedPixels, false)) {
 			wrong = true;
 		}
-		else{
+		else {
 			wrong = false;
 		}
-		if (Utils::CheckPoint(x, y, usedPixels)){
-			if (x != iXOld || y != iYOld){
+		if (Utils::CheckPoint(x, y, usedPixels)) {
+			if (x != iXOld || y != iYOld) {
 				pWind->DrawImage(storedDrawingImg, 0, UI.ToolBarHeight, pWind->GetWidth(), pWind->GetHeight() - UI.StatusBarHeight);
 
 				if (x != iXOld) {
@@ -554,160 +556,160 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 				Gfx.x1 = RectULX + UI.GATE_Width / 2;
 				Gfx.y1 = RectULY + UI.GATE_Height / 2;
 
-				pWind->StoreImage(smallCleanImageBeforeAddingGate, Gfx.x1 - UI.GATE_Width / 2 + 1, Gfx.y1 - UI.GATE_Height / 2 + 1, UI.GATE_Width - 1, UI.GATE_Height - 1);
+				pWind->StoreImage(smallCleanImageBeforeAddingGate, Gfx.x1 - UI.GRID_SIZE - 5, Gfx.y1 - UI.GRID_SIZE - 5,2* UI.GRID_SIZE +4, UI.GATE_Height + 5);
 
-				switch (ActType){
-				case ADD_Buff:{
-								  DrawNot_Buffer(Gfx, true, false, wrong);
-								  break;
+				switch (ActType) {
+				case ADD_Buff: {
+					DrawNot_Buffer(Gfx, true, false, wrong);
+					break;
 				}
 				case ADD_INV:
 				{
 
-								DrawNot_Buffer(Gfx, false, false, wrong);
+					DrawNot_Buffer(Gfx, false, false, wrong);
 
-								break;
+					break;
 				}
 				case ADD_AND_GATE_2:
 				{
 
-									   DrawAnd_Nand(Gfx, 2, false, false, wrong);
-									   break;
+					DrawAnd_Nand(Gfx, 2, false, false, wrong);
+					break;
 				}
 				case ADD_AND_GATE_3:
 				{
-									   DrawAnd_Nand(Gfx, 3, false, false, wrong);
-									   break;
+					DrawAnd_Nand(Gfx, 3, false, false, wrong);
+					break;
 				}
 
 				case ADD_NAND_GATE_2:
 				{
 
-										DrawAnd_Nand(Gfx, 2, true, false, wrong);
-										break;
+					DrawAnd_Nand(Gfx, 2, true, false, wrong);
+					break;
 				}
 				case ADD_OR_GATE_2:
 				{
-									  DrawOr_Nor(Gfx, 2, false, false, wrong);
-									  break;
+					DrawOr_Nor(Gfx, 2, false, false, wrong);
+					break;
 				}
 
 				case ADD_NOR_GATE_2:
 				{
-									   DrawOr_Nor(Gfx, 2, true, false, wrong);
+					DrawOr_Nor(Gfx, 2, true, false, wrong);
 
-									   break;
+					break;
 				}
 
 				case ADD_XOR_GATE_2:
 				{
 
-									   DrawXor_Xnor(Gfx, 2, false, false, wrong);
-									   break;
+					DrawXor_Xnor(Gfx, 2, false, false, wrong);
+					break;
 				}
 				case ADD_XOR_GATE_3:
 				{
-									   DrawXor_Xnor(Gfx, 3, false, false, wrong);
-									   break;
+					DrawXor_Xnor(Gfx, 3, false, false, wrong);
+					break;
 				}
 
 				case ADD_XNOR_GATE_2:
 				{
 
-										DrawXor_Xnor(Gfx, 2, true, false, wrong);
-										break;
+					DrawXor_Xnor(Gfx, 2, true, false, wrong);
+					break;
 				}
 				case ADD_NOR_GATE_3:
 				{
 
-									   DrawOr_Nor(Gfx, 3, true, false, wrong);
-									   break;
+					DrawOr_Nor(Gfx, 3, true, false, wrong);
+					break;
 				}
 				case ADD_Switch:
 				{
-								   DrawSwtich(Gfx, true, false, wrong);
-								   break;
+					DrawSwtich(Gfx, true, false, wrong);
+					break;
 				}
 				case ADD_LED:
 				{
-								DrawLed(Gfx, false, false, wrong);
-								break;
+					DrawLed(Gfx, false, false, wrong);
+					break;
 				}
-				case ADD_Buff_H:{
-									DrawNot_Buffer(Gfx, true, true, wrong);
-									break;
+				case ADD_Buff_H: {
+					DrawNot_Buffer(Gfx, true, true, wrong);
+					break;
 				}
 				case ADD_INV_H:
 				{
 
-								  DrawNot_Buffer(Gfx, false, true, wrong);
+					DrawNot_Buffer(Gfx, false, true, wrong);
 
-								  break;
+					break;
 				}
 				case ADD_AND_GATE_2_H:
 				{
 
-										 DrawAnd_Nand(Gfx, 2, false, true, wrong);
-										 break;
+					DrawAnd_Nand(Gfx, 2, false, true, wrong);
+					break;
 				}
 				case ADD_AND_GATE_3_H:
 				{
-										 DrawAnd_Nand(Gfx, 3, false, true, wrong);
-										 break;
+					DrawAnd_Nand(Gfx, 3, false, true, wrong);
+					break;
 				}
 
 				case ADD_NAND_GATE_2_H:
 				{
 
-										  DrawAnd_Nand(Gfx, 2, true, true, wrong);
-										  break;
+					DrawAnd_Nand(Gfx, 2, true, true, wrong);
+					break;
 				}
 				case ADD_OR_GATE_2_H:
 				{
-										DrawOr_Nor(Gfx, 2, false, true, wrong);
-										break;
+					DrawOr_Nor(Gfx, 2, false, true, wrong);
+					break;
 				}
 
 				case ADD_NOR_GATE_2_H:
 				{
-										 DrawOr_Nor(Gfx, 2, true, true, wrong);
+					DrawOr_Nor(Gfx, 2, true, true, wrong);
 
-										 break;
+					break;
 				}
 
 				case ADD_XOR_GATE_2_H:
 				{
 
-										 DrawXor_Xnor(Gfx, 2, false, true, wrong);
-										 break;
+					DrawXor_Xnor(Gfx, 2, false, true, wrong);
+					break;
 				}
 				case ADD_XOR_GATE_3_H:
 				{
-										 DrawXor_Xnor(Gfx, 3, false, true, wrong);
-										 break;
+					DrawXor_Xnor(Gfx, 3, false, true, wrong);
+					break;
 				}
 
 				case ADD_XNOR_GATE_2_H:
 				{
 
-										  DrawXor_Xnor(Gfx, 2, true, true, wrong);
-										  break;
+					DrawXor_Xnor(Gfx, 2, true, true, wrong);
+					break;
 				}
 				case ADD_NOR_GATE_3_H:
 				{
 
-										 DrawOr_Nor(Gfx, 3, true, true, wrong);
-										 break;
+					DrawOr_Nor(Gfx, 3, true, true, wrong);
+					break;
 				}
 				case ADD_Switch_H:
 				{
-									 DrawSwtich(Gfx, true, true, wrong);
-									 break;
+					DrawSwtich(Gfx, true, true, wrong);
+					break;
 				}
 				case ADD_LED_H:
 				{
-								  DrawLed(Gfx, false, true, wrong);
-								  break;
+					DrawLed(Gfx, false, true, wrong);
+					break;
 				}
 				}
 				//move connections with gate
@@ -718,19 +720,19 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 				pWind->UpdateBuffer();
 			}
 		}
-		if (!moving && pWind->GetKeyPress(cKeyData) == ESCAPE){
+		if (!moving && pWind->GetKeyPress(cKeyData) == ESCAPE) {
 			pWind->DrawImage(storedImg, 0, 0, pWind->GetWidth(), pWind->GetHeight());
 			draw = false;
 			break;
 		}
-		else if (pWind->GetMouseClick(GfxInfo.x1, GfxInfo.y1) == LEFT_CLICK || (moving && (pWind->GetButtonState(LEFT_BUTTON, GfxInfo.x1, GfxInfo.y1) == BUTTON_UP))){
+		else if (pWind->GetMouseClick(GfxInfo.x1, GfxInfo.y1) == LEFT_CLICK || (moving && (pWind->GetButtonState(LEFT_BUTTON, GfxInfo.x1, GfxInfo.y1) == BUTTON_UP))) {
 			pWind->FlushMouseQueue();
 			Utils::correctPointClicked(GfxInfo.x1, GfxInfo.y1, true, false);
-			if (Utils::CheckPoint(GfxInfo, usedPixels)){
+			if (Utils::CheckPoint(GfxInfo, usedPixels)) {
 				draw = true;
 				break;
 			}
-			else{
+			else {
 				draw = false;
 			}
 		}
@@ -753,7 +755,7 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //You Send a Centre Point (cx,cy) ,this means when you call Draw image Function , x and y sent should be cx-24, cy-24
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-void Output::DrawAnd_Nand(GraphicsInfo g, int in, bool isNand, bool highlighted, bool notValid) const{
+void Output::DrawAnd_Nand(GraphicsInfo g, int in, bool isNand, bool highlighted, bool notValid) const {
 
 	// Points
 	int cx = g.x1, cy = g.y1; //Centre Point
@@ -768,7 +770,7 @@ void Output::DrawAnd_Nand(GraphicsInfo g, int in, bool isNand, bool highlighted,
 	if (highlighted) pWind->SetPen(BLUE); else if (notValid) pWind->SetPen(RED);
 	else pWind->SetPen(BROWN);
 
-	if (isNand){
+	if (isNand) {
 		outx = cx + 14 - (2 * ciDefBrushSize);
 		p1x = p2x = p1x - 5;
 		//Darwing lines
@@ -778,7 +780,7 @@ void Output::DrawAnd_Nand(GraphicsInfo g, int in, bool isNand, bool highlighted,
 		pWind->DrawLine(in2x - 6 - (2 * ciDefBrushSize), in2y, in2x - 6, in2y, FRAME); //The Input2-Line
 		pWind->DrawLine(outx + 3 * ciDefBrushSize - 1, outy, outx + 7 + (2 * ciDefBrushSize), outy, FRAME); //The Output-Line
 		pWind->DrawLine(p1x, p1y - 1, p2x, p2y, FRAME);
-		if (in == 3){ //Checking for 3 input Gate 
+		if (in == 3) { //Checking for 3 input Gate 
 			int in3x = in1x, in3y = cy;
 			pWind->DrawLine(in3x - 6 - (2 * ciDefBrushSize), in3y, in3x, in3y, FRAME); //The Input3-Line
 		}
@@ -790,7 +792,7 @@ void Output::DrawAnd_Nand(GraphicsInfo g, int in, bool isNand, bool highlighted,
 		pWind->DrawCircle(outx - ciDefBrushSize + 2 * ciDefBrushSize, outy, 2 * ciDefBrushSize, FRAME);
 
 	}
-	else{
+	else {
 		outx = cx + 15 - (2 * ciDefBrushSize);
 		//Darwing lines
 		pWind->DrawLine(p1x, p1y, p1x + 8, p1y, FRAME);
@@ -799,7 +801,7 @@ void Output::DrawAnd_Nand(GraphicsInfo g, int in, bool isNand, bool highlighted,
 		pWind->DrawLine(in2x - 6 - (2 * ciDefBrushSize), in2y, in2x, in2y, FRAME); //The Input2-Line
 		pWind->DrawLine(outx + 3, outy, outx + 6 + (2 * ciDefBrushSize), outy, FRAME); //The Output-Line
 		pWind->DrawLine(p1x, p1y - 1, p2x, p2y, FRAME);
-		if (in == 3){ //Checking for 3 input Gate 
+		if (in == 3) { //Checking for 3 input Gate 
 			int in3x = in1x, in3y = cy;
 			pWind->DrawLine(in3x - 6 - (2 * ciDefBrushSize), in3y, in3x, in3y, FRAME); //The Input3-Line
 		}
@@ -811,7 +813,7 @@ void Output::DrawAnd_Nand(GraphicsInfo g, int in, bool isNand, bool highlighted,
 	}
 }
 
-void Output::DrawNot_Buffer(GraphicsInfo g, bool isBuffer, bool highlighted, bool notValid) const{
+void Output::DrawNot_Buffer(GraphicsInfo g, bool isBuffer, bool highlighted, bool notValid) const {
 	int cx = g.x1, cy = g.y1; //Centre Point
 	int p1x, p1y, p2x, p2y, inx, iny, outx, outy; //Vertices of Triangle and input/output Points
 
@@ -823,7 +825,7 @@ void Output::DrawNot_Buffer(GraphicsInfo g, bool isBuffer, bool highlighted, boo
 	else if (notValid) pWind->SetPen(RED);
 	else pWind->SetPen(BROWN);
 
-	if (isBuffer){
+	if (isBuffer) {
 		//BUFFER Gate
 		outx = cx + 15 - (2 * ciDefBrushSize);
 		//Drawing lines 
@@ -832,7 +834,7 @@ void Output::DrawNot_Buffer(GraphicsInfo g, bool isBuffer, bool highlighted, boo
 		//Drawing Trianlge
 		pWind->DrawTriangle(p1x, p1y, p2x, p2y, outx, outy, FRAME);
 	}
-	else{
+	else {
 		// NOT GATE
 		outx = cx + 14 - (2 * ciDefBrushSize);
 		//Drawing lines 
@@ -846,7 +848,7 @@ void Output::DrawNot_Buffer(GraphicsInfo g, bool isBuffer, bool highlighted, boo
 	}
 }
 
-void Output::DrawOr_Nor(GraphicsInfo g, int in, bool isNor, bool highlighted, bool notValid) const{
+void Output::DrawOr_Nor(GraphicsInfo g, int in, bool isNor, bool highlighted, bool notValid) const {
 	int cx = g.x1, cy = g.y1; //Centre Point
 	int p1x, p1y, p2x, p2y, hx1, hx2, hy1, hy2, kx, ky, ky2; //Helping Points
 	int in1x, in1y, in2x, in2y, outx, outy; // the 2 Inputs & Output
@@ -863,7 +865,7 @@ void Output::DrawOr_Nor(GraphicsInfo g, int in, bool isNor, bool highlighted, bo
 	if (highlighted) pWind->SetPen(BLUE); else if (notValid) pWind->SetPen(RED);
 	else pWind->SetPen(BROWN);
 
-	if (isNor){
+	if (isNor) {
 		//NOR GATE
 		outy = cy; outx = cx + 14 - (2 * ciDefBrushSize);
 		kx = (outx + hx1) / 2;
@@ -874,7 +876,7 @@ void Output::DrawOr_Nor(GraphicsInfo g, int in, bool isNor, bool highlighted, bo
 		pWind->DrawLine(in1x - 6 - (2 * ciDefBrushSize), in1y, in1x, in1y, FRAME); //The Input1-Line
 		pWind->DrawLine(in2x - 6 - (2 * ciDefBrushSize), in2y, in2x, in2y, FRAME); //The Input2-Line
 		pWind->DrawLine(outx + 4 * ciDefBrushSize - 1, outy, outx + 7 + (2 * ciDefBrushSize), outy, FRAME); //The Output-Line
-		if (in == 3){ //Checking for 3 input Gate 
+		if (in == 3) { //Checking for 3 input Gate 
 			int in3x = in1x + 2 * (ciDefBrushSize == 1 ? 2 : 1), in3y = cy;
 			pWind->DrawLine(in3x - 8 - (2 * ciDefBrushSize), in3y, in3x, in3y, FRAME); //The Input3-Line
 		}
@@ -887,7 +889,7 @@ void Output::DrawOr_Nor(GraphicsInfo g, int in, bool isNor, bool highlighted, bo
 
 	}
 
-	else{
+	else {
 		//OR GATE
 		outx = cx + 15 - (2 * ciDefBrushSize);
 		kx = (outx + hx1) / 2;
@@ -897,7 +899,7 @@ void Output::DrawOr_Nor(GraphicsInfo g, int in, bool isNor, bool highlighted, bo
 		pWind->DrawLine(in1x - 6 - (2 * ciDefBrushSize), in1y, in1x, in1y, FRAME); //The Input1-Line
 		pWind->DrawLine(in2x - 6 - (2 * ciDefBrushSize), in2y, in2x, in2y, FRAME); //The Input2-Line
 		pWind->DrawLine(outx, outy, outx + 6 + (2 * ciDefBrushSize), outy, FRAME); //The Output-Line
-		if (in == 3){ //Checking for 3 input Gate 
+		if (in == 3) { //Checking for 3 input Gate 
 			int in3x = in1x + 2 * (ciDefBrushSize == 1 ? 2 : 1), in3y = cy;
 			pWind->DrawLine(in3x - 8 - (2 * ciDefBrushSize), in3y, in3x, in3y, FRAME); //The Input3-Line
 		}
@@ -930,7 +932,7 @@ void Output::DrawXor_Xnor(GraphicsInfo g, int in, bool isXNor, bool highlighted,
 	if (highlighted) pWind->SetPen(BLUE); else if (notValid) pWind->SetPen(RED);
 	else pWind->SetPen(BROWN);
 
-	if (isXNor){
+	if (isXNor) {
 		//XNOR GATE
 		outy = cy; outx = cx + 14 - (2 * ciDefBrushSize);
 		kx = (outx + hx1) / 2;
@@ -939,8 +941,8 @@ void Output::DrawXor_Xnor(GraphicsInfo g, int in, bool isXNor, bool highlighted,
 		//Draw lines
 		pWind->DrawLine(in1x - 6 - (2 * ciDefBrushSize), in1y, in1x, in1y, FRAME); //The Input1-Line
 		pWind->DrawLine(in2x - 6 - (2 * ciDefBrushSize), in2y, in2x, in2y, FRAME); //The Input2-Line
-		pWind->DrawLine(outx + 4 * ciDefBrushSize - 1, outy, outx + 7 + (2 * ciDefBrushSize), outy, FRAME); //The Output-Line
-		if (in == 3){ //Checking for 3 input Gate 
+		pWind->DrawLine(outx + 4 * ciDefBrushSize - 1, outy, outx -1+ (2 * ciDefBrushSize), outy, FRAME); //The Output-Line
+		if (in == 3) { //Checking for 3 input Gate 
 			int in3x = in1x, in3y = cy;
 			pWind->DrawLine(in3x - 6 - (2 * ciDefBrushSize), in3y, in3x, in3y, FRAME); //The Input3-Line
 		}
@@ -954,7 +956,7 @@ void Output::DrawXor_Xnor(GraphicsInfo g, int in, bool isXNor, bool highlighted,
 		pWind->DrawCircle(outx + 2 * ciDefBrushSize, outy, 2 * ciDefBrushSize, FRAME);
 
 	}
-	else{
+	else {
 		//XOR GATE
 		outy = cy; outx = cx + 15 - (2 * ciDefBrushSize);
 		kx = (outx + hx1) / 2;
@@ -963,8 +965,8 @@ void Output::DrawXor_Xnor(GraphicsInfo g, int in, bool isXNor, bool highlighted,
 		//Draw lines
 		pWind->DrawLine(in1x - 6 - (2 * ciDefBrushSize), in1y, in1x, in1y, FRAME); //The Input1-Line
 		pWind->DrawLine(in2x - 6 - (2 * ciDefBrushSize), in2y, in2x, in2y, FRAME); //The Input2-Line
-		pWind->DrawLine(outx, outy, outx + 6 + (2 * ciDefBrushSize), outy, FRAME); //The Output-Line
-		if (in == 3){ //Checking for 3 input Gate 
+		pWind->DrawLine(outx, outy, outx + (2 * ciDefBrushSize)-1, outy, FRAME); //The Output-Line
+		if (in == 3) { //Checking for 3 input Gate 
 			int in3x = in1x, in3y = cy;
 			pWind->DrawLine(in3x - 6 - (2 * ciDefBrushSize), in3y, in3x, in3y, FRAME); //The Input3-Line
 		}
@@ -1029,7 +1031,7 @@ void Output::DrawSwtich(GraphicsInfo g, bool isON, bool highlighted, bool notVal
 
 
 }
-void Output::setUsedPixel(int i, int j, CellType c){
+void Output::setUsedPixel(int i, int j, CellType c) {
 	usedPixels[i][j] = c;
 }
 Output::~Output()

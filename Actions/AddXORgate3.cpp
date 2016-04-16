@@ -47,7 +47,8 @@ void AddXORgate3::Execute()
 	GInfotmp.y1 = GInfo.y1 - Wdth / 2;
 	GInfotmp.y2 = GInfo.y1 + Wdth / 2;
 	XOR3 *pA = new XOR3(GInfotmp, FANOUT);
-	pManager->allComponentsCorners.push_back(GInfotmp);pManager->AddComponent(pA);pA->setSmallCleanImageBeforeAddingComp(smallImageBeforeAddingComponent);}
+	pManager->allComponentsCorners.push_back(GInfotmp);
+	pManager->AddComponent(pA);pA->setSmallCleanImageBeforeAddingComp(smallImageBeforeAddingComponent);}
 }
 
 void AddXORgate3::Undo()

@@ -42,12 +42,7 @@ void AddConnection::Execute()
 			continue;
 		if (Cx1 >= pManager->allComponentsCorners[i].x1&&Cx1 <= pManager->allComponentsCorners[i].x2&& Cy1 >= pManager->allComponentsCorners[i].y1&&Cy1 <= pManager->allComponentsCorners[i].y2)
 		{
-			if (Cx1 < (pManager->allComponentsCorners[i].x1 + UI.GATE_Width / 2))
-			{
-				inputComponent = pManager->getComponent(i);
-				indxOfInputComponent = i;
-			}
-			else
+			if (Cx1 > (pManager->allComponentsCorners[i].x1 + UI.GATE_Width / 2))
 			{
 				outputComponent = pManager->getComponent(i);
 			}
@@ -58,10 +53,6 @@ void AddConnection::Execute()
 			{
 				inputComponent = pManager->getComponent(i);
 				indxOfInputComponent = i;
-			}
-			else
-			{
-				outputComponent = pManager->getComponent(i);
 			}
 		}
 	}
