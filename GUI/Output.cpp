@@ -295,7 +295,6 @@ bool Output::DrawConnection(GraphicsInfo GfxInfo, int inputPin, GraphicsInfo com
 	GfxInfo.x2 = compCenterLocation.x1 - UI.GATE_Width / 2 - 2;
 
 	int destX = GfxInfo.x2 / UI.GRID_SIZE + ((remindX2 > UI.GRID_SIZE / 2) ? 1 : 0);
-//	int destX = compCenterLocation.x1 / UI.GRID_SIZE/* + ((remindX2 > UI.GRID_SIZE / 2) ? 1 : 0)*/;
 	int destY;
 	if (inputPin == 0)
 	{
@@ -318,18 +317,20 @@ bool Output::DrawConnection(GraphicsInfo GfxInfo, int inputPin, GraphicsInfo com
 
 	if (target == NULL)
 	{
-		cout << endl << "No Way	 " << current->x << "   " << current->y << "   " << destX << "    " << destY << endl;
+	///	cout << endl << "No Way	 " << current->x << "   " << current->y << "   " << destX << "    " << destY << " B " 
+			//<< usedPixels[destY][destX]
+		//	<< endl;
 
 		pWind->FlushMouseQueue();
 
 		return false;
 	}
 	else {
-		cout << endl << "Way	 " << current->x << "   " << current->y << "   " << destX << "    " << destY << endl;
+	//	cout << endl << "Way	 " << current->x << "   " << current->y << "   " << destX << "    " << destY << endl;
 
-	
-}
-	if		(!selected)pWind->SetPen(color(23, 79, 181), 2);	else pWind->SetPen(BLUE, 2);
+
+	}
+	if (!selected)pWind->SetPen(color(23, 79, 181), 2);	else pWind->SetPen(BLUE, 2);
 
 	if (inputPin == 0)
 	{
@@ -485,7 +486,7 @@ bool Output::DrawConnection(GraphicsInfo GfxInfo, int inputPin, GraphicsInfo com
 						}
 					}
 
-					
+
 				}
 				if (parent->parent != NULL && ((target->x == parent->x && parent->parent->x != parent->x) || (target->y == parent->y && parent->parent->y != parent->y)))
 				{
@@ -590,7 +591,7 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 					usedPixels[cell.y][cell.x] = cell.cellType;
 				}
 				allInputConnections[i]->getCellsBeforeAddingConnection().clear();
-			}			
+			}
 		}
 		if (!Utils::CheckPoint(tmpGraphicsInfo, usedPixels, false)) {
 			wrong = true;
@@ -613,7 +614,7 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 				GraphicsInfo Gfx;
 				Gfx.x1 = RectULX + UI.GATE_Width / 2;
 				Gfx.y1 = RectULY + UI.GATE_Height / 2;
-				cout << "GFX " << Gfx.x1 << "   " << Gfx.y1 << endl;
+				//cout << "GFX " << Gfx.x1 << "   " << Gfx.y1 << endl;
 				pWind->StoreImage(smallCleanImageBeforeAddingGate, Gfx.x1 - UI.GRID_SIZE - 5, Gfx.y1 - UI.GRID_SIZE - 5, 2 * UI.GRID_SIZE + 4, UI.GATE_Height + 5);
 
 				switch (ActType) {
@@ -773,7 +774,7 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 				//move connections with gate
 				if (moving && !wrong)
 				{
-					int xbegin = (originalX - UI.GATE_Width / 2.0) / UI.GRID_SIZE, xend = (originalX + UI.GATE_Width / 2.0) / UI.GRID_SIZE, ybegin = (originalY - UI.GATE_Height / 2.0) / UI.GRID_SIZE, yend = (originalY + UI.GATE_Height / 2.0) / UI.GRID_SIZE;
+					int xbegin = (Gfx.x1 - UI.GATE_Width / 2.0) / UI.GRID_SIZE, xend = (Gfx.x1 + UI.GATE_Width / 2.0) / UI.GRID_SIZE, ybegin = (Gfx.y1 - UI.GATE_Height / 2.0) / UI.GRID_SIZE, yend = (Gfx.y1 + UI.GATE_Height / 2.0) / UI.GRID_SIZE;
 					for (int i = ybegin + 1; i <= yend; i++)
 					{
 						for (int j = xbegin; j <= xend; j++)
@@ -786,6 +787,7 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 							setUsedPixel(i, j, GATE);
 						}
 					}
+					
 					//Reconnect
 					comp->getAllInputConnections(allInputConnections);
 					comp->getAllOutputConnections(allOutputConnections);
@@ -839,7 +841,7 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 							setUsedPixel(i, j, EMPTY);
 						}
 					}
-					
+
 				}
 				pWind->UpdateBuffer();
 			}
