@@ -221,7 +221,7 @@ bfs_node* Output::bfs(bfs_node* bf, int requX, int requY, vector<bfs_node*> allN
 		if (tmp->x == requX && tmp->y == requY) {
 			return tmp;
 		}
-		if (Utils::CheckPointForConnections((tmp->x + 1)* UI.GRID_SIZE, tmp->y * UI.GRID_SIZE, usedPixels) && tmp->x + 1 <= 74 && vis[tmp->y][tmp->x + 1] < 0 && Output::usedPixels[tmp->y][tmp->x + 1] != INTERSECTION && (Output::usedPixels[tmp->y][tmp->x + 1] == EMPTY || ((Output::usedPixels[tmp->y][tmp->x] == EMPTY || Output::usedPixels[tmp->y][tmp->x] == VERTICAL) && tmp->y == requY && tmp->x + 1 == requX && Output::usedPixels[tmp->y][tmp->x + 1] == PIN) || (Output::usedPixels[tmp->y][tmp->x + 1] == VERTICAL && Output::usedPixels[tmp->y][tmp->x + 1] != END_CONNECTION)))
+		if (Utils::CheckPointForConnections((tmp->x + 1)* UI.GRID_SIZE, tmp->y * UI.GRID_SIZE, usedPixels) && tmp->x + 1 <= 74 && vis[tmp->y][tmp->x + 1] < 0 && Output::usedPixels[tmp->y][tmp->x + 1] != INTERSECTION && (Output::usedPixels[tmp->y][tmp->x + 1] == EMPTY || ((Output::usedPixels[tmp->y][tmp->x] == EMPTY || Output::usedPixels[tmp->y][tmp->x] == PIN || Output::usedPixels[tmp->y][tmp->x] == VERTICAL) && tmp->y == requY && tmp->x + 1 == requX && Output::usedPixels[tmp->y][tmp->x + 1] == PIN) || (Output::usedPixels[tmp->y][tmp->x + 1] == VERTICAL && Output::usedPixels[tmp->y][tmp->x + 1] != END_CONNECTION)))
 		{
 			vis[tmp->y][tmp->x + 1] = vis[tmp->y][tmp->x] + 1;
 			bfs_node* newNode = new bfs_node;
@@ -317,16 +317,16 @@ bool Output::DrawConnection(GraphicsInfo GfxInfo, int inputPin, GraphicsInfo com
 
 	if (target == NULL)
 	{
-	///	cout << endl << "No Way	 " << current->x << "   " << current->y << "   " << destX << "    " << destY << " B " 
-			//<< usedPixels[destY][destX]
-		//	<< endl;
+		///	cout << endl << "No Way	 " << current->x << "   " << current->y << "   " << destX << "    " << destY << " B " 
+				//<< usedPixels[destY][destX]
+			//	<< endl;
 
 		pWind->FlushMouseQueue();
 
 		return false;
 	}
 	else {
-	//	cout << endl << "Way	 " << current->x << "   " << current->y << "   " << destX << "    " << destY << endl;
+		//	cout << endl << "Way	 " << current->x << "   " << current->y << "   " << destX << "    " << destY << endl;
 
 
 	}
@@ -520,7 +520,7 @@ bool Output::DrawConnection(GraphicsInfo GfxInfo, int inputPin, GraphicsInfo com
 }
 void Output::DrawCleanImage(image* img, int x, int y)
 {
-	pWind->DrawImage(img, x - UI.GRID_SIZE - 5, y - UI.GRID_SIZE - 5, 2 * UI.GRID_SIZE + 4, UI.GATE_Height + 5);
+	pWind->DrawImage(img, x - UI.GRID_SIZE - 5, y - UI.GRID_SIZE - 5, 2 * UI.GRID_SIZE + 4, UI.GATE_Height + 3);
 }
 bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smallCleanImageBeforeAddingGate, bool moving, Component* comp) {
 	int originalX, originalY;
@@ -593,7 +593,7 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 				allInputConnections[i]->getCellsBeforeAddingConnection().clear();
 			}
 		}
-		if (!Utils::CheckPoint(tmpGraphicsInfo, usedPixels, false)) {
+		if (!Utils::CheckPoint(tmpGraphicsInfo, usedPixels, moving, false)) {
 			wrong = true;
 		}
 		else {
@@ -615,7 +615,7 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 				Gfx.x1 = RectULX + UI.GATE_Width / 2;
 				Gfx.y1 = RectULY + UI.GATE_Height / 2;
 				//cout << "GFX " << Gfx.x1 << "   " << Gfx.y1 << endl;
-				pWind->StoreImage(smallCleanImageBeforeAddingGate, Gfx.x1 - UI.GRID_SIZE - 5, Gfx.y1 - UI.GRID_SIZE - 5, 2 * UI.GRID_SIZE + 4, UI.GATE_Height + 5);
+				pWind->StoreImage(smallCleanImageBeforeAddingGate, Gfx.x1 - UI.GRID_SIZE - 5, Gfx.y1 - UI.GRID_SIZE - 5, 2 * UI.GRID_SIZE + 4, UI.GATE_Height + 3);
 
 				switch (ActType) {
 				case ADD_Buff: {
@@ -787,7 +787,7 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 							setUsedPixel(i, j, GATE);
 						}
 					}
-					
+
 					//Reconnect
 					comp->getAllInputConnections(allInputConnections);
 					comp->getAllOutputConnections(allOutputConnections);
@@ -856,11 +856,12 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 		else if (pWind->GetMouseClick(GfxInfo.x1, GfxInfo.y1) == LEFT_CLICK || (moving && (pWind->GetButtonState(LEFT_BUTTON, GfxInfo.x1, GfxInfo.y1) == BUTTON_UP))) {
 			pWind->FlushMouseQueue();
 			Utils::correctPointClicked(GfxInfo.x1, GfxInfo.y1, true, false);
-			if (Utils::CheckPoint(GfxInfo, usedPixels)) {
+			if (Utils::CheckPoint(GfxInfo, usedPixels, moving)) {
 				draw = true;
 				break;
 			}
 			else {
+				//cout <<"Adasd" << GfxInfo.y1 << "  "  <<GfxInfo.x1 <<" " << usedPixels[GfxInfo.y1/16][GfxInfo.x1/16] << endl;
 				draw = false;
 			}
 		}

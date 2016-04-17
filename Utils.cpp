@@ -54,7 +54,7 @@ void  Utils::correctPointClicked(int &x, int &y, bool DrawGate, bool DrawConnect
 		}
 	}
 }
-bool Utils::CheckPoint(GraphicsInfo r_GfxInfo, CellType usedPixels[44][74], bool fillArray) {
+bool Utils::CheckPoint(GraphicsInfo r_GfxInfo, CellType usedPixels[44][74], bool isMoving, bool fillArray) {
 	int xbegin = (r_GfxInfo.x1 - UI.GATE_Width / 2.0) / UI.GRID_SIZE, xend = (r_GfxInfo.x1 + UI.GATE_Width / 2.0) / UI.GRID_SIZE, ybegin = (r_GfxInfo.y1 - UI.GATE_Height / 2.0) / UI.GRID_SIZE, yend = (r_GfxInfo.y1 + UI.GATE_Height / 2.0) / UI.GRID_SIZE;
 	for (int i = ybegin; i <= yend + 1; i++)
 	{
@@ -62,9 +62,8 @@ bool Utils::CheckPoint(GraphicsInfo r_GfxInfo, CellType usedPixels[44][74], bool
 		{
 			if (usedPixels[i][j] == GATE || (usedPixels[i][j] == HORIZONTAL || usedPixels[i][j] == VERTICAL)) {
 				if ((i == yend+1 || i == ybegin) && (usedPixels[i][j] == HORIZONTAL || usedPixels[i][j] == END_CONNECTION)) {}
-				//else if ((j == xend || j == xbegin) && (usedPixels[i][j] == VERTICAL || usedPixels[i][j] == END_CONNECTION)){}
+				else if (isMoving && (j == xbegin || j == xend ) && (usedPixels[i][j] == VERTICAL)){}
 				else {
-				//	cout << endl<<usedPixels[i][j] << "  " << i << " " << j << endl;
 					return 0;
 				}
 			}
