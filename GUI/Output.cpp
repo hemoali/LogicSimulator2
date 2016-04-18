@@ -591,6 +591,7 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 					usedPixels[cell.y][cell.x] = cell.cellType;
 				}
 				allInputConnections[i]->getCellsBeforeAddingConnection().clear();
+
 			}
 		}
 		if (!Utils::CheckPoint(tmpGraphicsInfo, usedPixels, moving, false)) {
@@ -861,7 +862,6 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 				break;
 			}
 			else {
-				//cout <<"Adasd" << GfxInfo.y1 << "  "  <<GfxInfo.x1 <<" " << usedPixels[GfxInfo.y1/16][GfxInfo.x1/16] << endl;
 				draw = false;
 			}
 		}
