@@ -56,7 +56,7 @@ void  Utils::correctPointClicked(int &x, int &y, bool DrawGate, bool DrawConnect
 }
 bool Utils::CheckPoint(GraphicsInfo r_GfxInfo, CellType usedPixels[44][74], bool isMoving, bool fillArray) {
 	int xbegin = (r_GfxInfo.x1 - UI.GATE_Width / 2.0) / UI.GRID_SIZE, xend = (r_GfxInfo.x1 + UI.GATE_Width / 2.0) / UI.GRID_SIZE, ybegin = (r_GfxInfo.y1 - UI.GATE_Height / 2.0) / UI.GRID_SIZE, yend = (r_GfxInfo.y1 + UI.GATE_Height / 2.0) / UI.GRID_SIZE;
-	for (int i = ybegin; i <= yend + 1; i++)
+	for (int i = ((isMoving) ? (ybegin +1 ): ybegin); i <= ((isMoving) ? yend : (yend + 1)); i++)
 	{
 		for (int j =((isMoving)? xbegin:(xbegin-1)); j <= ((isMoving) ?xend: (xend+1)); j++)
 		{

@@ -14,7 +14,7 @@ Output::Output()
 
 	UI.AppMode = DESIGN;	//Design Mode is the startup mode
 
-	//Initilaize interface colors
+							//Initilaize interface colors
 	UI.DrawColor = BLACK;
 	UI.SelectColor = BLUE;
 	UI.ConnColor = RED;
@@ -69,7 +69,7 @@ void Output::CreateStatusBar() const
 void Output::PrintMsg(string msg) const
 {
 	ClearStatusBar();	//Clear Status bar to print message on it
-	// Set the Message offset from the Status Bar
+						// Set the Message offset from the Status Bar
 	int MsgX = 25;
 	int MsgY = UI.StatusBarHeight - 10;
 
@@ -120,9 +120,9 @@ void Output::CreateDesignToolBar() const
 	pWind->DrawRectangle(0, 0, UI.width, UI.ToolBarHeight + 10);
 	UI.AppMode = DESIGN;	//Design Mode
 
-	//You can draw the tool bar icons in any way you want.
+							//You can draw the tool bar icons in any way you want.
 
-	//First prepare List of images for each menu item
+							//First prepare List of images for each menu item
 	string MenuItemImages[DITEMSCOUNT];
 	MenuItemImages[D2AND] = "images\\Menu\\AND2.jpg";
 	MenuItemImages[D3AND] = "images\\Menu\\AND3.jpg";
@@ -318,8 +318,8 @@ bool Output::DrawConnection(GraphicsInfo GfxInfo, int inputPin, GraphicsInfo com
 	if (target == NULL)
 	{
 		///	cout << endl << "No Way	 " << current->x << "   " << current->y << "   " << destX << "    " << destY << " B " 
-				//<< usedPixels[destY][destX]
-			//	<< endl;
+		//<< usedPixels[destY][destX]
+		//	<< endl;
 
 		pWind->FlushMouseQueue();
 
@@ -430,12 +430,12 @@ bool Output::DrawConnection(GraphicsInfo GfxInfo, int inputPin, GraphicsInfo com
 					PreviousIsIntersection = false;
 
 				}
-				//if (i == 0)
-				//{
-				//cellsBeforeAddingConnection.push_back({ target->x , target->y, usedPixels[target->y][target->x] });
-				//usedPixels[target->y][target->x] = PIN;
-				//}
-				if (i != 0)
+				if (i == 0)
+				{
+					cellsBeforeAddingConnection.push_back({ target->x , target->y, usedPixels[target->y][target->x] });
+					usedPixels[target->y][target->x] = PIN;
+				}
+				else
 				{
 					if (target->x == parent->x)
 					{
@@ -493,12 +493,13 @@ bool Output::DrawConnection(GraphicsInfo GfxInfo, int inputPin, GraphicsInfo com
 					cellsBeforeAddingConnection.push_back({ parent->x , parent->y, usedPixels[parent->y][parent->x] });
 					usedPixels[parent->y][parent->x] = INTERSECTION;
 				}
-				/*
+
 				if (parent->parent == NULL)
 				{
-					usedPixels[parent->y][parent->x] = INTERSECTION;
+					cellsBeforeAddingConnection.push_back({ parent->x , parent->y, PIN });
+					//usedPixels[parent->y][parent->x] = PIN;
 				}
-				*/
+
 
 		}
 		else {
@@ -546,9 +547,87 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 	}
 
 	bool draw = true, isOriginalDrawn = false;
+	vector<Connection*> allInputConnections, allOutputConnections;
 
 	image* storedImg = new image;
 	image* storedDrawingImg = new image;
+	if (moving)
+	{
+		//Clear connections
+		comp->getAllInputConnections(allInputConnections);
+		comp->getAllOutputConnections(allOutputConnections);
+		for (size_t i = 0; i < allOutputConnections.size(); i++)
+		{
+			for (size_t j = 0; j < allOutputConnections[i]->getCellsBeforeAddingConnection().size(); j++)
+			{
+				Cell cell = allOutputConnections[i]->getCellsBeforeAddingConnection()[j];
+
+				if (j < allOutputConnections[i]->getCellsBeforeAddingConnection().size() - 1)
+				{
+					Cell cell2 = allOutputConnections[i]->getCellsBeforeAddingConnection()[j + 1];
+					if ((cell.cellType == EMPTY || cell.cellType == PIN) && (cell2.cellType == EMPTY || cell2.cellType == PIN) && (usedPixels[cell2.y][cell2.x] != INTERSECTION || (usedPixels[cell2.y][cell2.x] == INTERSECTION && cell2.cellType == EMPTY)))
+					{
+						pWind->SetPen(WHITE, 2);
+						pWind->DrawLine(cell.x * UI.GRID_SIZE - 1, cell.y*UI.GRID_SIZE, cell2.x * UI.GRID_SIZE, cell2.y*UI.GRID_SIZE);
+						pWind->SetBrush(WHITE);
+						pWind->DrawRectangle(cell2.x * UI.GRID_SIZE - 2, cell2.y*UI.GRID_SIZE - 2, cell2.x*UI.GRID_SIZE + 2, cell2.y*UI.GRID_SIZE + 2, FILLED);
+
+						pWind->SetPen(BLACK, 1);
+						pWind->DrawPixel(cell2.x*UI.GRID_SIZE, cell2.y*UI.GRID_SIZE);
+					}
+				}
+				arrayOfIntersections[cell.y][cell.x] = -1;
+
+				usedPixels[cell.y][cell.x] = cell.cellType;
+			}
+			//allOutputConnections[i]->getCellsBeforeAddingConnection().clear();
+		}
+		for (size_t i = 0; i < allInputConnections.size(); i++)
+		{
+			for (size_t j = 0; j < allInputConnections[i]->getCellsBeforeAddingConnection().size(); j++)
+			{
+				Cell cell = allInputConnections[i]->getCellsBeforeAddingConnection()[j];
+				if (j < allInputConnections[i]->getCellsBeforeAddingConnection().size() - 1)
+				{
+					Cell cell2 = allInputConnections[i]->getCellsBeforeAddingConnection()[j + 1];
+					if ((cell.cellType == EMPTY || cell.cellType == PIN) && (cell2.cellType == EMPTY || cell2.cellType == PIN) && (usedPixels[cell2.y][cell2.x] != INTERSECTION || (usedPixels[cell2.y][cell2.x] == INTERSECTION && cell2.cellType == EMPTY)))
+					{
+						pWind->SetPen(WHITE, 2);
+						pWind->SetBrush(WHITE);
+
+						pWind->DrawLine(cell.x * UI.GRID_SIZE - 1, cell.y*UI.GRID_SIZE, cell2.x * UI.GRID_SIZE, cell2.y*UI.GRID_SIZE);
+						pWind->DrawRectangle(cell2.x * UI.GRID_SIZE - 2, cell2.y*UI.GRID_SIZE - 2, cell2.x*UI.GRID_SIZE + 2, cell2.y*UI.GRID_SIZE + 2, FILLED);
+
+						if (allInputConnections[i]->getDestPin()->getPosition() == 0 && cell.cellType == PIN)
+						{
+							pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y* UI.GRID_SIZE, originalX - UI.GATE_Width / 2 + 3, originalY - 13);
+						}
+						else if (allInputConnections[i]->getDestPin()->getPosition() == 1 && cell.cellType == PIN) {
+							pWind->DrawLine(cell.x * UI.GRID_SIZE - 1, originalY, originalX - UI.GATE_Width / 2 + 3, originalY);
+						}
+						else if (allInputConnections[i]->getDestPin()->getPosition() == 2 && cell.cellType == PIN) {
+							pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y* UI.GRID_SIZE, originalX - UI.GATE_Width / 2 + 3, originalY + 13);
+						}
+					}
+
+					pWind->SetPen(BLACK, 1);
+					pWind->DrawPixel(cell2.x*UI.GRID_SIZE, cell2.y*UI.GRID_SIZE);
+
+					if (j == 0) {
+						//pWind->SetPen(BLACK, 1);
+						pWind->DrawPixel(cell.x*UI.GRID_SIZE, cell.y*UI.GRID_SIZE);
+
+					}
+				}
+				arrayOfIntersections[cell.y][cell.x] = -1;
+
+				usedPixels[cell.y][cell.x] = cell.cellType;
+			}
+			//allInputConnections[i]->getCellsBeforeAddingConnection().clear();
+
+		}
+	}
+
 	pWind->StoreImage(storedImg, 0, 0, pWind->GetWidth(), pWind->GetHeight());
 	pWind->StoreImage(storedDrawingImg, 0, UI.ToolBarHeight, pWind->GetWidth(), pWind->GetHeight() - UI.StatusBarHeight);
 
@@ -559,9 +638,12 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 		pWind->GetMouseCoord(x, y);
 		bool wrong = false;
 		Utils::correctPointClicked(x, y, true, false);
-		GraphicsInfo tmpGraphicsInfo; tmpGraphicsInfo.x1 = x; tmpGraphicsInfo.y1 = y;
-
-		vector<Connection*> allInputConnections, allOutputConnections;
+		if (!Utils::CheckPoint({ x,y }, usedPixels, moving, false)) {
+			wrong = true;
+		}
+		else {
+			wrong = false;
+		}
 
 		if (moving && (x != iXOld || y != iYOld))
 		{
@@ -572,11 +654,14 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 			{
 				for (size_t j = 0; j < allOutputConnections[i]->getCellsBeforeAddingConnection().size(); j++)
 				{
+
 					Cell cell = allOutputConnections[i]->getCellsBeforeAddingConnection()[j];
 
 					arrayOfIntersections[cell.y][cell.x] = -1;
-
-					usedPixels[cell.y][cell.x] = cell.cellType;
+					if (cell.cellType != PIN)
+					{
+						usedPixels[cell.y][cell.x] = cell.cellType;
+					}
 				}
 				allOutputConnections[i]->getCellsBeforeAddingConnection().clear();
 			}
@@ -588,17 +673,13 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 
 					arrayOfIntersections[cell.y][cell.x] = -1;
 
-					usedPixels[cell.y][cell.x] = cell.cellType;
+					if (cell.cellType != PIN)
+					{
+						usedPixels[cell.y][cell.x] = cell.cellType;
+					}
 				}
 				allInputConnections[i]->getCellsBeforeAddingConnection().clear();
-
 			}
-		}
-		if (!Utils::CheckPoint(tmpGraphicsInfo, usedPixels, moving, false)) {
-			wrong = true;
-		}
-		else {
-			wrong = false;
 		}
 		if (Utils::CheckPoint(x, y, usedPixels)) {
 			if (x != iXOld || y != iYOld) {
@@ -615,7 +696,6 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 				GraphicsInfo Gfx;
 				Gfx.x1 = RectULX + UI.GATE_Width / 2;
 				Gfx.y1 = RectULY + UI.GATE_Height / 2;
-				//cout << "GFX " << Gfx.x1 << "   " << Gfx.y1 << endl;
 				pWind->StoreImage(smallCleanImageBeforeAddingGate, Gfx.x1 - UI.GRID_SIZE - 5, Gfx.y1 - UI.GRID_SIZE - 5, 2 * UI.GRID_SIZE + 4, UI.GATE_Height + 3);
 
 				switch (ActType) {
@@ -794,16 +874,17 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 					comp->getAllOutputConnections(allOutputConnections);
 					for (size_t i = 0; i < allInputConnections.size(); i++)
 					{
+						cout << "CONN " << i + 1 << endl;
 						/*for (size_t j = 0; j < allInputConnections[i]->getCellsBeforeAddingConnection().size(); j++)
 						{
-							Cell cell = allInputConnections[i]->getCellsBeforeAddingConnection()[j];
+						Cell cell = allInputConnections[i]->getCellsBeforeAddingConnection()[j];
 
-							arrayOfIntersections[cell.y][cell.x] = -1;
+						arrayOfIntersections[cell.y][cell.x] = -1;
 
-							usedPixels[cell.y][cell.x] = cell.cellType;
+						usedPixels[cell.y][cell.x] = cell.cellType;
 						}
 						allInputConnections[i]->getCellsBeforeAddingConnection().clear();
-*/
+						*/
 						GraphicsInfo currentGfx = allInputConnections[i]->getCornersLocation();
 						currentGfx.x2 = currentGfx.x2 + (Gfx.x1 - originalX);
 						currentGfx.y2 = currentGfx.y2 + (Gfx.y1 - originalY);
@@ -817,14 +898,14 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 
 						/*for (size_t j = 0; j < allOutputConnections[i]->getCellsBeforeAddingConnection().size(); j++)
 						{
-							Cell cell = allOutputConnections[i]->getCellsBeforeAddingConnection()[j];
+						Cell cell = allOutputConnections[i]->getCellsBeforeAddingConnection()[j];
 
-							arrayOfIntersections[cell.y][cell.x] = -1;
+						arrayOfIntersections[cell.y][cell.x] = -1;
 
-							usedPixels[cell.y][cell.x] = cell.cellType;
+						usedPixels[cell.y][cell.x] = cell.cellType;
 						}
 						allOutputConnections[i]->getCellsBeforeAddingConnection().clear();
-*/
+						*/
 						GraphicsInfo currentGfx = allOutputConnections[i]->getCornersLocation();
 						currentGfx.x1 = currentGfx.x1 + (Gfx.x1 - originalX);
 						currentGfx.y1 = currentGfx.y1 + (Gfx.y1 - originalY);
@@ -961,7 +1042,7 @@ void Output::DrawNot_Buffer(GraphicsInfo g, bool isBuffer, bool highlighted, boo
 		//Drawing lines 
 		pWind->DrawLine(inx - 6 - (2 * ciDefBrushSize), iny, inx, iny, FRAME); //The Input-Line
 		pWind->DrawLine(outx, outy, outx + 6 + (2 * ciDefBrushSize), outy, FRAME); //The Output-Line
-		//Drawing Trianlge
+																				   //Drawing Trianlge
 		pWind->DrawTriangle(p1x, p1y, p2x, p2y, outx, outy, FRAME);
 	}
 	else {
@@ -971,7 +1052,7 @@ void Output::DrawNot_Buffer(GraphicsInfo g, bool isBuffer, bool highlighted, boo
 		pWind->DrawLine(inx - 6 - (2 * ciDefBrushSize), iny, inx, iny, FRAME); //The Input-Line
 		pWind->DrawLine(outx + 4 * ciDefBrushSize - 1, outy, outx + 7 + (2 * ciDefBrushSize), outy, FRAME);//The Output-Line
 
-		//Drawing Trianlge
+																										   //Drawing Trianlge
 		pWind->DrawTriangle(p1x, p1y, p2x, p2y, outx, outy, FRAME);
 		//Darwing Bubble
 		pWind->DrawCircle(outx + 2 * ciDefBrushSize, outy, 2 * ciDefBrushSize, FRAME);
@@ -1126,11 +1207,11 @@ void Output::DrawLed(GraphicsInfo g, bool isON, bool highlighted, bool notValid)
 	}
 	int inx = cx - radius - 10, iny = cy; // one input 
 	pWind->DrawLine(inx, iny, cx - radius, cy, FRAME);//input line (left)
-	///////////////------->>> lines of the fram <<<-------///////////////
+													  ///////////////------->>> lines of the fram <<<-------///////////////
 	pWind->DrawLine(cx + radius, cy, cx + radius + 4, cy, FRAME); //right
 	pWind->DrawLine(cx, cy + radius, cx, cy + radius + 4, FRAME); //lower
 	pWind->DrawLine(cx, cy - radius, cx, cy - radius - 4, FRAME); //upper
-	//right up
+																  //right up
 	pWind->DrawLine(cx + radius*(1 / sqrt(2)), cy - radius*(1 / sqrt(2)), cx + (radius + 4)*(1 / sqrt(2)), cy - (radius + 4)*(1 / sqrt(2)), FRAME);
 	//right down
 	pWind->DrawLine(cx + radius*(1 / sqrt(2)), cy + radius*(1 / sqrt(2)), cx + (radius + 4)*(1 / sqrt(2)), cy + (radius + 4)*(1 / sqrt(2)), FRAME);
@@ -1145,7 +1226,7 @@ void Output::DrawSwtich(GraphicsInfo g, bool isON, bool highlighted, bool notVal
 	if (highlighted) pWind->SetPen(BLUE); else if (notValid) pWind->SetPen(RED);
 	else pWind->SetPen(BROWN);
 	int cx = g.x1, cy = g.y1; //Centre Points
-	//the rectangle
+							  //the rectangle
 	if (isON)
 	{
 		pWind->DrawImage("images\\Menu\\SWITCH_ON.jpg", cx - 16, cy - 16, 32, 32);
