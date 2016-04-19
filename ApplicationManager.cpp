@@ -15,6 +15,7 @@
 #include"Actions\AddConnection.h"
 #include "Actions\Select.h"
 #include "Actions\Move.h"
+#include "Actions\RightClick.h"
 ApplicationManager::ApplicationManager()
 {
 	CompCount = 0;
@@ -91,12 +92,14 @@ void ApplicationManager::ExecuteAction(ActionType ActType)
 		case ADD_LED:
 			pAct = new AddLED(this);
 			break;
-
 		case ADD_CONNECTION:
 		pAct = new AddConnection(this);
 			break;
 		case MOVE:
 			pAct = new Move(this);
+			break;
+		case RIGHT_CLICKSELECT:
+			pAct = new RightClick(this);
 			break;
 		case EXIT:
 		// Exit action here

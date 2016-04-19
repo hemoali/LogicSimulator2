@@ -36,7 +36,6 @@ enum ActionType
 	ADD_CONNECTION_H,		//Add Wire Connection
 
 	ADD_Label,			//Add Label to a Component, a Connection
-	EDIT_Label,			//Edit Label of a Component, a Connection
 
 	Create_TruthTable,	//Create Truth Table of the Circuit
 	Simulate,
@@ -46,8 +45,15 @@ enum ActionType
 
 	SELECT,		//Select a Component, a Connection
 	MULTI_SELECT,		//Select many Components, a Connection
-	DEL,		//Delete a Component, a Connection
+	RIGHT_CLICKSELECT,
+			
 	MOVE,		//Move a Component, a Connection
+
+	CUT,
+	COPY,
+	PASTE,
+	EDIT_Label,	//Edit Label of a Component, a Connection
+	DEL, //Delete a Component, a Connection
 
 	SAVE,		//Save the whole Circuit to a file
 	LOAD,		//Load a Circuit from a file

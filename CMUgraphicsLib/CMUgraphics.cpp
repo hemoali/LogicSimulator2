@@ -494,20 +494,22 @@ buttonstate window::GetButtonState(const button btMouse, int &iX, int &iY) {
 	}
 }
 
-clicktype window::GetMouseClick(int &iX, int &iY) {
+clicktype window::GetMouseClick(int &iX, int &iY,bool dequeue) {
 
 	mqueuenode* mqueTmp;
     clicktype ctTmp;
 
     ProcessMessage(); // Kludge
-
-	mqueTmp = mqueInput.Remove();
+	if (dequeue)
+		mqueTmp = mqueInput.Remove();
+	else
+		mqueTmp = mqueInput.Front();
 	if(mqueTmp != NULL) {
 		iX = mqueTmp->iX;
 		iY = mqueTmp->iY;
         ctTmp = mqueTmp->ctInfo;
-
-		delete mqueTmp;
+		if (dequeue)
+			delete mqueTmp;
 		return ctTmp;
 
 	} else {
@@ -539,26 +541,45 @@ keytype window::GetKeyPress(char &cKey) {
 	}
 }
 
-clicktype window::WaitMouseClick(int &iX, int &iY, bool dequeue) {
+//clicktype window::WaitMouseClick(int &iX, int &iY, bool dequeue) {
+//
+//	mqueuenode* mqueTmp;
+//    clicktype ctTmp;
+//
+//	while(true) {
+//        ProcessMessage(); // Kludge
+//
+//	    mqueTmp = mqueInput.Remove();
+//		if (mqueTmp != NULL && dequeue) {
+//	        iX = mqueTmp->iX;
+//		    iY = mqueTmp->iY;
+//            ctTmp = mqueTmp->ctInfo;
+//
+//		    delete mqueTmp;
+//		    return ctTmp;
+//		}
+//		else if (mqueTmp != NULL && !dequeue){
+//			iX = mqueTmp->iX;
+//			iY = mqueTmp->iY;
+//		}
+//	}
+//}
+clicktype window::WaitMouseClick(int &iX, int &iY) {
 
 	mqueuenode* mqueTmp;
-    clicktype ctTmp;
+	clicktype ctTmp;
 
-	while(true) {
-        ProcessMessage(); // Kludge
+	while (true) {
+		ProcessMessage(); // Kludge
 
-	    mqueTmp = mqueInput.Remove();
-		if (mqueTmp != NULL && dequeue) {
-	        iX = mqueTmp->iX;
-		    iY = mqueTmp->iY;
-            ctTmp = mqueTmp->ctInfo;
-
-		    delete mqueTmp;
-		    return ctTmp;
-		}
-		else if (mqueTmp != NULL && !dequeue){
+		mqueTmp = mqueInput.Remove();
+		if (mqueTmp != NULL) {
 			iX = mqueTmp->iX;
 			iY = mqueTmp->iY;
+			ctTmp = mqueTmp->ctInfo;
+
+			delete mqueTmp;
+			return ctTmp;
 		}
 	}
 }

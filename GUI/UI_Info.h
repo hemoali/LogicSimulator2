@@ -18,7 +18,9 @@ struct UI_Info	//User Interface Info.
 		wx = 15, wy = 15,			//Window starting coordinates
 		StatusBarHeight = 50,	//Status Bar Height
 		ToolBarHeight = 40,		//Tool Bar Height (distance from top of window to bottom line of toolbar)
-		ToolItemWidth = 60;		//Width of each item in toolbar menu
+		ToolItemWidth = 60,		//Width of each item in toolbar menu
+		RightClickMenuLength = 184, //Length of Right CLl Menu
+		RightClickMenuWidth = 161; //Width of Right CLl Menu
 
 	color DrawColor;		//Drawing color
 	color SelectColor;		//Highlighting color

@@ -24,6 +24,11 @@ mqueue::~mqueue() {
 	   delete mqueTmp;
    }
 }
+
+mqueuenode * mqueue::Front()
+{
+	return mqueHead;
+}
 	
 void mqueue::Insert(mqueuenode* mqueNode) {
 
