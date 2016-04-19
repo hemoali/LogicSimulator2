@@ -141,7 +141,6 @@
     <ClCompile Include="Actions\AddXORgate2.cpp" />
     <ClCompile Include="Actions\AddXORgate3.cpp" />
     <ClCompile Include="Actions\Move.cpp" />
-    <ClCompile Include="Actions\RightClick.cpp" />
     <ClCompile Include="Actions\Select.cpp" />
     <ClCompile Include="CMUgraphicsLib\auxil.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
@@ -237,7 +236,6 @@
     <ClInclude Include="Actions\AddXORgate3.h" />
     <ClInclude Include="Actions\Action.h" />
     <ClInclude Include="Actions\Move.h" />
-    <ClInclude Include="Actions\RightClick.h" />
     <ClInclude Include="Actions\Select.h" />
     <ClInclude Include="CMUgraphicsLib\auxil.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>

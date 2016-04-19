@@ -184,12 +184,12 @@ class window {
     // determine which mouse button was clicked, and 
     // if the click was a double click 
     // (see the clicktype enum in mousequeue.h)
- 	clicktype GetMouseClick(int &iX, int &iY,bool dequeue = true);
+ 	clicktype GetMouseClick(int &iX, int &iY);
 
     // WaitMouseClick works the same as above but will only return 
     // if there is a mouse click event in the queue, otherwise
     // it will wait for one
-	clicktype WaitMouseClick(int &iX, int &iY);
+	clicktype WaitMouseClick(int &iX, int &iY, bool dequeue = true);
  	  
     // Removes the next keyboard event from the queue
     // stuffs the key value into ucKey, and returns the
