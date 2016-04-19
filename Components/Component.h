@@ -19,6 +19,7 @@ protected:
 	OutputPin m_OutputPin;	//The Gate output pin
 public:
 	Component(const GraphicsInfo &r_GfxInfo, int r_FanOut);
+	Component(const GraphicsInfo &r_GfxInfo);
 
 	virtual void Operate() = 0;	//Calculates the output according to the inputs
 	virtual void Draw(Output* pOut) = 0;	//for each component to Draw itself
