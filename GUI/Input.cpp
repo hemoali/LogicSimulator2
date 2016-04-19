@@ -12,6 +12,11 @@ void Input::GetPointClicked(int &x, int &y, bool DrawGate, bool DrawConnection)
 	Utils::correctPointClicked(x, y, DrawGate, DrawConnection);
 
 }
+void Input::getSelectionPoint(int & x, int & y)
+{
+	pWind->GetMouseClick(x, y);
+	pWind->FlushMouseQueue(); 
+}
 buttonstate Input::GetButtonStatus(const button btMouse, int &iX, int &iY) const{
 	return pWind->GetButtonState(btMouse, iX, iY);
 }
@@ -65,13 +70,16 @@ ActionType Input::GetUserAction(ApplicationManager *pManager) const
 	}
 
 	clicktype s = LEFT_CLICK;
-	s = pWind->GetMouseClick(x, y);	//Get the coordinates of the user click
+	s = pWind->GetMouseClick(x, y, false);	//Get the coordinates of the user click 
+	// We Called it with false argument inorder not to delete the click to be used in RightSelect
+	//Otherwise we call that function agian with true to delete that click 
 
 	if (UI.AppMode == DESIGN)	//application is in design mode
 	{
 		//[1] If user clicks on the Toolbar
 		if (y >= 0 && y < UI.ToolBarHeight)
 		{
+			pWind->GetMouseClick(x, y);
 			//TODO
 			//Check whick Menu item was clicked
 			//==> This assumes that menu items are lined up horizontally <==
@@ -139,7 +147,11 @@ ActionType Input::GetUserAction(ApplicationManager *pManager) const
 		//[2] User clicks on the drawing area //TODO:
 		if (y >= UI.ToolBarHeight && y < UI.height - UI.StatusBarHeight)
 		{
-			return SELECT;	//user want to select/unselect a statement i;
+				//user want to select/unselect a statement i;
+			 if (s == RIGHT_CLICK)
+				return RIGHT_CLICKSELECT;
+			 else 
+				 pWind->GetMouseClick(x, y,true); //Remove the last Saved Click
 		}
 
 		//[3] User clicks on the status bar
@@ -174,6 +186,12 @@ ActionType Input::GetUserAction(ApplicationManager *pManager) const
 		return STATUS_BAR;
 	}
 	pWind->FlushMouseQueue();
+
+}
+
+void Input::WaitSelectionPoint(int & X, int & Y)
+{
+	pWind->WaitMouseClick(X, Y);
 
 }
 

@@ -518,6 +518,64 @@ bool Output::DrawConnection(GraphicsInfo GfxInfo, int inputPin, GraphicsInfo com
 	pWind->FlushMouseQueue();
 	return true;
 }
+
+void Output::DrawRClickMenu_CorrectPoints(int& x, int& y, int type,bool draw)
+{
+	string imageURL;
+	if(draw)
+	switch (type) {
+	case 1: //The Gate SubMenu
+		imageURL = "images\\Menu\\RightClickMenu.jpg";
+		break;
+	default:
+		break;
+	}
+	//If Point (x,y) in the Right or Middle of the Drawing Area
+	if (x + UI.RightClickMenuLength < UI.width ) {
+		 if (y + UI.RightClickMenuWidth > UI.height - UI.StatusBarHeight) {
+			 // y must be corrected
+			 y =  y - UI.RightClickMenuWidth;
+			 if(draw)
+			 pWind->DrawImage(imageURL, x, y, UI.RightClickMenuLength, UI.RightClickMenuWidth);
+		}
+		 else{
+			 //The Point(x,y) is ready for drawing Menu 
+			 if(draw)
+			 pWind->DrawImage(imageURL, x, y, UI.RightClickMenuLength, UI.RightClickMenuWidth);
+		 }
+	}
+	//If Point (x,y) in the Left of the Drawing Area
+	if (x + UI.RightClickMenuLength > UI.width ) {
+		// x must be corrected
+		x = UI.width - UI.RightClickMenuWidth - 40;
+		if (y + UI.RightClickMenuWidth > UI.height - UI.StatusBarHeight) {
+			// y must be corrected
+			y = y - UI.RightClickMenuWidth;
+			if(draw)
+			pWind->DrawImage(imageURL, x, y, UI.RightClickMenuLength, UI.RightClickMenuWidth);
+		}
+		else {
+			//The Point(x,y) is ready for drawing Menu 
+			if(draw)
+			pWind->DrawImage(imageURL, x, y, UI.RightClickMenuLength, UI.RightClickMenuWidth);
+		}
+	}
+}
+
+image * Output::StoreBeforeMenu(int x, int y)
+{
+	image * ptr = new image;
+	pWind->StoreImage(ptr, x, y, UI.RightClickMenuLength, UI.RightClickMenuWidth);
+	return ptr;
+}
+
+void Output::DrawAfterMenu(image * img, int x, int y)
+{
+	pWind->DrawImage(img, x, y, UI.RightClickMenuLength, UI.RightClickMenuWidth);
+}
+
+
+
 void Output::DrawCleanImage(image* img, int x, int y)
 {
 	pWind->DrawImage(img, x - UI.GRID_SIZE - 5, y - UI.GRID_SIZE - 5, 2 * UI.GRID_SIZE + 4, UI.GATE_Height + 3);
