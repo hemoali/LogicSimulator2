@@ -189,10 +189,9 @@ ActionType Input::GetUserAction(ApplicationManager *pManager) const
 
 }
 
-void Input::WaitSelectionPoint(int & X, int & Y)
+void Input::WaitSelectionPoint(int &X, int &Y)
 {
 	pWind->WaitMouseClick(X, Y);
-
 }
 
 Input::~Input()

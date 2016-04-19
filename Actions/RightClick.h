@@ -5,6 +5,7 @@ class RightClick : public Action
 {
 private:
 	ActionType SelectedAction;
+	int actionNum;
 	Component* C;
 public:
 
