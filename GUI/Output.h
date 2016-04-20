@@ -15,9 +15,9 @@ private:
 	window* pWind;	//Pointer to the Graphics Window
 	mutable vector < pair <int, int> >allComponentsCorners;
 	static CellType Output::usedPixels[44][74];
-
+	ApplicationManager* pManager;
 public:
-	Output(); // Performs the Window Initialization
+	Output(ApplicationManager* pManager); // Performs the Window Initialization
 	Input* CreateInput() const; //creates a pointer to the Input object
 	void ChangeTitle(string Title) const;
 

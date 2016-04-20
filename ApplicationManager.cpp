@@ -23,7 +23,7 @@ ApplicationManager::ApplicationManager()
 		CompList[i] = NULL;
 
 	//Creates the Input / Output Objects & Initialize the GUI
-	OutputInterface = new Output();
+	OutputInterface = new Output(this);
 	InputInterface = OutputInterface->CreateInput();
 }
 ////////////////////////////////////////////////////////////////////
@@ -130,6 +130,15 @@ Output* ApplicationManager::GetOutput()
 	return OutputInterface;
 }
 
+void ApplicationManager::getAllConnections(vector<Connection*>& allConnections) {
+	allConnections.clear();
+	for (int i = 0; i < CompCount; i++) {
+		if (dynamic_cast<Connection*> (CompList[i]))
+		{
+			allConnections.push_back((Connection*)CompList[i]);
+		}
+	}
+}
 ////////////////////////////////////////////////////////////////////
 Component * ApplicationManager::getComponent(int idx)
 {
