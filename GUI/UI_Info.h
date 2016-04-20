@@ -15,7 +15,7 @@ struct UI_Info	//User Interface Info.
 	MODE AppMode;		//Application Mode (design or simulation)
 	
 	static const int	width = 1200, height = 700,	//Window width and height
-		wx = 15, wy = 15,			//Window starting coordinates
+		wx = 50, wy = 15,			//Window starting coordinates
 		StatusBarHeight = 50,	//Status Bar Height
 		ToolBarHeight = 40,		//Tool Bar Height (distance from top of window to bottom line of toolbar)
 		ToolItemWidth = 60;		//Width of each item in toolbar menu
