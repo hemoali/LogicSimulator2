@@ -1,4 +1,5 @@
 #include "AddConnection.h"
+#include <iostream>
 AddConnection::AddConnection(ApplicationManager *pApp) :Action(pApp)
 {
 }
@@ -109,6 +110,16 @@ void AddConnection::Execute()
 				outputComponent->getOutputPin()->ConnectTo(pA);
 				inputComponent->getInputPin(inputPin)->setConnection(pA);
 				inputComponent->getInputPin(inputPin)->setPosition(numOfInputs);
+				int x;
+				std::cin >> x;
+				if (x == 0) {
+					Sleep(400);
+					pManager->GetOutput()->changeConnectionColor(pA, RED);
+				}
+				else if (x == 5) {
+					Sleep(400);
+					pManager->GetOutput()->changeConnectionColor(((Connection*)pManager->getComponent(4)), GREEN);
+				}
 			}
 			else{
 				pManager->GetOutput()->PrintMsg("No Available Connection");

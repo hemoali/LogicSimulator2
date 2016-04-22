@@ -47,8 +47,8 @@ public:
 	bool DrawConnection(GraphicsInfo r_GfxInfo, int inputPin, GraphicsInfo compCenterLocationbool, vector<Cell>&, bool selected = false) const;
 	bfs_node* bfs(bfs_node* bf, int requX, int requY, vector<bfs_node*> allNodes) const;
 	
-	void reDrawConnections(vector<Connection*> & allConnections, int originalX, int originalY, bool isInput, color Color = WHITE);
-
+	void clearConnections(vector<Connection*> & allConnections, int originalX, int originalY, bool isInput);
+	void changeConnectionColor(Connection * connection, color Color = BLUE);
 	void PrintMsg(string msg) const;	//Print a message on Status bar
 
 	void setUsedPixel(int i, int j, CellType);
