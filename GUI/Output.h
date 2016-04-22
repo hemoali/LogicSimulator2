@@ -53,6 +53,7 @@ public:
 
 	void setUsedPixel(int i, int j, CellType);
 
+	void printMatrix(string msg);
 	~Output();
 };
 #endif

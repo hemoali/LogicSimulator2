@@ -81,7 +81,10 @@ bool Utils::CheckPoint(GraphicsInfo r_GfxInfo, CellType usedPixels[44][74], bool
 			{
 				if (xbegin == j || xend == j)
 				{
-					usedPixels[i][j] = PIN;
+					if (usedPixels[i][j] != INTERSECTION)
+					{
+						usedPixels[i][j] = PIN;
+					}
 					continue;
 				}
 				usedPixels[i][j] = GATE;
