@@ -523,7 +523,7 @@ void Output::reDrawConnections(vector<Connection*>& allConnections, int original
 					{
 						pWind->SetPen(WHITE, 2);
 						pWind->SetBrush(WHITE);
-						pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE, cell.x*UI.GRID_SIZE - 15, cell.y*UI.GRID_SIZE);
+						pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE, cell2.x*UI.GRID_SIZE, cell2.y*UI.GRID_SIZE);
 						pWind->DrawRectangle(cell.x * UI.GRID_SIZE - 10, cell.y*UI.GRID_SIZE - 10, cell.x*UI.GRID_SIZE + 10, cell.y*UI.GRID_SIZE + 10, FILLED);
 						pWind->SetPen(color(23, 79, 181), 2);
 						pWind->DrawLine(cell.x* UI.GRID_SIZE, cell.y* UI.GRID_SIZE - 11, cell.x* UI.GRID_SIZE, cell.y* UI.GRID_SIZE + 10);
@@ -531,7 +531,7 @@ void Output::reDrawConnections(vector<Connection*>& allConnections, int original
 					else if (Vertical0Horizontal1Nothing2 == 0) {
 						pWind->SetPen(WHITE, 2);
 						pWind->SetBrush(WHITE);
-						pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE, cell.x*UI.GRID_SIZE, cell.y*UI.GRID_SIZE - 15);
+						pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE, cell2.x*UI.GRID_SIZE, cell2.y*UI.GRID_SIZE);
 						pWind->DrawRectangle(cell.x * UI.GRID_SIZE - 10, cell.y*UI.GRID_SIZE - 10, cell.x*UI.GRID_SIZE + 10, cell.y*UI.GRID_SIZE + 10, FILLED);
 						pWind->SetPen(color(23, 79, 181), 2);
 						pWind->DrawLine(cell.x* UI.GRID_SIZE - 15, cell.y* UI.GRID_SIZE, cell.x* UI.GRID_SIZE + 10, cell.y* UI.GRID_SIZE);
