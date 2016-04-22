@@ -49,7 +49,6 @@ void ApplicationManager::ExecuteAction(ActionType ActType)
 	string error_msg = "Please select point within workspace avoiding overlaping!";
 	GraphicsInfo Gfx_info;
 	Gfx_info.x1 = Gfx_info.y1 = -1;
-
 	switch (ActType)
 	{
 	    case ADD_Buff:

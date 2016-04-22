@@ -49,12 +49,12 @@ ActionType Input::GetUserAction(ApplicationManager *pManager) const
 			{
 				if (dynamic_cast<Connection*>(pManager->getComponent(i)))
 					continue;
-				if (x >= pManager->allComponentsCorners[i].x1&&x <= pManager->allComponentsCorners[i].x2&& y >= pManager->allComponentsCorners[i].y1&&y <= pManager->allComponentsCorners[i].y2)
+				if (xT >= pManager->allComponentsCorners[i].x1&&xT <= pManager->allComponentsCorners[i].x2&& yT >= pManager->allComponentsCorners[i].y1&&yT <= pManager->allComponentsCorners[i].y2)
 				{
 					comp = pManager->getComponent(i);
 				}
 			}
-			if (comp == NULL)
+			if (comp != NULL)
 				return MOVE;
 			else
 				return MULTI_SELECT;
