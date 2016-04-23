@@ -810,44 +810,26 @@ void Output::clearConnections(vector<Connection*>& allConnections, int originalX
 						}
 					}
 				}
-				if (isInput)
-				{
-					//clear input pin small lines
-					pWind->SetPen(WHITE, 2);
-					pWind->SetBrush(WHITE);
-					if (allConnections[i]->getDestPin()->getPosition() == 0 && cell.cellType == PIN && j != allConnections[i]->getCellsBeforeAddingConnection().size() - 2)
-					{
-						pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y* UI.GRID_SIZE, originalX - UI.GATE_Width / 2 + 3, originalY - 13);
-					}
-					else if (allConnections[i]->getDestPin()->getPosition() == 1 && cell.cellType == PIN && j != allConnections[i]->getCellsBeforeAddingConnection().size() - 2) {
-						pWind->DrawLine(cell.x * UI.GRID_SIZE - 3, originalY, originalX - UI.GATE_Width / 2 + 3, originalY);
-					}
-					else if (allConnections[i]->getDestPin()->getPosition() == 2 && cell.cellType == PIN&& j != allConnections[i]->getCellsBeforeAddingConnection().size() - 2) {
-						pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y* UI.GRID_SIZE, originalX - UI.GATE_Width / 2 + 3, originalY + 13);
-					}
-					pWind->SetPen(BLACK, 1);
-					pWind->DrawPixel(cell.x*UI.GRID_SIZE, cell.y*UI.GRID_SIZE);
-
-				}
-				else {
-					pWind->SetPen(WHITE, 2);
-					pWind->SetBrush(WHITE);
+				//clear input pin small lines
+				if(!isInput) {
 					originalY = allConnections[i]->getDestPin()->getComponent()->getCenterLocation().y1;
 					originalX = allConnections[i]->getDestPin()->getComponent()->getCenterLocation().x1;
-					if (allConnections[i]->getDestPin()->getPosition() == 0 && cell.cellType == PIN && j != allConnections[i]->getCellsBeforeAddingConnection().size() - 2)
-					{
-						pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y* UI.GRID_SIZE, originalX - UI.GATE_Width / 2 + 3, originalY - 13);
-					}
-					else if (allConnections[i]->getDestPin()->getPosition() == 1 && cell.cellType == PIN && j != allConnections[i]->getCellsBeforeAddingConnection().size() - 2) {
-						pWind->DrawLine(cell.x * UI.GRID_SIZE - 3, originalY, originalX - UI.GATE_Width / 2 + 3, originalY);
-					}
-					else if (allConnections[i]->getDestPin()->getPosition() == 2 && cell.cellType == PIN&& j != allConnections[i]->getCellsBeforeAddingConnection().size() - 2) {
-						pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y* UI.GRID_SIZE, originalX - UI.GATE_Width / 2 + 3, originalY + 13);
-					}
-					pWind->SetPen(BLACK, 1);
-					pWind->DrawPixel(cell.x*UI.GRID_SIZE, cell.y*UI.GRID_SIZE);
-
 				}
+				pWind->SetPen(WHITE, 2);
+				pWind->SetBrush(WHITE);
+				if (allConnections[i]->getDestPin()->getPosition() == 0 && cell.cellType == PIN && j != allConnections[i]->getCellsBeforeAddingConnection().size() - 2)
+				{
+					pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y* UI.GRID_SIZE, originalX - UI.GATE_Width / 2 + 3, originalY - 13);
+				}
+				else if (allConnections[i]->getDestPin()->getPosition() == 1 && cell.cellType == PIN && j != allConnections[i]->getCellsBeforeAddingConnection().size() - 2) {
+					pWind->DrawLine(cell.x * UI.GRID_SIZE - 3, originalY, originalX - UI.GATE_Width / 2 + 3, originalY);
+				}
+				else if (allConnections[i]->getDestPin()->getPosition() == 2 && cell.cellType == PIN&& j != allConnections[i]->getCellsBeforeAddingConnection().size() - 2) {
+					pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y* UI.GRID_SIZE, originalX - UI.GATE_Width / 2 + 3, originalY + 13);
+				}
+				pWind->SetPen(BLACK, 1);
+				pWind->DrawPixel(cell.x*UI.GRID_SIZE, cell.y*UI.GRID_SIZE);
+
 			}
 			// Clear Grid
 			arrayOfIntersections[cell.y][cell.x] = -1;
@@ -868,7 +850,7 @@ void Output::clearConnections(vector<Connection*>& allConnections, int originalX
 				}
 				connectionsCountAtPixel[cell.y][cell.x] -= ((connectionsCountAtPixel[cell.y][cell.x] > 0) ? 1 : 0);
 			}
-			else if (j != allConnections[i]->getCellsBeforeAddingConnection().size() - 1) {
+			else if (j != allConnections[i]->getCellsBeforeAddingConnection().size() - 1 && j !=0) {
 				usedPixels[cell.y][cell.x] = EMPTY;
 			}
 			if (j == allConnections[i]->getCellsBeforeAddingConnection().size() - 1) {
@@ -920,7 +902,7 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 
 		clearConnections(allInputConnections, originalX, originalY, true);
 		clearConnections(allOutputConnections, originalX, originalY, false);
-		//printMatrix("After clearing connections");
+		printMatrix("After clearing connections");
 	}
 
 	pWind->StoreImage(storedImg, 0, 0, pWind->GetWidth(), pWind->GetHeight());
@@ -993,7 +975,7 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 						usedPixels[cell.y][cell.x] = cell.cellType;
 						connectionsCountAtPixel[cell.y][cell.x] -= ((connectionsCountAtPixel[cell.y][cell.x] > 0) ? 1 : 0);
 					}
-					else {
+					else if (j != allOutputConnections[i]->getCellsBeforeAddingConnection().size() - 1 && j != 0) {
 						usedPixels[cell.y][cell.x] = EMPTY;
 					}
 				}
@@ -1058,7 +1040,7 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 				allInputConnections[i]->getCellsBeforeAddingConnection().clear();
 			}
 			drawnConnectionsCount = 0;
-			//printMatrix("After clearing connections");
+			printMatrix("After clearing connections222");
 		}
 		if (!Utils::CheckPoint({ x,y }, usedPixels, moving, false)) {
 			wrong = true;
@@ -1263,7 +1245,7 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 						allInputConnections[i]->setCornersLocation({ currentGfx.x1 ,currentGfx.y1,currentGfx.x2 ,currentGfx.y2 });
 						if (DrawConnection(currentGfx, allInputConnections[i]->getDestPin()->getPosition(), { Gfx.x1, Gfx.y1,0,0 }, allInputConnections[i]->getCellsBeforeAddingConnection()))drawnConnectionsCount++;
 					}
-
+					printMatrix("After connecting inputs");
 					for (size_t i = 0; i < allOutputConnections.size(); i++)
 					{
 						GraphicsInfo currentGfx = allOutputConnections[i]->getCornersLocation();
@@ -1274,6 +1256,7 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 						if (DrawConnection(currentGfx, allOutputConnections[i]->getDestPin()->getPosition(), { dstComp->getCenterLocation().x1, dstComp->getCenterLocation().y1,0,0 }, allOutputConnections[i]->getCellsBeforeAddingConnection()))drawnConnectionsCount++;
 					}
 
+					printMatrix("After connecting outs");
 					originalX = Gfx.x1;
 					originalY = Gfx.y1;
 					//Clear gate/led/switch
@@ -1323,7 +1306,7 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 	return draw;
 }
 void Output::printMatrix(string msg) {
-	cout << msg << endl;
+	/*cout << msg << endl;
 	for (size_t i = 0; i < 44; i++)
 	{
 		for (size_t j = 0; j < 74; j++)
@@ -1331,7 +1314,7 @@ void Output::printMatrix(string msg) {
 			cout << usedPixels[i][j] << " ";
 		}
 		cout << endl;
-	}
+	}*/
 }
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //You Send a Centre Point (cx,cy) ,this means when you call Draw image Function , x and y sent should be cx-24, cy-24
