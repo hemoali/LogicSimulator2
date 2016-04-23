@@ -50,7 +50,7 @@ class mqueue {
   public:
 	mqueue();
 	~mqueue();
-	
+	mqueuenode* Front(); //Get the Front mouseClick Node
 	void Insert(mqueuenode* mqueNode);
 	mqueuenode* Remove();
 };

@@ -225,6 +225,9 @@
     <ClCompile Include="CMUgraphicsLib\jpeg\jutils.c">
       <Filter>CMUgraphics Library\jpeg</Filter>
     </ClCompile>
+    <ClCompile Include="Actions\RightClick.cpp">
+      <Filter>Actions</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Defs.H" />
@@ -408,6 +411,9 @@
     </ClInclude>
     <ClInclude Include="CMUgraphicsLib\jpeg\jversion.h">
       <Filter>CMUgraphics Library\jpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="Actions\RightClick.h">
+      <Filter>Actions</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
