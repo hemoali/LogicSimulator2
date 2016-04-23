@@ -565,6 +565,19 @@ void Output::changeConnectionColor(Connection * connection, color Color) {
 			pWind->SetPen(Color, 2);
 			pWind->SetBrush(Color);
 
+			// Draw small pins connections
+			int originalY = connection->getDestPin()->getComponent()->getCenterLocation().y1;
+			int	originalX = connection->getDestPin()->getComponent()->getCenterLocation().x1;
+			if (connection->getDestPin()->getPosition() == 0 && cell.cellType == PIN && j != connection->getCellsBeforeAddingConnection().size() - 2)
+			{
+				pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y* UI.GRID_SIZE, originalX - UI.GATE_Width / 2 + 3, originalY - 13);
+			}
+			else if (connection->getDestPin()->getPosition() == 1 && cell.cellType == PIN && j != connection->getCellsBeforeAddingConnection().size() - 2) {
+				pWind->DrawLine(cell.x * UI.GRID_SIZE - 3, originalY, originalX - UI.GATE_Width / 2 + 3, originalY);
+			}
+			else if (connection->getDestPin()->getPosition() == 2 && cell.cellType == PIN&& j != connection->getCellsBeforeAddingConnection().size() - 2) {
+				pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y* UI.GRID_SIZE, originalX - UI.GATE_Width / 2 + 3, originalY + 13);
+			}
 			// if above another connection: color the hump
 			if (usedPixels[cell2.y][cell2.x] == INTERSECTION && cell2.cellType == VERTICAL) {
 				if (cell2.x < cell.x) {
@@ -625,11 +638,11 @@ void Output::changeConnectionColor(Connection * connection, color Color) {
 			}
 			else if (usedPixels[cell2.y][cell2.x] == INTERSECTION && cell2.cellType == EMPTY && arrayOfCorners[cell2.y][cell2.x] == 0) {
 
-				if (j - 1 >= 0 && connection->getCellsBeforeAddingConnection()[j - 1].y == cell.y)
+				/*if (j - 1 >= 0 && connection->getCellsBeforeAddingConnection()[j - 1].y == cell.y)
 				{
 					Vertical0Horizontal1Nothing2 = 1;
 				}
-				else if (cell2.y == cell.y)
+				else */if (cell2.y == cell.y)
 				{
 					Vertical0Horizontal1Nothing2 = 1;
 				}
@@ -692,18 +705,7 @@ void Output::changeConnectionColor(Connection * connection, color Color) {
 					}
 				}
 
-				int originalY = connection->getDestPin()->getComponent()->getCenterLocation().y1;
-				int	originalX = connection->getDestPin()->getComponent()->getCenterLocation().x1;
-				if (connection->getDestPin()->getPosition() == 0 && cell.cellType == PIN && j != connection->getCellsBeforeAddingConnection().size() - 2)
-				{
-					pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y* UI.GRID_SIZE, originalX - UI.GATE_Width / 2 + 3, originalY - 13);
-				}
-				else if (connection->getDestPin()->getPosition() == 1 && cell.cellType == PIN && j != connection->getCellsBeforeAddingConnection().size() - 2) {
-					pWind->DrawLine(cell.x * UI.GRID_SIZE - 3, originalY, originalX - UI.GATE_Width / 2 + 3, originalY);
-				}
-				else if (connection->getDestPin()->getPosition() == 2 && cell.cellType == PIN&& j != connection->getCellsBeforeAddingConnection().size() - 2) {
-					pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y* UI.GRID_SIZE, originalX - UI.GATE_Width / 2 + 3, originalY + 13);
-				}
+				
 				PreviousIsIntersection = PreviousIsIntersection2 = false;
 				Vertical0Horizontal1Nothing2 = 2;
 			}
@@ -728,11 +730,11 @@ void Output::clearConnections(vector<Connection*>& allConnections, int originalX
 				// this Connection under other connection
 				if (usedPixels[cell.y][cell.x] == INTERSECTION && cell.cellType == EMPTY && arrayOfCorners[cell.y][cell.x] == 0) {
 
-					if (j - 1 >= 0 && allConnections[i]->getCellsBeforeAddingConnection()[j - 1].y == cell.y)
+					/*if (j - 1 >= 0 && allConnections[i]->getCellsBeforeAddingConnection()[j - 1].y == cell.y)
 					{
 						Vertical0Horizontal1Nothing2 = 1;
 					}
-					else if (cell2.y == cell.y)
+					else*/ if (cell2.y == cell.y)
 					{
 						Vertical0Horizontal1Nothing2 = 1;
 					}
@@ -952,11 +954,11 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 						// Connection under connection
 						if (usedPixels[cell.y][cell.x] == INTERSECTION && cell.cellType == EMPTY && arrayOfCorners[cell.y][cell.x] == 0) {
 
-							if (j - 1 >= 0 && allOutputConnections[i]->getCellsBeforeAddingConnection()[j - 1].y == cell.y)
+							/*if (j - 1 >= 0 && allOutputConnections[i]->getCellsBeforeAddingConnection()[j - 1].y == cell.y)
 							{
 								Vertical0Horizontal1Nothing2 = 1;
 							}
-							else if (cell2.y == cell.y)
+							else*/ if (cell2.y == cell.y)
 							{
 								Vertical0Horizontal1Nothing2 = 1;
 							}
@@ -1013,11 +1015,11 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 						// Connection under connection
 						if (usedPixels[cell.y][cell.x] == INTERSECTION && cell.cellType == EMPTY && arrayOfCorners[cell.y][cell.x] == 0) {
 
-							if (j - 1 >= 0 && allInputConnections[i]->getCellsBeforeAddingConnection()[j - 1].y == cell.y)
+							/*if (j - 1 >= 0 && allInputConnections[i]->getCellsBeforeAddingConnection()[j - 1].y == cell.y)
 							{
 								Vertical0Horizontal1Nothing2 = 1;
 							}
-							else if (cell2.y == cell.y)
+							else*/ if (cell2.y == cell.y)
 							{
 								Vertical0Horizontal1Nothing2 = 1;
 							}

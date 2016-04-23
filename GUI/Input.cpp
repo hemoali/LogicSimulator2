@@ -74,7 +74,7 @@ ActionType Input::GetUserAction(ApplicationManager *pManager) const
 					pManager->getAllConnections(allConnections);
 					for (size_t i = 0; i < allConnections.size(); i++)
 					{
-						allConnections[i]->selectYourSelf(pManager->GetOutput(), color(23, 79, 181));
+						allConnections[i]->selectYourSelf(pManager->GetOutput(), RED);
 					}
 					return MULTI_SELECT;
 				}
