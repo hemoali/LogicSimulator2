@@ -481,8 +481,7 @@ bool Output::DrawConnection(GraphicsInfo GfxInfo, int inputPin, GraphicsInfo com
 		tmp = NULL;
 	}
 	pWind->FlushMouseQueue();
-	/*
-		cout << endl;
+	/* cout << endl;
 		for (size_t i = 0; i < cellsBeforeAddingConnection.size(); i++)
 		{
 			cout << cellsBeforeAddingConnection[i].x << " " << cellsBeforeAddingConnection[i].y << "  " << cellsBeforeAddingConnection[i].cellType << endl;
@@ -653,6 +652,7 @@ void Output::changeConnectionColor(Connection * connection, color Color) {
 
 		}
 	}
+
 }
 void Output::clearConnections(vector<Connection*>& allConnections, int originalX, int originalY, bool isInput) {
 	for (size_t i = 0; i < allConnections.size(); i++)

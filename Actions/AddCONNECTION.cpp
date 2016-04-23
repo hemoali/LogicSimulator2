@@ -118,22 +118,22 @@ void AddConnection::Execute()
 					for (size_t j = cell.x * UI.GRID_SIZE; j < cell2.x * UI.GRID_SIZE; j++)
 					{
 						pManager->GetOutput()->setAllPixels(cell.y * UI.GRID_SIZE, j, pA);
-						pManager->GetOutput()->setAllPixels(cell.y * UI.GRID_SIZE +1, j, pA);
+						pManager->GetOutput()->setAllPixels(cell.y * UI.GRID_SIZE -1, j, pA);
 					}
 					for (size_t j = cell2.x * UI.GRID_SIZE; j < cell.x * UI.GRID_SIZE; j++)
 					{
 						pManager->GetOutput()->setAllPixels(cell.y * UI.GRID_SIZE, j, pA);
-						pManager->GetOutput()->setAllPixels(cell.y * UI.GRID_SIZE + 1, j, pA);
+						pManager->GetOutput()->setAllPixels(cell.y * UI.GRID_SIZE - 1, j, pA);
 					}
 					for (size_t j = cell.y * UI.GRID_SIZE; j < cell2.y * UI.GRID_SIZE; j++)
 					{
 						pManager->GetOutput()->setAllPixels(j, cell.x * UI.GRID_SIZE, pA);
-						pManager->GetOutput()->setAllPixels(j, cell.x * UI.GRID_SIZE + 1, pA);
+						pManager->GetOutput()->setAllPixels(j, cell.x * UI.GRID_SIZE - 1, pA);
 					}
 					for (size_t j = cell2.y * UI.GRID_SIZE; j < cell.y * UI.GRID_SIZE; j++)
 					{
 						pManager->GetOutput()->setAllPixels(j, cell.x * UI.GRID_SIZE, pA);
-						pManager->GetOutput()->setAllPixels(j, cell.x * UI.GRID_SIZE + 1, pA);
+						pManager->GetOutput()->setAllPixels(j, cell.x * UI.GRID_SIZE - 1, pA);
 					}
 				}
 			}
