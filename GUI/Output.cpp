@@ -1300,6 +1300,8 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 			if ((moving && (noOfTotalConnections == drawnConnectionsCount)) || !moving)
 			{
 				pWind->FlushMouseQueue();
+				GfxInfo.x1 = x;
+				GfxInfo.y1 = y;
 				Utils::correctPointClicked(GfxInfo.x1, GfxInfo.y1, true, false);
 				if (Utils::CheckPoint(GfxInfo, usedPixels, moving)) {
 					draw = true;
