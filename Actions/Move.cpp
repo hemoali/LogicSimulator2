@@ -46,18 +46,23 @@ void Move::Execute()
 		}
 		//
 		if (Comp != NULL &&Comp->getDelete()) Comp = NULL;
-		if (Comp != NULL){
+		if (Comp != NULL) {
 			Comp->setDelete(true);
 			Comp->Draw(pManager->GetOutput());
-
+			//Free gate location
 			int xbegin = (Comp->getCenterLocation().x1 - UI.GATE_Width / 2.0) / UI.GRID_SIZE, xend = (Comp->getCenterLocation().x1 + UI.GATE_Width / 2.0) / UI.GRID_SIZE, ybegin = (Comp->getCenterLocation().y1 - UI.GATE_Height / 2.0) / UI.GRID_SIZE, yend = (Comp->getCenterLocation().y1 + UI.GATE_Height / 2.0) / UI.GRID_SIZE;
-			for (int i = ybegin+1; i <= yend; i++)
+			for (int i = ybegin + 1; i <= yend; i++)
 			{
 				for (int j = xbegin; j <= xend; j++)
 				{
 					pOut->setUsedPixel(i, j, EMPTY);
 				}
 			}
+			// Free related connections
+			vector <Connection*> allIns, allOuts;
+			Comp->getAllInputConnections(allIns);
+			Comp->getAllOutputConnections(allOuts);
+	
 			//Get Action type
 			ActionType ActType;
 			if (dynamic_cast<AND2*> (Comp))
@@ -115,15 +120,17 @@ void Move::Execute()
 			//Drag
 			GraphicsInfo newCoor;
 			image* newSmallImageForGate = new image;
-			if (pManager->GetOutput()->SetDragImage(ActType, newCoor, newSmallImageForGate, true, Comp)){
+			if (pManager->GetOutput()->SetDragImage(ActType, newCoor, newSmallImageForGate, true, Comp)) {
 				Comp->setNewCenterLocation(newCoor);
+				Comp->setDelete(false);
 				pManager->allComponentsCorners[compIdx].x1 = newCoor.x1 - UI.GATE_Width / 2;
 				pManager->allComponentsCorners[compIdx].y1 = newCoor.y1 - UI.GATE_Height / 2;
 				pManager->allComponentsCorners[compIdx].x2 = newCoor.x1 + UI.GATE_Width / 2;
 				pManager->allComponentsCorners[compIdx].y2 = newCoor.y1 + UI.GATE_Height / 2;
 				Comp->setSmallCleanImageBeforeAddingComp(newSmallImageForGate);
+
 			}
-			else{
+			else {
 				int xbegin = (Comp->getCenterLocation().x1 - UI.GATE_Width / 2.0) / UI.GRID_SIZE, xend = (Comp->getCenterLocation().x1 + UI.GATE_Width / 2.0) / UI.GRID_SIZE, ybegin = (Comp->getCenterLocation().y1 - UI.GATE_Height / 2.0) / UI.GRID_SIZE, yend = (Comp->getCenterLocation().y1 + UI.GATE_Height / 2.0) / UI.GRID_SIZE;
 				for (int i = ybegin + 1; i <= yend; i++)
 				{
@@ -131,7 +138,7 @@ void Move::Execute()
 					{
 						if (xbegin == j || xend == j)
 						{
-							pOut->setUsedPixel(i, j, PIN); 
+							pOut->setUsedPixel(i, j, PIN);
 							continue;
 						}
 						pOut->setUsedPixel(i, j, GATE);
@@ -141,7 +148,7 @@ void Move::Execute()
 
 		}
 	}
-	if (Comp != NULL){
+	if (Comp != NULL) {
 		Comp->setDelete(false);
 		Comp->Draw(pManager->GetOutput());
 	}
