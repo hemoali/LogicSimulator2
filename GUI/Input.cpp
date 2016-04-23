@@ -59,6 +59,8 @@ ActionType Input::GetUserAction(ApplicationManager *pManager) const
 					comp = pManager->getComponent(i);
 				}
 			}
+			//
+			if (comp != NULL &&comp->getDelete()) comp = NULL;
 			if (comp != NULL)
 				return MOVE;
 			else {

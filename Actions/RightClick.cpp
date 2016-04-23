@@ -92,6 +92,17 @@ void RightClick::Execute() {
 				}
 			}
 			// Needed  Removing Connection
+			//Remove From All Component
+			//Delete the Component  Selected 
+			/*int index = -1, vectorSize = pManager->allComponentsCorners.size();
+			for (int i = 0; i < pManager->allComponentsCorners.size(); i++) {
+				if (C == pManager->getComponent(i)) {
+					index = i;
+					i = pManager->allComponentsCorners.size();
+				}
+			}
+			pManager->allComponentsCorners[index] = pManager->allComponentsCorners[vectorSize - 1];
+			pManager->allComponentsCorners.pop_back();*/
 			break;
 		}
 		case COPY:

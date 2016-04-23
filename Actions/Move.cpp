@@ -44,6 +44,8 @@ void Move::Execute()
 				Comp = pManager->getComponent(i);
 			}
 		}
+		//
+		if (Comp != NULL &&Comp->getDelete()) Comp = NULL;
 		if (Comp != NULL){
 			Comp->setDelete(true);
 			Comp->Draw(pManager->GetOutput());
