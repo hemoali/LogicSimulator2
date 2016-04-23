@@ -67,3 +67,6 @@ vector<Cell>& Connection::getCellsBeforeAddingConnection()
 {
 	return cellsBeforeAddingConnection;
 }
+void Connection::selectYourSelf(Output* pOut, color Color) {
+	pOut->changeConnectionColor(this, Color);
+}

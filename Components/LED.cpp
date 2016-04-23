@@ -41,3 +41,6 @@ void LED::setInputPinStatus(int n, STATUS s)
 LED::~LED(){
 
 }
+void LED::selectYourSelf(Output* pOut, color Color) {
+
+}

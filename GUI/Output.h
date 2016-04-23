@@ -15,7 +15,8 @@ class Output	//The application manager should have a pointer to this class
 private:
 	window* pWind;	//Pointer to the Graphics Window
 	mutable vector < pair <int, int> >allComponentsCorners;
-	static CellType Output::usedPixels[44][74];
+	static CellType usedPixels[44][74];
+	Component* allPixels[700][1200];
 	ApplicationManager* pManager;
 public:
 	Output(ApplicationManager* pManager); // Performs the Window Initialization
@@ -52,6 +53,8 @@ public:
 	void PrintMsg(string msg) const;	//Print a message on Status bar
 
 	void setUsedPixel(int i, int j, CellType);
+	void setAllPixels(int i, int j, Component*);
+	Component* getAllPixels(int i, int j);
 
 	void printMatrix(string msg);
 	~Output();

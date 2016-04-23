@@ -110,6 +110,32 @@ void AddConnection::Execute()
 				outputComponent->getOutputPin()->ConnectTo(pA);
 				inputComponent->getInputPin(inputPin)->setConnection(pA);
 				inputComponent->getInputPin(inputPin)->setPosition(numOfInputs);
+				// Assign connection to its pixels
+				for (size_t i = 0; i < pA->getCellsBeforeAddingConnection().size() - 1; i++)
+				{
+					Cell cell = pA->getCellsBeforeAddingConnection()[i];
+					Cell cell2 = pA->getCellsBeforeAddingConnection()[i+1];
+					for (size_t j = cell.x * UI.GRID_SIZE; j < cell2.x * UI.GRID_SIZE; j++)
+					{
+						pManager->GetOutput()->setAllPixels(cell.y * UI.GRID_SIZE, j, pA);
+						pManager->GetOutput()->setAllPixels(cell.y * UI.GRID_SIZE +1, j, pA);
+					}
+					for (size_t j = cell2.x * UI.GRID_SIZE; j < cell.x * UI.GRID_SIZE; j++)
+					{
+						pManager->GetOutput()->setAllPixels(cell.y * UI.GRID_SIZE, j, pA);
+						pManager->GetOutput()->setAllPixels(cell.y * UI.GRID_SIZE + 1, j, pA);
+					}
+					for (size_t j = cell.y * UI.GRID_SIZE; j < cell2.y * UI.GRID_SIZE; j++)
+					{
+						pManager->GetOutput()->setAllPixels(j, cell.x * UI.GRID_SIZE, pA);
+						pManager->GetOutput()->setAllPixels(j, cell.x * UI.GRID_SIZE + 1, pA);
+					}
+					for (size_t j = cell2.y * UI.GRID_SIZE; j < cell.y * UI.GRID_SIZE; j++)
+					{
+						pManager->GetOutput()->setAllPixels(j, cell.x * UI.GRID_SIZE, pA);
+						pManager->GetOutput()->setAllPixels(j, cell.x * UI.GRID_SIZE + 1, pA);
+					}
+				}
 			}
 			else{
 				pManager->GetOutput()->PrintMsg("No Available Connection");

@@ -10,6 +10,7 @@ CellType Output::usedPixels[44][74];
 int arrayOfIntersections[44][74];
 int arrayOfCorners[44][74];
 int connectionsCountAtPixel[44][74];
+
 Output::Output(ApplicationManager* pManager)
 {
 	//Initialize user interface parameters
@@ -35,6 +36,7 @@ Output::Output(ApplicationManager* pManager)
 	memset(arrayOfIntersections, -1, sizeof arrayOfIntersections);
 	memset(arrayOfCorners, 0, sizeof arrayOfCorners);
 	memset(connectionsCountAtPixel, 0, sizeof connectionsCountAtPixel);
+	memset(allPixels, NULL, sizeof allPixels);
 
 	this->pManager = pManager;
 }
@@ -1551,6 +1553,15 @@ void Output::DrawSwtich(GraphicsInfo g, bool isON, bool highlighted, bool notVal
 void Output::setUsedPixel(int i, int j, CellType c) {
 	usedPixels[i][j] = c;
 }
+void Output::setAllPixels(int i, int j, Component* comp) {
+	allPixels[i][j] = comp;
+}
+
+Component * Output::getAllPixels(int i, int j)
+{
+	return allPixels[i][j];
+}
+
 Output::~Output()
 {
 	delete pWind;

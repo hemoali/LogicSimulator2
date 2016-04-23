@@ -46,3 +46,6 @@ void BUFFER::setInputPinStatus(int n, STATUS s)
 {
 	m_InputPins[0].setStatus(s);
 }
+void BUFFER::selectYourSelf(Output* pOut, color Color) {
+
+}

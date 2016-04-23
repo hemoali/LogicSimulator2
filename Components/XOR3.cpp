@@ -48,3 +48,6 @@ void XOR3::setInputPinStatus(int n, STATUS s)
 {
 	m_InputPins[n - 1].setStatus(s);
 }
+void XOR3::selectYourSelf(Output* pOut, color Color) {
+
+}

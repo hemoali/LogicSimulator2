@@ -48,3 +48,6 @@ void SWITCH::setInputPinStatus(int n, STATUS s)
 SWITCH::~SWITCH(){
 
 }
+void SWITCH::selectYourSelf(Output* pOut, color Color) {
+
+}

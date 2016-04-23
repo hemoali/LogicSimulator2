@@ -44,6 +44,7 @@ public:
 	void setSmallCleanImageBeforeAddingComp(image* i);
 	image* getSmallCleanImageBeforeAddingComp();
 
+	virtual void selectYourSelf(Output* pOut, color Color) = 0;
 
 	void Component::setNumOfInputs(int n);
 	int getNumOfInputs()const;

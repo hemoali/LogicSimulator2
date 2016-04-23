@@ -12,7 +12,7 @@ void Input::GetPointClicked(int &x, int &y, bool DrawGate, bool DrawConnection)
 	Utils::correctPointClicked(x, y, DrawGate, DrawConnection);
 
 }
-buttonstate Input::GetButtonStatus(const button btMouse, int &iX, int &iY) const{
+buttonstate Input::GetButtonStatus(const button btMouse, int &iX, int &iY) const {
 	return pWind->GetButtonState(btMouse, iX, iY);
 }
 string Input::GetSrting(Output *pOut, string sOriginal = "")
@@ -20,15 +20,15 @@ string Input::GetSrting(Output *pOut, string sOriginal = "")
 	string s = "";
 	char ch;
 	keytype k;
-	while ((k = pWind->WaitKeyPress(ch)) != '\n' && (int)ch != 13){
-		if (k == ESCAPE){
+	while ((k = pWind->WaitKeyPress(ch)) != '\n' && (int)ch != 13) {
+		if (k == ESCAPE) {
 			s = "";
 			pOut->PrintMsg(sOriginal);
 		}
-		else if (k == ASCII && (int)ch == 8){
+		else if (k == ASCII && (int)ch == 8) {
 			s = s.substr(0, s.size() - 1);
 		}
-		else if (k == ASCII && (int)ch != 27){
+		else if (k == ASCII && (int)ch != 27) {
 			s += ch;
 		}
 		pOut->PrintMsg(sOriginal + " " + s);
@@ -41,9 +41,9 @@ string Input::GetSrting(Output *pOut, string sOriginal = "")
 //This function reads the position where the user clicks to determine the desired action
 ActionType Input::GetUserAction(ApplicationManager *pManager) const
 {
-	int x=0, y=0, xT, yT;
-	while (true){
-		if (pWind->GetButtonState(LEFT_BUTTON, xT, yT) == BUTTON_DOWN && yT >= UI.ToolBarHeight && yT < UI.height - UI.StatusBarHeight){
+	int x = 0, y = 0, xT, yT;
+	while (true) {
+		if (pWind->GetButtonState(LEFT_BUTTON, xT, yT) == BUTTON_DOWN && yT >= UI.ToolBarHeight && yT < UI.height - UI.StatusBarHeight) {
 			Component* comp = NULL;
 			for (int i = 0; i < pManager->allComponentsCorners.size(); i++)
 			{
@@ -56,10 +56,23 @@ ActionType Input::GetUserAction(ApplicationManager *pManager) const
 			}
 			if (comp != NULL)
 				return MOVE;
-			else
-				return MULTI_SELECT;
+			else {
+				if (pManager->GetOutput()->getAllPixels(yT, xT) != NULL)
+				{
+					pManager->GetOutput()->getAllPixels(yT, xT)->selectYourSelf(pManager->GetOutput() ,RED);
+				}
+				else {
+					vector <Connection*> allConnections;
+					pManager->getAllConnections(allConnections);
+					for (size_t i = 0; i < allConnections.size(); i++)
+					{
+						allConnections[i]->selectYourSelf(pManager->GetOutput(), color(23, 79, 181));
+					}
+					return MULTI_SELECT;
+				}
+			}
 		}
-		else{
+		else {
 			break;
 		}
 	}
@@ -109,7 +122,7 @@ ActionType Input::GetUserAction(ApplicationManager *pManager) const
 				default: return DSN_TOOL;	//A click on empty place in desgin toolbar
 				}
 			}
-			else{
+			else {
 				switch (ClickedItemOrder)
 				{
 				case D2AND:  return ADD_AND_GATE_2_H;
@@ -147,12 +160,12 @@ ActionType Input::GetUserAction(ApplicationManager *pManager) const
 	}
 	else	//Application is in Simulation mode
 	{
-		if (y > 0 && y < UI.ToolBarHeight){
+		if (y > 0 && y < UI.ToolBarHeight) {
 			int ClickedItemOrder = -1;//TODO:Modify
-			for (; x > 0; ClickedItemOrder++){
+			for (; x > 0; ClickedItemOrder++) {
 				x -= (UI.ToolItemWidth + 5);
 			}
-			switch (ClickedItemOrder){
+			switch (ClickedItemOrder) {
 			case SVALIDATE: return Validate;
 			case SSIMULATE: return Simulate;
 			case STT: return Create_TruthTable;

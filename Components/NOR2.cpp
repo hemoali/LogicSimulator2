@@ -43,3 +43,6 @@ void NOR2::setInputPinStatus(int n, STATUS s)
 {
 	m_InputPins[n - 1].setStatus(s);
 }
+void NOR2::selectYourSelf(Output* pOut, color Color) {
+
+}
