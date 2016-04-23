@@ -566,7 +566,7 @@ void Output::changeConnectionColor(Connection * connection, color Color) {
 			pWind->SetBrush(Color);
 
 			// if above another connection: color the hump
-			if (usedPixels[cell2.y][cell2.x] == INTERSECTION && cell2.cellType == VERTICAL && Vertical0Horizontal1Nothing2 == 2) {
+			if (usedPixels[cell2.y][cell2.x] == INTERSECTION && cell2.cellType == VERTICAL) {
 				if (cell2.x < cell.x) {
 					b1 = true;
 					if (!PreviousIsIntersection)
@@ -594,7 +594,7 @@ void Output::changeConnectionColor(Connection * connection, color Color) {
 				PreviousIsIntersection = true;
 				Vertical0Horizontal1Nothing2 = -1;
 			}
-			else if (usedPixels[cell2.y][cell2.x] == INTERSECTION && cell2.cellType == HORIZONTAL && Vertical0Horizontal1Nothing2 == 2) {
+			else if (usedPixels[cell2.y][cell2.x] == INTERSECTION && cell2.cellType == HORIZONTAL) {
 				if (cell2.y < cell.y) {
 					b2 = true;
 					if (!PreviousIsIntersection2)
@@ -604,7 +604,7 @@ void Output::changeConnectionColor(Connection * connection, color Color) {
 						pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE - 6, cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE - 10);
 					}
 					pWind->DrawBezier(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE - 10, cell.x * UI.GRID_SIZE + 6, cell.y*UI.GRID_SIZE - 14, cell.x * UI.GRID_SIZE + 8, cell.y*UI.GRID_SIZE - 18, cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE - 22);
-					if (j + 2 < connection->getCellsBeforeAddingConnection().size() && arrayOfIntersections[connection->getCellsBeforeAddingConnection()[j + 2].y][connection->getCellsBeforeAddingConnection()[j + 2].x] != 0)
+					if (j + 2 < connection->getCellsBeforeAddingConnection().size() && arrayOfIntersections[connection->getCellsBeforeAddingConnection()[j + 2].y][connection->getCellsBeforeAddingConnection()[j + 2].x] != 1)
 						pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE - 22, cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE - 32);
 				}
 				else {
@@ -616,7 +616,7 @@ void Output::changeConnectionColor(Connection * connection, color Color) {
 						pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE + 6, cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE + 10);
 					}
 					pWind->DrawBezier(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE + 10, cell.x * UI.GRID_SIZE + 6, cell.y*UI.GRID_SIZE + 14, cell.x * UI.GRID_SIZE + 8, cell.y*UI.GRID_SIZE + 18, cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE + 22);
-					if (j + 2 < connection->getCellsBeforeAddingConnection().size() && arrayOfIntersections[connection->getCellsBeforeAddingConnection()[j + 2].y][connection->getCellsBeforeAddingConnection()[j + 2].x] != 0)
+					if (j + 2 < connection->getCellsBeforeAddingConnection().size() && arrayOfIntersections[connection->getCellsBeforeAddingConnection()[j + 2].y][connection->getCellsBeforeAddingConnection()[j + 2].x] != 1)
 						pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE + 22, cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE + 32);
 				}
 				PreviousIsIntersection2 = true;

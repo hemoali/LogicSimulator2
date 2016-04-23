@@ -61,6 +61,7 @@ ActionType Input::GetUserAction(ApplicationManager *pManager) const
 			}
 			//
 			if (comp != NULL &&comp->getDelete()) comp = NULL;
+			
 			if (comp != NULL)
 				return MOVE;
 			else {
