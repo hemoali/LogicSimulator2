@@ -52,7 +52,7 @@ void NOR3::selectYourSelf(Output* pOut, color Color) {
 void NOR3::save(int id, ofstream & file)
 {
 
-	file << "NOR3  " << id << "  "/* << this->getLabel() << "  " */<< m_GfxInfo.x1 << "  " << m_GfxInfo.y1 << endl;
+	file << "NOR3  "<<this->getID()<<"  "/* << this->getLabel() << "  " */<< m_GfxInfo.x1 << "  " << m_GfxInfo.y1 << endl;
 }
 
 void NOR3::load(ApplicationManager*pM)

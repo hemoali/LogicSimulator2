@@ -52,7 +52,7 @@ void NOR2::selectYourSelf(Output* pOut, color Color) {
 void NOR2::save(int id, ofstream & file)
 {
 
-	file << "NOR2  " << id << "  "/* << this->getLabel() << "  " */<< m_GfxInfo.x1 << "  " << m_GfxInfo.y1 << endl;
+	file << "NOR2  "<<this->getID()<<"  "/* << this->getLabel() << "  " */<< m_GfxInfo.x1 << "  " << m_GfxInfo.y1 << endl;
 }
 
 void NOR2::load(ApplicationManager*pM)
