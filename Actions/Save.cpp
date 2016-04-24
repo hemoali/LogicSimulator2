@@ -30,6 +30,7 @@ void Save::Execute()
 	}
 	file << "-1";
 	file.close();
+	pManager->GetOutput()->PrintMsg("Design saved successfully");
 }
 void Save::Undo()
 {

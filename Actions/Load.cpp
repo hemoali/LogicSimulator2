@@ -102,6 +102,8 @@ void Load::Execute()
 		}
 	}
 	file.close();
+	pManager->GetOutput()->PrintMsg("Design loaded successfully");
+
 }
 void Load::Undo()
 {

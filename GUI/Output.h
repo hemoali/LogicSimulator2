@@ -52,7 +52,7 @@ public:
 	
 	void clearConnections(vector<Connection*> & allConnections, int originalX, int originalY, bool isInput, bool setDeleted = false);
 	void changeConnectionColor(Connection * connection, color Color = BLUE);
-	void PrintMsg(string msg) const;	//Print a message on Status bar
+	void PrintMsg(string msg, color Color = UI.MsgColor) const;	//Print a message on Status bar
 
 	void setUsedPixel(int i, int j, CellType);
 	

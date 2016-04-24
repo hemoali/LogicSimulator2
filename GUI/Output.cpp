@@ -18,12 +18,16 @@ Output::Output(ApplicationManager* pManager)
 	UI.AppMode = DESIGN;	//Design Mode is the startup mode
 
 							//Initilaize interface colors
-	UI.DrawColor = BLACK;
+	UI.DrawColor = BROWN;
 	UI.SelectColor = BLUE;
-	UI.ConnColor = RED;
+	UI.ConnColor = BROWN;
+	UI.HumpColor = BLACK;
+	UI.SelectedHumpColor = DARKBLUE;// color(23, 79, 181);
+	
 	UI.MsgColor = BLUE;
+	UI.ErrorMsgColor = RED;
 	UI.BkGrndColor = WHITE;
-
+	
 	//Create the drawing window
 	pWind = CreateWind(UI.width, UI.height, UI.wx, UI.wy);
 	ChangeTitle("Programming Techniques Project");
@@ -72,7 +76,7 @@ void Output::CreateStatusBar() const
 
 }
 //////////////////////////////////////////////////////////////////////////////////
-void Output::PrintMsg(string msg) const
+void Output::PrintMsg(string msg, color Color) const
 {
 	ClearStatusBar();	//Clear Status bar to print message on it
 						// Set the Message offset from the Status Bar
@@ -81,7 +85,7 @@ void Output::PrintMsg(string msg) const
 
 	// Print the Message
 	pWind->SetFont(20, BOLD | ITALICIZED, BY_NAME, "Arial");
-	pWind->SetPen(UI.MsgColor);
+	pWind->SetPen(Color);
 	pWind->DrawString(MsgX, UI.height - MsgY, msg);
 }
 //////////////////////////////////////////////////////////////////////////////////
@@ -329,7 +333,7 @@ bool Output::DrawConnection(GraphicsInfo GfxInfo, int inputPin, GraphicsInfo com
 
 		return false;
 	}
-	if (!selected)pWind->SetPen(color(23, 79, 181), 2);	else pWind->SetPen(BLUE, 2);
+	if (!selected)pWind->SetPen(UI.ConnColor, 2);	else pWind->SetPen(BLUE, 2);
 
 	if (inputPin == 0)
 	{
@@ -373,9 +377,9 @@ bool Output::DrawConnection(GraphicsInfo GfxInfo, int inputPin, GraphicsInfo com
 					else {
 						pWind->DrawLine(target->x * UI.GRID_SIZE, target->y*UI.GRID_SIZE - 6, target->x * UI.GRID_SIZE, target->y*UI.GRID_SIZE - 10);
 					}
-					pWind->SetPen(color(14, 36, 75), 2);
+					pWind->SetPen(UI.HumpColor , 2);
 					pWind->DrawBezier(target->x * UI.GRID_SIZE, target->y*UI.GRID_SIZE - 10, target->x * UI.GRID_SIZE + 6, target->y*UI.GRID_SIZE - 14, target->x * UI.GRID_SIZE + 8, target->y*UI.GRID_SIZE - 18, target->x * UI.GRID_SIZE, target->y*UI.GRID_SIZE - 22);
-					if (!selected)pWind->SetPen(color(23, 79, 181), 2);	else pWind->SetPen(BLUE, 2);
+					if (!selected)pWind->SetPen(UI.ConnColor, 2);	else pWind->SetPen(BLUE, 2);
 					if (parent->parent != NULL && arrayOfIntersections[parent->parent->y][parent->parent->x] != 1)
 						pWind->DrawLine(target->x * UI.GRID_SIZE, target->y*UI.GRID_SIZE - 22, target->x * UI.GRID_SIZE, target->y*UI.GRID_SIZE - 32);
 				}
@@ -386,9 +390,9 @@ bool Output::DrawConnection(GraphicsInfo GfxInfo, int inputPin, GraphicsInfo com
 					else {
 						pWind->DrawLine(target->x * UI.GRID_SIZE, target->y*UI.GRID_SIZE + 6, target->x * UI.GRID_SIZE, target->y*UI.GRID_SIZE + 10);
 					}
-					pWind->SetPen(color(14, 36, 75), 2);
+					pWind->SetPen(UI.HumpColor , 2);
 					pWind->DrawBezier(target->x * UI.GRID_SIZE, target->y*UI.GRID_SIZE + 10, target->x * UI.GRID_SIZE + 6, target->y*UI.GRID_SIZE + 14, target->x * UI.GRID_SIZE + 8, target->y*UI.GRID_SIZE + 18, target->x * UI.GRID_SIZE, target->y*UI.GRID_SIZE + 22);
-					if (!selected)pWind->SetPen(color(23, 79, 181), 2);	else pWind->SetPen(BLUE, 2);
+					if (!selected)pWind->SetPen(UI.ConnColor, 2);	else pWind->SetPen(BLUE, 2);
 					if (parent->parent != NULL && arrayOfIntersections[parent->parent->y][parent->parent->x] != 1)
 						pWind->DrawLine(target->x * UI.GRID_SIZE, target->y*UI.GRID_SIZE + 22, target->x * UI.GRID_SIZE, target->y*UI.GRID_SIZE + 32);
 				}
@@ -409,9 +413,9 @@ bool Output::DrawConnection(GraphicsInfo GfxInfo, int inputPin, GraphicsInfo com
 						else {
 							pWind->DrawLine(target->x * UI.GRID_SIZE - 6, target->y*UI.GRID_SIZE, target->x * UI.GRID_SIZE - 10, target->y*UI.GRID_SIZE);
 						}
-						pWind->SetPen(color(14, 36, 75), 2);
+						pWind->SetPen(UI.HumpColor , 2);
 						pWind->DrawBezier(target->x * UI.GRID_SIZE - 10, target->y*UI.GRID_SIZE, target->x * UI.GRID_SIZE - 14, target->y*UI.GRID_SIZE - 6, target->x * UI.GRID_SIZE - 18, target->y*UI.GRID_SIZE - 8, target->x * UI.GRID_SIZE - 22, target->y*UI.GRID_SIZE);
-						if (!selected)pWind->SetPen(color(23, 79, 181), 2);	else pWind->SetPen(BLUE, 2);
+						if (!selected)pWind->SetPen(UI.ConnColor, 2);	else pWind->SetPen(BLUE, 2);
 						if (parent->parent != NULL && arrayOfIntersections[parent->parent->y][parent->parent->x] != 0)
 							pWind->DrawLine(target->x * UI.GRID_SIZE - 22, target->y*UI.GRID_SIZE, target->x * UI.GRID_SIZE - 32, target->y*UI.GRID_SIZE);
 					}
@@ -421,9 +425,9 @@ bool Output::DrawConnection(GraphicsInfo GfxInfo, int inputPin, GraphicsInfo com
 						else {
 							pWind->DrawLine(target->x * UI.GRID_SIZE + 6, target->y*UI.GRID_SIZE, target->x * UI.GRID_SIZE + 10, target->y*UI.GRID_SIZE);
 						}
-						pWind->SetPen(color(14, 36, 75), 2);
+						pWind->SetPen(UI.HumpColor , 2);
 						pWind->DrawBezier(target->x * UI.GRID_SIZE + 10, target->y*UI.GRID_SIZE, target->x * UI.GRID_SIZE + 14, target->y*UI.GRID_SIZE - 6, target->x * UI.GRID_SIZE + 18, target->y*UI.GRID_SIZE - 8, target->x * UI.GRID_SIZE + 22, target->y*UI.GRID_SIZE);
-						if (!selected)pWind->SetPen(color(23, 79, 181), 2);	else pWind->SetPen(BLUE, 2);
+						if (!selected)pWind->SetPen(UI.ConnColor, 2);	else pWind->SetPen(BLUE, 2);
 						if (parent->parent != NULL && arrayOfIntersections[parent->parent->y][parent->parent->x] != 0)
 							pWind->DrawLine(target->x * UI.GRID_SIZE + 22, target->y*UI.GRID_SIZE, target->x * UI.GRID_SIZE + 32, target->y*UI.GRID_SIZE);
 					}
@@ -587,7 +591,9 @@ void Output::changeConnectionColor(Connection * connection, color Color) {
 						PreviousIsIntersection = false;
 						pWind->DrawLine(cell.x * UI.GRID_SIZE - 6, cell.y*UI.GRID_SIZE, cell.x * UI.GRID_SIZE - 10, cell.y*UI.GRID_SIZE);
 					}
+					if (Color == UI.SelectColor) pWind->SetPen(UI.SelectedHumpColor,2);else if(Color == UI.ConnColor) pWind->SetPen(UI.HumpColor, 2);
 					pWind->DrawBezier(cell.x * UI.GRID_SIZE - 10, cell.y*UI.GRID_SIZE, cell.x * UI.GRID_SIZE - 14, cell.y*UI.GRID_SIZE - 6, cell.x * UI.GRID_SIZE - 18, cell.y*UI.GRID_SIZE - 8, cell.x * UI.GRID_SIZE - 22, cell.y*UI.GRID_SIZE);
+					pWind->SetPen(Color, 2);
 					if (j + 2 < connection->getCellsBeforeAddingConnection().size() && arrayOfIntersections[connection->getCellsBeforeAddingConnection()[j + 2].y][connection->getCellsBeforeAddingConnection()[j + 2].x] != 0)
 						pWind->DrawLine(cell.x * UI.GRID_SIZE - 22, cell.y*UI.GRID_SIZE, cell.x * UI.GRID_SIZE - 32, cell.y*UI.GRID_SIZE);
 				}
@@ -599,7 +605,9 @@ void Output::changeConnectionColor(Connection * connection, color Color) {
 						PreviousIsIntersection = false;
 						pWind->DrawLine(cell.x * UI.GRID_SIZE + 6, cell.y*UI.GRID_SIZE, cell.x * UI.GRID_SIZE + 10, cell.y*UI.GRID_SIZE);
 					}
+					if (Color == UI.SelectColor) pWind->SetPen(UI.SelectedHumpColor, 2); else if (Color == UI.ConnColor) pWind->SetPen(UI.HumpColor, 2);
 					pWind->DrawBezier(cell.x * UI.GRID_SIZE + 10, cell.y*UI.GRID_SIZE, cell.x * UI.GRID_SIZE + 14, cell.y*UI.GRID_SIZE - 6, cell.x * UI.GRID_SIZE + 18, cell.y*UI.GRID_SIZE - 8, cell.x * UI.GRID_SIZE + 22, cell.y*UI.GRID_SIZE);
+					pWind->SetPen(Color, 2);
 					if (j + 2 < connection->getCellsBeforeAddingConnection().size() && arrayOfIntersections[connection->getCellsBeforeAddingConnection()[j + 2].y][connection->getCellsBeforeAddingConnection()[j + 2].x] != 0)
 						pWind->DrawLine(cell.x * UI.GRID_SIZE + 22, cell.y*UI.GRID_SIZE, cell.x * UI.GRID_SIZE + 32, cell.y*UI.GRID_SIZE);
 				}
@@ -615,7 +623,9 @@ void Output::changeConnectionColor(Connection * connection, color Color) {
 						PreviousIsIntersection2 = false;
 						pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE - 6, cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE - 10);
 					}
+					if (Color == UI.SelectColor) pWind->SetPen(UI.SelectedHumpColor, 2); else if (Color == UI.ConnColor) pWind->SetPen(UI.HumpColor, 2);
 					pWind->DrawBezier(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE - 10, cell.x * UI.GRID_SIZE + 6, cell.y*UI.GRID_SIZE - 14, cell.x * UI.GRID_SIZE + 8, cell.y*UI.GRID_SIZE - 18, cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE - 22);
+					pWind->SetPen(Color, 2);
 					if (j + 2 < connection->getCellsBeforeAddingConnection().size() && arrayOfIntersections[connection->getCellsBeforeAddingConnection()[j + 2].y][connection->getCellsBeforeAddingConnection()[j + 2].x] != 1)
 						pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE - 22, cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE - 32);
 				}
@@ -626,8 +636,10 @@ void Output::changeConnectionColor(Connection * connection, color Color) {
 					else {
 						PreviousIsIntersection2 = false;
 						pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE + 6, cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE + 10);
-					}
+					}				
+					if (Color == UI.SelectColor) pWind->SetPen(UI.SelectedHumpColor, 2); else if (Color == UI.ConnColor) pWind->SetPen(UI.HumpColor, 2);
 					pWind->DrawBezier(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE + 10, cell.x * UI.GRID_SIZE + 6, cell.y*UI.GRID_SIZE + 14, cell.x * UI.GRID_SIZE + 8, cell.y*UI.GRID_SIZE + 18, cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE + 22);
+					pWind->SetPen(Color, 2);
 					if (j + 2 < connection->getCellsBeforeAddingConnection().size() && arrayOfIntersections[connection->getCellsBeforeAddingConnection()[j + 2].y][connection->getCellsBeforeAddingConnection()[j + 2].x] != 1)
 						pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE + 22, cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE + 32);
 				}
@@ -751,7 +763,7 @@ void Output::clearConnections(vector<Connection*>& allConnections, int originalX
 						pWind->SetBrush(WHITE);
 						pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE, cell2.x*UI.GRID_SIZE, cell2.y*UI.GRID_SIZE);
 						pWind->DrawRectangle(cell.x * UI.GRID_SIZE - 10, cell.y*UI.GRID_SIZE - 10, cell.x*UI.GRID_SIZE + 10, cell.y*UI.GRID_SIZE + 10, FILLED);
-						pWind->SetPen(color(23, 79, 181), 2);
+						pWind->SetPen(UI.ConnColor, 2);
 						pWind->DrawLine(cell.x* UI.GRID_SIZE, cell.y* UI.GRID_SIZE - 11, cell.x* UI.GRID_SIZE, cell.y* UI.GRID_SIZE + 10);
 					}
 					else if (Vertical0Horizontal1Nothing2 == 0) {
@@ -759,7 +771,7 @@ void Output::clearConnections(vector<Connection*>& allConnections, int originalX
 						pWind->SetBrush(WHITE);
 						pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE, cell2.x*UI.GRID_SIZE, cell2.y*UI.GRID_SIZE);
 						pWind->DrawRectangle(cell.x * UI.GRID_SIZE - 10, cell.y*UI.GRID_SIZE - 10, cell.x*UI.GRID_SIZE + 10, cell.y*UI.GRID_SIZE + 10, FILLED);
-						pWind->SetPen(color(23, 79, 181), 2);
+						pWind->SetPen(UI.ConnColor, 2);
 						pWind->DrawLine(cell.x* UI.GRID_SIZE - 15, cell.y* UI.GRID_SIZE, cell.x* UI.GRID_SIZE + 10, cell.y* UI.GRID_SIZE);
 					}
 				}
@@ -781,7 +793,7 @@ void Output::clearConnections(vector<Connection*>& allConnections, int originalX
 					pWind->DrawRectangle(cell.x * UI.GRID_SIZE - 10, cell.y*UI.GRID_SIZE - 10, cell.x*UI.GRID_SIZE + 10, cell.y*UI.GRID_SIZE + 10, FILLED);
 					pWind->SetPen(BLACK, 1);
 					pWind->DrawPixel(cell.x*UI.GRID_SIZE, cell.y*UI.GRID_SIZE);
-					pWind->SetPen(color(23, 79, 181), 2);
+					pWind->SetPen(UI.ConnColor, 2);
 					pWind->DrawLine(cell.x* UI.GRID_SIZE, cell.y* UI.GRID_SIZE - 10, cell.x* UI.GRID_SIZE, cell.y* UI.GRID_SIZE + 10);
 					Vertical0Horizontal1Nothing2 = -1;
 				}
@@ -791,7 +803,7 @@ void Output::clearConnections(vector<Connection*>& allConnections, int originalX
 					pWind->DrawRectangle(cell.x * UI.GRID_SIZE - 10, cell.y*UI.GRID_SIZE - 10, cell.x*UI.GRID_SIZE + 10, cell.y*UI.GRID_SIZE + 10, FILLED);
 					pWind->SetPen(BLACK, 1);
 					pWind->DrawPixel(cell.x*UI.GRID_SIZE, cell.y*UI.GRID_SIZE);
-					pWind->SetPen(color(23, 79, 181), 2);
+					pWind->SetPen(UI.ConnColor, 2);
 					pWind->DrawLine(cell.x* UI.GRID_SIZE - 11, cell.y* UI.GRID_SIZE, cell.x* UI.GRID_SIZE + 10, cell.y* UI.GRID_SIZE);
 					Vertical0Horizontal1Nothing2 = -1;
 				}
@@ -1342,7 +1354,7 @@ void Output::DrawAnd_Nand(GraphicsInfo g, int in, bool isNand, bool highlighted,
 	p1y = cy - 20; p2y = cy + 21;
 
 	if (highlighted) pWind->SetPen(BLUE); else if (notValid) pWind->SetPen(RED);
-	else pWind->SetPen(BROWN);
+	else pWind->SetPen(UI.DrawColor);
 
 	if (isNand) {
 		outx = cx + 14 - (2 * ciDefBrushSize);
@@ -1397,7 +1409,7 @@ void Output::DrawNot_Buffer(GraphicsInfo g, bool isBuffer, bool highlighted, boo
 
 	if (highlighted) pWind->SetPen(BLUE); else if (notValid) pWind->SetPen(RED);
 	else if (notValid) pWind->SetPen(RED);
-	else pWind->SetPen(BROWN);
+	else pWind->SetPen(UI.DrawColor);
 
 	if (isBuffer) {
 		//BUFFER Gate
@@ -1437,7 +1449,7 @@ void Output::DrawOr_Nor(GraphicsInfo g, int in, bool isNor, bool highlighted, bo
 	hx1 = hx2 = cx;
 
 	if (highlighted) pWind->SetPen(BLUE); else if (notValid) pWind->SetPen(RED);
-	else pWind->SetPen(BROWN);
+	else pWind->SetPen(UI.DrawColor);
 
 	if (isNor) {
 		//NOR GATE
@@ -1504,7 +1516,7 @@ void Output::DrawXor_Xnor(GraphicsInfo g, int in, bool isXNor, bool highlighted,
 	int xi = 10; //X-Increment
 
 	if (highlighted) pWind->SetPen(BLUE); else if (notValid) pWind->SetPen(RED);
-	else pWind->SetPen(BROWN);
+	else pWind->SetPen(UI.DrawColor);
 
 	if (isXNor) {
 		//XNOR GATE
@@ -1556,7 +1568,7 @@ void Output::DrawXor_Xnor(GraphicsInfo g, int in, bool isXNor, bool highlighted,
 void Output::DrawLed(GraphicsInfo g, bool isON, bool highlighted, bool notValid) const
 {
 	if (highlighted) pWind->SetPen(BLUE); else if (notValid) pWind->SetPen(RED);
-	else pWind->SetPen(BROWN);
+	else pWind->SetPen(UI.DrawColor);
 	int cx = g.x1, cy = g.y1, radius = 12; //Centre Points
 	if (!isON)
 	{
@@ -1587,7 +1599,7 @@ void Output::DrawLed(GraphicsInfo g, bool isON, bool highlighted, bool notValid)
 void Output::DrawSwtich(GraphicsInfo g, bool isON, bool highlighted, bool notValid) const
 {
 	if (highlighted) pWind->SetPen(BLUE); else if (notValid) pWind->SetPen(RED);
-	else pWind->SetPen(BROWN);
+	else pWind->SetPen(UI.DrawColor);
 	int cx = g.x1, cy = g.y1; //Centre Points
 							  //the rectangle
 	if (isON)

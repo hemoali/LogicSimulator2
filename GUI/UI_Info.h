@@ -23,10 +23,17 @@ struct UI_Info	//User Interface Info.
 		RightClickMenuWidth = 161; //Width of Right CLl Menu
 
 	color DrawColor;		//Drawing color
-	color SelectColor;		//Highlighting color
+	color SelectColor;		//Highlighting color for gates and connections
 	color ConnColor;		//Connector color
+	color HumpColor;		//Connector hump color
+	color SelectedHumpColor;//Color of the hump when connector is selected
+	
+	color OneValueConnection;//For Simulation 1 value
+	color OneValueHumpColor;//For hump wheb simulation 1 value
+	
 	color MsgColor;			//Messages color
 	color BkGrndColor;		//Back ground color
+	color ErrorMsgColor;
 
 
 	//This should be calculated accurately because it will be used later to create connections between gates
