@@ -1,4 +1,6 @@
 #include "XNOR2.h"
+#include"..\ApplicationManager.h"
+#include<fstream>
 
 XNOR2::XNOR2(const GraphicsInfo &r_GfxInfo, int r_FanOut) :Gate(2, r_FanOut,r_GfxInfo)
 {
@@ -44,4 +46,15 @@ void XNOR2::setInputPinStatus(int n, STATUS s)
 }
 void XNOR2::selectYourSelf(Output* pOut, color Color) {
 
+}
+
+void XNOR2::save(int id, ofstream & file)
+{
+
+	file << "XNOR2  " << id << "  "/* << this->getLabel() << "  " */<< m_GfxInfo.x1 << "  " << m_GfxInfo.y1 << endl;
+}
+
+void XNOR2::load(ApplicationManager*pM)
+{
+	pM->AddComponent(this);
 }

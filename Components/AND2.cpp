@@ -1,4 +1,6 @@
 #include "AND2.h"
+#include"..\ApplicationManager.h"
+#include<fstream>
 
 AND2::AND2(const GraphicsInfo &r_GfxInfo, int r_FanOut) :Gate(2, r_FanOut, r_GfxInfo)
 {
@@ -42,4 +44,15 @@ void AND2::setInputPinStatus(int n, STATUS s)
 }
 void AND2::selectYourSelf(Output* pOut, color Color) {
 
+}
+
+void AND2::save(int id, ofstream & file)
+{
+
+	file << "AND2  " << id << "  "/* << this->getLabel() << "  " */<< m_GfxInfo.x1 << "  " << m_GfxInfo.y1 << endl;
+}
+
+void AND2::load(ApplicationManager*pM)
+{
+	pM->AddComponent(this);
 }

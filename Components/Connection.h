@@ -34,5 +34,8 @@ public:
 
 	void setCellsBeforeAddingConnection(vector<Cell> cellsBeforeAddingConnection);
 	vector<Cell>& getCellsBeforeAddingConnection();
+
+	virtual void save(int, ofstream &);
+	virtual void load(ApplicationManager*);
 };
 #endif

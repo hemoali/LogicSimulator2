@@ -1,4 +1,6 @@
 #include"AND3.h"
+#include"..\ApplicationManager.h"
+#include<fstream>
 
 AND3::AND3(const GraphicsInfo &r_GfxInfo, int r_FanOut) :Gate(3, r_FanOut, r_GfxInfo)
 {
@@ -43,4 +45,15 @@ void AND3::setInputPinStatus(int n, STATUS s)
 }
 void AND3::selectYourSelf(Output* pOut, color Color) {
 	
+}
+
+void AND3::save(int id, ofstream & file)
+{
+
+	file << "AND3  " << id << "  "/* << this->getLabel() << "  " */<< m_GfxInfo.x1 << "  " << m_GfxInfo.y1 << endl;
+}
+
+void AND3::load(ApplicationManager*pM)
+{
+	pM->AddComponent(this);
 }

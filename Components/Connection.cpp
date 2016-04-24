@@ -1,4 +1,5 @@
 #include "Connection.h"
+#include<fstream>
 
 Connection::Connection(const GraphicsInfo &r_GfxInfo, OutputPin *pSrcPin, InputPin *pDstPin) :Component(r_GfxInfo)
 
@@ -76,4 +77,13 @@ vector<Cell>& Connection::getCellsBeforeAddingConnection()
 }
 void Connection::selectYourSelf(Output* pOut, color Color) {
 	pOut->changeConnectionColor(this, Color);
+}
+
+void Connection::save(int id, ofstream & file)
+{
+}
+
+void Connection::load(ApplicationManager*pM)
+{
+
 }

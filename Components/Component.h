@@ -58,6 +58,11 @@ public:
 
 	void getAllInputConnections(vector<Connection*>& allConnections);
 	void getAllOutputConnections(vector<Connection*>& allOutputConnections);
+
+	//Save and Load
+	virtual void save(int, ofstream &)=0;
+	virtual void load(ApplicationManager*)=0;
+
 	//Destructor must be virtual
 	virtual ~Component();
 };

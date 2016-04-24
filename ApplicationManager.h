@@ -42,6 +42,10 @@ public:
 
 	void getAllConnections(vector<Connection*>& allConnections);
 	Component* getComponent(int);
+
+	//Get compcount
+	int getCompCount();
+
 	//destructor
 	~ApplicationManager();
 };

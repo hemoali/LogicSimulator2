@@ -1,4 +1,6 @@
 #include "NAND2.h"
+#include"..\ApplicationManager.h"
+#include<fstream>
 
 NAND2::NAND2(const GraphicsInfo &r_GfxInfo, int r_FanOut) :Gate(2, r_FanOut,r_GfxInfo)
 {
@@ -45,4 +47,15 @@ void NAND2::setInputPinStatus(int n, STATUS s)
 }
 void NAND2::selectYourSelf(Output* pOut, color Color) {
 
+}
+
+void NAND2::save(int id, ofstream & file)
+{
+
+	file << "NAND2  " << id << "  "/* << this->getLabel() << "  " */<< m_GfxInfo.x1 << "  " << m_GfxInfo.y1 << endl;
+}
+
+void NAND2::load(ApplicationManager*pM)
+{
+	pM->AddComponent(this);
 }

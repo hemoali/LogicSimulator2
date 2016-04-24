@@ -1,4 +1,6 @@
 #include "LED.h"
+#include"..\ApplicationManager.h"
+#include<fstream>
 
 LED::LED(const GraphicsInfo &r_GfxInfo, int r_FanOut) :Component(r_GfxInfo, r_FanOut)
 {
@@ -43,4 +45,14 @@ LED::~LED(){
 }
 void LED::selectYourSelf(Output* pOut, color Color) {
 
+}
+
+void LED::save(int id, ofstream & file)
+{
+	file << "LED  " << id << "  " << this->getLabel() << "  " << m_GfxInfo.x1 << "  " << m_GfxInfo.y1 << endl;
+}
+
+void LED::load(ApplicationManager*pM)
+{
+	pM->AddComponent(this);
 }

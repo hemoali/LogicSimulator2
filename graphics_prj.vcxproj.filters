@@ -228,6 +228,12 @@
     <ClCompile Include="Actions\RightClick.cpp">
       <Filter>Actions</Filter>
     </ClCompile>
+    <ClCompile Include="Actions\Save.cpp">
+      <Filter>Actions</Filter>
+    </ClCompile>
+    <ClCompile Include="Actions\Load.cpp">
+      <Filter>Actions</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Defs.H" />
@@ -415,6 +421,12 @@
     <ClInclude Include="Actions\RightClick.h">
       <Filter>Actions</Filter>
     </ClInclude>
+    <ClInclude Include="Actions\Save.h">
+      <Filter>Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="Actions\Load.h">
+      <Filter>Actions</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
@@ -449,6 +461,9 @@
     </Text>
     <Text Include="CMUgraphicsLib\Readme.txt">
       <Filter>CMUgraphics Library</Filter>
+    </Text>
+    <Text Include="save.txt">
+      <Filter>Components</Filter>
     </Text>
   </ItemGroup>
 </Project>
