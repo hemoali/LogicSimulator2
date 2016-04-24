@@ -79,7 +79,7 @@ ActionType Input::GetUserAction(ApplicationManager *pManager) const
 						{
 							if (xT > cell2.x * UI.GRID_SIZE && xT < cell.x * UI.GRID_SIZE && abs(yT - cell.y * UI.GRID_SIZE) <= 3)
 							{
-								allConnections[i]->selectYourSelf(pManager->GetOutput(), RED);
+								allConnections[i]->selectYourSelf(pManager->GetOutput(), UI.SelectColor);
 								found = true;
 								break;
 							}
@@ -87,7 +87,7 @@ ActionType Input::GetUserAction(ApplicationManager *pManager) const
 						else if (cell.x < cell2.x) {
 							if (xT < cell2.x * UI.GRID_SIZE && xT > cell.x * UI.GRID_SIZE && abs(yT - cell.y * UI.GRID_SIZE) <= 3)
 							{
-								allConnections[i]->selectYourSelf(pManager->GetOutput(), RED);
+								allConnections[i]->selectYourSelf(pManager->GetOutput(), UI.SelectColor);
 								found = true;
 								break;
 							}
@@ -96,7 +96,7 @@ ActionType Input::GetUserAction(ApplicationManager *pManager) const
 						{
 							if (yT > cell2.y * UI.GRID_SIZE && yT < cell.y * UI.GRID_SIZE && abs(xT - cell.x * UI.GRID_SIZE) <= 3)
 							{
-								allConnections[i]->selectYourSelf(pManager->GetOutput(), RED);
+								allConnections[i]->selectYourSelf(pManager->GetOutput(), UI.SelectColor);
 								found = true;
 								break;
 							}
@@ -104,7 +104,7 @@ ActionType Input::GetUserAction(ApplicationManager *pManager) const
 						else if (cell.y < cell2.y) {
 							if (yT < cell2.y * UI.GRID_SIZE && yT > cell.y * UI.GRID_SIZE && abs(xT - cell.x * UI.GRID_SIZE) <= 3)
 							{
-								allConnections[i]->selectYourSelf(pManager->GetOutput(), RED);
+								allConnections[i]->selectYourSelf(pManager->GetOutput(), UI.SelectColor);
 								found = true;
 								break;
 							}
@@ -116,7 +116,7 @@ ActionType Input::GetUserAction(ApplicationManager *pManager) const
 
 					for (size_t i = 0; i < allConnections.size(); i++)
 					{
-						allConnections[i]->selectYourSelf(pManager->GetOutput(), color(23, 79, 181));
+						allConnections[i]->selectYourSelf(pManager->GetOutput(), UI.ConnColor);
 					}
 					return MULTI_SELECT;
 				}

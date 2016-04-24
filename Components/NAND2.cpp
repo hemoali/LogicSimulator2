@@ -18,10 +18,10 @@ void NAND2::Operate()
 
 // Function Draw
 // Draws 2-input NAND gate
-void NAND2::Draw(Output* pOut)
+void NAND2::Draw(Output* pOut, bool highlight)
 {
 	//Call output class and pass gate drawing info to it.
-	if (!getDelete()) pOut->DrawAnd_Nand(m_CenterInfo, 2, true);
+	if (!getDelete()) pOut->DrawAnd_Nand(m_CenterInfo, 2, true, highlight);
 	else {
 		pOut->DrawCleanImage(getSmallCleanImageBeforeAddingComp(), m_CenterInfo.x1, m_CenterInfo.y1);
 	}

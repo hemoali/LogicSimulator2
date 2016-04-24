@@ -17,9 +17,9 @@ void AND3::Operate()
 
 // Function Draw
 // Draws 3-input AND gate
-void AND3::Draw(Output* pOut)
+void AND3::Draw(Output* pOut, bool highlight)
 {
-	if (!getDelete()) pOut->DrawAnd_Nand(m_CenterInfo,3);
+	if (!getDelete()) pOut->DrawAnd_Nand(m_CenterInfo,3, true, highlight);
 	else {
 		pOut->DrawCleanImage(getSmallCleanImageBeforeAddingComp(), m_CenterInfo.x1, m_CenterInfo.y1);
 	}

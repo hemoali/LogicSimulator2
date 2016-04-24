@@ -60,7 +60,7 @@ void AddConnection::Execute()
 
 	if (inputComponent == NULL || outputComponent == NULL || inputComponent == outputComponent || dynamic_cast<SWITCH*> (inputComponent) || dynamic_cast<LED*> (outputComponent))
 	{
-		pManager->GetOutput()->PrintMsg("Invalid Connection");
+		pManager->GetOutput()->PrintMsg("Invalid Connection", UI.ErrorColor);
 	}
 	else{
 		numOfInputs = inputComponent->getNumOfInputs();
@@ -82,7 +82,7 @@ void AddConnection::Execute()
 
 		if (inputComponent->getInputPin(inputPin)->getConnection() != NULL || outputComponent->getOutputPin()->connectedConnectionsCount() == FANOUT)
 		{
-			pManager->GetOutput()->PrintMsg("Invalid Connection");
+			pManager->GetOutput()->PrintMsg("Invalid Connection", UI.ErrorColor);
 		}
 		else{
 			GraphicsInfo GInfo;

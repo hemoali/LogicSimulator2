@@ -18,10 +18,10 @@ void NOR3::Operate()
 
 // Function Draw
 // Draws 3-input NOR gate
-void NOR3::Draw(Output* pOut)
+void NOR3::Draw(Output* pOut, bool highlight)
 {
 	//Call output class and pass gate drawing info to it.
-	if (!getDelete()) pOut->DrawOr_Nor(m_CenterInfo, 3, true);
+	if (!getDelete()) pOut->DrawOr_Nor(m_CenterInfo, 3, true, highlight);
 	else {
 		pOut->DrawCleanImage(getSmallCleanImageBeforeAddingComp(), m_CenterInfo.x1, m_CenterInfo.y1);
 	}

@@ -131,6 +131,8 @@ void Load::Execute()
 	pManager->getAllConnections(allConnections);
 
 	file.close();
+	pManager->GetOutput()->PrintMsg("Design loaded successfully");
+
 }
 void Load::Undo()
 {
