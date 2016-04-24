@@ -43,8 +43,7 @@ void Connection::Draw(Output* pOut)
 void Connection::deleteConnection(Output* pOut) {
 	setDelete(true);
 	DstPin->setConnection(NULL);
-	SrcPin->ConnectTo(NULL);
-	SrcPin->setConnectedConnectionsCount(SrcPin->connectedConnectionsCount() - 1);
+	SrcPin->removeConnectedConnection(this);
 }
 
 int Connection::GetOutPinStatus()	//returns status of outputpin if LED, return -1

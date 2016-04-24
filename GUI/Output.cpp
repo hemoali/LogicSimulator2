@@ -859,7 +859,18 @@ void Output::clearConnections(vector<Connection*>& allConnections, int originalX
 			if (j == allConnections[i]->getCellsBeforeAddingConnection().size() - 1) {
 				pWind->SetPen(BLACK, 1);
 				pWind->DrawPixel(cell.x*UI.GRID_SIZE, cell.y*UI.GRID_SIZE);
+				if (setDeleted)
+				{
+					usedPixels[cell.y][cell.x] = PIN;
+				}
 			}
+			else if (setDeleted && j == allConnections[i]->getCellsBeforeAddingConnection().size() - 2) {
+				if (cell.cellType == PIN)
+				{
+					usedPixels[cell.y][cell.x] = PIN;
+				}
+			}
+			
 		}
 		// clear connection
 		allConnections[i]->getCellsBeforeAddingConnection().clear();
