@@ -16,6 +16,8 @@
 #include "Actions\Select.h"
 #include "Actions\Move.h"
 #include "Actions\RightClick.h"
+#include"Actions\Save.h"
+#include"Actions\Load.h"
 ApplicationManager::ApplicationManager()
 {
 	CompCount = 0;
@@ -100,6 +102,11 @@ void ApplicationManager::ExecuteAction(ActionType ActType)
 		case RIGHT_CLICKSELECT:
 			pAct = new RightClick(this);
 			break;
+		case SAVE:
+			pAct = new Save(this);
+			break;
+		case LOAD:
+			pAct = new Load(this);
 		case EXIT:
 		// Exit action here
 			break;
@@ -140,6 +147,11 @@ void ApplicationManager::getAllConnections(vector<Connection*>& allConnections) 
 			allConnections.push_back((Connection*)CompList[i]);
 		}
 	}
+}
+////////////////////////////////////////////////////////////////////
+int ApplicationManager::getCompCount()
+{
+	return CompCount;
 }
 ////////////////////////////////////////////////////////////////////
 Component * ApplicationManager::getComponent(int idx)

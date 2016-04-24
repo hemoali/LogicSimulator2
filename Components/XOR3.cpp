@@ -1,4 +1,6 @@
 #include "XOR3.h"
+#include"..\ApplicationManager.h"
+#include<fstream>
 
 XOR3::XOR3(const GraphicsInfo &r_GfxInfo, int r_FanOut) :Gate(3, r_FanOut,r_GfxInfo)
 {
@@ -50,4 +52,14 @@ void XOR3::setInputPinStatus(int n, STATUS s)
 }
 void XOR3::selectYourSelf(Output* pOut, color Color) {
 
+}
+
+void XOR3::save(int id, ofstream & file)
+{
+	file << "XOR3  " << id << "  "/* << this->getLabel() << "  " */<< m_GfxInfo.x1 << "  " << m_GfxInfo.y1 << endl;
+}
+
+void XOR3::load(ApplicationManager*pM)
+{
+	pM->AddComponent(this);
 }

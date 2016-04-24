@@ -1,4 +1,6 @@
 #include "NOR2.h"
+#include"..\ApplicationManager.h"
+#include<fstream>
 
 NOR2::NOR2(const GraphicsInfo &r_GfxInfo, int r_FanOut) :Gate(2, r_FanOut,r_GfxInfo)
 {
@@ -45,4 +47,15 @@ void NOR2::setInputPinStatus(int n, STATUS s)
 }
 void NOR2::selectYourSelf(Output* pOut, color Color) {
 
+}
+
+void NOR2::save(int id, ofstream & file)
+{
+
+	file << "NOR2  " << id << "  "/* << this->getLabel() << "  " */<< m_GfxInfo.x1 << "  " << m_GfxInfo.y1 << endl;
+}
+
+void NOR2::load(ApplicationManager*pM)
+{
+	pM->AddComponent(this);
 }

@@ -1,4 +1,6 @@
 #include "NOT.h"
+#include"..\ApplicationManager.h"
+#include<fstream>
 
 NOT::NOT(const GraphicsInfo &r_GfxInfo, int r_FanOut) :Gate(1, r_FanOut, r_GfxInfo)
 {
@@ -45,4 +47,15 @@ void NOT::setInputPinStatus(int n, STATUS s)
 }
 void NOT::selectYourSelf(Output* pOut, color Color) {
 
+}
+
+void NOT::save(int id, ofstream & file)
+{
+
+	file << "NOT  " << id << "  "/* << this->getLabel() << "  " */<< m_GfxInfo.x1 << "  " << m_GfxInfo.y1 << endl;
+}
+
+void NOT::load(ApplicationManager*pM)
+{
+	pM->AddComponent(this);
 }

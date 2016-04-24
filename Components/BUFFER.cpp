@@ -1,4 +1,6 @@
 #include "BUFFER.h"
+#include"..\ApplicationManager.h"
+#include<fstream>
 
 BUFFER::BUFFER(const GraphicsInfo &r_GfxInfo, int r_FanOut) :Gate(1, r_FanOut, r_GfxInfo)
 {
@@ -48,4 +50,15 @@ void BUFFER::setInputPinStatus(int n, STATUS s)
 }
 void BUFFER::selectYourSelf(Output* pOut, color Color) {
 
+}
+
+void BUFFER::save(int id, ofstream & file)
+{
+
+	file << "BUFFER  " << id << "  " << /*this->getLabel() << "  " <<*/ m_GfxInfo.x1 << "  " << m_GfxInfo.y1 << endl;
+}
+
+void BUFFER::load(ApplicationManager*pM)
+{
+	pM->AddComponent(this);
 }

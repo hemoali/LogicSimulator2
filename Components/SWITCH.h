@@ -18,6 +18,8 @@ public:
 	virtual void setInputPinStatus(int n, STATUS s); virtual void selectYourSelf(Output* pOut, color Color);
 
 	void setOutputPinStatus(int n, STATUS s);
+	virtual void save(int, ofstream &);
+	virtual void load(ApplicationManager*);
 
 	virtual ~SWITCH();
 };

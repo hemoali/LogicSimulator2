@@ -1,4 +1,6 @@
 #include "NOR3.h"
+#include"..\ApplicationManager.h"
+#include<fstream>
 
 NOR3::NOR3(const GraphicsInfo &r_GfxInfo, int r_FanOut) :Gate(3, r_FanOut,r_GfxInfo)
 {
@@ -45,4 +47,15 @@ void NOR3::setInputPinStatus(int n, STATUS s)
 }
 void NOR3::selectYourSelf(Output* pOut, color Color) {
 
+}
+
+void NOR3::save(int id, ofstream & file)
+{
+
+	file << "NOR3  " << id << "  "/* << this->getLabel() << "  " */<< m_GfxInfo.x1 << "  " << m_GfxInfo.y1 << endl;
+}
+
+void NOR3::load(ApplicationManager*pM)
+{
+	pM->AddComponent(this);
 }
