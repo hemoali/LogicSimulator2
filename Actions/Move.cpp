@@ -35,7 +35,7 @@ void Move::Execute()
 	int x, y;
 	Component* Comp = NULL;
 	while (pIn->GetButtonStatus(LEFT_BUTTON, x, y) == BUTTON_DOWN) {
-		int compIdx;
+		int compIdx = -1;
 		for (int i = 0; i < pManager->allComponentsCorners.size(); i++)
 		{
 			if (x >= pManager->allComponentsCorners[i].x1 && x <= pManager->allComponentsCorners[i].x2 && y >= pManager->allComponentsCorners[i].y1&&y <= pManager->allComponentsCorners[i].y2 && !dynamic_cast<Connection*> (pManager->getComponent(i)))
@@ -46,7 +46,7 @@ void Move::Execute()
 		}
 		//
 		if (Comp != NULL &&Comp->getDelete()) Comp = NULL;
-		if (Comp != NULL) {
+		if (Comp != NULL && compIdx != -1) {
 			Comp->setDelete(true);
 			Comp->Draw(pManager->GetOutput());
 			//Free gate location
