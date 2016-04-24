@@ -135,7 +135,7 @@ Output* ApplicationManager::GetOutput()
 void ApplicationManager::getAllConnections(vector<Connection*>& allConnections) {
 	allConnections.clear();
 	for (int i = 0; i < CompCount; i++) {
-		if (dynamic_cast<Connection*> (CompList[i]))
+		if (dynamic_cast<Connection*> (CompList[i]) && !CompList[i]->getDelete())
 		{
 			allConnections.push_back((Connection*)CompList[i]);
 		}

@@ -23,6 +23,10 @@ bool OutputPin::ConnectTo(Connection *r_Conn)
 int OutputPin::connectedConnectionsCount(){
 	return m_Conn;
 }
+void OutputPin::setConnectedConnectionsCount(int i)
+{
+	m_Conn = i;
+}
 Connection* OutputPin::getConnection(int idx) {
 	return m_Connections[idx];
 }

@@ -713,9 +713,13 @@ void Output::changeConnectionColor(Connection * connection, color Color) {
 	}
 
 }
-void Output::clearConnections(vector<Connection*>& allConnections, int originalX, int originalY, bool isInput) {
+void Output::clearConnections(vector<Connection*>& allConnections, int originalX, int originalY, bool isInput, bool setDeleted) {
 	for (size_t i = 0; i < allConnections.size(); i++)
 	{
+		if (setDeleted)
+		{
+			allConnections[i]->deleteConnection(this);
+		}
 		for (size_t j = 0; j < allConnections[i]->getCellsBeforeAddingConnection().size(); j++)
 		{
 			Cell& cell = allConnections[i]->getCellsBeforeAddingConnection()[j];
@@ -901,7 +905,6 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 
 		clearConnections(allInputConnections, originalX, originalY, true);
 		clearConnections(allOutputConnections, originalX, originalY, false);
-		printMatrix("After clearing connections");
 	}
 
 	pWind->StoreImage(storedImg, 0, 0, pWind->GetWidth(), pWind->GetHeight());
@@ -1039,7 +1042,6 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 				allInputConnections[i]->getCellsBeforeAddingConnection().clear();
 			}
 			drawnConnectionsCount = 0;
-			printMatrix("After clearing connections222");
 		}
 		if (!Utils::CheckPoint({ x,y }, usedPixels, moving, false)) {
 			wrong = true;
@@ -1244,7 +1246,6 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 						allInputConnections[i]->setCornersLocation({ currentGfx.x1 ,currentGfx.y1,currentGfx.x2 ,currentGfx.y2 });
 						if (DrawConnection(currentGfx, allInputConnections[i]->getDestPin()->getPosition(), { Gfx.x1, Gfx.y1,0,0 }, allInputConnections[i]->getCellsBeforeAddingConnection()))drawnConnectionsCount++;
 					}
-					printMatrix("After connecting inputs");
 					for (size_t i = 0; i < allOutputConnections.size(); i++)
 					{
 						GraphicsInfo currentGfx = allOutputConnections[i]->getCornersLocation();
@@ -1255,7 +1256,6 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 						if (DrawConnection(currentGfx, allOutputConnections[i]->getDestPin()->getPosition(), { dstComp->getCenterLocation().x1, dstComp->getCenterLocation().y1,0,0 }, allOutputConnections[i]->getCellsBeforeAddingConnection()))drawnConnectionsCount++;
 					}
 
-					printMatrix("After connecting outs");
 					originalX = Gfx.x1;
 					originalY = Gfx.y1;
 					//Clear gate/led/switch
@@ -1297,7 +1297,7 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 			}
 		}
 	}
-	//printMatrix("Final");
+	printMatrix("Final");
 	pWind->FlushMouseQueue();
 	PrintMsg("");
 	delete storedDrawingImg;
@@ -1305,7 +1305,7 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 	return draw;
 }
 void Output::printMatrix(string msg) {
-	/*cout << msg << endl;
+	cout << msg << endl;
 	for (size_t i = 0; i < 44; i++)
 	{
 		for (size_t j = 0; j < 74; j++)
@@ -1313,7 +1313,7 @@ void Output::printMatrix(string msg) {
 			cout << usedPixels[i][j] << " ";
 		}
 		cout << endl;
-	}*/
+	}
 }
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //You Send a Centre Point (cx,cy) ,this means when you call Draw image Function , x and y sent should be cx-24, cy-24

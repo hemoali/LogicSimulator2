@@ -68,7 +68,7 @@ ActionType Input::GetUserAction(ApplicationManager *pManager) const
 				bool found = false;
 				vector <Connection*> allConnections;
 				pManager->getAllConnections(allConnections);
-				Connection* conn = NULL;;
+
 				for (size_t i = 0; i < allConnections.size() && !found; i++)
 				{
 					for (size_t j = 0; j < allConnections[i]->getCellsBeforeAddingConnection().size() - 1; j++)

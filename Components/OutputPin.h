@@ -24,6 +24,7 @@ public:
 	OutputPin(int r_FanOut);	
 	bool ConnectTo(Connection *r_Conn);	//connect to a new connection
 	int connectedConnectionsCount();
+	void setConnectedConnectionsCount(int i);
 	Connection* getConnection(int idx);
 	
 	void setComponent(Component* pCmp);	//sets the component of this input pin

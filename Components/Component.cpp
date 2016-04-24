@@ -89,7 +89,7 @@ void Component::getAllInputConnections(vector<Connection*> &allInputConnections)
 	allInputConnections.clear();
 	for (size_t i = 0; i < m_Inputs; i++)
 	{
-		if (m_InputPins[i].getConnection()!=NULL)
+		if (m_InputPins[i].getConnection()!=NULL && !((Component*)m_InputPins[i].getConnection())->getDelete())
 		{
 			allInputConnections.push_back(m_InputPins[i].getConnection());
 		}
@@ -100,6 +100,10 @@ void Component::getAllOutputConnections(vector<Connection*>& allOutputConnection
 	allOutputConnections.clear();
 	for (size_t i = 0; i < m_OutputPin.connectedConnectionsCount(); i++)
 	{
+		if (((Component*) m_OutputPin.getConnection(i))->getDelete() || m_OutputPin.getConnection(i) == NULL)
+		{
+			continue;
+		}
 		allOutputConnections.push_back(m_OutputPin.getConnection(i));
 	}
 }
