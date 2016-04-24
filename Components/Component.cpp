@@ -1,7 +1,8 @@
 #include "Component.h"
-
-Component::Component(const GraphicsInfo &r_GfxInfo, int r_FanOut) :m_OutputPin(r_FanOut)
+int Component::lastID = 0;
+Component::Component(const GraphicsInfo &r_GfxInfo, int r_FanOut) :m_OutputPin(r_FanOut), ID(++lastID)
 {
+
 	m_GfxInfo.x1 = r_GfxInfo.x1;
 	m_GfxInfo.x2 = r_GfxInfo.x2;
 	m_GfxInfo.y1 = r_GfxInfo.y1;
@@ -12,7 +13,7 @@ Component::Component(const GraphicsInfo &r_GfxInfo, int r_FanOut) :m_OutputPin(r
 	deleted = false;
 	smallCleanImageBeforeAddingComp = NULL;
 }
-Component::Component(const GraphicsInfo & r_GfxInfo) :m_OutputPin(0)
+Component::Component(const GraphicsInfo & r_GfxInfo) :m_OutputPin(0), ID(++lastID)
 {
 	m_GfxInfo.x1 = r_GfxInfo.x1;
 	m_GfxInfo.x2 = r_GfxInfo.x2;
@@ -29,6 +30,16 @@ void Component::setDelete(bool d){
 	deleted = d;
 }
 bool Component::getDelete(){ return deleted; }
+
+void Component::setID(int id)
+{
+	this->ID = id;
+}
+
+int Component::getID()
+{
+	return this->ID;
+}
 
 void Component::setSmallCleanImageBeforeAddingComp(image* i){
 	smallCleanImageBeforeAddingComp = i;

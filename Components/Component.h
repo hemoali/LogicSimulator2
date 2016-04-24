@@ -11,7 +11,8 @@ private:
 	bool deleted;
 	image* smallCleanImageBeforeAddingComp;
 	int m_Inputs;		//No. of input pins of that Gate.
-
+	static int lastID;
+	int ID;
 protected:
 	GraphicsInfo m_GfxInfo;	//The parameters required to draw a component
 	GraphicsInfo m_CenterInfo;
@@ -34,6 +35,9 @@ public:
 
 	void setDelete(bool d);
 	bool getDelete();
+	
+	void setID(int id);
+	int getID();
 
 	void setNewCenterLocation(GraphicsInfo GfxInfo);
 	GraphicsInfo getCenterLocation();
