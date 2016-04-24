@@ -40,6 +40,7 @@ bool RightClick::ReadActionParameters(image* img) {
 		MenuRectangle.y2 = y + UI.RightClickMenuWidth;
 	/*	s = to_string(x) + "    " + to_string(y);
 		pOut->PrintMsg(s);*/
+		C->Draw(pOut, true);
 		pIn->WaitSelectionPoint(x, y); //New Member Function to wait for Selection Point.
 		//Check if the new Point is in the Menu Bar or Not
 		if (x > MenuRectangle.x1 && x < MenuRectangle.x2) {
@@ -128,6 +129,8 @@ void RightClick::Execute() {
 		default:
 			break;
 		}
+		C->Draw(pOut, false);
+
 	}
 }
 void RightClick::Undo()

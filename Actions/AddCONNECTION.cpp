@@ -60,7 +60,7 @@ void AddConnection::Execute()
 
 	if (inputComponent == NULL || outputComponent == NULL || inputComponent == outputComponent || dynamic_cast<SWITCH*> (inputComponent) || dynamic_cast<LED*> (outputComponent))
 	{
-		pManager->GetOutput()->PrintMsg("Invalid Connection");
+		pManager->GetOutput()->PrintMsg("Invalid Connection", UI.ErrorColor);
 	}
 	else{
 		numOfInputs = inputComponent->getNumOfInputs();
