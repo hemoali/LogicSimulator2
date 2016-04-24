@@ -10,6 +10,7 @@ CellType Output::usedPixels[44][74];
 int arrayOfIntersections[44][74];
 int arrayOfCorners[44][74];
 int connectionsCountAtPixel[44][74];
+Component* Output::arrayOfComponents[44][74];
 
 Output::Output(ApplicationManager* pManager)
 {
@@ -40,6 +41,7 @@ Output::Output(ApplicationManager* pManager)
 	memset(arrayOfIntersections, -1, sizeof arrayOfIntersections);
 	memset(arrayOfCorners, 0, sizeof arrayOfCorners);
 	memset(connectionsCountAtPixel, 0, sizeof connectionsCountAtPixel);
+	memset(arrayOfComponents, NULL, sizeof arrayOfComponents);
 
 	this->pManager = pManager;
 }
@@ -1321,7 +1323,7 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 			}
 		}
 	}
-	printMatrix("Final");
+	//printMatrix("Final");
 	pWind->FlushMouseQueue();
 	PrintMsg("");
 	delete storedDrawingImg;
@@ -1334,7 +1336,7 @@ void Output::printMatrix(string msg) {
 	{
 		for (size_t j = 0; j < 74; j++)
 		{
-			cout << usedPixels[i][j] << " ";
+			cout << arrayOfComponents[i][j] << " ";
 		}
 		cout << endl;
 	}
@@ -1623,6 +1625,21 @@ void Output::DrawSwtich(GraphicsInfo g, bool isON, bool highlighted, bool notVal
 }
 void Output::setUsedPixel(int i, int j, CellType c) {
 	usedPixels[i][j] = c;
+}
+
+CellType Output::getUsedPixel(int i, int j)
+{
+	return usedPixels[i][j];
+}
+
+void Output::setArrayOfComponents(int i, int j, Component * c)
+{
+	arrayOfComponents[i][j] = c;
+}
+
+Component * Output::getArrayOfComponents(int i, int j)
+{
+	return arrayOfComponents[i][j];
 }
 
 Output::~Output()

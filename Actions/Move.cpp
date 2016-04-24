@@ -56,6 +56,7 @@ void Move::Execute()
 				for (int j = xbegin; j <= xend; j++)
 				{
 					pOut->setUsedPixel(i, j, EMPTY);
+					pOut->setArrayOfComponents(i, j, NULL);
 				}
 			}
 			// Free related connections
@@ -152,6 +153,7 @@ void Move::Execute()
 							pOut->setUsedPixel(i, j, PIN);
 							continue;
 						}
+						pOut->setArrayOfComponents(i, j, Comp);
 						pOut->setUsedPixel(i, j, GATE);
 					}
 				}
