@@ -82,7 +82,7 @@ void AddConnection::Execute()
 
 		if (inputComponent->getInputPin(inputPin)->getConnection() != NULL || outputComponent->getOutputPin()->connectedConnectionsCount() == FANOUT)
 		{
-			pManager->GetOutput()->PrintMsg("Invalid Connection", UI.ErrorMsgColor);
+			pManager->GetOutput()->PrintMsg("Invalid Connection", UI.ErrorColor);
 		}
 		else{
 			GraphicsInfo GInfo;

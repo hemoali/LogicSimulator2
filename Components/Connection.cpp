@@ -35,7 +35,7 @@ void Connection::Operate()
 	DstPin->setStatus((STATUS)SrcPin->getStatus());
 }
 
-void Connection::Draw(Output* pOut)
+void Connection::Draw(Output* pOut, bool highlight)
 {
 	//pOut->DrawConnection(m_GfxInfo, DstPin->getPosition(), DstPin->getComponent()->getCenterLocation());
 }

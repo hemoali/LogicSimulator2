@@ -16,11 +16,11 @@ void XOR2::Operate()
 
 // Function Draw
 // Draws 2-input XOR gate
-void XOR2::Draw(Output* pOut)
+void XOR2::Draw(Output* pOut, bool highlight)
 {
 	//Call output class and pass gate drawing info to it.
 	
-	if (!getDelete())pOut->DrawXor_Xnor(m_CenterInfo, 2);
+	if (!getDelete())pOut->DrawXor_Xnor(m_CenterInfo, 2, false, highlight);
 	else {
 		pOut->DrawCleanImage(getSmallCleanImageBeforeAddingComp(), m_CenterInfo.x1, m_CenterInfo.y1);
 	}

@@ -128,7 +128,18 @@ void Move::Execute()
 				pManager->allComponentsCorners[compIdx].x2 = newCoor.x1 + UI.GATE_Width / 2;
 				pManager->allComponentsCorners[compIdx].y2 = newCoor.y1 + UI.GATE_Height / 2;
 				Comp->setSmallCleanImageBeforeAddingComp(newSmallImageForGate);
-
+				Comp->Draw(pOut, false);
+				vector<Connection*> allInConnections, allOutConnections;
+				Comp->getAllInputConnections(allInConnections);
+				Comp->getAllOutputConnections(allOutConnections);
+				for (size_t i = 0; i < allOutConnections.size(); i++)
+				{
+					allOutConnections[i]->selectYourSelf(pOut, UI.ConnColor);
+				}
+				for (size_t i = 0; i < allInConnections.size(); i++)
+				{
+					allInConnections[i]->selectYourSelf(pOut, UI.ConnColor);
+				}
 			}
 			else {
 				int xbegin = (Comp->getCenterLocation().x1 - UI.GATE_Width / 2.0) / UI.GRID_SIZE, xend = (Comp->getCenterLocation().x1 + UI.GATE_Width / 2.0) / UI.GRID_SIZE, ybegin = (Comp->getCenterLocation().y1 - UI.GATE_Height / 2.0) / UI.GRID_SIZE, yend = (Comp->getCenterLocation().y1 + UI.GATE_Height / 2.0) / UI.GRID_SIZE;

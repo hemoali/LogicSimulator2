@@ -16,7 +16,7 @@ public:
 	Connection(const GraphicsInfo &r_GfxInfo, OutputPin *pSrcPin,InputPin *pDstPin);
 
 	virtual void Operate() ;	//Calculates the output according to the inputs
-	virtual void Draw(Output* pOut);	//for each component to Draw itself
+	virtual void Draw(Output* pOut, bool highlight);	//for each component to Draw itself
 
 	
 	void setSourcePin(OutputPin *pSrcPin);

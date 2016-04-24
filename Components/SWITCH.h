@@ -9,7 +9,7 @@ class SWITCH : public Component
 public:
 	SWITCH(const GraphicsInfo &r_GfxInfo, int r_FanOut);
 	virtual void Operate();	//Calculates the output according to the inputs
-	virtual void Draw(Output* pOut);	//for each component to Draw itself
+	virtual void Draw(Output* pOut, bool highlight);	//for each component to Draw itself
 
 
 	virtual int GetOutPinStatus();	//returns status of outputpin if LED, return -1

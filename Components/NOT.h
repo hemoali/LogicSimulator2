@@ -14,7 +14,7 @@ class NOT :public Gate
 public:
 	NOT(const GraphicsInfo &r_GfxInfo, int r_FanOut);
 	virtual void Operate();	//Calculates the output of the NOT gate
-	virtual void Draw(Output* pOut);	//Draws NOT gate
+	virtual void Draw(Output* pOut, bool highlight);	//Draws NOT gate
 
 	virtual int GetOutPinStatus();	//returns status of outputpin if LED, return -1
 	virtual int GetInputPinStatus(int n);	//returns status of the Inputpin if SWITCH, return -1

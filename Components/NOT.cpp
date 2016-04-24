@@ -17,11 +17,11 @@ void NOT::Operate()
 
 // Function Draw
 // Draws NOT gate
-void NOT::Draw(Output* pOut)
+void NOT::Draw(Output* pOut, bool highlight)
 {
 	//Call output class and pass gate drawing info to it.
 	
-	if (!getDelete()) pOut->DrawNot_Buffer(m_CenterInfo);
+	if (!getDelete()) pOut->DrawNot_Buffer(m_CenterInfo, false, highlight);
 	else {
 		pOut->DrawCleanImage(getSmallCleanImageBeforeAddingComp(), m_CenterInfo.x1, m_CenterInfo.y1);
 	}

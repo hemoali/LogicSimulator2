@@ -16,10 +16,10 @@ void SWITCH::Operate()
 
 // Function Draw
 // Draws SWITCH
-void SWITCH::Draw(Output* pOut)
+void SWITCH::Draw(Output* pOut, bool highlight)
 {
 	//Call output class and pass SWITCH drawing info to it.
-	if (!getDelete())pOut->DrawSwtich(m_CenterInfo, (getOutputPin()->getStatus() == HIGH) ? true : false);
+	if (!getDelete())pOut->DrawSwtich(m_CenterInfo, (getOutputPin()->getStatus() == HIGH) ? true : false, highlight);
 	else {
 		pOut->DrawCleanImage(getSmallCleanImageBeforeAddingComp(), m_CenterInfo.x1, m_CenterInfo.y1);
 	}

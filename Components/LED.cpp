@@ -14,10 +14,10 @@ void LED::Operate()
 
 // Function Draw
 // Draws LED
-void LED::Draw(Output* pOut)
+void LED::Draw(Output* pOut, bool highlight)
 {
 	//Call output class and pass LED drawing info to it.
-	if (!getDelete()) pOut->DrawLed(m_CenterInfo, (getInputPin(0)->getStatus() == HIGH) ? true : false);
+	if (!getDelete()) pOut->DrawLed(m_CenterInfo, (getInputPin(0)->getStatus() == HIGH) ? true : false, highlight);
 
 	else {
 		pOut->DrawCleanImage(getSmallCleanImageBeforeAddingComp(), m_CenterInfo.x1, m_CenterInfo.y1);

@@ -33,7 +33,7 @@ struct UI_Info	//User Interface Info.
 	
 	color MsgColor;			//Messages color
 	color BkGrndColor;		//Back ground color
-	color ErrorMsgColor;
+	color ErrorColor;
 
 
 	//This should be calculated accurately because it will be used later to create connections between gates
