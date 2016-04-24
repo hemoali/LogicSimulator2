@@ -15,9 +15,9 @@ void Input::GetPointClicked(int &x, int &y, bool DrawGate, bool DrawConnection)
 void Input::getSelectionPoint(int & x, int & y)
 {
 	pWind->GetMouseClick(x, y);
-	pWind->FlushMouseQueue(); 
+	pWind->FlushMouseQueue();
 }
-buttonstate Input::GetButtonStatus(const button btMouse, int &iX, int &iY) const{
+buttonstate Input::GetButtonStatus(const button btMouse, int &iX, int &iY) const {
 	return pWind->GetButtonState(btMouse, iX, iY);
 }
 string Input::GetSrting(Output *pOut, string sOriginal = "")
@@ -61,16 +61,59 @@ ActionType Input::GetUserAction(ApplicationManager *pManager) const
 			}
 			//
 			if (comp != NULL &&comp->getDelete()) comp = NULL;
+
 			if (comp != NULL)
 				return MOVE;
 			else {
-				if (pManager->GetOutput()->getAllPixels(yT, xT) != NULL)
+				bool found = false;
+				vector <Connection*> allConnections;
+				pManager->getAllConnections(allConnections);
+
+				for (size_t i = 0; i < allConnections.size() && !found; i++)
 				{
-					pManager->GetOutput()->getAllPixels(yT, xT)->selectYourSelf(pManager->GetOutput() ,RED);
+					for (size_t j = 0; j < allConnections[i]->getCellsBeforeAddingConnection().size() - 1; j++)
+					{
+						Cell cell = allConnections[i]->getCellsBeforeAddingConnection()[j];
+						Cell cell2 = allConnections[i]->getCellsBeforeAddingConnection()[j + 1];
+						if (cell.x > cell2.x)
+						{
+							if (xT > cell2.x * UI.GRID_SIZE && xT < cell.x * UI.GRID_SIZE && abs(yT - cell.y * UI.GRID_SIZE) <= 3)
+							{
+								allConnections[i]->selectYourSelf(pManager->GetOutput(), RED);
+								found = true;
+								break;
+							}
+						}
+						else if (cell.x < cell2.x) {
+							if (xT < cell2.x * UI.GRID_SIZE && xT > cell.x * UI.GRID_SIZE && abs(yT - cell.y * UI.GRID_SIZE) <= 3)
+							{
+								allConnections[i]->selectYourSelf(pManager->GetOutput(), RED);
+								found = true;
+								break;
+							}
+						}
+						else if (cell.y > cell2.y)
+						{
+							if (yT > cell2.y * UI.GRID_SIZE && yT < cell.y * UI.GRID_SIZE && abs(xT - cell.x * UI.GRID_SIZE) <= 3)
+							{
+								allConnections[i]->selectYourSelf(pManager->GetOutput(), RED);
+								found = true;
+								break;
+							}
+						}
+						else if (cell.y < cell2.y) {
+							if (yT < cell2.y * UI.GRID_SIZE && yT > cell.y * UI.GRID_SIZE && abs(xT - cell.x * UI.GRID_SIZE) <= 3)
+							{
+								allConnections[i]->selectYourSelf(pManager->GetOutput(), RED);
+								found = true;
+								break;
+							}
+						}
+					}
 				}
-				else {
-					vector <Connection*> allConnections;
-					pManager->getAllConnections(allConnections);
+
+				if(!found) {
+
 					for (size_t i = 0; i < allConnections.size(); i++)
 					{
 						allConnections[i]->selectYourSelf(pManager->GetOutput(), color(23, 79, 181));
@@ -162,11 +205,11 @@ ActionType Input::GetUserAction(ApplicationManager *pManager) const
 		//[2] User clicks on the drawing area //TODO:
 		if (y >= UI.ToolBarHeight && y < UI.height - UI.StatusBarHeight)
 		{
-				//user want to select/unselect a statement i;
-			 if (s == RIGHT_CLICK)
+			//user want to select/unselect a statement i;
+			if (s == RIGHT_CLICK)
 				return RIGHT_CLICKSELECT;
-			 else 
-				 pWind->GetMouseClick(x, y,true); //Remove the last Saved Click
+			else
+				pWind->GetMouseClick(x, y, true); //Remove the last Saved Click
 		}
 
 		//[3] User clicks on the status bar

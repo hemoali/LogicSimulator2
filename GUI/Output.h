@@ -16,7 +16,6 @@ private:
 	window* pWind;	//Pointer to the Graphics Window
 	mutable vector < pair <int, int> >allComponentsCorners;
 	static CellType usedPixels[44][74];
-	Component* allPixels[700][1200];
 	ApplicationManager* pManager;
 public:
 	Output(ApplicationManager* pManager); // Performs the Window Initialization
@@ -51,14 +50,12 @@ public:
 	void DrawAfterMenu(image* img,int x, int y);
 	bfs_node* bfs(bfs_node* bf, int requX, int requY, vector<bfs_node*> allNodes) const;
 	
-	void clearConnections(vector<Connection*> & allConnections, int originalX, int originalY, bool isInput);
+	void clearConnections(vector<Connection*> & allConnections, int originalX, int originalY, bool isInput, bool setDeleted = false);
 	void changeConnectionColor(Connection * connection, color Color = BLUE);
 	void PrintMsg(string msg) const;	//Print a message on Status bar
 
 	void setUsedPixel(int i, int j, CellType);
-	void setAllPixels(int i, int j, Component*);
-	Component* getAllPixels(int i, int j);
-
+	
 	void printMatrix(string msg);
 	~Output();
 };

@@ -17,7 +17,7 @@ private:
 
 	//Array of connections (poniters) to be connected to that OutputPin
 	//For simplicity, we consider it a constant length
-	Connection* m_Connections[MAX_CONNS];	
+	Connection* m_Connections[FANOUT];	
 	int m_FanOut;	//Maximum No. of connections connected to that output pin (depends on the component)
 	int m_Conn;		//Actual No. of connections connected to that output pin
 public:
@@ -26,6 +26,8 @@ public:
 	int connectedConnectionsCount();
 	Connection* getConnection(int idx);
 	
+	void removeConnectedConnection(Connection*);
+
 	void setComponent(Component* pCmp);	//sets the component of this input pin
 	Component* getComponent();	//returns the component of this input pin
 };

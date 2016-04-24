@@ -40,6 +40,13 @@ void Connection::Draw(Output* pOut)
 	//pOut->DrawConnection(m_GfxInfo, DstPin->getPosition(), DstPin->getComponent()->getCenterLocation());
 }
 
+
+void Connection::deleteConnection(Output* pOut) {
+	setDelete(true);
+	DstPin->setConnection(NULL);
+	SrcPin->removeConnectedConnection(this);
+}
+
 int Connection::GetOutPinStatus()	//returns status of outputpin if LED, return -1
 {
 	return DstPin->getStatus();

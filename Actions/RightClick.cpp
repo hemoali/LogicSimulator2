@@ -91,7 +91,15 @@ void RightClick::Execute() {
 					pOut->setUsedPixel(i, j, EMPTY);
 				}
 			}
+
 			// Needed  Removing Connection
+			vector<Connection*> allInConnections, allOutConnections;
+			C->getAllInputConnections(allInConnections);
+			C->getAllOutputConnections(allOutConnections);
+			
+			pOut->clearConnections(allInConnections, C->getCenterLocation().x1, C->getCenterLocation().y1, true, true);
+			pOut->clearConnections(allOutConnections, C->getCenterLocation().x1, C->getCenterLocation().y1, false, true);
+
 			//Remove From All Component
 			//Delete the Component  Selected 
 			/*int index = -1, vectorSize = pManager->allComponentsCorners.size();
