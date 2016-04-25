@@ -90,6 +90,7 @@ void RightClick::Execute() {
 				for (int j = xbegin; j <= xend; j++)
 				{
 					pOut->setUsedPixel(i, j, EMPTY);
+					pOut->setArrayOfComponents(i, j, NULL);
 				}
 			}
 
