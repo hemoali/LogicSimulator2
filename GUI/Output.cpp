@@ -736,6 +736,11 @@ void Output::clearConnections(vector<Connection*>& allConnections, int originalX
 		}
 		for (size_t j = 0; j < allConnections[i]->getCellsBeforeAddingConnection().size(); j++)
 		{
+			if (getArrayOfComponents(allConnections[i]->getCellsBeforeAddingConnection()[j].y, allConnections[i]->getCellsBeforeAddingConnection()[j].x) == allConnections[i])
+			{
+				setArrayOfComponents(allConnections[i]->getCellsBeforeAddingConnection()[j].y, allConnections[i]->getCellsBeforeAddingConnection()[j].x, NULL);
+			}
+			
 			Cell& cell = allConnections[i]->getCellsBeforeAddingConnection()[j];
 			int Vertical0Horizontal1Nothing2 = 2;
 
@@ -1313,8 +1318,24 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 				GfxInfo.y1 = y;
 				Utils::correctPointClicked(GfxInfo.x1, GfxInfo.y1, true, false);
 				if (Utils::CheckPoint(GfxInfo, usedPixels, moving)) {
+					if (moving) // Reset connections on grid of pointers
+					{
+						for (size_t i = 0; i < allInputConnections.size(); i++)
+						{
+							for (size_t j = 0; j < allInputConnections[i]->getCellsBeforeAddingConnection().size(); j++)
+							{
+								pManager->GetOutput()->setArrayOfComponents(allInputConnections[i]->getCellsBeforeAddingConnection()[j].y, allInputConnections[i]->getCellsBeforeAddingConnection()[j].x, allInputConnections[i]);
+							}
+						}
+						for (size_t i = 0; i < allOutputConnections.size(); i++)
+						{
+							for (size_t j = 0; j < allOutputConnections[i]->getCellsBeforeAddingConnection().size(); j++)
+							{
+								pManager->GetOutput()->setArrayOfComponents(allOutputConnections[i]->getCellsBeforeAddingConnection()[j].y, allOutputConnections[i]->getCellsBeforeAddingConnection()[j].x, allOutputConnections[i]);
+							}
+						}
+					}
 					draw = true;
-
 					break;
 				}
 				else {
