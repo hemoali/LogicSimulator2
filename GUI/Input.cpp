@@ -141,12 +141,10 @@ ActionType Input::GetUserAction(ApplicationManager *pManager) const
 				Component* comp = pManager->GetOutput()->getArrayOfComponents(hoverY / UI.GRID_SIZE, hoverX / UI.GRID_SIZE);
 				if (comp != NULL && comp != preComp)
 				{
-					cout << "X";
 					pManager->GetOutput()->PrintMsg(comp->getLabel());
 				}
 				else if (comp == NULL) {
 					pManager->GetOutput()->PrintMsg("");
-
 				}
 				hoverYOld = hoverY;
 				hoverXOld = hoverX; 
