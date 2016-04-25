@@ -39,7 +39,7 @@ void Connection::Operate()
 
 void Connection::Draw(Output* pOut, bool highlight)
 {
-	//pOut->DrawConnection(m_GfxInfo, DstPin->getPosition(), DstPin->getComponent()->getCenterLocation());
+	pOut->DrawConnection(m_GfxInfo, DstPin->getPosition(), DstPin->getComponent()->getCenterLocation(), getCellsBeforeAddingConnection(), false);
 }
 
 
