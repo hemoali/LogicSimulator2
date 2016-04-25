@@ -9,7 +9,6 @@ class Component
 private:
 	string m_Label;
 	bool deleted;
-	bool deletedOnce; 
 	image* smallCleanImageBeforeAddingComp;
 	int m_Inputs;		//No. of input pins of that Gate.
 	static int lastID;
@@ -37,9 +36,6 @@ public:
 	void setDelete(bool d);
 	bool getDelete();
 	
-	void setDeletedOnce(bool d);
-	bool getDeleteOnce();
-
 	void setID(int id);
 	int getID();
 

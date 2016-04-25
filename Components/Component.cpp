@@ -11,7 +11,6 @@ Component::Component(const GraphicsInfo &r_GfxInfo, int r_FanOut) :m_OutputPin(r
 	m_CenterInfo.y1 = m_GfxInfo.y1 + UI.GATE_Height / 2;
 
 	deleted = false;
-	deletedOnce = false;
 	smallCleanImageBeforeAddingComp = NULL;
 }
 Component::Component(const GraphicsInfo & r_GfxInfo) :m_OutputPin(0), ID(++lastID)
@@ -31,16 +30,6 @@ void Component::setDelete(bool d){
 	deleted = d;
 }
 bool Component::getDelete(){ return deleted; }
-
-void Component::setDeletedOnce(bool d)
-{
-	deletedOnce = d;
-}
-
-bool Component::getDeleteOnce()
-{
-	return deletedOnce;
-}
 
 void Component::setID(int id)
 {

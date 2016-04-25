@@ -1,14 +1,12 @@
 #pragma once
 #include "Action.h"
 #include "../Components/Gate.h"
-//TODO:::
 class RightClick : public Action
 {
 private:
 	ActionType SelectedAction;
 	int actionNum;
 	Component* C;
-
 public:
 
 	RightClick(ApplicationManager*);
