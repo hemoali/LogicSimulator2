@@ -24,11 +24,11 @@ Output::Output(ApplicationManager* pManager)
 	UI.ConnColor = BROWN;
 	UI.HumpColor = BLACK;
 	UI.SelectedHumpColor = DARKBLUE;// color(23, 79, 181);
-	
+
 	UI.MsgColor = BLUE;
 	UI.ErrorColor = RED;
 	UI.BkGrndColor = WHITE;
-	
+
 	//Create the drawing window
 	pWind = CreateWind(UI.width, UI.height, UI.wx, UI.wy);
 	ChangeTitle("Programming Techniques Project");
@@ -233,7 +233,7 @@ bfs_node* Output::bfs(bfs_node* bf, int requX, int requY, vector<bfs_node*> allN
 		if (tmp->x == requX && tmp->y == requY) {
 			return tmp;
 		}
-		if (Utils::CheckPointInBorders((tmp->x + 1)* UI.GRID_SIZE, tmp->y * UI.GRID_SIZE) && tmp->x + 1 <= 74 && vis[tmp->y][tmp->x + 1] < 0 && Output::usedPixels[tmp->y][tmp->x + 1] != INTERSECTION && (Output::usedPixels[tmp->y][tmp->x + 1] == EMPTY || ((Output::usedPixels[tmp->y][tmp->x] == EMPTY || Output::usedPixels[tmp->y][tmp->x] == PIN || Output::usedPixels[tmp->y][tmp->x] == VERTICAL) && ((tmp->y == requY && tmp->x + 1 == requX-1 && Output::usedPixels[tmp->y][tmp->x + 1] == VERTICAL && Output::usedPixels[tmp->y][tmp->x + 2] == PIN) ||(tmp->y == requY && tmp->x + 1 == requX && Output::usedPixels[tmp->y][tmp->x + 1] == PIN))) || (Output::usedPixels[tmp->y][tmp->x + 1] == VERTICAL && Output::usedPixels[tmp->y][tmp->x + 1] != END_CONNECTION)))
+		if (Utils::CheckPointInBorders((tmp->x + 1)* UI.GRID_SIZE, tmp->y * UI.GRID_SIZE) && tmp->x + 1 <= 74 && vis[tmp->y][tmp->x + 1] < 0 && Output::usedPixels[tmp->y][tmp->x + 1] != INTERSECTION && (Output::usedPixels[tmp->y][tmp->x + 1] == EMPTY || ((Output::usedPixels[tmp->y][tmp->x] == EMPTY || Output::usedPixels[tmp->y][tmp->x] == PIN || Output::usedPixels[tmp->y][tmp->x] == VERTICAL) && ((tmp->y == requY && tmp->x + 1 == requX - 1 && Output::usedPixels[tmp->y][tmp->x + 1] == VERTICAL && Output::usedPixels[tmp->y][tmp->x + 2] == PIN) || (tmp->y == requY && tmp->x + 1 == requX && Output::usedPixels[tmp->y][tmp->x + 1] == PIN))) || (Output::usedPixels[tmp->y][tmp->x + 1] == VERTICAL && Output::usedPixels[tmp->y][tmp->x + 1] != END_CONNECTION)))
 		{
 			vis[tmp->y][tmp->x + 1] = vis[tmp->y][tmp->x] + 1;
 			bfs_node* newNode = new bfs_node;
@@ -490,45 +490,45 @@ bool Output::DrawConnection(GraphicsInfo GfxInfo, int inputPin, GraphicsInfo com
 	return true;
 }
 
-void Output::DrawRClickMenu_CorrectPoints(int& x, int& y, int type,bool draw)
+void Output::DrawRClickMenu_CorrectPoints(int& x, int& y, int type, bool draw)
 {
 	string imageURL;
-	if(draw)
-	switch (type) {
-	case 1: //The Gate SubMenu
-		imageURL = "images\\Menu\\RightClickMenu.jpg";
-		break;
-	default:
-		break;
-	}
-	//If Point (x,y) in the Right or Middle of the Drawing Area
-	if (x + UI.RightClickMenuLength < UI.width ) {
-		 if (y + UI.RightClickMenuWidth > UI.height - UI.StatusBarHeight) {
-			 // y must be corrected
-			 y =  y - UI.RightClickMenuWidth;
-			 if(draw)
-			 pWind->DrawImage(imageURL, x, y, UI.RightClickMenuLength, UI.RightClickMenuWidth);
+	if (draw)
+		switch (type) {
+		case 1: //The Gate SubMenu
+			imageURL = "images\\Menu\\RightClickMenu.jpg";
+			break;
+		default:
+			break;
 		}
-		 else{
-			 //The Point(x,y) is ready for drawing Menu 
-			 if(draw)
-			 pWind->DrawImage(imageURL, x, y, UI.RightClickMenuLength, UI.RightClickMenuWidth);
-		 }
+	//If Point (x,y) in the Right or Middle of the Drawing Area
+	if (x + UI.RightClickMenuLength < UI.width) {
+		if (y + UI.RightClickMenuWidth > UI.height - UI.StatusBarHeight) {
+			// y must be corrected
+			y = y - UI.RightClickMenuWidth;
+			if (draw)
+				pWind->DrawImage(imageURL, x, y, UI.RightClickMenuLength, UI.RightClickMenuWidth);
+		}
+		else {
+			//The Point(x,y) is ready for drawing Menu 
+			if (draw)
+				pWind->DrawImage(imageURL, x, y, UI.RightClickMenuLength, UI.RightClickMenuWidth);
+		}
 	}
 	//If Point (x,y) in the Left of the Drawing Area
-	if (x + UI.RightClickMenuLength > UI.width ) {
+	if (x + UI.RightClickMenuLength > UI.width) {
 		// x must be corrected
 		x = UI.width - UI.RightClickMenuWidth - 40;
 		if (y + UI.RightClickMenuWidth > UI.height - UI.StatusBarHeight) {
 			// y must be corrected
 			y = y - UI.RightClickMenuWidth;
-			if(draw)
-			pWind->DrawImage(imageURL, x, y, UI.RightClickMenuLength, UI.RightClickMenuWidth);
+			if (draw)
+				pWind->DrawImage(imageURL, x, y, UI.RightClickMenuLength, UI.RightClickMenuWidth);
 		}
 		else {
 			//The Point(x,y) is ready for drawing Menu 
-			if(draw)
-			pWind->DrawImage(imageURL, x, y, UI.RightClickMenuLength, UI.RightClickMenuWidth);
+			if (draw)
+				pWind->DrawImage(imageURL, x, y, UI.RightClickMenuLength, UI.RightClickMenuWidth);
 		}
 	}
 }
@@ -606,7 +606,7 @@ void Output::changeConnectionColor(Connection * connection, color Color) {
 						PreviousIsIntersection = false;
 						pWind->DrawLine(cell.x * UI.GRID_SIZE - 6, cell.y*UI.GRID_SIZE, cell.x * UI.GRID_SIZE - 10, cell.y*UI.GRID_SIZE);
 					}
-					if (Color == UI.SelectColor) pWind->SetPen(UI.SelectedHumpColor,2);else if(Color == UI.ConnColor) pWind->SetPen(UI.HumpColor, 2);
+					if (Color == UI.SelectColor) pWind->SetPen(UI.SelectedHumpColor, 2); else if (Color == UI.ConnColor) pWind->SetPen(UI.HumpColor, 2);
 					pWind->DrawBezier(cell.x * UI.GRID_SIZE - 10, cell.y*UI.GRID_SIZE, cell.x * UI.GRID_SIZE - 14, cell.y*UI.GRID_SIZE - 6, cell.x * UI.GRID_SIZE - 18, cell.y*UI.GRID_SIZE - 8, cell.x * UI.GRID_SIZE - 22, cell.y*UI.GRID_SIZE);
 					pWind->SetPen(Color, 2);
 					if (j + 2 < connection->getCellsBeforeAddingConnection().size() && arrayOfIntersections[connection->getCellsBeforeAddingConnection()[j + 2].y][connection->getCellsBeforeAddingConnection()[j + 2].x] != 0)
@@ -651,7 +651,7 @@ void Output::changeConnectionColor(Connection * connection, color Color) {
 					else {
 						PreviousIsIntersection2 = false;
 						pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE + 6, cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE + 10);
-					}				
+					}
 					if (Color == UI.SelectColor) pWind->SetPen(UI.SelectedHumpColor, 2); else if (Color == UI.ConnColor) pWind->SetPen(UI.HumpColor, 2);
 					pWind->DrawBezier(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE + 10, cell.x * UI.GRID_SIZE + 6, cell.y*UI.GRID_SIZE + 14, cell.x * UI.GRID_SIZE + 8, cell.y*UI.GRID_SIZE + 18, cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE + 22);
 					pWind->SetPen(Color, 2);
@@ -706,7 +706,7 @@ void Output::changeConnectionColor(Connection * connection, color Color) {
 
 					}
 					else if (PreviousIsIntersection2) {
-						pWind->DrawLine(cell.x * UI.GRID_SIZE , cell.y*UI.GRID_SIZE - ((b2) ? 6 : -6), cell2.x * UI.GRID_SIZE, cell2.y*UI.GRID_SIZE);
+						pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE - ((b2) ? 6 : -6), cell2.x * UI.GRID_SIZE, cell2.y*UI.GRID_SIZE);
 
 					}
 					else {
@@ -731,7 +731,7 @@ void Output::changeConnectionColor(Connection * connection, color Color) {
 					}
 				}
 
-				
+
 				PreviousIsIntersection = PreviousIsIntersection2 = false;
 				Vertical0Horizontal1Nothing2 = 2;
 			}
@@ -753,7 +753,7 @@ void Output::clearConnections(vector<Connection*>& allConnections, int originalX
 			{
 				setArrayOfComponents(allConnections[i]->getCellsBeforeAddingConnection()[j].y, allConnections[i]->getCellsBeforeAddingConnection()[j].x, NULL);
 			}
-			
+
 			Cell& cell = allConnections[i]->getCellsBeforeAddingConnection()[j];
 			int Vertical0Horizontal1Nothing2 = 2;
 
@@ -846,7 +846,7 @@ void Output::clearConnections(vector<Connection*>& allConnections, int originalX
 					}
 				}
 				//clear input pin small lines
-				if(!isInput) {
+				if (!isInput) {
 					originalY = allConnections[i]->getDestPin()->getComponent()->getCenterLocation().y1;
 					originalX = allConnections[i]->getDestPin()->getComponent()->getCenterLocation().x1;
 				}
@@ -885,7 +885,7 @@ void Output::clearConnections(vector<Connection*>& allConnections, int originalX
 				}
 				connectionsCountAtPixel[cell.y][cell.x] -= ((connectionsCountAtPixel[cell.y][cell.x] > 0) ? 1 : 0);
 			}
-			else if (j != allConnections[i]->getCellsBeforeAddingConnection().size() - 1 && j !=0) {
+			else if (j != allConnections[i]->getCellsBeforeAddingConnection().size() - 1 && j != 0) {
 				usedPixels[cell.y][cell.x] = EMPTY;
 			}
 			if (j == allConnections[i]->getCellsBeforeAddingConnection().size() - 1) {
@@ -902,7 +902,7 @@ void Output::clearConnections(vector<Connection*>& allConnections, int originalX
 					usedPixels[cell.y][cell.x] = PIN;
 				}
 			}
-			
+
 		}
 		// clear connection
 		allConnections[i]->getCellsBeforeAddingConnection().clear();
@@ -1364,6 +1364,210 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 	delete storedImg;
 	return draw;
 }
+bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMovingComponent, vector< pair<int, Component*> > allSelectedComponents) {
+	PrintMsg("Please select point within workspace and avoid overlaping!, press ESCAPE to stop");
+	int successfullyDrawnComponentsCount = 0;
+	image* storedImg = new image;
+	image* storedDrawingImg = new image;
+	vector <pair <int, int> > xyOld, RectULXY;
+	vector<image*> allSmallCleanImages;
+	Utils::correctPointClicked(currentX, currentY, true, false);
+
+	for (size_t i = 0; i < allSelectedComponents.size(); i++)
+	{
+		Component* comp = allSelectedComponents[i].second;
+		int iXOld = currentX + (allSelectedComponents[i].second->getCenterLocation().x1 - mainMovingComponent->getCenterLocation().x1);
+		int iYOld = currentY + (allSelectedComponents[i].second->getCenterLocation().y1 - mainMovingComponent->getCenterLocation().y1);
+		int RectULX = iXOld - UI.GATE_Width / 2;
+		int RectULY = iYOld - UI.GATE_Height / 2;
+		xyOld.push_back(make_pair(iXOld, iYOld));
+		RectULXY.push_back(make_pair(RectULX, RectULY));
+		allSmallCleanImages.push_back(NULL);
+
+		int originalX = comp->getCenterLocation().x1;
+		int originalY = comp->getCenterLocation().y1;
+		vector<Connection*> allInputConnections, allOutputConnections;
+
+		comp->getAllInputConnections(allInputConnections);
+		comp->getAllOutputConnections(allOutputConnections);
+		
+		clearConnections(allInputConnections, originalX, originalY, true);
+		clearConnections(allOutputConnections, originalX, originalY, false);
+
+	}
+	pWind->StoreImage(storedImg, 0, 0, pWind->GetWidth(), pWind->GetHeight());
+	pWind->StoreImage(storedDrawingImg, 0, UI.ToolBarHeight, pWind->GetWidth(), pWind->GetHeight() - UI.StatusBarHeight);
+	
+	pWind->SetPen(UI.SelectColor, 2);
+	while (true)
+	{
+		for (size_t i = 0; i < allSelectedComponents.size(); i++)
+		{
+			int noOfTotalConnections = 0;
+			int drawnConnectionsCount = 0;
+
+			int x, y;
+			pWind->GetMouseCoord(x, y);
+			x += (allSelectedComponents[i].second->getCenterLocation().x1 - mainMovingComponent->getCenterLocation().x1);
+			y += (allSelectedComponents[i].second->getCenterLocation().y1 - mainMovingComponent->getCenterLocation().y1);
+			bool wrong = false;
+			Utils::correctPointClicked(x, y, true, false);
+			if (x != xyOld[i].first || y != xyOld[i].second)
+			{
+				vector<Connection*> allInputConnections, allOutputConnections;
+
+				allSelectedComponents[i].second->getAllInputConnections(allInputConnections);
+				allSelectedComponents[i].second->getAllOutputConnections(allOutputConnections);
+
+				for (size_t i = 0; i < allOutputConnections.size(); i++)
+				{
+					for (size_t j = 0; j < allOutputConnections[i]->getCellsBeforeAddingConnection().size(); j++)
+					{
+						Cell cell = allOutputConnections[i]->getCellsBeforeAddingConnection()[j];
+						int Vertical0Horizontal1Nothing2 = 2;
+
+						// Clear intersected connections
+						if (j < allOutputConnections[i]->getCellsBeforeAddingConnection().size() - 1)
+						{
+							Vertical0Horizontal1Nothing2 = 2;
+							Cell& cell2 = allOutputConnections[i]->getCellsBeforeAddingConnection()[j + 1];
+
+							// Connection under connection
+							if (usedPixels[cell.y][cell.x] == INTERSECTION && cell.cellType == EMPTY && arrayOfCorners[cell.y][cell.x] == 0) {
+
+								/*if (j - 1 >= 0 && allOutputConnections[i]->getCellsBeforeAddingConnection()[j - 1].y == cell.y)
+								{
+								Vertical0Horizontal1Nothing2 = 1;
+								}
+								else*/ if (cell2.y == cell.y)
+								{
+									Vertical0Horizontal1Nothing2 = 1;
+								}
+								else {
+									Vertical0Horizontal1Nothing2 = 0;
+								}
+
+							}
+							//Clear other connections intersections
+							if (Vertical0Horizontal1Nothing2 == 0 || Vertical0Horizontal1Nothing2 == 1)
+							{
+								vector<Connection*> allConnections;
+								pManager->getAllConnections(allConnections);
+
+								for (size_t k = 0; k < allConnections.size(); k++)
+								{
+									for (size_t l = 0; l < allConnections[k]->getCellsBeforeAddingConnection().size(); l++)
+									{
+										if (allConnections[k] != allOutputConnections[i] && allConnections[k]->getCellsBeforeAddingConnection()[l].x == cell.x && allConnections[k]->getCellsBeforeAddingConnection()[l].y == cell.y)
+										{
+											allConnections[k]->getCellsBeforeAddingConnection()[l].cellType = EMPTY;
+										}
+									}
+								}
+							}
+						}
+						// Clear Grid
+						arrayOfIntersections[cell.y][cell.x] = -1;
+						arrayOfCorners[cell.y][cell.x] = 0;
+						if (cell.cellType != PIN)
+						{
+							usedPixels[cell.y][cell.x] = cell.cellType;
+							connectionsCountAtPixel[cell.y][cell.x] -= ((connectionsCountAtPixel[cell.y][cell.x] > 0) ? 1 : 0);
+						}
+						else if (j != allOutputConnections[i]->getCellsBeforeAddingConnection().size() - 1 && j != 0) {
+							usedPixels[cell.y][cell.x] = EMPTY;
+						}
+					}
+					allOutputConnections[i]->getCellsBeforeAddingConnection().clear();
+				}
+				for (size_t i = 0; i < allInputConnections.size(); i++)
+				{
+					for (size_t j = 0; j < allInputConnections[i]->getCellsBeforeAddingConnection().size(); j++)
+					{
+						Cell cell = allInputConnections[i]->getCellsBeforeAddingConnection()[j];
+						int Vertical0Horizontal1Nothing2 = 2;
+
+						// Clear intersected connections
+						if (j < allInputConnections[i]->getCellsBeforeAddingConnection().size() - 1)
+						{
+							Vertical0Horizontal1Nothing2 = 2;
+							Cell& cell2 = allInputConnections[i]->getCellsBeforeAddingConnection()[j + 1];
+
+							// Connection under connection
+							if (usedPixels[cell.y][cell.x] == INTERSECTION && cell.cellType == EMPTY && arrayOfCorners[cell.y][cell.x] == 0) {
+
+								/*if (j - 1 >= 0 && allInputConnections[i]->getCellsBeforeAddingConnection()[j - 1].y == cell.y)
+								{
+								Vertical0Horizontal1Nothing2 = 1;
+								}
+								else*/ if (cell2.y == cell.y)
+								{
+									Vertical0Horizontal1Nothing2 = 1;
+								}
+								else {
+									Vertical0Horizontal1Nothing2 = 0;
+								}
+
+							}
+							//Clear other connections intersections
+							if (Vertical0Horizontal1Nothing2 == 0 || Vertical0Horizontal1Nothing2 == 1)
+							{
+								vector<Connection*> allConnections;
+								pManager->getAllConnections(allConnections);
+
+								for (size_t k = 0; k < allConnections.size(); k++)
+								{
+									for (size_t l = 0; l < allConnections[k]->getCellsBeforeAddingConnection().size(); l++)
+									{
+										if (allConnections[k] != allInputConnections[i] && allConnections[k]->getCellsBeforeAddingConnection()[l].x == cell.x && allConnections[k]->getCellsBeforeAddingConnection()[l].y == cell.y)
+										{
+											allConnections[k]->getCellsBeforeAddingConnection()[l].cellType = EMPTY;
+										}
+									}
+								}
+							}
+						}
+						arrayOfIntersections[cell.y][cell.x] = -1;
+						arrayOfCorners[cell.y][cell.x] = 0;
+						if (cell.cellType != PIN || (allInputConnections[i]->getCellsBeforeAddingConnection()[allInputConnections[i]->getCellsBeforeAddingConnection().size() - 1].cellType == PIN && allInputConnections[i]->getCellsBeforeAddingConnection()[allInputConnections[i]->getCellsBeforeAddingConnection().size() - 2].cellType == PIN && (j == allInputConnections[i]->getCellsBeforeAddingConnection().size() - 2)))
+						{
+							usedPixels[cell.y][cell.x] = cell.cellType;
+							connectionsCountAtPixel[cell.y][cell.x] -= ((connectionsCountAtPixel[cell.y][cell.x] > 0) ? 1 : 0);
+
+						}
+					}
+					allInputConnections[i]->getCellsBeforeAddingConnection().clear();
+				}
+
+				if (!Utils::CheckPoint({ x,y }, usedPixels, true, false)) {
+					wrong = true;
+				}
+				else {
+					wrong = false;
+				}
+
+				if (Utils::CheckPoint(x, y, usedPixels)) {
+					pWind->DrawImage(storedDrawingImg, 0, UI.ToolBarHeight, pWind->GetWidth(), pWind->GetHeight() - UI.StatusBarHeight);
+
+					if (x != xyOld[i].first) {
+						RectULXY[i].first = RectULXY[i].first + (x - xyOld[i].first);
+						xyOld[i].first = x;
+					}
+					if (y != xyOld[i].second) {
+						RectULXY[i].second = RectULXY[i].second + (y - xyOld[i].second);
+						xyOld[i].second= y;
+					}
+					GraphicsInfo Gfx;
+					Gfx.x1 = RectULXY[i].first + UI.GATE_Width / 2;
+					Gfx.y1 = RectULXY[i].second + UI.GATE_Height / 2;
+					pWind->StoreImage(allSmallCleanImages[i], Gfx.x1 - UI.GRID_SIZE - 5, Gfx.y1 - UI.GRID_SIZE - 5, 2 * UI.GRID_SIZE + 4, UI.GATE_Height + 3);
+					
+				}
+			}
+		}
+	}
+}
+
 void Output::printMatrix(string msg) {
 	cout << msg << endl;
 	for (size_t i = 0; i < 44; i++)
@@ -1446,7 +1650,7 @@ void Output::DrawNot_Buffer(GraphicsInfo g, bool isBuffer, bool highlighted, boo
 	iny = outy = cy;
 
 	pWind->SetPen(UI.DrawColor);
-	if (highlighted) pWind->SetPen(UI.SelectColor); 
+	if (highlighted) pWind->SetPen(UI.SelectColor);
 	if (notValid) pWind->SetPen(UI.ErrorColor);
 
 	if (isBuffer) {
@@ -1607,7 +1811,7 @@ void Output::DrawLed(GraphicsInfo g, bool isON, bool highlighted, bool notValid)
 {
 	pWind->SetPen(UI.DrawColor);
 	if (highlighted) pWind->SetPen(UI.SelectColor);
-	if (notValid) pWind->SetPen(UI.ErrorColor); 
+	if (notValid) pWind->SetPen(UI.ErrorColor);
 	int cx = g.x1, cy = g.y1, radius = 12; //Centre Points
 	if (!isON)
 	{
@@ -1639,7 +1843,7 @@ void Output::DrawSwtich(GraphicsInfo g, bool isON, bool highlighted, bool notVal
 {
 	pWind->SetPen(UI.DrawColor);
 	if (highlighted) pWind->SetPen(UI.SelectColor);
-	if (notValid) pWind->SetPen(UI.ErrorColor); 
+	if (notValid) pWind->SetPen(UI.ErrorColor);
 	int cx = g.x1, cy = g.y1; //Centre Points
 							  //the rectangle
 	if (isON)

@@ -9,7 +9,7 @@ class Utils
 public:
 	Utils();
 	static void correctPointClicked(int &, int &, bool DrawGate = false, bool DrawConnection = false);
-	static bool CheckPoint(GraphicsInfo, CellType[44][74], bool isMoving = false, bool = true);
+	static bool CheckPoint(GraphicsInfo, CellType[44][74], bool isMoving = false, bool fillArray = true);
 	static bool CheckPoint(int x, int y, CellType[44][74]);
 	static bool CheckPointInBorders(int x, int y);
 	static GraphicsInfo* Utils::getOutputDirections(GraphicsInfo GInfo, CellType usedPixels[44][74], int noOfOutputs = 4);
