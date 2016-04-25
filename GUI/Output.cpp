@@ -500,51 +500,126 @@ void Output::DrawRClickMenu_CorrectPoints(int& x, int& y, int type,bool draw)
 	case 1: //The Gate SubMenu
 		imageURL = "images\\Menu\\RightClickMenu.jpg";
 		break;
+	case 2: //The connection menu
+		imageURL = "images\\Menu\\RightClickMenuConnection.jpg";
+		break;
+	case 3:
+		imageURL = "images\\Menu\\RightClickMenuSpace.jpg";
+		break;
 	default:
+		break;
+	}
+	int Height; 
+	switch (type) 
+	{
+	case 1:
+		Height = UI.RightClickMenuHeight;
+		break;
+	case 2:
+		Height = UI.RightClickCMenuH;
+		break;
+	case 3:
+		Height = UI.RightClickCMenuH / 2;
 		break;
 	}
 	//If Point (x,y) in the Right or Middle of the Drawing Area
 	if (x + UI.RightClickMenuLength < UI.width ) {
-		 if (y + UI.RightClickMenuWidth > UI.height - UI.StatusBarHeight) {
+		 if (y + Height > UI.height - UI.StatusBarHeight) {
 			 // y must be corrected
-			 y =  y - UI.RightClickMenuWidth;
+			 y =  y - Height;
 			 if(draw)
-			 pWind->DrawImage(imageURL, x, y, UI.RightClickMenuLength, UI.RightClickMenuWidth);
+			 pWind->DrawImage(imageURL, x, y, UI.RightClickMenuLength, Height);
 		}
 		 else{
 			 //The Point(x,y) is ready for drawing Menu 
 			 if(draw)
-			 pWind->DrawImage(imageURL, x, y, UI.RightClickMenuLength, UI.RightClickMenuWidth);
+			 pWind->DrawImage(imageURL, x, y, UI.RightClickMenuLength, Height);
 		 }
 	}
-	//If Point (x,y) in the Left of the Drawing Area
+	//If Point (x,y) in the Right of the Drawing Area
 	if (x + UI.RightClickMenuLength > UI.width ) {
 		// x must be corrected
-		x = UI.width - UI.RightClickMenuWidth - 40;
-		if (y + UI.RightClickMenuWidth > UI.height - UI.StatusBarHeight) {
+		x = UI.width - UI.RightClickMenuLength - 40;
+		if (y + Height > UI.height - UI.StatusBarHeight) {
 			// y must be corrected
-			y = y - UI.RightClickMenuWidth;
+			y = y - Height;
 			if(draw)
-			pWind->DrawImage(imageURL, x, y, UI.RightClickMenuLength, UI.RightClickMenuWidth);
+			pWind->DrawImage(imageURL, x, y, UI.RightClickMenuLength, Height);
 		}
 		else {
 			//The Point(x,y) is ready for drawing Menu 
 			if(draw)
-			pWind->DrawImage(imageURL, x, y, UI.RightClickMenuLength, UI.RightClickMenuWidth);
+			pWind->DrawImage(imageURL, x, y, UI.RightClickMenuLength, Height);
 		}
 	}
 }
 
-image * Output::StoreBeforeMenu(int x, int y)
+void Output::DeleteGate(Component * C)
 {
+	Output *pOut = this;
+	string s = "Gate: " + (C->getLabel()) + " has been deleted successfully";
+	pOut->PrintMsg(s);
+	C->setDelete(true);
+	C->Draw(pOut);
+	GraphicsInfo gfx = C->getCornersLocation();
+	int xbegin = (C->getCenterLocation().x1 - UI.GATE_Width / 2.0) / UI.GRID_SIZE;
+	int xend = (C->getCenterLocation().x1 + UI.GATE_Width / 2.0) / UI.GRID_SIZE;
+	int ybegin = (C->getCenterLocation().y1 - UI.GATE_Height / 2.0) / UI.GRID_SIZE;
+	int yend = (C->getCenterLocation().y1 + UI.GATE_Height / 2.0) / UI.GRID_SIZE;
+	for (int i = ybegin + 1; i <= yend; i++)
+	{
+		for (int j = xbegin; j <= xend; j++)
+		{
+			pOut->setUsedPixel(i, j, EMPTY);
+		}
+	}
+
+	// Removing Connection
+	vector<Connection*> allInConnections, allOutConnections;
+	C->getAllInputConnections(allInConnections);
+	C->getAllOutputConnections(allOutConnections);
+
+	pOut->clearConnections(allInConnections, C->getCenterLocation().x1, C->getCenterLocation().y1, true, true);
+	pOut->clearConnections(allOutConnections, C->getCenterLocation().x1, C->getCenterLocation().y1, false, true);
+
+}
+
+image * Output::StoreBeforeMenu(int x, int y, int type)
+{
+	int Height;
+	switch (type)
+	{
+	case 1:
+		Height = UI.RightClickMenuHeight;
+		break;
+	case 2:
+		Height = UI.RightClickCMenuH;
+		break;
+	case 3:
+		Height = UI.RightClickCMenuH / 2;
+		break;
+	}
 	image * ptr = new image;
-	pWind->StoreImage(ptr, x, y, UI.RightClickMenuLength, UI.RightClickMenuWidth);
+	pWind->StoreImage(ptr, x, y, UI.RightClickMenuLength, Height);
 	return ptr;
 }
 
-void Output::DrawAfterMenu(image * img, int x, int y)
+void Output::DrawAfterMenu(image * img, int x, int y, int type)
 {
-	pWind->DrawImage(img, x, y, UI.RightClickMenuLength, UI.RightClickMenuWidth);
+	int Height;
+	switch (type)
+	{
+	case 1:
+		Height = UI.RightClickMenuHeight;
+		break;
+	case 2:
+		Height = UI.RightClickCMenuH;
+		break;
+	case 3:
+		Height = UI.RightClickCMenuH / 2;
+		break;
+	}
+	pWind->DrawImage(img, x, y, UI.RightClickMenuLength, Height);
 }
 
 

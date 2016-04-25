@@ -46,10 +46,14 @@ public:
 	void DrawCleanImage(image*, int x,int y);
 	bool DrawConnection(GraphicsInfo r_GfxInfo, int inputPin, GraphicsInfo compCenterLocationbool, vector<Cell>&, bool selected = false) const;
 	void DrawRClickMenu_CorrectPoints(int& x, int& y, int type, bool = true);
-	image* StoreBeforeMenu(int, int);
-	void DrawAfterMenu(image* img,int x, int y);
-	bfs_node* bfs(bfs_node* bf, int requX, int requY, vector<bfs_node*> allNodes) const;
 	
+	void DeleteGate(Component* C);
+
+	image* StoreBeforeMenu(int, int,int );
+	void DrawAfterMenu(image* img,int x, int y,int type);
+	
+	bfs_node* bfs(bfs_node* bf, int requX, int requY, vector<bfs_node*> allNodes) const;
+
 	void clearConnections(vector<Connection*> & allConnections, int originalX, int originalY, bool isInput, bool setDeleted = false);
 	void changeConnectionColor(Connection * connection, color Color = BLUE);
 	void PrintMsg(string msg, color Color = UI.MsgColor) const;	//Print a message on Status bar

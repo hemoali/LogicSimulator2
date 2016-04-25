@@ -49,11 +49,12 @@ enum ActionType
 			
 	MOVE,		//Move a Component, a Connection
 
-	CUT,
+	
 	COPY,
+	CUT,
 	PASTE,
-	DEL, //Delete a Component, a Connection
 	EDIT_Label,	//Edit Label of a Component, a Connection
+	DEL, //Delete a Component, a Connection
 
 	SAVE,		//Save the whole Circuit to a file
 	LOAD,		//Load a Circuit from a file
