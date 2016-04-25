@@ -15,6 +15,7 @@
 #include"Actions\AddConnection.h"
 #include "Actions\Select.h"
 #include "Actions\Move.h"
+#include "Actions\MultiMove.h"
 #include "Actions\RightClick.h"
 #include"Actions\Save.h"
 #include"Actions\Load.h"
@@ -99,6 +100,9 @@ void ApplicationManager::ExecuteAction(ActionType ActType)
 		break;
 	case MOVE:
 		pAct = new Move(this);
+		break;
+	case MULTI_MOVE:
+		pAct = new MultiMove(this);
 		break;
 	case RIGHT_CLICKSELECT:
 		pAct = new RightClick(this);

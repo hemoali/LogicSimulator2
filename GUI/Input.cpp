@@ -5,6 +5,7 @@
 Input::Input(window* pW)
 {
 	pWind = pW; //point to the passed window
+	isSelectMode = false;
 }
 
 void Input::GetPointClicked(int &x, int &y, bool DrawGate, bool DrawConnection)
@@ -23,34 +24,8 @@ void Input::getMouseCoordinates(int & x, int & y)
 	pWind->GetMouseCoord(x, y);
 	pWind->FlushMouseQueue();
 }
-buttonstate Input::GetButtonStatus(const button btMouse, int &iX, int &iY) const {
-	return pWind->GetButtonState(btMouse, iX, iY);
-}
-string Input::GetSrting(Output *pOut, string sOriginal = "")
-{
-	string s = "";
-	char ch;
-	keytype k;
-	while ((k = pWind->WaitKeyPress(ch)) != '\n' && (int)ch != 13) {
-		if (k == ESCAPE) {
-			s = "";
-			pOut->PrintMsg(sOriginal);
-		}
-		else if (k == ASCII && (int)ch == 8) {
-			s = s.substr(0, s.size() - 1);
-		}
-		else if (k == ASCII && (int)ch != 27) {
-			s += ch;
-		}
-		pOut->PrintMsg(sOriginal + " " + s);
-	}
-	pOut->PrintMsg("");
-	pWind->FlushMouseQueue();
-	return s;
-}
-
 //This function reads the position where the user clicks to determine the desired action
-ActionType Input::GetUserAction(ApplicationManager *pManager) const
+ActionType Input::GetUserAction(ApplicationManager *pManager)
 {
 	int x = 0, y = 0, xT, yT, hoverXOld = 0, hoverYOld = 0;
 	clicktype s = LEFT_CLICK;
@@ -67,16 +42,40 @@ ActionType Input::GetUserAction(ApplicationManager *pManager) const
 					comp = pManager->getComponent(i);
 				}
 			}
-			//
 			if (comp != NULL &&comp->getDelete()) comp = NULL;
 
-			if (comp != NULL)
+			if (comp != NULL) {
+				if (isSelectMode)
+				{
+					for (size_t i = 0; i < selectedComponents.size(); i++)
+					{
+						if (selectedComponents[i].second == comp)
+							return MULTI_MOVE;
+					}
+				}
 				return MOVE;
-			else {
+			}
+			else {				
 				bool found = false;
 				vector <Connection*> allConnections;
 				pManager->getAllConnections(allConnections);
 
+				for (size_t i = 0; i < allConnections.size(); i++)
+				{
+					allConnections[i]->selectYourSelf(pManager->GetOutput(), UI.ConnColor);
+				}
+				if (isSelectMode)
+				{
+					for (size_t i = 0; i < selectedComponents.size(); i++)
+					{
+						selectedComponents[i].second->Draw(pManager->GetOutput(),false);
+					}
+					setSelectMode(false);
+					selectedComponents.clear();
+
+				}
+
+				
 				for (size_t i = 0; i < allConnections.size() && !found; i++)
 				{
 					for (size_t j = 0; j < allConnections[i]->getCellsBeforeAddingConnection().size() - 1; j++)
@@ -122,10 +121,6 @@ ActionType Input::GetUserAction(ApplicationManager *pManager) const
 
 				if (!found) {
 
-					for (size_t i = 0; i < allConnections.size(); i++)
-					{
-						allConnections[i]->selectYourSelf(pManager->GetOutput(), UI.ConnColor);
-					}
 					return MULTI_SELECT;
 				}
 			}
@@ -157,8 +152,7 @@ ActionType Input::GetUserAction(ApplicationManager *pManager) const
 			}
 		}
 	}
-
-
+	
 	if (UI.AppMode == DESIGN)	//application is in design mode
 	{
 		//[1] If user clicks on the Toolbar
@@ -274,9 +268,56 @@ ActionType Input::GetUserAction(ApplicationManager *pManager) const
 
 }
 
+
+buttonstate Input::GetButtonStatus(const button btMouse, int &iX, int &iY) const {
+	return pWind->GetButtonState(btMouse, iX, iY);
+}
+string Input::GetSrting(Output *pOut, string sOriginal = "")
+{
+	string s = "";
+	char ch;
+	keytype k;
+	while ((k = pWind->WaitKeyPress(ch)) != '\n' && (int)ch != 13) {
+		if (k == ESCAPE) {
+			s = "";
+			pOut->PrintMsg(sOriginal);
+		}
+		else if (k == ASCII && (int)ch == 8) {
+			s = s.substr(0, s.size() - 1);
+		}
+		else if (k == ASCII && (int)ch != 27) {
+			s += ch;
+		}
+		pOut->PrintMsg(sOriginal + " " + s);
+	}
+	pOut->PrintMsg("");
+	pWind->FlushMouseQueue();
+	return s;
+}
+
 void Input::WaitSelectionPoint(int &X, int &Y)
 {
 	pWind->WaitMouseClick(X, Y);
+}
+
+void Input::setSelectMode(bool b)
+{
+	isSelectMode = b;
+}
+
+bool Input::getSelectMode()
+{
+	return isSelectMode;
+}
+
+void Input::setSelectedComponents(vector<pair<int, Component*> > comp)
+{
+	selectedComponents = comp;
+}
+
+vector<pair<int, Component*> > Input::getSelectedComponents()
+{
+	return selectedComponents;
 }
 
 Input::~Input()

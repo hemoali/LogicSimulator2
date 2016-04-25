@@ -40,7 +40,6 @@ int Component::getID()
 {
 	return this->ID;
 }
-
 void Component::setSmallCleanImageBeforeAddingComp(image* i){
 	smallCleanImageBeforeAddingComp = i;
 }

@@ -48,7 +48,7 @@ enum ActionType
 	RIGHT_CLICKSELECT,
 			
 	MOVE,		//Move a Component, a Connection
-
+	MULTI_MOVE,
 	CUT,
 	COPY,
 	PASTE,

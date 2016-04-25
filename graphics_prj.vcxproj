@@ -142,6 +142,7 @@
     <ClCompile Include="Actions\AddXORgate3.cpp" />
     <ClCompile Include="Actions\Load.cpp" />
     <ClCompile Include="Actions\Move.cpp" />
+    <ClCompile Include="Actions\MultiMove.cpp" />
     <ClCompile Include="Actions\MultiSelect.cpp" />
     <ClCompile Include="Actions\RightClick.cpp" />
     <ClCompile Include="Actions\Save.cpp" />
@@ -241,6 +242,7 @@
     <ClInclude Include="Actions\Action.h" />
     <ClInclude Include="Actions\Load.h" />
     <ClInclude Include="Actions\Move.h" />
+    <ClInclude Include="Actions\MultiMove.h" />
     <ClInclude Include="Actions\MultiSelect.h" />
     <ClInclude Include="Actions\RightClick.h" />
     <ClInclude Include="Actions\Save.h" />
