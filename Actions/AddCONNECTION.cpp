@@ -104,13 +104,22 @@ void AddConnection::Execute()
 			if (pManager->GetOutput()->DrawConnection(GInfo, numOfInputs, inputComponent->getCenterLocation(), cellsBeforeAddingConnection) && !(outputComponent->getOutputPin()->connectedConnectionsCount() == FANOUT))
 			{
 				Connection *pA = new Connection(GInfo, outputComponent->getOutputPin(), inputComponent->getInputPin(inputPin));
-				pManager->AddComponent(pA);pA->setLabel(gateLabel);
+				pManager->AddComponent(pA);
 				pManager->allComponentsCorners.push_back(GInfo);
 				pA->setCellsBeforeAddingConnection(cellsBeforeAddingConnection);
 				outputComponent->getOutputPin()->ConnectTo(pA);
 				inputComponent->getInputPin(inputPin)->setConnection(pA);
 				inputComponent->getInputPin(inputPin)->setPosition(numOfInputs);
 				
+				string s = "Please enter connection label: ";
+				pManager->GetOutput()->PrintMsg(s);
+				gateLabel = pManager->GetInput()->GetSrting(pManager->GetOutput(), s);
+				pA->setLabel(gateLabel);
+				pA->setIsDrawn(true);
+				for (size_t i = 0; i < cellsBeforeAddingConnection.size(); i++)
+				{
+					pManager->GetOutput()->setArrayOfComponents(cellsBeforeAddingConnection[i].y, cellsBeforeAddingConnection[i].x, pA);
+				}
 			}
 			else{
 				pManager->GetOutput()->PrintMsg("No Available Connection");

@@ -1,6 +1,7 @@
 #include "Input.h"
 #include "Output.h"
 #include "..\Utils.h"
+#include <iostream>
 Input::Input(window* pW)
 {
 	pWind = pW; //point to the passed window
@@ -46,7 +47,9 @@ string Input::GetSrting(Output *pOut, string sOriginal = "")
 //This function reads the position where the user clicks to determine the desired action
 ActionType Input::GetUserAction(ApplicationManager *pManager) const
 {
-	int x = 0, y = 0, xT, yT;
+	int x = 0, y = 0, xT, yT, hoverXOld = 0, hoverYOld = 0;
+	clicktype s = LEFT_CLICK;
+	Component* preComp = NULL;
 	while (true) {
 		if (pWind->GetButtonState(LEFT_BUTTON, xT, yT) == BUTTON_DOWN && yT >= UI.ToolBarHeight && yT < UI.height - UI.StatusBarHeight) {
 			Component* comp = NULL;
@@ -112,7 +115,7 @@ ActionType Input::GetUserAction(ApplicationManager *pManager) const
 					}
 				}
 
-				if(!found) {
+				if (!found) {
 
 					for (size_t i = 0; i < allConnections.size(); i++)
 					{
@@ -123,14 +126,33 @@ ActionType Input::GetUserAction(ApplicationManager *pManager) const
 			}
 		}
 		else {
-			break;
+			//Get the coordinates of the user click 
+			// We Called it with false argument inorder not to delete the click to be used in RightSelect
+			//Otherwise we call that function agian with true to delete that click 
+
+			if ((s = pWind->GetMouseClick(x, y, false)) != NO_CLICK)
+			{
+				break;
+			}
+			else {
+				int hoverX, hoverY;
+				pWind->GetMouseCoord(hoverX, hoverY);
+				Utils::correctPointClicked(hoverX, hoverY, true, false);
+				Component* comp = pManager->GetOutput()->getArrayOfComponents(hoverY / UI.GRID_SIZE, hoverX / UI.GRID_SIZE);
+				if (comp != NULL && comp != preComp)
+				{
+					pManager->GetOutput()->PrintMsg(comp->getLabel());
+				}
+				else if (comp == NULL) {
+					pManager->GetOutput()->PrintMsg("");
+				}
+				hoverYOld = hoverY;
+				hoverXOld = hoverX; 
+				preComp = comp;
+			}
 		}
 	}
 
-	clicktype s = LEFT_CLICK;
-	s = pWind->GetMouseClick(x, y, false);	//Get the coordinates of the user click 
-	// We Called it with false argument inorder not to delete the click to be used in RightSelect
-	//Otherwise we call that function agian with true to delete that click 
 
 	if (UI.AppMode == DESIGN)	//application is in design mode
 	{

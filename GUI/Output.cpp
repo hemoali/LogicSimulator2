@@ -10,6 +10,7 @@ CellType Output::usedPixels[44][74];
 int arrayOfIntersections[44][74];
 int arrayOfCorners[44][74];
 int connectionsCountAtPixel[44][74];
+Component* Output::arrayOfComponents[44][74];
 
 Output::Output(ApplicationManager* pManager)
 {
@@ -40,6 +41,7 @@ Output::Output(ApplicationManager* pManager)
 	memset(arrayOfIntersections, -1, sizeof arrayOfIntersections);
 	memset(arrayOfCorners, 0, sizeof arrayOfCorners);
 	memset(connectionsCountAtPixel, 0, sizeof connectionsCountAtPixel);
+	memset(arrayOfComponents, NULL, sizeof arrayOfComponents);
 
 	this->pManager = pManager;
 }
@@ -809,6 +811,11 @@ void Output::clearConnections(vector<Connection*>& allConnections, int originalX
 		}
 		for (size_t j = 0; j < allConnections[i]->getCellsBeforeAddingConnection().size(); j++)
 		{
+			if (getArrayOfComponents(allConnections[i]->getCellsBeforeAddingConnection()[j].y, allConnections[i]->getCellsBeforeAddingConnection()[j].x) == allConnections[i])
+			{
+				setArrayOfComponents(allConnections[i]->getCellsBeforeAddingConnection()[j].y, allConnections[i]->getCellsBeforeAddingConnection()[j].x, NULL);
+			}
+			
 			Cell& cell = allConnections[i]->getCellsBeforeAddingConnection()[j];
 			int Vertical0Horizontal1Nothing2 = 2;
 
@@ -1386,8 +1393,24 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 				GfxInfo.y1 = y;
 				Utils::correctPointClicked(GfxInfo.x1, GfxInfo.y1, true, false);
 				if (Utils::CheckPoint(GfxInfo, usedPixels, moving)) {
+					if (moving) // Reset connections on grid of pointers
+					{
+						for (size_t i = 0; i < allInputConnections.size(); i++)
+						{
+							for (size_t j = 0; j < allInputConnections[i]->getCellsBeforeAddingConnection().size(); j++)
+							{
+								pManager->GetOutput()->setArrayOfComponents(allInputConnections[i]->getCellsBeforeAddingConnection()[j].y, allInputConnections[i]->getCellsBeforeAddingConnection()[j].x, allInputConnections[i]);
+							}
+						}
+						for (size_t i = 0; i < allOutputConnections.size(); i++)
+						{
+							for (size_t j = 0; j < allOutputConnections[i]->getCellsBeforeAddingConnection().size(); j++)
+							{
+								pManager->GetOutput()->setArrayOfComponents(allOutputConnections[i]->getCellsBeforeAddingConnection()[j].y, allOutputConnections[i]->getCellsBeforeAddingConnection()[j].x, allOutputConnections[i]);
+							}
+						}
+					}
 					draw = true;
-
 					break;
 				}
 				else {
@@ -1396,7 +1419,7 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 			}
 		}
 	}
-	printMatrix("Final");
+	//printMatrix("Final");
 	pWind->FlushMouseQueue();
 	PrintMsg("");
 	delete storedDrawingImg;
@@ -1409,7 +1432,7 @@ void Output::printMatrix(string msg) {
 	{
 		for (size_t j = 0; j < 74; j++)
 		{
-			cout << usedPixels[i][j] << " ";
+			cout << arrayOfComponents[i][j] << " ";
 		}
 		cout << endl;
 	}
@@ -1698,6 +1721,21 @@ void Output::DrawSwtich(GraphicsInfo g, bool isON, bool highlighted, bool notVal
 }
 void Output::setUsedPixel(int i, int j, CellType c) {
 	usedPixels[i][j] = c;
+}
+
+CellType Output::getUsedPixel(int i, int j)
+{
+	return usedPixels[i][j];
+}
+
+void Output::setArrayOfComponents(int i, int j, Component * c)
+{
+	arrayOfComponents[i][j] = c;
+}
+
+Component * Output::getArrayOfComponents(int i, int j)
+{
+	return arrayOfComponents[i][j];
 }
 
 Output::~Output()

@@ -19,7 +19,6 @@ int main()
 
 		//Update the drawing window
 		//AppManager.UpdateInterface();
-	
 
 	}while(ActType != EXIT);
 		

@@ -7,6 +7,7 @@ Connection::Connection(const GraphicsInfo &r_GfxInfo, OutputPin *pSrcPin, InputP
 {
 	SrcPin = pSrcPin;
 	DstPin = pDstPin;
+	isDrawn = false;
 
 }
 void Connection::setSourcePin(OutputPin *pSrcPin)
@@ -39,9 +40,18 @@ void Connection::Operate()
 
 void Connection::Draw(Output* pOut, bool highlight)
 {
-	//pOut->DrawConnection(m_GfxInfo, DstPin->getPosition(), DstPin->getComponent()->getCenterLocation());
+	if (!isDrawn)
+	{
+		pOut->DrawConnection(m_GfxInfo, DstPin->getPosition(), DstPin->getComponent()->getCenterLocation(), getCellsBeforeAddingConnection(), false);
+		isDrawn = true;
+	}
 }
-
+void Connection::setIsDrawn(bool isDrawn) {
+	this->isDrawn = isDrawn;
+}
+bool Connection::getIsDrawn() {
+	return this->isDrawn;
+}
 
 void Connection::deleteConnection(Output* pOut) {
 	setDelete(true);
@@ -69,7 +79,7 @@ void Connection::setCellsBeforeAddingConnection(vector<Cell> cellsBeforeAddingCo
 {
 	for (size_t i = 0; i < cellsBeforeAddingConnection.size(); i++)
 	{
-		this->cellsBeforeAddingConnection.push_back({cellsBeforeAddingConnection[i].x ,cellsBeforeAddingConnection[i].y,cellsBeforeAddingConnection[i].cellType });
+		this->cellsBeforeAddingConnection.push_back({ cellsBeforeAddingConnection[i].x ,cellsBeforeAddingConnection[i].y,cellsBeforeAddingConnection[i].cellType });
 	}
 }
 
@@ -83,7 +93,7 @@ void Connection::selectYourSelf(Output* pOut, color Color) {
 
 void Connection::save(int id, ofstream & file)
 {
-	file << this->getSourcePin()->getComponent()->getID()<< "  " << this->getDestPin()->getComponent()->getID()<<"  " << this->getDestPin()->getPosition() << "\n";
+	file << this->getSourcePin()->getComponent()->getID() << "  " << this->getDestPin()->getComponent()->getID() << "  " << this->getDestPin()->getPosition() << "\n";
 }
 
 void Connection::load(ApplicationManager*pM)

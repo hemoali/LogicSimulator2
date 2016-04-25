@@ -56,6 +56,7 @@ void Move::Execute()
 				for (int j = xbegin; j <= xend; j++)
 				{
 					pOut->setUsedPixel(i, j, EMPTY);
+					pOut->setArrayOfComponents(i, j, NULL);
 				}
 			}
 			// Free related connections
@@ -140,6 +141,15 @@ void Move::Execute()
 				{
 					allInConnections[i]->selectYourSelf(pOut, UI.ConnColor);
 				}
+				int xbegin = (newCoor.x1 - UI.GATE_Width / 2.0) / UI.GRID_SIZE, xend = (newCoor.x1 + UI.GATE_Width / 2.0) / UI.GRID_SIZE, ybegin = (newCoor.y1 - UI.GATE_Height / 2.0) / UI.GRID_SIZE, yend = (newCoor.y1 + UI.GATE_Height / 2.0) / UI.GRID_SIZE;
+
+				for (int i = ybegin + 1; i <= yend; i++)
+				{
+					for (int j = xbegin; j <= xend; j++)
+					{
+						pManager->GetOutput()->setArrayOfComponents(i, j, Comp);
+					}
+				}
 			}
 			else {
 				int xbegin = (Comp->getCenterLocation().x1 - UI.GATE_Width / 2.0) / UI.GRID_SIZE, xend = (Comp->getCenterLocation().x1 + UI.GATE_Width / 2.0) / UI.GRID_SIZE, ybegin = (Comp->getCenterLocation().y1 - UI.GATE_Height / 2.0) / UI.GRID_SIZE, yend = (Comp->getCenterLocation().y1 + UI.GATE_Height / 2.0) / UI.GRID_SIZE;
@@ -152,6 +162,7 @@ void Move::Execute()
 							pOut->setUsedPixel(i, j, PIN);
 							continue;
 						}
+						pOut->setArrayOfComponents(i, j, Comp);
 						pOut->setUsedPixel(i, j, GATE);
 					}
 				}

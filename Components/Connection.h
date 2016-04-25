@@ -11,6 +11,7 @@ class Connection :	public Component
 	OutputPin* SrcPin;	//The Source pin of this connection (an output pin of certain Component)
 	InputPin* DstPin;	//The Destination pin of this connection (an input pin of certain Component)
 	vector<Cell> cellsBeforeAddingConnection;
+	bool isDrawn;
 public:
 	//Connection(const GraphicsInfo &r_GfxInfo, Component *pS=NULL,Component *pD=NULL, int Pin=0);
 	Connection(const GraphicsInfo &r_GfxInfo, OutputPin *pSrcPin,InputPin *pDstPin);
@@ -23,6 +24,9 @@ public:
 	void setDestPin(InputPin *pDstPin);
 	OutputPin* getSourcePin();
 	InputPin* getDestPin();
+
+	void setIsDrawn(bool isDrawn);
+	bool getIsDrawn();
 
 	void deleteConnection(Output* pOut);
 

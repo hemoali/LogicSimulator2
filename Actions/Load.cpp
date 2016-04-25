@@ -126,6 +126,7 @@ void Load::Execute()
 		file >> dest >> pnum;
 		Connection*ptr = new Connection(point, listOfGates[src - 1]->getOutputPin(), listOfGates[dest - 1]->getInputPin(pnum));
 		ptr->load(pManager);
+
 	}
 	while (src != -1);
 	pManager->getAllConnections(allConnections);
