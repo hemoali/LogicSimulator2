@@ -1,4 +1,5 @@
-#pragma once
+#ifndef _RIGHT_CLICK
+#define _RIGHT_CLICK
 #include "Action.h"
 #include "../Components/Gate.h"
 class RightClick : public Action
@@ -22,3 +23,4 @@ public:
 	virtual void Redo();
 	~RightClick();
 };
+#endif

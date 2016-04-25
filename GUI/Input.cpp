@@ -18,6 +18,11 @@ void Input::getSelectionPoint(int & x, int & y)
 	pWind->GetMouseClick(x, y);
 	pWind->FlushMouseQueue();
 }
+void Input::getMouseCoordinates(int & x, int & y)
+{
+	pWind->GetMouseCoord(x, y);
+	pWind->FlushMouseQueue();
+}
 buttonstate Input::GetButtonStatus(const button btMouse, int &iX, int &iY) const {
 	return pWind->GetButtonState(btMouse, iX, iY);
 }

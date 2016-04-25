@@ -99,7 +99,7 @@ bool Utils::CheckPoint(int x, int y, CellType usedPixels[44][74]) {
 	}
 	return 1;
 }
-bool Utils::CheckPointForConnections(int x, int y, CellType usedPixels[44][74]) {
+bool Utils::CheckPointInBorders(int x, int y) {
 	if (x< 20 || y <= (UI.ToolBarHeight + 20) || (x)>UI.width - 20 || (y) >= (UI.height - UI.StatusBarHeight - 20)) {
 		return 0;
 	}

@@ -48,6 +48,11 @@ public:
 	bool DrawConnection(GraphicsInfo r_GfxInfo, int inputPin, GraphicsInfo compCenterLocationbool, vector<Cell>&, bool selected = false) const;
 	void DrawRClickMenu_CorrectPoints(int& x, int& y, int type, bool = true);
 	image* StoreBeforeMenu(int, int);
+	void storeDrawingAreaImage(image*& img); 
+	void drawStoredDrawingAreaImage(image*& img);
+	void drawRectangle(int x1, int y1, int x2, int y2);
+
+	void updateBuffer();
 	void DrawAfterMenu(image* img,int x, int y);
 	bfs_node* bfs(bfs_node* bf, int requX, int requY, vector<bfs_node*> allNodes) const;
 	

@@ -18,6 +18,7 @@
 #include "Actions\RightClick.h"
 #include"Actions\Save.h"
 #include"Actions\Load.h"
+#include "Actions\MultiSelect.h"
 ApplicationManager::ApplicationManager()
 {
 	CompCount = 0;
@@ -104,6 +105,9 @@ void ApplicationManager::ExecuteAction(ActionType ActType)
 		break;
 	case SAVE:
 		pAct = new Save(this);
+		break;
+	case MULTI_SELECT:
+		pAct = new MultiSelect(this);
 		break;
 	case LOAD:
 		//pAct = new Load(this);

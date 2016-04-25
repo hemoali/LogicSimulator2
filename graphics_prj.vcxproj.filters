@@ -234,6 +234,9 @@
     <ClCompile Include="Actions\Load.cpp">
       <Filter>Actions</Filter>
     </ClCompile>
+    <ClCompile Include="Actions\MultiSelect.cpp">
+      <Filter>Actions</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Defs.H" />
@@ -427,6 +430,9 @@
     <ClInclude Include="Actions\Load.h">
       <Filter>Actions</Filter>
     </ClInclude>
+    <ClInclude Include="Actions\MultiSelect.h">
+      <Filter>Actions</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
@@ -435,9 +441,6 @@
   <ItemGroup>
     <Filter Include="Actions">
       <UniqueIdentifier>{61ecbe41-f437-4e4b-9178-88ac0a5bf06d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="GUI">
-      <UniqueIdentifier>{e9b7c77c-4258-4c7f-a59e-a041dec06954}</UniqueIdentifier>
     </Filter>
     <Filter Include="Components">
       <UniqueIdentifier>{b97e2492-a07f-4801-bd62-8525b0447a72}</UniqueIdentifier>
@@ -453,6 +456,9 @@
     </Filter>
     <Filter Include="CMUgraphics Library\jpeg">
       <UniqueIdentifier>{d5f5bd64-4030-4f72-b4c7-590ecaebd95c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI">
+      <UniqueIdentifier>{e9b7c77c-4258-4c7f-a59e-a041dec06954}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

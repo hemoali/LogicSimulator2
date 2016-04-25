@@ -233,7 +233,7 @@ bfs_node* Output::bfs(bfs_node* bf, int requX, int requY, vector<bfs_node*> allN
 		if (tmp->x == requX && tmp->y == requY) {
 			return tmp;
 		}
-		if (Utils::CheckPointForConnections((tmp->x + 1)* UI.GRID_SIZE, tmp->y * UI.GRID_SIZE, usedPixels) && tmp->x + 1 <= 74 && vis[tmp->y][tmp->x + 1] < 0 && Output::usedPixels[tmp->y][tmp->x + 1] != INTERSECTION && (Output::usedPixels[tmp->y][tmp->x + 1] == EMPTY || ((Output::usedPixels[tmp->y][tmp->x] == EMPTY || Output::usedPixels[tmp->y][tmp->x] == PIN || Output::usedPixels[tmp->y][tmp->x] == VERTICAL) && ((tmp->y == requY && tmp->x + 1 == requX-1 && Output::usedPixels[tmp->y][tmp->x + 1] == VERTICAL && Output::usedPixels[tmp->y][tmp->x + 2] == PIN) ||(tmp->y == requY && tmp->x + 1 == requX && Output::usedPixels[tmp->y][tmp->x + 1] == PIN))) || (Output::usedPixels[tmp->y][tmp->x + 1] == VERTICAL && Output::usedPixels[tmp->y][tmp->x + 1] != END_CONNECTION)))
+		if (Utils::CheckPointInBorders((tmp->x + 1)* UI.GRID_SIZE, tmp->y * UI.GRID_SIZE) && tmp->x + 1 <= 74 && vis[tmp->y][tmp->x + 1] < 0 && Output::usedPixels[tmp->y][tmp->x + 1] != INTERSECTION && (Output::usedPixels[tmp->y][tmp->x + 1] == EMPTY || ((Output::usedPixels[tmp->y][tmp->x] == EMPTY || Output::usedPixels[tmp->y][tmp->x] == PIN || Output::usedPixels[tmp->y][tmp->x] == VERTICAL) && ((tmp->y == requY && tmp->x + 1 == requX-1 && Output::usedPixels[tmp->y][tmp->x + 1] == VERTICAL && Output::usedPixels[tmp->y][tmp->x + 2] == PIN) ||(tmp->y == requY && tmp->x + 1 == requX && Output::usedPixels[tmp->y][tmp->x + 1] == PIN))) || (Output::usedPixels[tmp->y][tmp->x + 1] == VERTICAL && Output::usedPixels[tmp->y][tmp->x + 1] != END_CONNECTION)))
 		{
 			vis[tmp->y][tmp->x + 1] = vis[tmp->y][tmp->x] + 1;
 			bfs_node* newNode = new bfs_node;
@@ -247,7 +247,7 @@ bfs_node* Output::bfs(bfs_node* bf, int requX, int requY, vector<bfs_node*> allN
 				arrayOfIntersections[tmp->y][tmp->x + 1] = 0;
 			}
 		}
-		if (Utils::CheckPointForConnections((tmp->x)* UI.GRID_SIZE, (tmp->y + 1) * UI.GRID_SIZE, usedPixels) && tmp->y + 1 <= 44 && vis[tmp->y + 1][tmp->x] < 0 && Output::usedPixels[tmp->y + 1][tmp->x] != INTERSECTION && (Output::usedPixels[tmp->y + 1][tmp->x] == EMPTY || ((Output::usedPixels[tmp->y][tmp->x] == EMPTY || Output::usedPixels[tmp->y][tmp->x] == HORIZONTAL) && tmp->y + 1 == requY && tmp->x == requX &&  Output::usedPixels[tmp->y + 1][tmp->x] == PIN) || (abs((tmp->y + 1) - bf->y) == 1 && tmp->x == bf->x &&  Output::usedPixels[tmp->y + 1][tmp->x] == PIN) || (Output::usedPixels[tmp->y + 1][tmp->x] == HORIZONTAL && Output::usedPixels[tmp->y + 1][tmp->x] != END_CONNECTION)))
+		if (Utils::CheckPointInBorders((tmp->x)* UI.GRID_SIZE, (tmp->y + 1) * UI.GRID_SIZE) && tmp->y + 1 <= 44 && vis[tmp->y + 1][tmp->x] < 0 && Output::usedPixels[tmp->y + 1][tmp->x] != INTERSECTION && (Output::usedPixels[tmp->y + 1][tmp->x] == EMPTY || ((Output::usedPixels[tmp->y][tmp->x] == EMPTY || Output::usedPixels[tmp->y][tmp->x] == HORIZONTAL) && tmp->y + 1 == requY && tmp->x == requX &&  Output::usedPixels[tmp->y + 1][tmp->x] == PIN) || (abs((tmp->y + 1) - bf->y) == 1 && tmp->x == bf->x &&  Output::usedPixels[tmp->y + 1][tmp->x] == PIN) || (Output::usedPixels[tmp->y + 1][tmp->x] == HORIZONTAL && Output::usedPixels[tmp->y + 1][tmp->x] != END_CONNECTION)))
 		{
 
 			vis[tmp->y + 1][tmp->x] = vis[tmp->y][tmp->x] + 1;
@@ -262,7 +262,7 @@ bfs_node* Output::bfs(bfs_node* bf, int requX, int requY, vector<bfs_node*> allN
 				arrayOfIntersections[tmp->y + 1][tmp->x] = 1;
 			}
 		}
-		if (Utils::CheckPointForConnections((tmp->x - 1)* UI.GRID_SIZE, tmp->y * UI.GRID_SIZE, usedPixels) && tmp->x - 1 >= 0 && vis[tmp->y][tmp->x - 1] < 0 && Output::usedPixels[tmp->y][tmp->x - 1] != INTERSECTION && (Output::usedPixels[tmp->y][tmp->x - 1] == EMPTY || (Output::usedPixels[tmp->y][tmp->x - 1] == VERTICAL && Output::usedPixels[tmp->y][tmp->x - 1] != END_CONNECTION)))
+		if (Utils::CheckPointInBorders((tmp->x - 1)* UI.GRID_SIZE, tmp->y * UI.GRID_SIZE) && tmp->x - 1 >= 0 && vis[tmp->y][tmp->x - 1] < 0 && Output::usedPixels[tmp->y][tmp->x - 1] != INTERSECTION && (Output::usedPixels[tmp->y][tmp->x - 1] == EMPTY || (Output::usedPixels[tmp->y][tmp->x - 1] == VERTICAL && Output::usedPixels[tmp->y][tmp->x - 1] != END_CONNECTION)))
 		{
 			vis[tmp->y][tmp->x - 1] = vis[tmp->y][tmp->x] + 1;
 			bfs_node* newNode = new bfs_node;
@@ -277,7 +277,7 @@ bfs_node* Output::bfs(bfs_node* bf, int requX, int requY, vector<bfs_node*> allN
 			}
 		}
 
-		if (Utils::CheckPointForConnections((tmp->x)* UI.GRID_SIZE, (tmp->y - 1) * UI.GRID_SIZE, usedPixels) && tmp->y - 1 >= 0 && vis[tmp->y - 1][tmp->x] < 0 && Output::usedPixels[tmp->y - 1][tmp->x] != INTERSECTION && (Output::usedPixels[tmp->y - 1][tmp->x] == EMPTY || ((Output::usedPixels[tmp->y][tmp->x] == EMPTY || Output::usedPixels[tmp->y][tmp->x] == HORIZONTAL) && tmp->y - 1 == requY && tmp->x == requX &&  Output::usedPixels[tmp->y - 1][tmp->x] == PIN) || (abs((tmp->y - 1) - bf->y) == 1 && tmp->x == bf->x &&  Output::usedPixels[tmp->y - 1][tmp->x] == PIN) || (Output::usedPixels[tmp->y - 1][tmp->x] == HORIZONTAL && Output::usedPixels[tmp->y - 1][tmp->x] != END_CONNECTION)))
+		if (Utils::CheckPointInBorders((tmp->x)* UI.GRID_SIZE, (tmp->y - 1) * UI.GRID_SIZE) && tmp->y - 1 >= 0 && vis[tmp->y - 1][tmp->x] < 0 && Output::usedPixels[tmp->y - 1][tmp->x] != INTERSECTION && (Output::usedPixels[tmp->y - 1][tmp->x] == EMPTY || ((Output::usedPixels[tmp->y][tmp->x] == EMPTY || Output::usedPixels[tmp->y][tmp->x] == HORIZONTAL) && tmp->y - 1 == requY && tmp->x == requX &&  Output::usedPixels[tmp->y - 1][tmp->x] == PIN) || (abs((tmp->y - 1) - bf->y) == 1 && tmp->x == bf->x &&  Output::usedPixels[tmp->y - 1][tmp->x] == PIN) || (Output::usedPixels[tmp->y - 1][tmp->x] == HORIZONTAL && Output::usedPixels[tmp->y - 1][tmp->x] != END_CONNECTION)))
 		{
 			vis[tmp->y - 1][tmp->x] = vis[tmp->y][tmp->x] + 1;
 			bfs_node* newNode = new bfs_node;
@@ -486,11 +486,7 @@ bool Output::DrawConnection(GraphicsInfo GfxInfo, int inputPin, GraphicsInfo com
 		tmp = NULL;
 	}
 	pWind->FlushMouseQueue();
-	/* cout << endl;
-		for (size_t i = 0; i < cellsBeforeAddingConnection.size(); i++)
-		{
-			cout << cellsBeforeAddingConnection[i].x << " " << cellsBeforeAddingConnection[i].y << "  " << cellsBeforeAddingConnection[i].cellType << endl;
-		}*/
+
 	return true;
 }
 
@@ -544,6 +540,11 @@ image * Output::StoreBeforeMenu(int x, int y)
 	return ptr;
 }
 
+void Output::updateBuffer()
+{
+	pWind->UpdateBuffer();
+}
+
 void Output::DrawAfterMenu(image * img, int x, int y)
 {
 	pWind->DrawImage(img, x, y, UI.RightClickMenuLength, UI.RightClickMenuWidth);
@@ -555,6 +556,18 @@ void Output::DrawCleanImage(image* img, int x, int y)
 {
 	pWind->DrawImage(img, x - UI.GRID_SIZE - 5, y - UI.GRID_SIZE - 5, 2 * UI.GRID_SIZE + 4, UI.GATE_Height + 3);
 }
+void Output::storeDrawingAreaImage(image*& img) {
+	pWind->StoreImage(img, 0, UI.ToolBarHeight, pWind->GetWidth(), pWind->GetHeight() - UI.StatusBarHeight);
+}
+void Output::drawStoredDrawingAreaImage(image*& img) {
+	pWind->DrawImage(img, 0, UI.ToolBarHeight, pWind->GetWidth(), pWind->GetHeight() - UI.StatusBarHeight);
+}
+
+void Output::drawRectangle(int x1, int y1, int x2, int y2) {
+	//pWind->SetPen(UI.SelectColor, 2);
+	pWind->DrawRectangle(x1, y1, x2, y2, FRAME);
+}
+
 void Output::changeConnectionColor(Connection * connection, color Color) {
 	bool b1 = false, b2 = false, PreviousIsIntersection = false, PreviousIsIntersection2 = false, isCell2XGreaterThanCellX = false, isCell2YGreaterThanCellY = false;
 	int i = 0;
