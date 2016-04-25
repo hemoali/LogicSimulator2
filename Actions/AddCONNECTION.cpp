@@ -115,7 +115,7 @@ void AddConnection::Execute()
 				pManager->GetOutput()->PrintMsg(s);
 				gateLabel = pManager->GetInput()->GetSrting(pManager->GetOutput(), s);
 				pA->setLabel(gateLabel);
-
+				pA->setIsDrawn(true);
 				for (size_t i = 0; i < cellsBeforeAddingConnection.size(); i++)
 				{
 					pManager->GetOutput()->setArrayOfComponents(cellsBeforeAddingConnection[i].y, cellsBeforeAddingConnection[i].x, pA);
