@@ -2,12 +2,8 @@
 #define NOR3_Header
 #include"Action.h"
 #include"..\Components\NOR3.h"
-#include"..\ApplicationManager.h"
 class AddNORgate3:public Action
 {
-private:
-	 string gateLabel;
-	GraphicsInfo GInfo;
 public:
 	AddNORgate3(ApplicationManager *pApp);
 	virtual ~AddNORgate3(void);

@@ -41,15 +41,17 @@ void AddBUFFER::Execute()
 		int Len = UI.GATE_Width;
 		int Wdth = UI.GATE_Height;
 
-		//Gfx info to be used to construct the AND2 gate
+		
 		GraphicsInfo GInfotmp;
 
 		GInfotmp.x1 = GInfo.x1 - Len / 2;
 		GInfotmp.x2 = GInfo.x1 + Len / 2;
 		GInfotmp.y1 = GInfo.y1 - Wdth / 2;
 		GInfotmp.y2 = GInfo.y1 + Wdth / 2;
-		BUFFER *pA = new BUFFER(GInfotmp, AND2_FANOUT);
-		pManager->allComponentsCorners.push_back(GInfotmp);pManager->AddComponent(pA);pA->setSmallCleanImageBeforeAddingComp(smallImageBeforeAddingComponent);
+		BUFFER *pA = new BUFFER(GInfotmp, FANOUT);
+		pA->setSmallCleanImageBeforeAddingComp(smallImageBeforeAddingComponent);
+		pManager->allComponentsCorners.push_back(GInfotmp);
+		pManager->AddComponent(pA);pA->setLabel(gateLabel);for (int i = GInfotmp.y1 / UI.GRID_SIZE + 1; i <= GInfotmp.y2 / UI.GRID_SIZE; i++)		{for (int j = GInfotmp.x1 / UI.GRID_SIZE; j <= GInfotmp.x2 / UI.GRID_SIZE; j++)	{	pManager->GetOutput()->setArrayOfComponents(i,j,pA);}}
 	}
 }
 

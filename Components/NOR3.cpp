@@ -1,13 +1,10 @@
 #include "NOR3.h"
+#include"..\ApplicationManager.h"
+#include<fstream>
 
-NOR3::NOR3(const GraphicsInfo &r_GfxInfo, int r_FanOut) :Gate(3, r_FanOut)
+NOR3::NOR3(const GraphicsInfo &r_GfxInfo, int r_FanOut) :Gate(3, r_FanOut,r_GfxInfo)
 {
-	m_GfxInfo.x1 = r_GfxInfo.x1;
-	m_GfxInfo.y1 = r_GfxInfo.y1;
-	m_GfxInfo.x2 = r_GfxInfo.x2;
-	m_GfxInfo.y2 = r_GfxInfo.y2;
-	m_CenterInfo.x1 = m_GfxInfo.x1 + UI.GATE_Width / 2;
-	m_CenterInfo.y1 = m_GfxInfo.y1 + UI.GATE_Height / 2;
+
 }
 
 
@@ -21,10 +18,10 @@ void NOR3::Operate()
 
 // Function Draw
 // Draws 3-input NOR gate
-void NOR3::Draw(Output* pOut)
+void NOR3::Draw(Output* pOut, bool highlight)
 {
 	//Call output class and pass gate drawing info to it.
-	if (!getDelete()) pOut->DrawOr_Nor(m_CenterInfo, 3, true);
+	if (!getDelete()) pOut->DrawOr_Nor(m_CenterInfo, 3, true, highlight);
 	else {
 		pOut->DrawCleanImage(getSmallCleanImageBeforeAddingComp(), m_CenterInfo.x1, m_CenterInfo.y1);
 	}
@@ -47,4 +44,18 @@ int NOR3::GetInputPinStatus(int n)
 void NOR3::setInputPinStatus(int n, STATUS s)
 {
 	m_InputPins[n - 1].setStatus(s);
+}
+void NOR3::selectYourSelf(Output* pOut, color Color) {
+
+}
+
+void NOR3::save(int id, ofstream & file)
+{
+
+	file << "NOR3  "<<this->getID()<<"  "/* << this->getLabel() << "  " */<< m_GfxInfo.x1 << "  " << m_GfxInfo.y1 << endl;
+}
+
+void NOR3::load(ApplicationManager*pM)
+{
+	pM->AddComponent(this);
 }

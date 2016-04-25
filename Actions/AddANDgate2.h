@@ -1,14 +1,11 @@
 #ifndef AND2_Header
 #define AND2_Header
 
-#include "action.h"
+#include "Action.h"
 #include "..\Components\AND2.h"
 
 class AddANDgate2 : public Action
 {
-private:
-	string gateLabel;
-	GraphicsInfo GInfo;
 public:
 	AddANDgate2(ApplicationManager *pApp);
 	virtual ~AddANDgate2(void);

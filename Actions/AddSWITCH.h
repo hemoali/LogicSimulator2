@@ -1,13 +1,9 @@
 #ifndef SWITCH_Header
 #define SWITCH_Header
-#include"../Components/SWITCH.h"
-#include"..\ApplicationManager.h"
 #include"Action.h"
+#include"..\Components\SWITCH.h"
 class AddSWITCH:public Action
 {
-private:
-	 string gateLabel;
-	GraphicsInfo GInfo;
 public:
 	AddSWITCH(ApplicationManager *pApp);
 	virtual ~AddSWITCH(void);

@@ -1,7 +1,4 @@
 #include "AddANDgate2.h"
-#include "..\ApplicationManager.h"
-#include<iostream>
-using namespace std;
 AddANDgate2::AddANDgate2(ApplicationManager *pApp) :Action(pApp)
 {
 }
@@ -39,18 +36,20 @@ void AddANDgate2::Execute()
 
 	if (ReadActionParameters(smallImageBeforeAddingComponent)){
 
-		//Gfx info to be used to construct the AND2 gate
+		
 		GraphicsInfo GInfotmp;
 
 		GInfotmp.x1 = GInfo.x1 - UI.GATE_Width / 2;
 		GInfotmp.x2 = GInfo.x1 + UI.GATE_Width / 2;
 		GInfotmp.y1 = GInfo.y1 - UI.GATE_Height / 2;
 		GInfotmp.y2 = GInfo.y1 + UI.GATE_Height / 2;
-		AND2 *pA = new AND2(GInfotmp, AND2_FANOUT);
+		AND2 *pA = new AND2(GInfotmp, FANOUT);
 		pA->setLabel(gateLabel);
-		pManager->allComponentsCorners.push_back(GInfotmp);
-		pManager->AddComponent(pA);
 		pA->setSmallCleanImageBeforeAddingComp(smallImageBeforeAddingComponent);
+		pManager->allComponentsCorners.push_back(GInfotmp);
+		pManager->AddComponent(pA);pA->setLabel(gateLabel);
+		for (int i = GInfotmp.y1 / UI.GRID_SIZE + 1; i <= GInfotmp.y2 / UI.GRID_SIZE; i++)
+		{for (int j = GInfotmp.x1 / UI.GRID_SIZE; j <= GInfotmp.x2 / UI.GRID_SIZE; j++)	{	pManager->GetOutput()->setArrayOfComponents(i,j,pA);}}
 	}
 }
 

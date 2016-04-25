@@ -1,21 +1,19 @@
 #ifndef CONNECTION_Header
 #define CONNECTION_Header
 
-#include"..\ApplicationManager.h"
+#include"Action.h"
 #include"..\Components\Connection.h"
 #include"..\Components\Gate.h"
 #include"..\Components\LED.h"
 #include"..\Components\SWITCH.h"
-class AddCONNECTION:public Action
+class AddConnection:public Action
 {
 private:
-	 string gateLabel;
 	int Cx1,Cy1,Cx2,Cy2;// start and end point for Connections
-	//int x1, y1, x2, y2;	//Two corners of the rectangluar area
 
 public:
-	AddCONNECTION(ApplicationManager *pApp);
-	virtual ~AddCONNECTION(void);
+	AddConnection(ApplicationManager *pApp);
+	virtual ~AddConnection(void);
 
 	//Reads parameters required for action to execute
 	virtual bool  ReadActionParameters(image * );

@@ -1,10 +1,14 @@
 #include "Connection.h"
+#include"..\ApplicationManager.h"
+#include<fstream>
 
 Connection::Connection(const GraphicsInfo &r_GfxInfo, OutputPin *pSrcPin, InputPin *pDstPin) :Component(r_GfxInfo)
 
 {
 	SrcPin = pSrcPin;
 	DstPin = pDstPin;
+	isDrawn = false;
+
 }
 void Connection::setSourcePin(OutputPin *pSrcPin)
 {
@@ -34,9 +38,25 @@ void Connection::Operate()
 	DstPin->setStatus((STATUS)SrcPin->getStatus());
 }
 
-void Connection::Draw(Output* pOut)
+void Connection::Draw(Output* pOut, bool highlight)
 {
-//	pOut->DrawConnection(m_GfxInfo);
+	if (!isDrawn)
+	{
+		pOut->DrawConnection(m_GfxInfo, DstPin->getPosition(), DstPin->getComponent()->getCenterLocation(), getCellsBeforeAddingConnection(), false);
+		isDrawn = true;
+	}
+}
+void Connection::setIsDrawn(bool isDrawn) {
+	this->isDrawn = isDrawn;
+}
+bool Connection::getIsDrawn() {
+	return this->isDrawn;
+}
+
+void Connection::deleteConnection(Output* pOut) {
+	setDelete(true);
+	DstPin->setConnection(NULL);
+	SrcPin->removeConnectedConnection(this);
 }
 
 int Connection::GetOutPinStatus()	//returns status of outputpin if LED, return -1
@@ -53,4 +73,30 @@ int Connection::GetInputPinStatus(int n)	//returns status of Inputpin # n if SWI
 void Connection::setInputPinStatus(int n, STATUS s)
 {
 	SrcPin->setStatus(s);
+}
+
+void Connection::setCellsBeforeAddingConnection(vector<Cell> cellsBeforeAddingConnection)
+{
+	for (size_t i = 0; i < cellsBeforeAddingConnection.size(); i++)
+	{
+		this->cellsBeforeAddingConnection.push_back({ cellsBeforeAddingConnection[i].x ,cellsBeforeAddingConnection[i].y,cellsBeforeAddingConnection[i].cellType });
+	}
+}
+
+vector<Cell>& Connection::getCellsBeforeAddingConnection()
+{
+	return cellsBeforeAddingConnection;
+}
+void Connection::selectYourSelf(Output* pOut, color Color) {
+	pOut->changeConnectionColor(this, Color);
+}
+
+void Connection::save(int id, ofstream & file)
+{
+	file << this->getSourcePin()->getComponent()->getID() << "  " << this->getDestPin()->getComponent()->getID() << "  " << this->getDestPin()->getPosition() << "\n";
+}
+
+void Connection::load(ApplicationManager*pM)
+{
+	pM->AddComponent(this);
 }

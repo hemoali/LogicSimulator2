@@ -2,12 +2,8 @@
 #define NAND2_Header
 #include"Action.h"
 #include"..\Components\NAND2.h"
-#include"..\ApplicationManager.h"
 class AddNANDgate2:public Action
 {
-private:
-	 string gateLabel;
-	GraphicsInfo GInfo;
 public:
 	AddNANDgate2(ApplicationManager *pApp);
 	virtual ~AddNANDgate2(void);

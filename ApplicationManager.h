@@ -7,7 +7,7 @@
 #include "Actions\Action.h"
 #include <vector>
 class Component;
-
+class Connection;
 //Main class that manages everything in the application.
 class ApplicationManager
 {
@@ -39,7 +39,13 @@ public:
 	//Adds a new component to the list of components
 	void AddComponent(Component* pComp);
 	vector<GraphicsInfo>allComponentsCorners;
-	Component* getGate(int);
+
+	void getAllConnections(vector<Connection*>& allConnections);
+	Component* getComponent(int);
+
+	//Get compcount
+	int getCompCount();
+
 	//destructor
 	~ApplicationManager();
 };

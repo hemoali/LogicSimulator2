@@ -1,12 +1,9 @@
 #ifndef OR2_Header
 #define OR2_Header
 #include"..\Components\OR2.h"
-#include"..\ApplicationManager.h"
+#include"Action.h"
 class AddORgate2:public Action
 {
-private:
-	 string gateLabel;
-	GraphicsInfo GInfo;
 public:
 	AddORgate2(ApplicationManager *pApp);
 	virtual ~AddORgate2(void);

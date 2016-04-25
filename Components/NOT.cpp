@@ -1,13 +1,10 @@
 #include "NOT.h"
+#include"..\ApplicationManager.h"
+#include<fstream>
 
-NOT::NOT(const GraphicsInfo &r_GfxInfo, int r_FanOut) :Gate(1, r_FanOut)
+NOT::NOT(const GraphicsInfo &r_GfxInfo, int r_FanOut) :Gate(1, r_FanOut, r_GfxInfo)
 {
-	m_GfxInfo.x1 = r_GfxInfo.x1;
-	m_GfxInfo.y1 = r_GfxInfo.y1;
-	m_GfxInfo.x2 = r_GfxInfo.x2;
-	m_GfxInfo.y2 = r_GfxInfo.y2;
-	m_CenterInfo.x1 = m_GfxInfo.x1 + UI.GATE_Width / 2;
-	m_CenterInfo.y1 = m_GfxInfo.y1 + UI.GATE_Height / 2;
+	
 }
 
 
@@ -20,11 +17,11 @@ void NOT::Operate()
 
 // Function Draw
 // Draws NOT gate
-void NOT::Draw(Output* pOut)
+void NOT::Draw(Output* pOut, bool highlight)
 {
 	//Call output class and pass gate drawing info to it.
 	
-	if (!getDelete()) pOut->DrawNot_Buffer(m_CenterInfo);
+	if (!getDelete()) pOut->DrawNot_Buffer(m_CenterInfo, false, highlight);
 	else {
 		pOut->DrawCleanImage(getSmallCleanImageBeforeAddingComp(), m_CenterInfo.x1, m_CenterInfo.y1);
 	}
@@ -47,4 +44,18 @@ int NOT::GetInputPinStatus(int n)
 void NOT::setInputPinStatus(int n, STATUS s)
 {
 	m_InputPins[n - 1].setStatus(s);
+}
+void NOT::selectYourSelf(Output* pOut, color Color) {
+
+}
+
+void NOT::save(int id, ofstream & file)
+{
+
+	file << "NOT  "<<this->getID()<<"  "/* << this->getLabel() << "  " */<< m_GfxInfo.x1 << "  " << m_GfxInfo.y1 << endl;
+}
+
+void NOT::load(ApplicationManager*pM)
+{
+	pM->AddComponent(this);
 }

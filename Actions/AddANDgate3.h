@@ -2,13 +2,8 @@
 #define AND3_Header
 #include"Action.h"
 #include"..\Components\AND3.h"
-#include"..\ApplicationManager.h"
 class AddANDgate3 : public Action
 {
-private:
-	string gateLabel;
-	GraphicsInfo GInfo;
-
 public:
 	AddANDgate3(ApplicationManager *pApp);
 	virtual ~AddANDgate3(void);

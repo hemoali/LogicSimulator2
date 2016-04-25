@@ -1,6 +1,7 @@
 #include "Input.h"
 #include "Output.h"
 #include "..\Utils.h"
+#include <iostream>
 Input::Input(window* pW)
 {
 	pWind = pW; //point to the passed window
@@ -12,7 +13,12 @@ void Input::GetPointClicked(int &x, int &y, bool DrawGate, bool DrawConnection)
 	Utils::correctPointClicked(x, y, DrawGate, DrawConnection);
 
 }
-buttonstate Input::GetButtonStatus(const button btMouse, int &iX, int &iY) const{
+void Input::getSelectionPoint(int & x, int & y)
+{
+	pWind->GetMouseClick(x, y);
+	pWind->FlushMouseQueue();
+}
+buttonstate Input::GetButtonStatus(const button btMouse, int &iX, int &iY) const {
 	return pWind->GetButtonState(btMouse, iX, iY);
 }
 string Input::GetSrting(Output *pOut, string sOriginal = "")
@@ -20,14 +26,15 @@ string Input::GetSrting(Output *pOut, string sOriginal = "")
 	string s = "";
 	char ch;
 	keytype k;
-	while ((k = pWind->WaitKeyPress(ch)) != '\n' && (int)ch != 13){
-		if (k == ESCAPE){
+	while ((k = pWind->WaitKeyPress(ch)) != '\n' && (int)ch != 13) {
+		if (k == ESCAPE) {
+			s = "";
 			pOut->PrintMsg(sOriginal);
 		}
-		else if (k == ASCII && (int)ch == 8){
+		else if (k == ASCII && (int)ch == 8) {
 			s = s.substr(0, s.size() - 1);
 		}
-		else if (k == ASCII && (int)ch != 27){
+		else if (k == ASCII && (int)ch != 27) {
 			s += ch;
 		}
 		pOut->PrintMsg(sOriginal + " " + s);
@@ -40,37 +47,119 @@ string Input::GetSrting(Output *pOut, string sOriginal = "")
 //This function reads the position where the user clicks to determine the desired action
 ActionType Input::GetUserAction(ApplicationManager *pManager) const
 {
-	int x=0, y=0, xT, yT;
-	while (true){
-		if (pWind->GetButtonState(LEFT_BUTTON, xT, yT) == BUTTON_DOWN && yT >= UI.ToolBarHeight && yT < UI.height - UI.StatusBarHeight){
+	int x = 0, y = 0, xT, yT, hoverXOld = 0, hoverYOld = 0;
+	clicktype s = LEFT_CLICK;
+	Component* preComp = NULL;
+	while (true) {
+		if (pWind->GetButtonState(LEFT_BUTTON, xT, yT) == BUTTON_DOWN && yT >= UI.ToolBarHeight && yT < UI.height - UI.StatusBarHeight) {
 			Component* comp = NULL;
 			for (int i = 0; i < pManager->allComponentsCorners.size(); i++)
 			{
-				if (dynamic_cast<Connection*>(pManager->getGate(i)))
+				if (dynamic_cast<Connection*>(pManager->getComponent(i)))
 					continue;
-				if (x >= pManager->allComponentsCorners[i].x1&&x <= pManager->allComponentsCorners[i].x2&& y >= pManager->allComponentsCorners[i].y1&&y <= pManager->allComponentsCorners[i].y2)
+				if (xT >= pManager->allComponentsCorners[i].x1&&xT <= pManager->allComponentsCorners[i].x2&& yT >= pManager->allComponentsCorners[i].y1&&yT <= pManager->allComponentsCorners[i].y2)
 				{
-					comp = pManager->getGate(i);
+					comp = pManager->getComponent(i);
 				}
 			}
-			if (comp == NULL)
+			//
+			if (comp != NULL &&comp->getDelete()) comp = NULL;
+
+			if (comp != NULL)
 				return MOVE;
-			else
-				return MULTI_SELECT;
+			else {
+				bool found = false;
+				vector <Connection*> allConnections;
+				pManager->getAllConnections(allConnections);
+
+				for (size_t i = 0; i < allConnections.size() && !found; i++)
+				{
+					for (size_t j = 0; j < allConnections[i]->getCellsBeforeAddingConnection().size() - 1; j++)
+					{
+						Cell cell = allConnections[i]->getCellsBeforeAddingConnection()[j];
+						Cell cell2 = allConnections[i]->getCellsBeforeAddingConnection()[j + 1];
+						if (cell.x > cell2.x)
+						{
+							if (xT > cell2.x * UI.GRID_SIZE && xT < cell.x * UI.GRID_SIZE && abs(yT - cell.y * UI.GRID_SIZE) <= 3)
+							{
+								allConnections[i]->selectYourSelf(pManager->GetOutput(), UI.SelectColor);
+								found = true;
+								break;
+							}
+						}
+						else if (cell.x < cell2.x) {
+							if (xT < cell2.x * UI.GRID_SIZE && xT > cell.x * UI.GRID_SIZE && abs(yT - cell.y * UI.GRID_SIZE) <= 3)
+							{
+								allConnections[i]->selectYourSelf(pManager->GetOutput(), UI.SelectColor);
+								found = true;
+								break;
+							}
+						}
+						else if (cell.y > cell2.y)
+						{
+							if (yT > cell2.y * UI.GRID_SIZE && yT < cell.y * UI.GRID_SIZE && abs(xT - cell.x * UI.GRID_SIZE) <= 3)
+							{
+								allConnections[i]->selectYourSelf(pManager->GetOutput(), UI.SelectColor);
+								found = true;
+								break;
+							}
+						}
+						else if (cell.y < cell2.y) {
+							if (yT < cell2.y * UI.GRID_SIZE && yT > cell.y * UI.GRID_SIZE && abs(xT - cell.x * UI.GRID_SIZE) <= 3)
+							{
+								allConnections[i]->selectYourSelf(pManager->GetOutput(), UI.SelectColor);
+								found = true;
+								break;
+							}
+						}
+					}
+				}
+
+				if (!found) {
+
+					for (size_t i = 0; i < allConnections.size(); i++)
+					{
+						allConnections[i]->selectYourSelf(pManager->GetOutput(), UI.ConnColor);
+					}
+					return MULTI_SELECT;
+				}
+			}
 		}
-		else{
-			break;
+		else {
+			//Get the coordinates of the user click 
+			// We Called it with false argument inorder not to delete the click to be used in RightSelect
+			//Otherwise we call that function agian with true to delete that click 
+
+			if ((s = pWind->GetMouseClick(x, y, false)) != NO_CLICK)
+			{
+				break;
+			}
+			else {
+				int hoverX, hoverY;
+				pWind->GetMouseCoord(hoverX, hoverY);
+				Utils::correctPointClicked(hoverX, hoverY, true, false);
+				Component* comp = pManager->GetOutput()->getArrayOfComponents(hoverY / UI.GRID_SIZE, hoverX / UI.GRID_SIZE);
+				if (comp != NULL && comp != preComp)
+				{
+					pManager->GetOutput()->PrintMsg(comp->getLabel());
+				}
+				else if (comp == NULL) {
+					pManager->GetOutput()->PrintMsg("");
+				}
+				hoverYOld = hoverY;
+				hoverXOld = hoverX; 
+				preComp = comp;
+			}
 		}
 	}
 
-	clicktype s = LEFT_CLICK;
-	s = pWind->GetMouseClick(x, y);	//Get the coordinates of the user click
 
 	if (UI.AppMode == DESIGN)	//application is in design mode
 	{
 		//[1] If user clicks on the Toolbar
 		if (y >= 0 && y < UI.ToolBarHeight)
 		{
+			pWind->GetMouseClick(x, y);
 			//TODO
 			//Check whick Menu item was clicked
 			//==> This assumes that menu items are lined up horizontally <==
@@ -108,7 +197,7 @@ ActionType Input::GetUserAction(ApplicationManager *pManager) const
 				default: return DSN_TOOL;	//A click on empty place in desgin toolbar
 				}
 			}
-			else{
+			else {
 				switch (ClickedItemOrder)
 				{
 				case D2AND:  return ADD_AND_GATE_2_H;
@@ -138,7 +227,11 @@ ActionType Input::GetUserAction(ApplicationManager *pManager) const
 		//[2] User clicks on the drawing area //TODO:
 		if (y >= UI.ToolBarHeight && y < UI.height - UI.StatusBarHeight)
 		{
-			return SELECT;	//user want to select/unselect a statement i;
+			//user want to select/unselect a statement i;
+			if (s == RIGHT_CLICK)
+				return RIGHT_CLICKSELECT;
+			else
+				pWind->GetMouseClick(x, y, true); //Remove the last Saved Click
 		}
 
 		//[3] User clicks on the status bar
@@ -146,12 +239,12 @@ ActionType Input::GetUserAction(ApplicationManager *pManager) const
 	}
 	else	//Application is in Simulation mode
 	{
-		if (y > 0 && y < UI.ToolBarHeight){
+		if (y > 0 && y < UI.ToolBarHeight) {
 			int ClickedItemOrder = -1;//TODO:Modify
-			for (; x > 0; ClickedItemOrder++){
+			for (; x > 0; ClickedItemOrder++) {
 				x -= (UI.ToolItemWidth + 5);
 			}
-			switch (ClickedItemOrder){
+			switch (ClickedItemOrder) {
 			case SVALIDATE: return Validate;
 			case SSIMULATE: return Simulate;
 			case STT: return Create_TruthTable;
@@ -174,6 +267,11 @@ ActionType Input::GetUserAction(ApplicationManager *pManager) const
 	}
 	pWind->FlushMouseQueue();
 
+}
+
+void Input::WaitSelectionPoint(int &X, int &Y)
+{
+	pWind->WaitMouseClick(X, Y);
 }
 
 Input::~Input()
