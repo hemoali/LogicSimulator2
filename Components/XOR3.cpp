@@ -56,7 +56,7 @@ void XOR3::selectYourSelf(Output* pOut, color Color) {
 
 void XOR3::save(int id, ofstream & file)
 {
-	file << "XOR3  " << id << "  "/* << this->getLabel() << "  " */<< m_GfxInfo.x1 << "  " << m_GfxInfo.y1 << endl;
+	file << "XOR3  "<<this->getID()<<"  "/* << this->getLabel() << "  " */<< m_GfxInfo.x1 << "  " << m_GfxInfo.y1 << endl;
 }
 
 void XOR3::load(ApplicationManager*pM)

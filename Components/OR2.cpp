@@ -53,7 +53,7 @@ void OR2::selectYourSelf(Output* pOut, color Color) {
 void OR2::save(int id, ofstream & file)
 {
 
-	file << "OR2  " << id << "  "/* << this->getLabel() << "  " */<< m_GfxInfo.x1 << "  " << m_GfxInfo.y1 << endl;
+	file << "OR2  "<<this->getID()<<"  "/* << this->getLabel() << "  " */<< m_GfxInfo.x1 << "  " << m_GfxInfo.y1 << endl;
 }
 
 void OR2::load(ApplicationManager*pM)

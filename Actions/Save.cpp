@@ -28,6 +28,14 @@ void Save::Execute()
 			continue;
 		pManager->getComponent(i)->save(i + 1, file);
 	}
+	file << "Connections\n";
+	for (int i = 0; i < pManager->getCompCount(); i++)
+	{
+		if (dynamic_cast<Connection*>(pManager->getComponent(i)))
+		{
+			pManager->getComponent(i)->save(i + 1, file);
+		}
+	}
 	file << "-1";
 	file.close();
 	pManager->GetOutput()->PrintMsg("Design saved successfully");

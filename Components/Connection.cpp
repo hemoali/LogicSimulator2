@@ -1,4 +1,5 @@
 #include "Connection.h"
+#include"..\ApplicationManager.h"
 #include<fstream>
 
 Connection::Connection(const GraphicsInfo &r_GfxInfo, OutputPin *pSrcPin, InputPin *pDstPin) :Component(r_GfxInfo)
@@ -6,6 +7,7 @@ Connection::Connection(const GraphicsInfo &r_GfxInfo, OutputPin *pSrcPin, InputP
 {
 	SrcPin = pSrcPin;
 	DstPin = pDstPin;
+
 }
 void Connection::setSourcePin(OutputPin *pSrcPin)
 {
@@ -81,9 +83,10 @@ void Connection::selectYourSelf(Output* pOut, color Color) {
 
 void Connection::save(int id, ofstream & file)
 {
+	file << this->getSourcePin()->getComponent()->getID()<< "  " << this->getDestPin()->getComponent()->getID()<<"  " << this->getDestPin()->getPosition() << "\n";
 }
 
 void Connection::load(ApplicationManager*pM)
 {
-
+	pM->AddComponent(this);
 }

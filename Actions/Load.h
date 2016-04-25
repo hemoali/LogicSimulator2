@@ -11,6 +11,7 @@ protected:
 public:
 	Load(ApplicationManager*pApp);
 
+
 	//Reads parameters required for action to execute
 	virtual bool ReadActionParameters(image *);
 

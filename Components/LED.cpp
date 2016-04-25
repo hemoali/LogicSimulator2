@@ -49,7 +49,7 @@ void LED::selectYourSelf(Output* pOut, color Color) {
 
 void LED::save(int id, ofstream & file)
 {
-	file << "LED  " << id << "  " << this->getLabel() << "  " << m_GfxInfo.x1 << "  " << m_GfxInfo.y1 << endl;
+	file << "LED  "<<this->getID()<<"  " << this->getLabel() << "  " << m_GfxInfo.x1 << "  " << m_GfxInfo.y1 << endl;
 }
 
 void LED::load(ApplicationManager*pM)

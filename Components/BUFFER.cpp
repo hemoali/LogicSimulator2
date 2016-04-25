@@ -55,7 +55,7 @@ void BUFFER::selectYourSelf(Output* pOut, color Color) {
 void BUFFER::save(int id, ofstream & file)
 {
 
-	file << "BUFFER  " << id << "  " << /*this->getLabel() << "  " <<*/ m_GfxInfo.x1 << "  " << m_GfxInfo.y1 << endl;
+	file << "BUFFER  "<<this->getID()<<"  " << /*this->getLabel() << "  " <<*/ m_GfxInfo.x1 << "  " << m_GfxInfo.y1 << endl;
 }
 
 void BUFFER::load(ApplicationManager*pM)
