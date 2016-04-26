@@ -59,3 +59,6 @@ void NAND2::load(ApplicationManager*pM)
 {
 	pM->AddComponent(this);
 }
+ActionType NAND2::getComponentActionType() {
+	return ADD_NAND_GATE_2;
+}

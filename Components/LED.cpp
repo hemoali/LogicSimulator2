@@ -56,3 +56,7 @@ void LED::load(ApplicationManager*pM)
 {
 	pM->AddComponent(this);
 }
+
+ActionType LED::getComponentActionType() {
+	return ADD_LED;
+}

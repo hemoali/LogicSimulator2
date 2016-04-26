@@ -20,6 +20,8 @@ public:
 	virtual void setInputPinStatus(int n, STATUS s); virtual void selectYourSelf(Output* pOut, color Color);
 	//Destructor must be virtual
 	virtual ~LED();
+	virtual ActionType getComponentActionType();
+
 };
 
 #endif

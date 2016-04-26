@@ -23,6 +23,8 @@ public:
 
 	virtual void save(int, ofstream &);
 	virtual void load(ApplicationManager*);
+	virtual ActionType getComponentActionType();
+
 };
 
 #endif

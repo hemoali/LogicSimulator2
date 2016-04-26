@@ -56,3 +56,6 @@ void AND2::load(ApplicationManager*pM)
 {
 	pM->AddComponent(this);
 }
+ActionType AND2::getComponentActionType() {
+	return ADD_AND_GATE_2;
+}

@@ -59,3 +59,7 @@ void NOR3::load(ApplicationManager*pM)
 {
 	pM->AddComponent(this);
 }
+
+ActionType NOR3::getComponentActionType() {
+	return ADD_NOR_GATE_3;
+}

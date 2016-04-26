@@ -62,3 +62,6 @@ void BUFFER::load(ApplicationManager*pM)
 {
 	pM->AddComponent(this);
 }
+ActionType BUFFER::getComponentActionType() {
+	return ADD_Buff;
+}

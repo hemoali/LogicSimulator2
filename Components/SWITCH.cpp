@@ -64,3 +64,6 @@ void SWITCH::load(ApplicationManager*pM)
 {
 	pM->AddComponent(this);
 }
+ActionType SWITCH::getComponentActionType() {
+	return ADD_Switch;
+}

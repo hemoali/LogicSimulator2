@@ -100,3 +100,6 @@ void Connection::load(ApplicationManager*pM)
 {
 	pM->AddComponent(this);
 }
+ActionType Connection::getComponentActionType() {
+	return ADD_CONNECTION;
+}

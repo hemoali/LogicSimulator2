@@ -59,3 +59,6 @@ void XOR2::load(ApplicationManager*pM)
 {
 	pM->AddComponent(this);
 }
+ActionType XOR2::getComponentActionType() {
+	return ADD_XOR_GATE_2;
+}

@@ -58,3 +58,6 @@ void XNOR2::load(ApplicationManager*pM)
 {
 	pM->AddComponent(this);
 }
+ActionType XNOR2::getComponentActionType() {
+	return ADD_XNOR_GATE_2;
+}

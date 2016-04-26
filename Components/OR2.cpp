@@ -60,3 +60,6 @@ void OR2::load(ApplicationManager*pM)
 {
 	pM->AddComponent(this);
 }
+ActionType OR2::getComponentActionType() {
+	return ADD_OR_GATE_2;
+}

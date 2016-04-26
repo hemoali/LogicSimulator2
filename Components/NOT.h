@@ -23,6 +23,7 @@ public:
 	virtual void load(ApplicationManager*);
 
 	virtual void setInputPinStatus(int n, STATUS s); virtual void selectYourSelf(Output* pOut, color Color);	//set status of the Inputpin , to be used by connection class.
+	virtual ActionType getComponentActionType();
 
 };
 

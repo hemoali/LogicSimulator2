@@ -1369,10 +1369,11 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 	int successfullyDrawnComponentsCount = 0;
 	image* storedImg = new image;
 	image* storedDrawingImg = new image;
-	vector <pair <int, int> > xyOld, RectULXY;
+	vector <pair <int, int> > xyOld, RectULXY, originalXY;
+	vector<bool> isComponentDrawn;
 	vector<image*> allSmallCleanImages;
 	Utils::correctPointClicked(currentX, currentY, true, false);
-
+	bool isMovingSucceded = false;
 	for (size_t i = 0; i < allSelectedComponents.size(); i++)
 	{
 		Component* comp = allSelectedComponents[i].second;
@@ -1383,28 +1384,33 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 		xyOld.push_back(make_pair(iXOld, iYOld));
 		RectULXY.push_back(make_pair(RectULX, RectULY));
 		allSmallCleanImages.push_back(NULL);
+		isComponentDrawn.push_back(false);
 
 		int originalX = comp->getCenterLocation().x1;
 		int originalY = comp->getCenterLocation().y1;
+		originalXY.push_back(make_pair(originalX, originalY));
+
 		vector<Connection*> allInputConnections, allOutputConnections;
 
 		comp->getAllInputConnections(allInputConnections);
 		comp->getAllOutputConnections(allOutputConnections);
-		
+		noOfTotalConnections += allInputConnections.size() + allOutputConnections.size();
+
 		clearConnections(allInputConnections, originalX, originalY, true);
 		clearConnections(allOutputConnections, originalX, originalY, false);
 
 	}
 	pWind->StoreImage(storedImg, 0, 0, pWind->GetWidth(), pWind->GetHeight());
 	pWind->StoreImage(storedDrawingImg, 0, UI.ToolBarHeight, pWind->GetWidth(), pWind->GetHeight() - UI.StatusBarHeight);
-	
+
 	pWind->SetPen(UI.SelectColor, 2);
 	while (true)
 	{
+		int drawnConnectionsCount = 0;
+		int noOfTotalConnections = 0;
+
 		for (size_t i = 0; i < allSelectedComponents.size(); i++)
 		{
-			int noOfTotalConnections = 0;
-			int drawnConnectionsCount = 0;
 
 			int x, y;
 			pWind->GetMouseCoord(x, y);
@@ -1418,6 +1424,7 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 
 				allSelectedComponents[i].second->getAllInputConnections(allInputConnections);
 				allSelectedComponents[i].second->getAllOutputConnections(allOutputConnections);
+				noOfTotalConnections = allInputConnections.size() + allOutputConnections.size();
 
 				for (size_t i = 0; i < allOutputConnections.size(); i++)
 				{
@@ -1555,17 +1562,195 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 					}
 					if (y != xyOld[i].second) {
 						RectULXY[i].second = RectULXY[i].second + (y - xyOld[i].second);
-						xyOld[i].second= y;
+						xyOld[i].second = y;
 					}
 					GraphicsInfo Gfx;
 					Gfx.x1 = RectULXY[i].first + UI.GATE_Width / 2;
 					Gfx.y1 = RectULXY[i].second + UI.GATE_Height / 2;
 					pWind->StoreImage(allSmallCleanImages[i], Gfx.x1 - UI.GRID_SIZE - 5, Gfx.y1 - UI.GRID_SIZE - 5, 2 * UI.GRID_SIZE + 4, UI.GATE_Height + 3);
-					
+					switch (allSelectedComponents[i].second->getComponentActionType()) {
+					case ADD_Buff: {
+						DrawNot_Buffer(Gfx, true, true, wrong);
+						break;
+					}
+					case ADD_INV:
+					{
+
+						DrawNot_Buffer(Gfx, false, true, wrong);
+
+						break;
+					}
+					case ADD_AND_GATE_2:
+					{
+
+						DrawAnd_Nand(Gfx, 2, false, true, wrong);
+						break;
+					}
+					case ADD_AND_GATE_3:
+					{
+						DrawAnd_Nand(Gfx, 3, false, true, wrong);
+						break;
+					}
+
+					case ADD_NAND_GATE_2:
+					{
+
+						DrawAnd_Nand(Gfx, 2, true, true, wrong);
+						break;
+					}
+					case ADD_OR_GATE_2:
+					{
+						DrawOr_Nor(Gfx, 2, false, true, wrong);
+						break;
+					}
+
+					case ADD_NOR_GATE_2:
+					{
+						DrawOr_Nor(Gfx, 2, true, true, wrong);
+
+						break;
+					}
+
+					case ADD_XOR_GATE_2:
+					{
+
+						DrawXor_Xnor(Gfx, 2, false, true, wrong);
+						break;
+					}
+					case ADD_XOR_GATE_3:
+					{
+						DrawXor_Xnor(Gfx, 3, false, true, wrong);
+						break;
+					}
+
+					case ADD_XNOR_GATE_2:
+					{
+
+						DrawXor_Xnor(Gfx, 2, true, true, wrong);
+						break;
+					}
+					case ADD_NOR_GATE_3:
+					{
+
+						DrawOr_Nor(Gfx, 3, true, true, wrong);
+						break;
+					}
+					case ADD_Switch:
+					{
+						DrawSwtich(Gfx, true, true, wrong);
+						break;
+					}
+					case ADD_LED:
+					{
+						DrawLed(Gfx, false, true, wrong);
+						break;
+					}
+					}
+
+					int xbegin = (Gfx.x1 - UI.GATE_Width / 2.0) / UI.GRID_SIZE, xend = (Gfx.x1 + UI.GATE_Width / 2.0) / UI.GRID_SIZE, ybegin = (Gfx.y1 - UI.GATE_Height / 2.0) / UI.GRID_SIZE, yend = (Gfx.y1 + UI.GATE_Height / 2.0) / UI.GRID_SIZE;
+					for (int i = ybegin + 1; i <= yend; i++)
+					{
+						for (int j = xbegin; j <= xend; j++)
+						{
+							if (xbegin == j || xend == j)
+							{
+								setUsedPixel(i, j, PIN);
+								continue;
+							}
+							setUsedPixel(i, j, GATE);
+						}
+					}
+
+					//Reconnect
+					for (size_t i = 0; i < allInputConnections.size(); i++)
+					{
+						GraphicsInfo currentGfx = allInputConnections[i]->getCornersLocation();
+						currentGfx.x2 = currentGfx.x2 + (Gfx.x1 - originalXY[i].first);
+						currentGfx.y2 = currentGfx.y2 + (Gfx.y1 - originalXY[i].second);
+						allInputConnections[i]->setCornersLocation({ currentGfx.x1 ,currentGfx.y1,currentGfx.x2 ,currentGfx.y2 });
+						if (DrawConnection(currentGfx, allInputConnections[i]->getDestPin()->getPosition(), { Gfx.x1, Gfx.y1,0,0 }, allInputConnections[i]->getCellsBeforeAddingConnection(), true))drawnConnectionsCount++;
+					}
+					for (size_t i = 0; i < allOutputConnections.size(); i++)
+					{
+						GraphicsInfo currentGfx = allOutputConnections[i]->getCornersLocation();
+						currentGfx.x1 = currentGfx.x1 + (Gfx.x1 - originalXY[i].first);
+						currentGfx.y1 = currentGfx.y1 + (Gfx.y1 - originalXY[i].second);
+						allOutputConnections[i]->setCornersLocation({ currentGfx.x1 ,currentGfx.y1,currentGfx.x2 ,currentGfx.y2 });
+						Component* dstComp = allOutputConnections[i]->getDestPin()->getComponent();
+						if (DrawConnection(currentGfx, allOutputConnections[i]->getDestPin()->getPosition(), { dstComp->getCenterLocation().x1, dstComp->getCenterLocation().y1,0,0 }, allOutputConnections[i]->getCellsBeforeAddingConnection(), true))drawnConnectionsCount++;
+					}
+					originalXY[i].first = Gfx.x1;
+					originalXY[i].second = Gfx.y1;
+					for (int i = ybegin + 1; i <= yend; i++)
+					{
+						for (int j = xbegin; j <= xend; j++)
+						{
+							if (usedPixels[i][j] != INTERSECTION)
+							{
+								setUsedPixel(i, j, EMPTY);
+							}
+						}
+					}
 				}
+			}
+			if (!wrong&& Utils::CheckPoint({ x,y }, usedPixels, true) && noOfTotalConnections == drawnConnectionsCount) {
+
+				vector<Connection*> allInputConnections, allOutputConnections;
+
+				allSelectedComponents[i].second->getAllInputConnections(allInputConnections);
+				allSelectedComponents[i].second->getAllOutputConnections(allOutputConnections);
+
+				for (size_t i = 0; i < allInputConnections.size(); i++)
+				{
+					for (size_t j = 0; j < allInputConnections[i]->getCellsBeforeAddingConnection().size(); j++)
+					{
+						pManager->GetOutput()->setArrayOfComponents(allInputConnections[i]->getCellsBeforeAddingConnection()[j].y, allInputConnections[i]->getCellsBeforeAddingConnection()[j].x, allInputConnections[i]);
+					}
+				}
+				for (size_t i = 0; i < allOutputConnections.size(); i++)
+				{
+					for (size_t j = 0; j < allOutputConnections[i]->getCellsBeforeAddingConnection().size(); j++)
+					{
+						pManager->GetOutput()->setArrayOfComponents(allOutputConnections[i]->getCellsBeforeAddingConnection()[j].y, allOutputConnections[i]->getCellsBeforeAddingConnection()[j].x, allOutputConnections[i]);
+					}
+				}
+
+				isComponentDrawn[i] = true;
+			}
+			else {
+				isComponentDrawn[i] = false;
+			}
+			pWind->UpdateBuffer();
+
+		}
+		int tx, ty;
+		if ((pWind->GetMouseClick(tx, ty) == LEFT_CLICK || pWind->GetButtonState(LEFT_BUTTON, tx, ty) == BUTTON_UP)) {
+			
+		{
+			bool isDone = true;
+			for (size_t i = 0; i < isComponentDrawn.size(); i++)
+			{
+				if (isComponentDrawn[i] == false)
+				{
+					isDone = false;
+					break;
+				}
+			}
+			if (isDone)
+			{
+				isMovingSucceded = true;
+				break;
+			}
+			else {
+				isMovingSucceded = false;
 			}
 		}
 	}
+	pWind->FlushMouseQueue();
+	PrintMsg("");
+	delete storedDrawingImg;
+	delete storedImg;
+	return isMovingSucceded;
 }
 
 void Output::printMatrix(string msg) {

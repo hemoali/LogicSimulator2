@@ -63,3 +63,6 @@ void XOR3::load(ApplicationManager*pM)
 {
 	pM->AddComponent(this);
 }
+ActionType XOR3::getComponentActionType() {
+	return ADD_XOR_GATE_3;
+}

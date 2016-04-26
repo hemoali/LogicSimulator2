@@ -23,6 +23,7 @@ public:
 	virtual void load(ApplicationManager*);
 
 	virtual void setInputPinStatus(int n, STATUS s); virtual void selectYourSelf(Output* pOut, color Color);
+	virtual ActionType getComponentActionType();
 
 };
 

@@ -19,6 +19,7 @@ public:
 	virtual void Operate() ;	//Calculates the output according to the inputs
 	virtual void Draw(Output* pOut, bool highlight);	//for each component to Draw itself
 
+	virtual ActionType getComponentActionType();
 	
 	void setSourcePin(OutputPin *pSrcPin);
 	void setDestPin(InputPin *pDstPin);

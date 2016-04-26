@@ -59,3 +59,6 @@ void NOR2::load(ApplicationManager*pM)
 {
 	pM->AddComponent(this);
 }
+ActionType NOR2::getComponentActionType() {
+	return ADD_NOR_GATE_2;
+}

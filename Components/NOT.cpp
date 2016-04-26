@@ -59,3 +59,6 @@ void NOT::load(ApplicationManager*pM)
 {
 	pM->AddComponent(this);
 }
+ActionType NOT::getComponentActionType() {
+	return ADD_INV;
+}
