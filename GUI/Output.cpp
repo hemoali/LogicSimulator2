@@ -1727,6 +1727,11 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 					{
 						if (Utils::CheckPoint({ xyOld[i].first,xyOld[i].second }, usedPixels, true)) {
 
+							allSelectedComponents[i].second->setDelete(false);
+							allSelectedComponents[i].second->setNewCenterLocation({ xyOld[i].first, xyOld[i].second });
+							allSelectedComponents[i].second->setSmallCleanImageBeforeAddingComp(allSmallCleanImages[i]);
+							allSelectedComponents[i].second->Draw(pManager->GetOutput(), false);
+
 							vector<Connection*> allInputConnections, allOutputConnections;
 
 							allSelectedComponents[i].second->getAllInputConnections(allInputConnections);
@@ -1737,6 +1742,7 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 								for (size_t j = 0; j < allInputConnections[i]->getCellsBeforeAddingConnection().size(); j++)
 								{
 									pManager->GetOutput()->setArrayOfComponents(allInputConnections[i]->getCellsBeforeAddingConnection()[j].y, allInputConnections[i]->getCellsBeforeAddingConnection()[j].x, allInputConnections[i]);
+									allInputConnections[i]->selectYourSelf(pManager->GetOutput(), UI.ConnColor);
 								}
 							}
 							for (size_t i = 0; i < allOutputConnections.size(); i++)
@@ -1744,9 +1750,11 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 								for (size_t j = 0; j < allOutputConnections[i]->getCellsBeforeAddingConnection().size(); j++)
 								{
 									pManager->GetOutput()->setArrayOfComponents(allOutputConnections[i]->getCellsBeforeAddingConnection()[j].y, allOutputConnections[i]->getCellsBeforeAddingConnection()[j].x, allOutputConnections[i]);
+									allOutputConnections[i]->selectYourSelf(pManager->GetOutput(), UI.ConnColor);
 								}
 							}
 						}
+					
 					}
 
 					isMovingSucceded = true;
@@ -1761,28 +1769,6 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 		oldoy = oy;
 	}
 
-	//Redraw non-selected
-	for (size_t i = 0; i < allSelectedComponents.size(); i++)
-	{
-		allSelectedComponents[i].second->setDelete(false);
-		allSelectedComponents[i].second->setNewCenterLocation({ originalXY[i].first, originalXY[i].second });
-		allSelectedComponents[i].second->setSmallCleanImageBeforeAddingComp(allSmallCleanImages[i]);
-		allSelectedComponents[i].second->Draw(pManager->GetOutput(), false);
-
-
-		vector<Connection*> allInputConnections, allOutputConnections;
-		allSelectedComponents[i].second->getAllInputConnections(allInputConnections);
-		allSelectedComponents[i].second->getAllOutputConnections(allOutputConnections);
-
-		for (size_t i = 0; i < allInputConnections.size(); i++)
-		{
-			allInputConnections[i]->selectYourSelf(pManager->GetOutput(), UI.ConnColor);
-		}
-		for (size_t i = 0; i < allOutputConnections.size(); i++)
-		{
-			allOutputConnections[i]->selectYourSelf(pManager->GetOutput(), UI.ConnColor);
-		}
-	}
 	pWind->FlushMouseQueue();
 	printMatrix("Multi-Move");
 	PrintMsg("");
