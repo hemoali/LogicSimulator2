@@ -65,59 +65,7 @@ void Move::Execute()
 			Comp->getAllOutputConnections(allOuts);
 	
 			//Get Action type
-			ActionType ActType;
-			if (dynamic_cast<AND2*> (Comp))
-			{
-				ActType = ADD_AND_GATE_2;
-			}
-			else if (dynamic_cast<AND3*> (Comp))
-			{
-				ActType = ADD_AND_GATE_3;
-			}
-			else if (dynamic_cast<BUFFER*> (Comp))
-			{
-				ActType = ADD_Buff;
-			}
-			else if (dynamic_cast<LED*> (Comp))
-			{
-				ActType = ADD_LED;
-			}
-			else if (dynamic_cast<NAND2*> (Comp))
-			{
-				ActType = ADD_NAND_GATE_2;
-			}
-			else if (dynamic_cast<NOR2*> (Comp))
-			{
-				ActType = ADD_NOR_GATE_2;
-			}
-			else if (dynamic_cast<NOR3*> (Comp))
-			{
-				ActType = ADD_NOR_GATE_3;
-			}
-			else if (dynamic_cast<NOT*> (Comp))
-			{
-				ActType = ADD_INV;
-			}
-			else if (dynamic_cast<OR2*> (Comp))
-			{
-				ActType = ADD_OR_GATE_2;
-			}
-			else if (dynamic_cast<SWITCH*> (Comp))
-			{
-				ActType = ADD_Switch;
-			}
-			else if (dynamic_cast<XNOR2*> (Comp))
-			{
-				ActType = ADD_XNOR_GATE_2;
-			}
-			else if (dynamic_cast<XOR2*> (Comp))
-			{
-				ActType = ADD_XOR_GATE_2;
-			}
-			else if (dynamic_cast<XOR3*> (Comp))
-			{
-				ActType = ADD_XOR_GATE_3;
-			}
+			ActionType ActType = Comp->getComponentActionType();
 			//Drag
 			GraphicsInfo newCoor;
 			image* newSmallImageForGate = new image;

@@ -911,6 +911,7 @@ void Output::clearConnections(vector<Connection*>& allConnections, int originalX
 }
 bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smallCleanImageBeforeAddingGate, bool moving, Component* comp) {
 	int originalX, originalY;
+	bool alreadyHighlighted = false;
 	if (moving)
 	{
 		originalX = comp->getCenterLocation().x1;
@@ -919,7 +920,7 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 	int iXOld = 0;
 	int iYOld = 0;
 
-	pWind->GetMouseCoord(iXOld, iXOld);
+	pWind->GetMouseCoord(iXOld, iYOld);
 
 	char cKeyData;
 	int RectULX = iXOld - UI.GATE_Width / 2;
@@ -1093,7 +1094,8 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 			wrong = false;
 		}
 		if (Utils::CheckPoint(x, y, usedPixels)) {
-			if (x != iXOld || y != iYOld) {
+			if ((x != iXOld || y != iYOld) || (!alreadyHighlighted && moving && x == iXOld && y == iYOld && x == comp->getCenterLocation().x1 && y == comp->getCenterLocation().y1)) {
+				alreadyHighlighted = true;
 				pWind->DrawImage(storedDrawingImg, 0, UI.ToolBarHeight, pWind->GetWidth(), pWind->GetHeight() - UI.StatusBarHeight);
 
 				if (x != iXOld) {
@@ -1405,12 +1407,14 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 	pWind->SetPen(UI.SelectColor, 2);
 	while (true)
 	{
-		int drawnConnectionsCount = 0;
-		int noOfTotalConnections = 0;
-		int x, y;
-		pWind->GetMouseCoord(x, y);
+		
+		
 		for (size_t i = 0; i < allSelectedComponents.size(); i++)
 		{
+			int x, y;
+			pWind->GetMouseCoord(x, y);
+			int drawnConnectionsCount = 0;
+			int noOfTotalConnections = 0;
 			x += (allSelectedComponents[i].second->getCenterLocation().x1 - mainMovingComponent->getCenterLocation().x1);
 			y += (allSelectedComponents[i].second->getCenterLocation().y1 - mainMovingComponent->getCenterLocation().y1);
 			bool wrong = false;
