@@ -47,7 +47,7 @@ void MultiMove::Execute()
 				continue;
 			if (x >= c->getCornersLocation().x1&&x <= c->getCornersLocation().x2&& y >= c->getCornersLocation().y1&&y <= c->getCornersLocation().y2)
 			{
-				comp = pManager->getComponent(i);
+				comp = pIn->getSelectedComponents()[i].second;
 			}
 			c->setDelete(true);
 			c->Draw(pManager->GetOutput());
@@ -94,6 +94,8 @@ void MultiMove::Execute()
 		}
 
 	}
+	pIn->setSelectMode(false);
+	pIn->getSelectedComponents().clear();
 }
 
 void MultiMove::Undo()

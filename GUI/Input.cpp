@@ -315,7 +315,7 @@ void Input::setSelectedComponents(vector<pair<int, Component*> > comp)
 	selectedComponents = comp;
 }
 
-vector<pair<int, Component*> > Input::getSelectedComponents()
+vector<pair<int, Component*> >& Input::getSelectedComponents()
 {
 	return selectedComponents;
 }

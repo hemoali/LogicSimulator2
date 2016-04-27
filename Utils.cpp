@@ -60,12 +60,13 @@ bool Utils::CheckPoint(GraphicsInfo r_GfxInfo, CellType usedPixels[44][74], bool
 	{
 		return 0;
 	}
-	for (int i = ((isMoving) ? (ybegin +1 ): ybegin); i <= ((isMoving) ? yend : (yend + 1)); i++)
+	for (int i = ybegin; i <=  yend + 1; i++)
 	{
-		for (int j =((isMoving)? xbegin:(xbegin-1)); j <= ((isMoving) ?xend: (xend+1)); j++)
+		for (int j = xbegin - 1; j <= xend + 1; j++)
 		{
 			if (usedPixels[i][j] == GATE || (usedPixels[i][j] == HORIZONTAL || usedPixels[i][j] == VERTICAL)) {
-				if ((i == yend+1 || i == ybegin) && (usedPixels[i][j] == HORIZONTAL || usedPixels[i][j] == END_CONNECTION)) {}
+				if ((i == yend + 1 || i == ybegin) && (usedPixels[i][j] == HORIZONTAL || usedPixels[i][j] == END_CONNECTION)) {}
+				else if (isMoving && (i == ybegin || i == yend + 1 || j == xbegin - 1 || j == xend+1) && usedPixels[i][j] != GATE) {}
 				else {
 					return 0;
 				}

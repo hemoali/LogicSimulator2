@@ -27,7 +27,7 @@ public:
 	bool getSelectMode();
 
 	void setSelectedComponents(vector<pair<int, Component*> >);
-	vector<pair<int,Component*> > getSelectedComponents();
+	vector<pair<int,Component*> >& getSelectedComponents();
 
 	
 	~Input();

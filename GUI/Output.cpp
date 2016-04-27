@@ -564,7 +564,6 @@ void Output::drawStoredDrawingAreaImage(image*& img) {
 }
 
 void Output::drawRectangle(int x1, int y1, int x2, int y2) {
-	//pWind->SetPen(UI.SelectColor, 2);
 	pWind->DrawRectangle(x1, y1, x2, y2, FRAME);
 }
 
@@ -663,12 +662,7 @@ void Output::changeConnectionColor(Connection * connection, color Color) {
 
 			}
 			else if (usedPixels[cell2.y][cell2.x] == INTERSECTION && cell2.cellType == EMPTY && arrayOfCorners[cell2.y][cell2.x] == 0) {
-
-				/*if (j - 1 >= 0 && connection->getCellsBeforeAddingConnection()[j - 1].y == cell.y)
-				{
-					Vertical0Horizontal1Nothing2 = 1;
-				}
-				else */if (cell2.y == cell.y)
+				if (cell2.y == cell.y)
 				{
 					Vertical0Horizontal1Nothing2 = 1;
 				}
@@ -1094,7 +1088,7 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 			wrong = false;
 		}
 		if (Utils::CheckPoint(x, y, usedPixels)) {
-			if ((x != iXOld || y != iYOld) || (!alreadyHighlighted && moving && x == iXOld && y == iYOld && x == comp->getCenterLocation().x1 && y == comp->getCenterLocation().y1)) {
+			if ((x != iXOld || y != iYOld) || (!alreadyHighlighted && moving && x == iXOld && y == iYOld)) {
 				alreadyHighlighted = true;
 				pWind->DrawImage(storedDrawingImg, 0, UI.ToolBarHeight, pWind->GetWidth(), pWind->GetHeight() - UI.StatusBarHeight);
 
@@ -1359,7 +1353,7 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 			}
 		}
 	}
-	//printMatrix("Final");
+	printMatrix("Final single move");
 	pWind->FlushMouseQueue();
 	PrintMsg("");
 	delete storedDrawingImg;
@@ -1368,6 +1362,10 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 }
 
 bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMovingComponent, vector< pair<int, Component*> > allSelectedComponents) {
+	if (mainMovingComponent == NULL)
+	{
+		return false;
+	}
 	PrintMsg("Please select point within workspace and avoid overlaping!, press ESCAPE to stop");
 	int successfullyDrawnComponentsCount = 0;
 	image* storedImg = new image;
@@ -1375,6 +1373,7 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 	vector <pair <int, int> > xyOld, RectULXY, originalXY;
 	vector<bool> isComponentDrawn;
 	vector<image*> allSmallCleanImages;
+	vector<bool> alreadyHighlighted;
 	Utils::correctPointClicked(currentX, currentY, true, false);
 	bool isMovingSucceded = false;
 	for (size_t i = 0; i < allSelectedComponents.size(); i++)
@@ -1384,14 +1383,15 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 		int iYOld = currentY + (allSelectedComponents[i].second->getCenterLocation().y1 - mainMovingComponent->getCenterLocation().y1);
 		int RectULX = iXOld - UI.GATE_Width / 2;
 		int RectULY = iYOld - UI.GATE_Height / 2;
-		int originalX = comp->getCenterLocation().x1;
-		int originalY = comp->getCenterLocation().y1;
+		int originalX = allSelectedComponents[i].second->getCenterLocation().x1;
+		int originalY = allSelectedComponents[i].second->getCenterLocation().y1;
 
 		xyOld.push_back(make_pair(iXOld, iYOld));
 		RectULXY.push_back(make_pair(RectULX, RectULY));
 		allSmallCleanImages.push_back(new image);
 		isComponentDrawn.push_back(false);
 		originalXY.push_back(make_pair(originalX, originalY));
+		alreadyHighlighted.push_back(false);
 
 		vector<Connection*> allInputConnections, allOutputConnections;
 		comp->getAllInputConnections(allInputConnections);
@@ -1405,22 +1405,26 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 	pWind->StoreImage(storedDrawingImg, 0, UI.ToolBarHeight, pWind->GetWidth(), pWind->GetHeight() - UI.StatusBarHeight);
 
 	pWind->SetPen(UI.SelectColor, 2);
+	int oldox = 0, oldoy = 0;
 	while (true)
 	{
-		
-		
+		int ox, oy;
+		pWind->GetMouseCoord(ox, oy);
+		Utils::correctPointClicked(ox, oy, true, false);
+		if (Utils::CheckPoint(ox, oy, usedPixels) && (ox != oldox || oy != oldoy)) {
+			pWind->DrawImage(storedDrawingImg, 0, UI.ToolBarHeight, pWind->GetWidth(), pWind->GetHeight() - UI.StatusBarHeight);
+		}
 		for (size_t i = 0; i < allSelectedComponents.size(); i++)
 		{
-			int x, y;
-			pWind->GetMouseCoord(x, y);
 			int drawnConnectionsCount = 0;
 			int noOfTotalConnections = 0;
-			x += (allSelectedComponents[i].second->getCenterLocation().x1 - mainMovingComponent->getCenterLocation().x1);
-			y += (allSelectedComponents[i].second->getCenterLocation().y1 - mainMovingComponent->getCenterLocation().y1);
+			int x = ox + (allSelectedComponents[i].second->getCenterLocation().x1 - mainMovingComponent->getCenterLocation().x1);
+			int y = oy + (allSelectedComponents[i].second->getCenterLocation().y1 - mainMovingComponent->getCenterLocation().y1);
 			bool wrong = false;
 			Utils::correctPointClicked(x, y, true, false);
-			if (x != xyOld[i].first || y != xyOld[i].second)
+			if ((x != xyOld[i].first || y != xyOld[i].second) || (!alreadyHighlighted[i] && x == xyOld[i].first && y == xyOld[i].second))
 			{
+				alreadyHighlighted[i] = true;
 				vector<Connection*> allInputConnections, allOutputConnections;
 
 				allSelectedComponents[i].second->getAllInputConnections(allInputConnections);
@@ -1555,7 +1559,6 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 				}
 
 				if (Utils::CheckPoint(x, y, usedPixels)) {
-					pWind->DrawImage(storedDrawingImg, 0, UI.ToolBarHeight, pWind->GetWidth(), pWind->GetHeight() - UI.StatusBarHeight);
 
 					if (x != xyOld[i].first) {
 						RectULXY[i].first = RectULXY[i].first + (x - xyOld[i].first);
@@ -1656,7 +1659,6 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 						{
 							for (int j = xbegin; j <= xend; j++)
 							{
-								cout << i << " " << j << endl;
 								if (xbegin == j || xend == j)
 								{
 									setUsedPixel(i, j, PIN);
@@ -1706,12 +1708,10 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 					isComponentDrawn[i] = false;
 				}
 			}
-
 			pWind->UpdateBuffer();
 		}
 		int tx, ty;
 		if ((pWind->GetMouseClick(tx, ty) == LEFT_CLICK || pWind->GetButtonState(LEFT_BUTTON, tx, ty) == BUTTON_UP)) {
-
 			{
 				bool isDone = true;
 				for (size_t i = 0; i < isComponentDrawn.size(); i++)
@@ -1757,7 +1757,8 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 				}
 			}
 		}
-
+		oldox = ox;
+		oldoy = oy;
 	}
 
 	//Redraw non-selected
@@ -1783,7 +1784,7 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 		}
 	}
 	pWind->FlushMouseQueue();
-	printMatrix("Last");
+	printMatrix("Multi-Move");
 	PrintMsg("");
 	delete storedDrawingImg;
 	delete storedImg;
