@@ -1664,37 +1664,55 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 				toContinue = false;
 			}
 		}
-		if (toContinue)
+		if (toContinue && moved)
 		{
 			//Change corners
 			for (size_t m = 0; m < allSelectedComponents.size(); m++)
 			{
-				if (isComponentDrawn[m] && moved)
+				GraphicsInfo Gfx;
+				Gfx.x1 = RectULXY[m].first + UI.GATE_Width / 2;
+				Gfx.y1 = RectULXY[m].second + UI.GATE_Height / 2;
+
+				vector<Connection*> allInputConnections, allOutputConnections;
+
+				allSelectedComponents[m].second->getAllInputConnections(allInputConnections);
+				allSelectedComponents[m].second->getAllOutputConnections(allOutputConnections);
+
+				for (size_t i = 0; i < allInputConnections.size(); i++)
 				{
-					GraphicsInfo Gfx;
-					Gfx.x1 = RectULXY[m].first + UI.GATE_Width / 2;
-					Gfx.y1 = RectULXY[m].second + UI.GATE_Height / 2;
+					GraphicsInfo currentGfx = allInputConnections[i]->getCornersLocation();
+					currentGfx.x2 = currentGfx.x2 + (Gfx.x1 - originalXY[m].first);
+					currentGfx.y2 = currentGfx.y2 + (Gfx.y1 - originalXY[m].second);
+					allInputConnections[i]->setCornersLocation({ currentGfx.x1 ,currentGfx.y1,currentGfx.x2 ,currentGfx.y2 });
+				}
 
-					vector<Connection*> allInputConnections, allOutputConnections;
+				for (size_t i = 0; i < allOutputConnections.size(); i++)
+				{
+					Component* dstComp = allOutputConnections[i]->getDestPin()->getComponent();
+					GraphicsInfo currentGfx = allOutputConnections[i]->getCornersLocation();
+					currentGfx.x1 = currentGfx.x1 + (Gfx.x1 - originalXY[m].first);
+					currentGfx.y1 = currentGfx.y1 + (Gfx.y1 - originalXY[m].second);
+					allOutputConnections[i]->setCornersLocation({ currentGfx.x1 ,currentGfx.y1,currentGfx.x2 ,currentGfx.y2 });
+				}
 
-					allSelectedComponents[m].second->getAllInputConnections(allInputConnections);
-					allSelectedComponents[m].second->getAllOutputConnections(allOutputConnections);
+			}
+			for (size_t m = 0; m < allSelectedComponents.size(); m++)
+			{
+				GraphicsInfo Gfx;
+				Gfx.x1 = RectULXY[m].first + UI.GATE_Width / 2;
+				Gfx.y1 = RectULXY[m].second + UI.GATE_Height / 2;
 
-					for (size_t i = 0; i < allInputConnections.size(); i++)
+				int xbegin = (Gfx.x1 - UI.GATE_Width / 2.0) / UI.GRID_SIZE, xend = (Gfx.x1 + UI.GATE_Width / 2.0) / UI.GRID_SIZE, ybegin = (Gfx.y1 - UI.GATE_Height / 2.0) / UI.GRID_SIZE, yend = (Gfx.y1 + UI.GATE_Height / 2.0) / UI.GRID_SIZE;
+				for (int i = ybegin + 1; i <= yend; i++)
+				{
+					for (int j = xbegin; j <= xend; j++)
 					{
-						GraphicsInfo currentGfx = allInputConnections[i]->getCornersLocation();
-						currentGfx.x2 = currentGfx.x2 + (Gfx.x1 - originalXY[m].first);
-						currentGfx.y2 = currentGfx.y2 + (Gfx.y1 - originalXY[m].second);
-						allInputConnections[i]->setCornersLocation({ currentGfx.x1 ,currentGfx.y1,currentGfx.x2 ,currentGfx.y2 });
-					}
-
-					for (size_t i = 0; i < allOutputConnections.size(); i++)
-					{
-						Component* dstComp = allOutputConnections[i]->getDestPin()->getComponent();
-						GraphicsInfo currentGfx = allOutputConnections[i]->getCornersLocation();
-						currentGfx.x1 = currentGfx.x1 + (Gfx.x1 - originalXY[m].first);
-						currentGfx.y1 = currentGfx.y1 + (Gfx.y1 - originalXY[m].second);
-						allOutputConnections[i]->setCornersLocation({ currentGfx.x1 ,currentGfx.y1,currentGfx.x2 ,currentGfx.y2 });
+						if (xbegin == j || xend == j)
+						{
+							setUsedPixel(i, j, PIN);
+							continue;
+						}
+						setUsedPixel(i, j, GATE);
 					}
 				}
 			}
@@ -1702,141 +1720,139 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 			vector <Connection*> allDrawnConnections;
 			for (size_t m = 0; m < allSelectedComponents.size(); m++)
 			{
-				if (isComponentDrawn[m] && moved)
+				GraphicsInfo Gfx;
+				Gfx.x1 = RectULXY[m].first + UI.GATE_Width / 2;
+				Gfx.y1 = RectULXY[m].second + UI.GATE_Height / 2;
+
+				vector<Connection*> allInputConnections, allOutputConnections;
+
+				allSelectedComponents[m].second->getAllInputConnections(allInputConnections);
+				allSelectedComponents[m].second->getAllOutputConnections(allOutputConnections);
+				int drawnConnectionsCount = 0;
+				int noOfTotalConnections = allInputConnections.size() + allOutputConnections.size();
+
+				for (size_t i = 0; i < allInputConnections.size(); i++)
 				{
-					vector<Connection*> allInputConnections, allOutputConnections;
-
-					allSelectedComponents[m].second->getAllInputConnections(allInputConnections);
-					allSelectedComponents[m].second->getAllOutputConnections(allOutputConnections);
-					int drawnConnectionsCount = 0;
-					int noOfTotalConnections = allInputConnections.size() + allOutputConnections.size();
-
-					GraphicsInfo Gfx;
-					Gfx.x1 = RectULXY[m].first + UI.GATE_Width / 2;
-					Gfx.y1 = RectULXY[m].second + UI.GATE_Height / 2;
-					int xbegin = (Gfx.x1 - UI.GATE_Width / 2.0) / UI.GRID_SIZE, xend = (Gfx.x1 + UI.GATE_Width / 2.0) / UI.GRID_SIZE, ybegin = (Gfx.y1 - UI.GATE_Height / 2.0) / UI.GRID_SIZE, yend = (Gfx.y1 + UI.GATE_Height / 2.0) / UI.GRID_SIZE;
-					for (int i = ybegin + 1; i <= yend; i++)
+					if (std::find(allDrawnConnections.begin(), allDrawnConnections.end(), allInputConnections[i]) != allDrawnConnections.end())
 					{
-						for (int j = xbegin; j <= xend; j++)
-						{
-							if (xbegin == j || xend == j)
-							{
-								setUsedPixel(i, j, PIN);
-								continue;
-							}
-							setUsedPixel(i, j, GATE);
-						}
+						drawnConnectionsCount++;
+						continue;
 					}
-					for (size_t i = 0; i < allInputConnections.size(); i++)
-					{
-						cout << "in " << m << " " << allDrawnConnections.size() << endl;
-						if (std::find(allDrawnConnections.begin(), allDrawnConnections.end(), allInputConnections[i]) != allDrawnConnections.end())
-						{
-							drawnConnectionsCount++;
-							continue;
-						}
-						if (DrawConnection(allInputConnections[i]->getCornersLocation(), allInputConnections[i]->getDestPin()->getPosition(), { Gfx.x1, Gfx.y1,0,0 }, allInputConnections[i]->getCellsBeforeAddingConnection(), true)) {
-							drawnConnectionsCount++;
-							allDrawnConnections.push_back(allInputConnections[i]);
-						}
+					if (DrawConnection(allInputConnections[i]->getCornersLocation(), allInputConnections[i]->getDestPin()->getPosition(), { Gfx.x1, Gfx.y1,0,0 }, allInputConnections[i]->getCellsBeforeAddingConnection(), true)) {
+						drawnConnectionsCount++;
+						allDrawnConnections.push_back(allInputConnections[i]);
 					}
-					for (size_t i = 0; i < allOutputConnections.size(); i++)
+				}
+				for (size_t i = 0; i < allOutputConnections.size(); i++)
+				{
+					if (std::find(allDrawnConnections.begin(), allDrawnConnections.end(), allOutputConnections[i]) != allDrawnConnections.end())
 					{
-						cout << "out " << m << endl;
-						if (std::find(allDrawnConnections.begin(), allDrawnConnections.end(), allOutputConnections[i]) != allDrawnConnections.end())
+						drawnConnectionsCount++;
+						continue;
+					}
+					bool drawn = false;
+					Component* dstComp = allOutputConnections[i]->getDestPin()->getComponent();
+					for (size_t z = 0; z < allSmallCleanImages.size(); z++)
+					{
+						if (allSelectedComponents[z].second == dstComp)
 						{
-							drawnConnectionsCount++;
-							continue;
-						}
-						bool drawn = false;
-						Component* dstComp = allOutputConnections[i]->getDestPin()->getComponent();
-						for (size_t z = 0; z < allSmallCleanImages.size(); z++)
-						{
-							if (allSelectedComponents[z].second == dstComp)
-							{
-								if (DrawConnection(allOutputConnections[i]->getCornersLocation(), allOutputConnections[i]->getDestPin()->getPosition(), { (RectULXY[z].first + UI.GATE_Width / 2),(RectULXY[z].second + UI.GATE_Height / 2),0,0 }, allOutputConnections[i]->getCellsBeforeAddingConnection(), true))
-								{
-									drawnConnectionsCount++;
-									allDrawnConnections.push_back(allOutputConnections[i]);
-								}
-								drawn = true;
-								break;
-							}
-						}
-						if (!drawn)
-						{
-							if (DrawConnection(allOutputConnections[i]->getCornersLocation(), allOutputConnections[i]->getDestPin()->getPosition(), { dstComp->getCenterLocation().x1, dstComp->getCenterLocation().y1,0,0 }, allOutputConnections[i]->getCellsBeforeAddingConnection(), true))
+							if (DrawConnection(allOutputConnections[i]->getCornersLocation(), allOutputConnections[i]->getDestPin()->getPosition(), { (RectULXY[z].first + UI.GATE_Width / 2),(RectULXY[z].second + UI.GATE_Height / 2),0,0 }, allOutputConnections[i]->getCellsBeforeAddingConnection(), true))
 							{
 								drawnConnectionsCount++;
 								allDrawnConnections.push_back(allOutputConnections[i]);
 							}
+							drawn = true;
+							break;
 						}
 					}
-
-					originalXY[m].first = Gfx.x1;
-					originalXY[m].second = Gfx.y1;
-
-					for (int i = ybegin + 1; i <= yend; i++)
+					if (!drawn)
 					{
-						for (int j = xbegin; j <= xend; j++)
+						if (DrawConnection(allOutputConnections[i]->getCornersLocation(), allOutputConnections[i]->getDestPin()->getPosition(), { dstComp->getCenterLocation().x1, dstComp->getCenterLocation().y1,0,0 }, allOutputConnections[i]->getCellsBeforeAddingConnection(), true))
 						{
-							if (usedPixels[i][j] != INTERSECTION)
-							{
-								setUsedPixel(i, j, EMPTY);
-							}
+							drawnConnectionsCount++;
+							allDrawnConnections.push_back(allOutputConnections[i]);
 						}
 					}
-					if (noOfTotalConnections == drawnConnectionsCount)
+				}
+
+				originalXY[m].first = Gfx.x1;
+				originalXY[m].second = Gfx.y1;
+
+				if (noOfTotalConnections == drawnConnectionsCount)
+				{
+					isComponentDrawn[m] = true;
+				}
+				else {
+					isComponentDrawn[m] = false;
+				}
+
+			}
+
+			//Remove gates
+			for (size_t m = 0; m < allSelectedComponents.size(); m++)
+			{
+				GraphicsInfo Gfx;
+				Gfx.x1 = RectULXY[m].first + UI.GATE_Width / 2;
+				Gfx.y1 = RectULXY[m].second + UI.GATE_Height / 2;
+
+				int xbegin = (Gfx.x1 - UI.GATE_Width / 2.0) / UI.GRID_SIZE, xend = (Gfx.x1 + UI.GATE_Width / 2.0) / UI.GRID_SIZE, ybegin = (Gfx.y1 - UI.GATE_Height / 2.0) / UI.GRID_SIZE, yend = (Gfx.y1 + UI.GATE_Height / 2.0) / UI.GRID_SIZE;
+				for (int i = ybegin + 1; i <= yend; i++)
+				{
+					for (int j = xbegin; j <= xend; j++)
 					{
-						isComponentDrawn[m] = true;
-					}
-					else {
-						isComponentDrawn[m] = false;
+						if (usedPixels[i][j] != INTERSECTION)
+						{
+							setUsedPixel(i, j, EMPTY);
+						}
 					}
 				}
 			}
+
+		}
+		if (toContinue) {
 			int tx, ty;
 			if ((pWind->GetMouseClick(tx, ty) == LEFT_CLICK || pWind->GetButtonState(LEFT_BUTTON, tx, ty) == BUTTON_UP)) {
 				{
-						for (size_t m = 0; m < allSelectedComponents.size(); m++)
-						{
-							if (Utils::CheckPoint({ originalXY[m].first,originalXY[m].second }, usedPixels, true)) {
+					for (size_t m = 0; m < allSelectedComponents.size(); m++)
+					{
+						if (Utils::CheckPoint({ originalXY[m].first,originalXY[m].second }, usedPixels, true)) {
 
-								allSelectedComponents[m].second->setDelete(false);
-								allSelectedComponents[m].second->setNewCenterLocation({ originalXY[m].first, originalXY[m].second });
-								allSelectedComponents[m].second->setSmallCleanImageBeforeAddingComp(allSmallCleanImages[m]);
-								allSelectedComponents[m].second->Draw(pManager->GetOutput(), false);
-							}
+							allSelectedComponents[m].second->setDelete(false);
+							allSelectedComponents[m].second->setNewCenterLocation({ originalXY[m].first, originalXY[m].second });
+							allSelectedComponents[m].second->setSmallCleanImageBeforeAddingComp(allSmallCleanImages[m]);
+							allSelectedComponents[m].second->Draw(pManager->GetOutput(), false);
 						}
-						for (size_t m = 0; m < allSelectedComponents.size(); m++)
+					}
+					for (size_t m = 0; m < allSelectedComponents.size(); m++)
+					{
+						vector<Connection*> allInputConnections, allOutputConnections;
+
+						allSelectedComponents[m].second->getAllInputConnections(allInputConnections);
+						allSelectedComponents[m].second->getAllOutputConnections(allOutputConnections);
+
+						for (size_t i = 0; i < allInputConnections.size(); i++)
 						{
-							vector<Connection*> allInputConnections, allOutputConnections;
-
-							allSelectedComponents[m].second->getAllInputConnections(allInputConnections);
-							allSelectedComponents[m].second->getAllOutputConnections(allOutputConnections);
-
-							for (size_t i = 0; i < allInputConnections.size(); i++)
+							for (size_t j = 0; j < allInputConnections[i]->getCellsBeforeAddingConnection().size(); j++)
 							{
-								for (size_t j = 0; j < allInputConnections[i]->getCellsBeforeAddingConnection().size(); j++)
-								{
-									pManager->GetOutput()->setArrayOfComponents(allInputConnections[i]->getCellsBeforeAddingConnection()[j].y, allInputConnections[i]->getCellsBeforeAddingConnection()[j].x, allInputConnections[i]);
-								}
-								allInputConnections[i]->selectYourSelf(pManager->GetOutput(), UI.DrawColor);
+								pManager->GetOutput()->setArrayOfComponents(allInputConnections[i]->getCellsBeforeAddingConnection()[j].y, allInputConnections[i]->getCellsBeforeAddingConnection()[j].x, allInputConnections[i]);
 							}
-							for (size_t i = 0; i < allOutputConnections.size(); i++)
-							{
-								for (size_t j = 0; j < allOutputConnections[i]->getCellsBeforeAddingConnection().size(); j++)
-								{
-									pManager->GetOutput()->setArrayOfComponents(allOutputConnections[i]->getCellsBeforeAddingConnection()[j].y, allOutputConnections[i]->getCellsBeforeAddingConnection()[j].x, allOutputConnections[i]);
-								}
-								allOutputConnections[i]->selectYourSelf(pManager->GetOutput(), UI.DrawColor);
-							}
+							allInputConnections[i]->selectYourSelf(pManager->GetOutput(), UI.DrawColor);
 						}
-						isMovingSucceded = true;
-						break;
-					}				
+						for (size_t i = 0; i < allOutputConnections.size(); i++)
+						{
+							for (size_t j = 0; j < allOutputConnections[i]->getCellsBeforeAddingConnection().size(); j++)
+							{
+								pManager->GetOutput()->setArrayOfComponents(allOutputConnections[i]->getCellsBeforeAddingConnection()[j].y, allOutputConnections[i]->getCellsBeforeAddingConnection()[j].x, allOutputConnections[i]);
+							}
+							allOutputConnections[i]->selectYourSelf(pManager->GetOutput(), UI.DrawColor);
+						}
+					}
+					isMovingSucceded = true;
+					break;
+				}
 			}
 		}
+
 		oldox = ox;
 		oldoy = oy;
 	}
