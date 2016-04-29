@@ -13,6 +13,7 @@ private:
 	window *pWind;	//Pointer to the Graphics Window
 	bool isSelectMode;
 	vector<pair<int, Component*> > selectedComponents;
+	int startXPointForConnections, startYPointForConnections;
 public:
 	Input(window*);
 	void GetPointClicked(int &, int &, bool drawImage = false, bool drawConnection = false);	//Get coordinate where user clicks
@@ -29,6 +30,10 @@ public:
 	void setSelectedComponents(vector<pair<int, Component*> >);
 	vector<pair<int,Component*> >& getSelectedComponents();
 
+	void getConnectionStartPoint(int&x, int&y) {
+		x = startXPointForConnections;
+		y = startYPointForConnections;
+	}
 	
 	~Input();
 };

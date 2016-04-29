@@ -15,7 +15,7 @@ bool AddConnection::ReadActionParameters(image * smallImageBeforeAddingComponent
 	Input* pIn = pManager->GetInput();
 
 	//Print Action Message
-	pOut->PrintMsg("Connection : Click to select the Source");
+	//pOut->PrintMsg("Connection : Click to select the Source");
 	pIn->GetPointClicked(Cx1, Cy1);
 
 	pOut->PrintMsg("Connection : Click to select the Destination");
@@ -61,6 +61,7 @@ void AddConnection::Execute()
 	if (inputComponent == NULL || outputComponent == NULL || inputComponent == outputComponent || dynamic_cast<SWITCH*> (inputComponent) || dynamic_cast<LED*> (outputComponent))
 	{
 		pManager->GetOutput()->PrintMsg("Invalid Connection", UI.ErrorColor);
+		Sleep(100);
 	}
 	else{
 		numOfInputs = inputComponent->getNumOfInputs();
@@ -83,6 +84,7 @@ void AddConnection::Execute()
 		if (inputComponent->getInputPin(inputPin)->getConnection() != NULL || outputComponent->getOutputPin()->connectedConnectionsCount() == FANOUT)
 		{
 			pManager->GetOutput()->PrintMsg("Invalid Connection", UI.ErrorColor);
+			Sleep(100);
 		}
 		else{
 			GraphicsInfo GInfo;
@@ -116,6 +118,7 @@ void AddConnection::Execute()
 				gateLabel = pManager->GetInput()->GetSrting(pManager->GetOutput(), s);
 				pA->setLabel(gateLabel);
 				pA->setIsDrawn(true);
+				
 				for (size_t i = 0; i < cellsBeforeAddingConnection.size(); i++)
 				{
 					pManager->GetOutput()->setArrayOfComponents(cellsBeforeAddingConnection[i].y, cellsBeforeAddingConnection[i].x, pA);
@@ -126,6 +129,12 @@ void AddConnection::Execute()
 			}
 		}
 	}
+	// Remove red pin
+	outputComponent->setDelete(true);
+	outputComponent->Draw(pManager->GetOutput(), false);
+	outputComponent->setDelete(false);
+	outputComponent->Draw(pManager->GetOutput(), false);
+
 }
 
 

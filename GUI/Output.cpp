@@ -968,11 +968,7 @@ void Output::clearConnectionsFromGrid(vector<Connection*> allOutputConnections, 
 				// Connection under connection
 				if (usedPixels[cell.y][cell.x] == INTERSECTION && cell.cellType == EMPTY && arrayOfCorners[cell.y][cell.x] == 0) {
 
-					/*if (j - 1 >= 0 && allInputConnections[i]->getCellsBeforeAddingConnection()[j - 1].y == cell.y)
-					{
-					Vertical0Horizontal1Nothing2 = 1;
-					}
-					else*/ if (cell2.y == cell.y)
+					if (cell2.y == cell.y)
 					{
 						Vertical0Horizontal1Nothing2 = 1;
 					}
@@ -1236,7 +1232,7 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 			draw = false;
 			break;
 		}
-		else if (!wrong && Utils::CheckPoint({ x,y }, usedPixels, moving, false) && ((pWind->GetMouseClick(tX, tY) == LEFT_CLICK) || (moving && (pWind->GetButtonState(LEFT_BUTTON, tX, tY) == BUTTON_UP)))) {
+		else if (!wrong && Utils::CheckPoint({ x,y }, usedPixels, moving, false) && (pWind->GetMouseClick(tX, tY) == LEFT_CLICK) || ( (pWind->GetButtonState(LEFT_BUTTON, tX, tY) == BUTTON_UP))) {
 			if ((moving && (noOfTotalConnections == drawnConnectionsCount)) || !moving)
 			{
 				Utils::correctPointClicked(x, y, true, false);

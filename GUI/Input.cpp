@@ -12,7 +12,6 @@ void Input::GetPointClicked(int &x, int &y, bool DrawGate, bool DrawConnection)
 {
 	pWind->WaitMouseClick(x, y);	//Wait for mouse click
 	Utils::correctPointClicked(x, y, DrawGate, DrawConnection);
-
 }
 void Input::getSelectionPoint(int & x, int & y)
 {
@@ -31,7 +30,9 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 	clicktype s = LEFT_CLICK;
 	Component* preComp = NULL;
 	while (true) {
+		bool drawConnection = false;
 		if (pWind->GetButtonState(LEFT_BUTTON, xT, yT) == BUTTON_DOWN && yT >= UI.ToolBarHeight && yT < UI.height - UI.StatusBarHeight) {
+
 			Component* comp = NULL;
 			for (int i = 0; i < pManager->allComponentsCorners.size(); i++)
 			{
@@ -40,7 +41,19 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 				if (xT >= pManager->allComponentsCorners[i].x1&&xT <= pManager->allComponentsCorners[i].x2&& yT >= pManager->allComponentsCorners[i].y1&&yT <= pManager->allComponentsCorners[i].y2)
 				{
 					comp = pManager->getComponent(i);
+					if (xT >= pManager->allComponentsCorners[i].x2 - UI.GATE_Width / 2 + 11 && yT > (pManager->allComponentsCorners[i].y1 + UI.GATE_Height / 2) - 3 && yT < (pManager->allComponentsCorners[i].y1 + UI.GATE_Height / 2) + 3)
+					{
+						pWind->SetPen(UI.ErrorColor,5);
+						pWind->DrawLine(pManager->allComponentsCorners[i].x2 - UI.GATE_Width / 2 + 11, pManager->allComponentsCorners[i].y1 + UI.GATE_Height / 2, pManager->allComponentsCorners[i].x2 - UI.GATE_Width / 2 + 12, pManager->allComponentsCorners[i].y1 + UI.GATE_Height / 2, FRAME);
+						startXPointForConnections = xT;
+						startYPointForConnections = yT;
+						drawConnection = true;
+					}
 				}
+			}
+			if (drawConnection)
+			{
+				return ADD_CONNECTION;
 			}
 			if (comp != NULL &&comp->getDelete()) comp = NULL;
 
@@ -55,7 +68,7 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 				}
 				return MOVE;
 			}
-			else {				
+			else {
 				bool found = false;
 				vector <Connection*> allConnections;
 				pManager->getAllConnections(allConnections);
@@ -68,14 +81,14 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 				{
 					for (size_t i = 0; i < selectedComponents.size(); i++)
 					{
-						selectedComponents[i].second->Draw(pManager->GetOutput(),false);
+						selectedComponents[i].second->Draw(pManager->GetOutput(), false);
 					}
 					setSelectMode(false);
 					selectedComponents.clear();
 
 				}
 
-				
+
 				for (size_t i = 0; i < allConnections.size() && !found; i++)
 				{
 					for (size_t j = 0; j < allConnections[i]->getCellsBeforeAddingConnection().size() - 1; j++)
@@ -147,12 +160,12 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 					pManager->GetOutput()->PrintMsg("");
 				}
 				hoverYOld = hoverY;
-				hoverXOld = hoverX; 
+				hoverXOld = hoverX;
 				preComp = comp;
 			}
 		}
 	}
-	
+
 	if (UI.AppMode == DESIGN)	//application is in design mode
 	{
 		//[1] If user clicks on the Toolbar
@@ -186,7 +199,7 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 				case D2NOR: return ADD_NOR_GATE_2;
 				case D3NOR: return ADD_NOR_GATE_3;
 				case D2XNOR: return ADD_XNOR_GATE_2;
-				case DCONNECTION: return ADD_CONNECTION;
+				case DCONNECTION: {/*return ADD_CONNECTION; */}
 				case DSWITCH: return ADD_Switch;
 				case DLED: return ADD_LED;
 				case DSIMULATION: return SIM_MODE;
@@ -210,7 +223,7 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 				case D2NOR: return ADD_NOR_GATE_2_H;
 				case D3NOR: return ADD_NOR_GATE_3_H;
 				case D2XNOR: return ADD_XNOR_GATE_2_H;
-				case DCONNECTION: return ADD_CONNECTION_H;
+				case DCONNECTION: {/*return ADD_CONNECTION_H; */}
 				case DSWITCH: return ADD_Switch_H;
 				case DLED: return ADD_LED_H;
 				case DSIMULATION: return SIM_MODE;
