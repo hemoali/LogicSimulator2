@@ -86,6 +86,10 @@ InputPin*Component::getInputPin(int idx)
 void Component::getAllInputConnections(vector<Connection*> &allInputConnections)
 {
 	allInputConnections.clear();
+	if (this->getComponentActionType() == ADD_Switch)
+	{
+		return;
+	}
 	for (size_t i = 0; i < m_Inputs; i++)
 	{
 		if (m_InputPins[i].getConnection()!=NULL && !((Component*)m_InputPins[i].getConnection())->getDelete())
@@ -97,6 +101,10 @@ void Component::getAllInputConnections(vector<Connection*> &allInputConnections)
 void Component::getAllOutputConnections(vector<Connection*>& allOutputConnections)
 {
 	allOutputConnections.clear();
+	if (this->getComponentActionType() == ADD_LED)
+	{
+		return;
+	}
 	for (size_t i = 0; i < m_OutputPin.connectedConnectionsCount(); i++)
 	{
 		if (((Component*) m_OutputPin.getConnection(i))->getDelete() || m_OutputPin.getConnection(i) == NULL)
