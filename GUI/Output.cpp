@@ -894,7 +894,7 @@ void Output::clearConnections(vector<Connection*>& allConnections, int originalX
 
 }
 
-void Output::clearConnectionsFromGrid(vector<Connection*> allOutputConnections, vector<Connection*> allInputConnections){
+void Output::clearConnectionsFromGrid(vector<Connection*> allOutputConnections, vector<Connection*> allInputConnections) {
 	for (size_t i = 0; i < allOutputConnections.size(); i++)
 	{
 		for (size_t j = 0; j < allOutputConnections[i]->getCellsBeforeAddingConnection().size(); j++)
@@ -1228,49 +1228,53 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 				}
 				pWind->UpdateBuffer();
 			}
-
 		}
 
+		int tX, tY;
 		if (!moving && pWind->GetKeyPress(cKeyData) == ESCAPE) {
 			pWind->DrawImage(storedImg, 0, 0, pWind->GetWidth(), pWind->GetHeight());
 			draw = false;
 			break;
 		}
-		else if (!wrong && (pWind->GetMouseClick(GfxInfo.x1, GfxInfo.y1) == LEFT_CLICK || (moving && (pWind->GetButtonState(LEFT_BUTTON, GfxInfo.x1, GfxInfo.y1) == BUTTON_UP)))) {
+		else if (!wrong && Utils::CheckPoint({ x,y }, usedPixels, moving, false) && ((pWind->GetMouseClick(tX, tY) == LEFT_CLICK) || (moving && (pWind->GetButtonState(LEFT_BUTTON, tX, tY) == BUTTON_UP)))) {
 			if ((moving && (noOfTotalConnections == drawnConnectionsCount)) || !moving)
 			{
-				pWind->FlushMouseQueue();
-				GfxInfo.x1 = x;
-				GfxInfo.y1 = y;
-				Utils::correctPointClicked(GfxInfo.x1, GfxInfo.y1, true, false);
-				if (Utils::CheckPoint(GfxInfo, usedPixels, moving)) {
-					if (moving) // Reset connections on grid of pointers
-					{
-						for (size_t i = 0; i < allInputConnections.size(); i++)
+				Utils::correctPointClicked(x, y, true, false);
+				if (Utils::CheckPoint({ x,y }, usedPixels, moving, false))
+				{
+					GfxInfo.x1 = x;
+					GfxInfo.y1 = y;
+					if (Utils::CheckPoint(GfxInfo, usedPixels, moving)) {
+						if (moving) // Reset connections on grid of pointers
 						{
-							for (size_t j = 0; j < allInputConnections[i]->getCellsBeforeAddingConnection().size(); j++)
+							for (size_t i = 0; i < allInputConnections.size(); i++)
 							{
-								pManager->GetOutput()->setArrayOfComponents(allInputConnections[i]->getCellsBeforeAddingConnection()[j].y, allInputConnections[i]->getCellsBeforeAddingConnection()[j].x, allInputConnections[i]);
+								for (size_t j = 0; j < allInputConnections[i]->getCellsBeforeAddingConnection().size(); j++)
+								{
+									pManager->GetOutput()->setArrayOfComponents(allInputConnections[i]->getCellsBeforeAddingConnection()[j].y, allInputConnections[i]->getCellsBeforeAddingConnection()[j].x, allInputConnections[i]);
+								}
+							}
+							for (size_t i = 0; i < allOutputConnections.size(); i++)
+							{
+								for (size_t j = 0; j < allOutputConnections[i]->getCellsBeforeAddingConnection().size(); j++)
+								{
+									pManager->GetOutput()->setArrayOfComponents(allOutputConnections[i]->getCellsBeforeAddingConnection()[j].y, allOutputConnections[i]->getCellsBeforeAddingConnection()[j].x, allOutputConnections[i]);
+								}
 							}
 						}
-						for (size_t i = 0; i < allOutputConnections.size(); i++)
-						{
-							for (size_t j = 0; j < allOutputConnections[i]->getCellsBeforeAddingConnection().size(); j++)
-							{
-								pManager->GetOutput()->setArrayOfComponents(allOutputConnections[i]->getCellsBeforeAddingConnection()[j].y, allOutputConnections[i]->getCellsBeforeAddingConnection()[j].x, allOutputConnections[i]);
-							}
-						}
+						draw = true;
+						break;
 					}
-					draw = true;
-					break;
-				}
-				else {
-					draw = false;
+					else {
+						draw = false;
+					}
 				}
 			}
 		}
-	}
-	printMatrix("Final single move");
+		pWind->DownButtons();
+		pWind->FlushMouseQueue();
+}
+//	printMatrix("Final single move");
 	pWind->FlushMouseQueue();
 	PrintMsg("");
 	delete storedDrawingImg;
@@ -1329,6 +1333,13 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 		pWind->GetMouseCoord(ox, oy);
 		Utils::correctPointClicked(ox, oy, true, false);
 		bool moved = false;
+		if (!Utils::CheckPoint(ox, oy, usedPixels))
+		{
+
+			pWind->FlushMouseQueue();
+			pWind->DownButtons();
+			continue;
+		}
 		if (Utils::CheckPoint(ox, oy, usedPixels) && (ox != oldox || oy != oldoy)) {
 			pWind->DrawImage(storedDrawingImg, 0, UI.ToolBarHeight, pWind->GetWidth(), pWind->GetHeight() - UI.StatusBarHeight);
 		}
@@ -1619,7 +1630,7 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 		}
 		if (toContinue) {
 			int tx, ty;
-			if ((pWind->GetMouseClick(tx, ty) == LEFT_CLICK || pWind->GetButtonState(LEFT_BUTTON, tx, ty) == BUTTON_UP)) {
+			if (Utils::CheckPoint({ ox,oy }, usedPixels, true, false) && (pWind->GetMouseClick(tx, ty) == LEFT_CLICK || pWind->GetButtonState(LEFT_BUTTON, tx, ty) == BUTTON_UP)) {
 				{
 					for (size_t m = 0; m < allSelectedComponents.size(); m++)
 					{
@@ -1657,10 +1668,13 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 					}
 					isMovingSucceded = true;
 					break;
+					pWind->FlushMouseQueue();
 				}
 			}
 		}
 
+		pWind->FlushMouseQueue();
+		pWind->DownButtons();
 		oldox = ox;
 		oldoy = oy;
 	}
@@ -1989,4 +2003,3 @@ Output::~Output()
 {
 	delete pWind;
 }
-

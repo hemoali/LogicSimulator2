@@ -210,7 +210,9 @@ class window {
     // be wanted by the user
     void FlushKeyQueue();
     void FlushMouseQueue();
-
+	void DownButtons() {
+		bsLeft = bsRight = BUTTON_DOWN;
+	}
     // Sets the color of the current brush, which is used when drawing with
     // the FILLED style.  Returns the last selected color.
 	color SetBrush(const double dRed, const double dGreen, const double dBlue);
