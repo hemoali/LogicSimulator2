@@ -295,10 +295,9 @@ bfs_node* Output::bfs(bfs_node* bf, int requX, int requY, vector<bfs_node*> allN
 	}
 	return NULL;
 }
+
 bool Output::DrawConnection(GraphicsInfo GfxInfo, int inputPin, GraphicsInfo compCenterLocation, vector<Cell>& cellsBeforeAddingConnection, bool selected) const
 {
-	cout << GfxInfo.x1 << " " << GfxInfo.y1 << "  " << GfxInfo.x2 << " " << GfxInfo.y2 << endl;
-	cout << compCenterLocation.x1 << " " << compCenterLocation.y1 << endl << endl;
 	vector<bfs_node*> allNodes;
 	bfs_node* current = new bfs_node;
 
@@ -543,17 +542,10 @@ image * Output::StoreBeforeMenu(int x, int y)
 	return ptr;
 }
 
-void Output::updateBuffer()
-{
-	pWind->UpdateBuffer();
-}
-
 void Output::DrawAfterMenu(image * img, int x, int y)
 {
 	pWind->DrawImage(img, x, y, UI.RightClickMenuLength, UI.RightClickMenuWidth);
 }
-
-
 
 void Output::DrawCleanImage(image* img, int x, int y)
 {
@@ -901,6 +893,127 @@ void Output::clearConnections(vector<Connection*>& allConnections, int originalX
 	}
 
 }
+
+void Output::clearConnectionsFromGrid(vector<Connection*> allOutputConnections, vector<Connection*> allInputConnections){
+	for (size_t i = 0; i < allOutputConnections.size(); i++)
+	{
+		for (size_t j = 0; j < allOutputConnections[i]->getCellsBeforeAddingConnection().size(); j++)
+		{
+			Cell cell = allOutputConnections[i]->getCellsBeforeAddingConnection()[j];
+			int Vertical0Horizontal1Nothing2 = 2;
+
+			// Clear intersected connections
+			if (j < allOutputConnections[i]->getCellsBeforeAddingConnection().size() - 1)
+			{
+				Vertical0Horizontal1Nothing2 = 2;
+				Cell& cell2 = allOutputConnections[i]->getCellsBeforeAddingConnection()[j + 1];
+
+				// Connection under connection
+				if (usedPixels[cell.y][cell.x] == INTERSECTION && cell.cellType == EMPTY && arrayOfCorners[cell.y][cell.x] == 0) {
+
+					if (cell2.y == cell.y)
+					{
+						Vertical0Horizontal1Nothing2 = 1;
+					}
+					else {
+						Vertical0Horizontal1Nothing2 = 0;
+					}
+
+				}
+				//Clear other connections intersections
+				if (Vertical0Horizontal1Nothing2 == 0 || Vertical0Horizontal1Nothing2 == 1)
+				{
+					vector<Connection*> allConnections;
+					pManager->getAllConnections(allConnections);
+
+					for (size_t k = 0; k < allConnections.size(); k++)
+					{
+						for (size_t l = 0; l < allConnections[k]->getCellsBeforeAddingConnection().size(); l++)
+						{
+							if (allConnections[k] != allOutputConnections[i] && allConnections[k]->getCellsBeforeAddingConnection()[l].x == cell.x && allConnections[k]->getCellsBeforeAddingConnection()[l].y == cell.y)
+							{
+								allConnections[k]->getCellsBeforeAddingConnection()[l].cellType = EMPTY;
+							}
+						}
+					}
+				}
+			}
+			// Clear Grid
+			arrayOfIntersections[cell.y][cell.x] = -1;
+			arrayOfCorners[cell.y][cell.x] = 0;
+			if (cell.cellType != PIN)
+			{
+				usedPixels[cell.y][cell.x] = cell.cellType;
+				connectionsCountAtPixel[cell.y][cell.x] -= ((connectionsCountAtPixel[cell.y][cell.x] > 0) ? 1 : 0);
+			}
+			else if (j != allOutputConnections[i]->getCellsBeforeAddingConnection().size() - 1 && j != 0) {
+				usedPixels[cell.y][cell.x] = EMPTY;
+			}
+		}
+		allOutputConnections[i]->getCellsBeforeAddingConnection().clear();
+	}
+	for (size_t i = 0; i < allInputConnections.size(); i++)
+	{
+		for (size_t j = 0; j < allInputConnections[i]->getCellsBeforeAddingConnection().size(); j++)
+		{
+			Cell cell = allInputConnections[i]->getCellsBeforeAddingConnection()[j];
+			int Vertical0Horizontal1Nothing2 = 2;
+
+			// Clear intersected connections
+			if (j < allInputConnections[i]->getCellsBeforeAddingConnection().size() - 1)
+			{
+				Vertical0Horizontal1Nothing2 = 2;
+				Cell& cell2 = allInputConnections[i]->getCellsBeforeAddingConnection()[j + 1];
+
+				// Connection under connection
+				if (usedPixels[cell.y][cell.x] == INTERSECTION && cell.cellType == EMPTY && arrayOfCorners[cell.y][cell.x] == 0) {
+
+					/*if (j - 1 >= 0 && allInputConnections[i]->getCellsBeforeAddingConnection()[j - 1].y == cell.y)
+					{
+					Vertical0Horizontal1Nothing2 = 1;
+					}
+					else*/ if (cell2.y == cell.y)
+					{
+						Vertical0Horizontal1Nothing2 = 1;
+					}
+					else {
+						Vertical0Horizontal1Nothing2 = 0;
+					}
+
+				}
+				//Clear other connections intersections
+				if (Vertical0Horizontal1Nothing2 == 0 || Vertical0Horizontal1Nothing2 == 1)
+				{
+					vector<Connection*> allConnections;
+					pManager->getAllConnections(allConnections);
+
+					for (size_t k = 0; k < allConnections.size(); k++)
+					{
+						for (size_t l = 0; l < allConnections[k]->getCellsBeforeAddingConnection().size(); l++)
+						{
+							if (allConnections[k] != allInputConnections[i] && allConnections[k]->getCellsBeforeAddingConnection()[l].x == cell.x && allConnections[k]->getCellsBeforeAddingConnection()[l].y == cell.y)
+							{
+								allConnections[k]->getCellsBeforeAddingConnection()[l].cellType = EMPTY;
+							}
+						}
+					}
+				}
+			}
+			arrayOfIntersections[cell.y][cell.x] = -1;
+			arrayOfCorners[cell.y][cell.x] = 0;
+			if (cell.cellType != PIN || (allInputConnections[i]->getCellsBeforeAddingConnection()[allInputConnections[i]->getCellsBeforeAddingConnection().size() - 1].cellType == PIN && allInputConnections[i]->getCellsBeforeAddingConnection()[allInputConnections[i]->getCellsBeforeAddingConnection().size() - 2].cellType == PIN && (j == allInputConnections[i]->getCellsBeforeAddingConnection().size() - 2)))
+			{
+				usedPixels[cell.y][cell.x] = cell.cellType;
+				connectionsCountAtPixel[cell.y][cell.x] -= ((connectionsCountAtPixel[cell.y][cell.x] > 0) ? 1 : 0);
+
+			}
+		}
+		allInputConnections[i]->getCellsBeforeAddingConnection().clear();
+	}
+
+}
+
+
 bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smallCleanImageBeforeAddingGate, bool moving, Component* comp) {
 	int originalX, originalY;
 	bool alreadyHighlighted = false;
@@ -958,125 +1071,7 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 		if (moving && (x != iXOld || y != iYOld))
 		{
 			//Clear connections from grid
-			for (size_t i = 0; i < allOutputConnections.size(); i++)
-			{
-				for (size_t j = 0; j < allOutputConnections[i]->getCellsBeforeAddingConnection().size(); j++)
-				{
-					Cell cell = allOutputConnections[i]->getCellsBeforeAddingConnection()[j];
-					int Vertical0Horizontal1Nothing2 = 2;
-
-					// Clear intersected connections
-					if (j < allOutputConnections[i]->getCellsBeforeAddingConnection().size() - 1)
-					{
-						Vertical0Horizontal1Nothing2 = 2;
-						Cell& cell2 = allOutputConnections[i]->getCellsBeforeAddingConnection()[j + 1];
-
-						// Connection under connection
-						if (usedPixels[cell.y][cell.x] == INTERSECTION && cell.cellType == EMPTY && arrayOfCorners[cell.y][cell.x] == 0) {
-
-							/*if (j - 1 >= 0 && allOutputConnections[i]->getCellsBeforeAddingConnection()[j - 1].y == cell.y)
-							{
-							Vertical0Horizontal1Nothing2 = 1;
-							}
-							else*/ if (cell2.y == cell.y)
-							{
-								Vertical0Horizontal1Nothing2 = 1;
-							}
-							else {
-								Vertical0Horizontal1Nothing2 = 0;
-							}
-
-						}
-						//Clear other connections intersections
-						if (Vertical0Horizontal1Nothing2 == 0 || Vertical0Horizontal1Nothing2 == 1)
-						{
-							vector<Connection*> allConnections;
-							pManager->getAllConnections(allConnections);
-
-							for (size_t k = 0; k < allConnections.size(); k++)
-							{
-								for (size_t l = 0; l < allConnections[k]->getCellsBeforeAddingConnection().size(); l++)
-								{
-									if (allConnections[k] != allOutputConnections[i] && allConnections[k]->getCellsBeforeAddingConnection()[l].x == cell.x && allConnections[k]->getCellsBeforeAddingConnection()[l].y == cell.y)
-									{
-										allConnections[k]->getCellsBeforeAddingConnection()[l].cellType = EMPTY;
-									}
-								}
-							}
-						}
-					}
-					// Clear Grid
-					arrayOfIntersections[cell.y][cell.x] = -1;
-					arrayOfCorners[cell.y][cell.x] = 0;
-					if (cell.cellType != PIN)
-					{
-						usedPixels[cell.y][cell.x] = cell.cellType;
-						connectionsCountAtPixel[cell.y][cell.x] -= ((connectionsCountAtPixel[cell.y][cell.x] > 0) ? 1 : 0);
-					}
-					else if (j != allOutputConnections[i]->getCellsBeforeAddingConnection().size() - 1 && j != 0) {
-						usedPixels[cell.y][cell.x] = EMPTY;
-					}
-				}
-				allOutputConnections[i]->getCellsBeforeAddingConnection().clear();
-			}
-			for (size_t i = 0; i < allInputConnections.size(); i++)
-			{
-				for (size_t j = 0; j < allInputConnections[i]->getCellsBeforeAddingConnection().size(); j++)
-				{
-					Cell cell = allInputConnections[i]->getCellsBeforeAddingConnection()[j];
-					int Vertical0Horizontal1Nothing2 = 2;
-
-					// Clear intersected connections
-					if (j < allInputConnections[i]->getCellsBeforeAddingConnection().size() - 1)
-					{
-						Vertical0Horizontal1Nothing2 = 2;
-						Cell& cell2 = allInputConnections[i]->getCellsBeforeAddingConnection()[j + 1];
-
-						// Connection under connection
-						if (usedPixels[cell.y][cell.x] == INTERSECTION && cell.cellType == EMPTY && arrayOfCorners[cell.y][cell.x] == 0) {
-
-							/*if (j - 1 >= 0 && allInputConnections[i]->getCellsBeforeAddingConnection()[j - 1].y == cell.y)
-							{
-							Vertical0Horizontal1Nothing2 = 1;
-							}
-							else*/ if (cell2.y == cell.y)
-							{
-								Vertical0Horizontal1Nothing2 = 1;
-							}
-							else {
-								Vertical0Horizontal1Nothing2 = 0;
-							}
-
-						}
-						//Clear other connections intersections
-						if (Vertical0Horizontal1Nothing2 == 0 || Vertical0Horizontal1Nothing2 == 1)
-						{
-							vector<Connection*> allConnections;
-							pManager->getAllConnections(allConnections);
-
-							for (size_t k = 0; k < allConnections.size(); k++)
-							{
-								for (size_t l = 0; l < allConnections[k]->getCellsBeforeAddingConnection().size(); l++)
-								{
-									if (allConnections[k] != allInputConnections[i] && allConnections[k]->getCellsBeforeAddingConnection()[l].x == cell.x && allConnections[k]->getCellsBeforeAddingConnection()[l].y == cell.y)
-									{
-										allConnections[k]->getCellsBeforeAddingConnection()[l].cellType = EMPTY;
-									}
-								}
-							}
-						}
-					}
-					arrayOfIntersections[cell.y][cell.x] = -1;
-					arrayOfCorners[cell.y][cell.x] = 0;
-					if (cell.cellType != PIN || (allInputConnections[i]->getCellsBeforeAddingConnection()[allInputConnections[i]->getCellsBeforeAddingConnection().size() - 1].cellType == PIN && allInputConnections[i]->getCellsBeforeAddingConnection()[allInputConnections[i]->getCellsBeforeAddingConnection().size() - 2].cellType == PIN && (j == allInputConnections[i]->getCellsBeforeAddingConnection().size() - 2)))
-					{
-						usedPixels[cell.y][cell.x] = cell.cellType;
-						connectionsCountAtPixel[cell.y][cell.x] -= ((connectionsCountAtPixel[cell.y][cell.x] > 0) ? 1 : 0);
-
-					}
-				}
-				allInputConnections[i]->getCellsBeforeAddingConnection().clear();
-			}
+			clearConnectionsFromGrid(allOutputConnections, allInputConnections);
 			drawnConnectionsCount = 0;
 		}
 		if (!Utils::CheckPoint({ x,y }, usedPixels, moving, false)) {
@@ -1178,82 +1173,6 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 				case ADD_LED:
 				{
 					DrawLed(Gfx, false, moving, wrong);
-					break;
-				}
-				case ADD_Buff_H: {
-					DrawNot_Buffer(Gfx, true, true, wrong);
-					break;
-				}
-				case ADD_INV_H:
-				{
-
-					DrawNot_Buffer(Gfx, false, true, wrong);
-
-					break;
-				}
-				case ADD_AND_GATE_2_H:
-				{
-
-					DrawAnd_Nand(Gfx, 2, false, true, wrong);
-					break;
-				}
-				case ADD_AND_GATE_3_H:
-				{
-					DrawAnd_Nand(Gfx, 3, false, true, wrong);
-					break;
-				}
-
-				case ADD_NAND_GATE_2_H:
-				{
-
-					DrawAnd_Nand(Gfx, 2, true, true, wrong);
-					break;
-				}
-				case ADD_OR_GATE_2_H:
-				{
-					DrawOr_Nor(Gfx, 2, false, true, wrong);
-					break;
-				}
-
-				case ADD_NOR_GATE_2_H:
-				{
-					DrawOr_Nor(Gfx, 2, true, true, wrong);
-
-					break;
-				}
-
-				case ADD_XOR_GATE_2_H:
-				{
-
-					DrawXor_Xnor(Gfx, 2, false, true, wrong);
-					break;
-				}
-				case ADD_XOR_GATE_3_H:
-				{
-					DrawXor_Xnor(Gfx, 3, false, true, wrong);
-					break;
-				}
-
-				case ADD_XNOR_GATE_2_H:
-				{
-
-					DrawXor_Xnor(Gfx, 2, true, true, wrong);
-					break;
-				}
-				case ADD_NOR_GATE_3_H:
-				{
-
-					DrawOr_Nor(Gfx, 3, true, true, wrong);
-					break;
-				}
-				case ADD_Switch_H:
-				{
-					DrawSwtich(Gfx, true, true, wrong);
-					break;
-				}
-				case ADD_LED_H:
-				{
-					DrawLed(Gfx, false, true, wrong);
 					break;
 				}
 				}
@@ -1431,117 +1350,7 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 				allSelectedComponents[m].second->getAllOutputConnections(allOutputConnections);
 				noOfTotalConnections = allInputConnections.size() + allOutputConnections.size();
 
-				for (size_t i = 0; i < allOutputConnections.size(); i++)
-				{
-					for (size_t j = 0; j < allOutputConnections[i]->getCellsBeforeAddingConnection().size(); j++)
-					{
-						Cell cell = allOutputConnections[i]->getCellsBeforeAddingConnection()[j];
-						int Vertical0Horizontal1Nothing2 = 2;
-
-						// Clear intersected connections
-						if (j < allOutputConnections[i]->getCellsBeforeAddingConnection().size() - 1)
-						{
-							Vertical0Horizontal1Nothing2 = 2;
-							Cell& cell2 = allOutputConnections[i]->getCellsBeforeAddingConnection()[j + 1];
-
-							// Connection under connection
-							if (usedPixels[cell.y][cell.x] == INTERSECTION && cell.cellType == EMPTY && arrayOfCorners[cell.y][cell.x] == 0) {
-
-								if (cell2.y == cell.y)
-								{
-									Vertical0Horizontal1Nothing2 = 1;
-								}
-								else {
-									Vertical0Horizontal1Nothing2 = 0;
-								}
-
-							}
-							//Clear other connections intersections
-							if (Vertical0Horizontal1Nothing2 == 0 || Vertical0Horizontal1Nothing2 == 1)
-							{
-								vector<Connection*> allConnections;
-								pManager->getAllConnections(allConnections);
-
-								for (size_t k = 0; k < allConnections.size(); k++)
-								{
-									for (size_t l = 0; l < allConnections[k]->getCellsBeforeAddingConnection().size(); l++)
-									{
-										if (allConnections[k] != allOutputConnections[i] && allConnections[k]->getCellsBeforeAddingConnection()[l].x == cell.x && allConnections[k]->getCellsBeforeAddingConnection()[l].y == cell.y)
-										{
-											allConnections[k]->getCellsBeforeAddingConnection()[l].cellType = EMPTY;
-										}
-									}
-								}
-							}
-						}
-						// Clear Grid
-						arrayOfIntersections[cell.y][cell.x] = -1;
-						arrayOfCorners[cell.y][cell.x] = 0;
-						if (cell.cellType != PIN)
-						{
-							usedPixels[cell.y][cell.x] = cell.cellType;
-							connectionsCountAtPixel[cell.y][cell.x] -= ((connectionsCountAtPixel[cell.y][cell.x] > 0) ? 1 : 0);
-						}
-						else if (j != allOutputConnections[i]->getCellsBeforeAddingConnection().size() - 1 && j != 0) {
-							usedPixels[cell.y][cell.x] = EMPTY;
-						}
-					}
-					allOutputConnections[i]->getCellsBeforeAddingConnection().clear();
-				}
-				for (size_t i = 0; i < allInputConnections.size(); i++)
-				{
-					for (size_t j = 0; j < allInputConnections[i]->getCellsBeforeAddingConnection().size(); j++)
-					{
-						Cell cell = allInputConnections[i]->getCellsBeforeAddingConnection()[j];
-						int Vertical0Horizontal1Nothing2 = 2;
-
-						// Clear intersected connections
-						if (j < allInputConnections[i]->getCellsBeforeAddingConnection().size() - 1)
-						{
-							Vertical0Horizontal1Nothing2 = 2;
-							Cell& cell2 = allInputConnections[i]->getCellsBeforeAddingConnection()[j + 1];
-
-							// Connection under connection
-							if (usedPixels[cell.y][cell.x] == INTERSECTION && cell.cellType == EMPTY && arrayOfCorners[cell.y][cell.x] == 0) {
-
-								if (cell2.y == cell.y)
-								{
-									Vertical0Horizontal1Nothing2 = 1;
-								}
-								else {
-									Vertical0Horizontal1Nothing2 = 0;
-								}
-
-							}
-							//Clear other connections intersections
-							if (Vertical0Horizontal1Nothing2 == 0 || Vertical0Horizontal1Nothing2 == 1)
-							{
-								vector<Connection*> allConnections;
-								pManager->getAllConnections(allConnections);
-
-								for (size_t k = 0; k < allConnections.size(); k++)
-								{
-									for (size_t l = 0; l < allConnections[k]->getCellsBeforeAddingConnection().size(); l++)
-									{
-										if (allConnections[k] != allInputConnections[i] && allConnections[k]->getCellsBeforeAddingConnection()[l].x == cell.x && allConnections[k]->getCellsBeforeAddingConnection()[l].y == cell.y)
-										{
-											allConnections[k]->getCellsBeforeAddingConnection()[l].cellType = EMPTY;
-										}
-									}
-								}
-							}
-						}
-						arrayOfIntersections[cell.y][cell.x] = -1;
-						arrayOfCorners[cell.y][cell.x] = 0;
-						if (cell.cellType != PIN || (allInputConnections[i]->getCellsBeforeAddingConnection()[allInputConnections[i]->getCellsBeforeAddingConnection().size() - 1].cellType == PIN && allInputConnections[i]->getCellsBeforeAddingConnection()[allInputConnections[i]->getCellsBeforeAddingConnection().size() - 2].cellType == PIN && (j == allInputConnections[i]->getCellsBeforeAddingConnection().size() - 2)))
-						{
-							usedPixels[cell.y][cell.x] = cell.cellType;
-							connectionsCountAtPixel[cell.y][cell.x] -= ((connectionsCountAtPixel[cell.y][cell.x] > 0) ? 1 : 0);
-
-						}
-					}
-					allInputConnections[i]->getCellsBeforeAddingConnection().clear();
-				}
+				clearConnectionsFromGrid(allOutputConnections, allInputConnections);
 
 				if (!Utils::CheckPoint({ x,y }, usedPixels, true, false)) {
 					wrong = true;
@@ -1643,7 +1452,6 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 						break;
 					}
 					}
-
 
 				}
 				if (!wrong && Utils::CheckPoint({ x,y }, usedPixels, true, false)) {

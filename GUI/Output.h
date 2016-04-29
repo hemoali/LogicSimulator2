@@ -52,7 +52,6 @@ public:
 	void drawStoredDrawingAreaImage(image*& img);
 	void drawRectangle(int x1, int y1, int x2, int y2);
 
-	void updateBuffer();
 	void DrawAfterMenu(image* img,int x, int y);
 	bfs_node* bfs(bfs_node* bf, int requX, int requY, vector<bfs_node*> allNodes) const;
 	
@@ -65,7 +64,8 @@ public:
 
 	void setArrayOfComponents(int i, int j, Component*);
 	Component* getArrayOfComponents(int i, int j);
-
+	
+	void clearConnectionsFromGrid(vector<Connection*> allOutputConnections, vector<Connection*> allInputConnections);
 
 	void printMatrix(string msg);
 	~Output();
