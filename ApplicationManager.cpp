@@ -104,9 +104,14 @@ void ApplicationManager::ExecuteAction(ActionType ActType)
 	case MULTI_MOVE:
 		pAct = new MultiMove(this);
 		break;
-	case RIGHT_CLICKSELECT:
+	case RIGHT_CLICKSELECT: {
 		pAct = new RightClick(this);
+		pAct->Execute();
+		RightClick* tmp = (RightClick*)(pAct);
+		pAct = tmp->getAction();
+		delete tmp;
 		break;
+	}
 	case SAVE:
 		pAct = new Save(this);
 		break;

@@ -20,7 +20,7 @@ public:
 	void getSelectionPoint(int& , int&);
 	void getMouseCoordinates(int & x, int & y);
 	buttonstate Input::GetButtonStatus(const button btMouse, int &iX, int &iY) const;
-	string GetSrting(Output*, string);		//Returns a string entered by the user
+	string GetSrting(Output*, string,bool EditingLabel = false);		//Returns a string entered by the user
 	ActionType GetUserAction(ApplicationManager* pManager); //Reads the user click and maps it to an action
 	void WaitSelectionPoint(int &X, int &Y);
 	
@@ -35,6 +35,10 @@ public:
 		y = startYPointForConnections;
 	}
 	
+
+	string EditComponenetLabel(Output *);
+	void getExactConnectionLocation(int&x, int&y);
+
 	~Input();
 };
 #endif

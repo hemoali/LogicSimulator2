@@ -500,51 +500,108 @@ void Output::DrawRClickMenu_CorrectPoints(int& x, int& y, int type, bool draw)
 		case 1: //The Gate SubMenu
 			imageURL = "images\\Menu\\RightClickMenu.jpg";
 			break;
+		case 2: //The connection menu
+			imageURL = "images\\Menu\\RightClickMenuConnection.jpg";
+			break;
+		case 3: //The Space Menu
+			imageURL = "images\\Menu\\RightClickMenuSpace.jpg";
+			break;
+		case 5: //The MultiDelete Menu
+			imageURL = "images\\Menu\\RightClickMultiDelete.jpg";
+			break;
 		default:
 			break;
 		}
+	int Height;
+	switch (type)
+	{
+	case 1:
+		Height = UI.RightClickMenuHeight;
+		break;
+	case 2:
+		Height = UI.RightClickCMenuH;
+		break;
+	case 3:
+		Height = UI.RightClickCMenuH / 2;
+		break;
+	case 5:
+		Height = UI.RightClickCMenuH / 2;
+		break;
+	}
 	//If Point (x,y) in the Right or Middle of the Drawing Area
 	if (x + UI.RightClickMenuLength < UI.width) {
-		if (y + UI.RightClickMenuWidth > UI.height - UI.StatusBarHeight) {
+		if (y + Height > UI.height - UI.StatusBarHeight) {
 			// y must be corrected
-			y = y - UI.RightClickMenuWidth;
+			y = y - Height;
 			if (draw)
-				pWind->DrawImage(imageURL, x, y, UI.RightClickMenuLength, UI.RightClickMenuWidth);
+				pWind->DrawImage(imageURL, x, y, UI.RightClickMenuLength, Height);
 		}
 		else {
 			//The Point(x,y) is ready for drawing Menu 
 			if (draw)
-				pWind->DrawImage(imageURL, x, y, UI.RightClickMenuLength, UI.RightClickMenuWidth);
+				pWind->DrawImage(imageURL, x, y, UI.RightClickMenuLength, Height);
 		}
 	}
-	//If Point (x,y) in the Left of the Drawing Area
+	//If Point (x,y) in the Right of the Drawing Area
 	if (x + UI.RightClickMenuLength > UI.width) {
 		// x must be corrected
-		x = UI.width - UI.RightClickMenuWidth - 40;
-		if (y + UI.RightClickMenuWidth > UI.height - UI.StatusBarHeight) {
+		x = UI.width - UI.RightClickMenuLength - 40;
+		if (y + Height > UI.height - UI.StatusBarHeight) {
 			// y must be corrected
-			y = y - UI.RightClickMenuWidth;
+			y = y - Height;
 			if (draw)
-				pWind->DrawImage(imageURL, x, y, UI.RightClickMenuLength, UI.RightClickMenuWidth);
+				pWind->DrawImage(imageURL, x, y, UI.RightClickMenuLength, Height);
 		}
 		else {
 			//The Point(x,y) is ready for drawing Menu 
 			if (draw)
-				pWind->DrawImage(imageURL, x, y, UI.RightClickMenuLength, UI.RightClickMenuWidth);
+				pWind->DrawImage(imageURL, x, y, UI.RightClickMenuLength, Height);
 		}
 	}
 }
 
-image * Output::StoreBeforeMenu(int x, int y)
+image * Output::StoreBeforeMenu(int x, int y,int type)
 {
+	int Height;
+	switch (type)
+	{
+	case 1:
+		Height = UI.RightClickMenuHeight;
+		break;
+	case 2:
+		Height = UI.RightClickCMenuH;
+		break;
+	case 3:
+		Height = UI.RightClickCMenuH / 2;
+		break;
+	case 5:
+		Height = UI.RightClickCMenuH / 2;
+		break;
+	}
 	image * ptr = new image;
-	pWind->StoreImage(ptr, x, y, UI.RightClickMenuLength, UI.RightClickMenuWidth);
+	pWind->StoreImage(ptr, x, y, UI.RightClickMenuLength, Height);
 	return ptr;
 }
 
-void Output::DrawAfterMenu(image * img, int x, int y)
+void Output::DrawAfterMenu(image * img, int x, int y, int type)
 {
-	pWind->DrawImage(img, x, y, UI.RightClickMenuLength, UI.RightClickMenuWidth);
+	int Height;
+	switch (type)
+	{
+	case 1:
+		Height = UI.RightClickMenuHeight;
+		break;
+	case 2:
+		Height = UI.RightClickCMenuH;
+		break;
+	case 3:
+		Height = UI.RightClickCMenuH / 2;
+		break;
+	case 5:
+		Height = UI.RightClickCMenuH / 2;
+		break;
+	}
+	pWind->DrawImage(img, x, y, UI.RightClickMenuLength, Height);
 }
 
 void Output::DrawCleanImage(image* img, int x, int y)
@@ -561,6 +618,75 @@ void Output::drawStoredDrawingAreaImage(image*& img) {
 void Output::drawRectangle(int x1, int y1, int x2, int y2) {
 	pWind->DrawRectangle(x1, y1, x2, y2, FRAME);
 }
+
+void Output::DeleteGate(Component *& C, bool undo , bool completetly)
+{
+	if (undo) {
+		//Undo
+		Output *pOut = this;
+		C->setDelete(false);
+		C->Draw(pOut);
+		GraphicsInfo gfx = C->getCornersLocation();
+		int xbegin = (C->getCenterLocation().x1 - UI.GATE_Width / 2.0) / UI.GRID_SIZE;
+		int xend = (C->getCenterLocation().x1 + UI.GATE_Width / 2.0) / UI.GRID_SIZE;
+		int ybegin = (C->getCenterLocation().y1 - UI.GATE_Height / 2.0) / UI.GRID_SIZE;
+		int yend = (C->getCenterLocation().y1 + UI.GATE_Height / 2.0) / UI.GRID_SIZE;
+		for (int i = ybegin + 1; i <= yend; i++)
+		{
+			for (int j = xbegin; j <= xend; j++)
+			{
+				pOut->setUsedPixel(i, j, GATE);
+			}
+		}
+		//Drawing the Connections
+		//Reasigning the array
+	}
+	else {
+		Output *pOut = this;
+		string s = "Gate: " + (C->getLabel()) + " has been deleted successfully";
+		pOut->PrintMsg(s);
+		C->setDelete(true);
+		C->Draw(pOut);
+		GraphicsInfo gfx = C->getCornersLocation();
+		int xbegin = (C->getCenterLocation().x1 - UI.GATE_Width / 2.0) / UI.GRID_SIZE;
+		int xend = (C->getCenterLocation().x1 + UI.GATE_Width / 2.0) / UI.GRID_SIZE;
+		int ybegin = (C->getCenterLocation().y1 - UI.GATE_Height / 2.0) / UI.GRID_SIZE;
+		int yend = (C->getCenterLocation().y1 + UI.GATE_Height / 2.0) / UI.GRID_SIZE;
+		//Removeing Used Pixels and the Array of components reserved cells
+		for (int i = ybegin + 1; i <= yend; i++)
+		{
+			for (int j = xbegin; j <= xend; j++)
+			{
+				pOut->setUsedPixel(i, j, EMPTY);
+			}
+		}
+		GraphicsInfo GInfotmp, GInfo = C->getCornersLocation();
+		GInfotmp.x1 = GInfo.x1 - UI.GATE_Width / 2;
+		GInfotmp.x2 = GInfo.x1 + UI.GATE_Width / 2;
+		GInfotmp.y1 = GInfo.y1 - UI.GATE_Height / 2;
+		GInfotmp.y2 = GInfo.y1 + UI.GATE_Height / 2;
+		for (int i = GInfotmp.y1 / UI.GRID_SIZE + 1; i <= GInfotmp.y2 / UI.GRID_SIZE; i++)
+		{
+			for (int j = GInfotmp.x1 / UI.GRID_SIZE; j <= GInfotmp.x2 / UI.GRID_SIZE; j++) { 
+				pOut->setArrayOfComponents(i, j, NULL); 
+			}
+		}
+		
+		// Removing Connection
+		vector<Connection*> allInConnections, allOutConnections;
+		C->getAllInputConnections(allInConnections);
+		C->getAllOutputConnections(allOutConnections);
+
+		pOut->clearConnections(allInConnections, C->getCenterLocation().x1, C->getCenterLocation().y1, true, true);
+		pOut->clearConnections(allOutConnections, C->getCenterLocation().x1, C->getCenterLocation().y1, false, true);
+		if (completetly) {
+			delete C;
+			C = NULL;
+		}
+	}
+}
+
+
 
 void Output::changeConnectionColor(Connection * connection, color Color) {
 	bool b1 = false, b2 = false, PreviousIsIntersection = false, PreviousIsIntersection2 = false, isCell2XGreaterThanCellX = false, isCell2YGreaterThanCellY = false;
@@ -1714,39 +1840,40 @@ void Output::DrawAnd_Nand(GraphicsInfo g, int in, bool isNand, bool highlighted,
 	if (notValid) pWind->SetPen(UI.ErrorColor);
 
 	if (isNand) {
-		outx = cx + 14 - (2 * ciDefBrushSize);
+		outx = cx + 10 - (2 * ciDefBrushSize);
 		p1x = p2x = p1x - 5;
 		//Darwing lines
-		pWind->DrawLine(p1x, p1y, p1x + 8, p1y, FRAME);
-		pWind->DrawLine(p2x, p2y, p2x + 8, p2y, FRAME);
+		pWind->DrawLine(p1x, p1y, p1x + 4, p1y, FRAME);
+		pWind->DrawLine(p2x, p2y, p2x + 4, p2y, FRAME);
 		pWind->DrawLine(in1x - 6 - (2 * ciDefBrushSize), in1y, in1x - 6, in1y, FRAME); //The Input1-Line
 		pWind->DrawLine(in2x - 6 - (2 * ciDefBrushSize), in2y, in2x - 6, in2y, FRAME); //The Input2-Line
-		pWind->DrawLine(outx + 3 * ciDefBrushSize - 1, outy, outx + 7 + (2 * ciDefBrushSize), outy, FRAME); //The Output-Line
+		pWind->DrawLine(outx + 3 * ciDefBrushSize - 1, outy, outx + 4 + (2 * ciDefBrushSize), outy, FRAME); //The Output-Line
 		pWind->DrawLine(p1x, p1y - 1, p2x, p2y, FRAME);
 		if (in == 3) { //Checking for 3 input Gate 
 			int in3x = in1x, in3y = cy;
 			pWind->DrawLine(in3x - 6 - (2 * ciDefBrushSize), in3y, in3x, in3y, FRAME); //The Input3-Line
 		}
 		//Drawing Arc
-		pWind->DrawBezier(p1x + 8, p1y, p1x + 10 + 3 + 4, p1y + 4, p1x + 10 + 9 + 4, p1y + 12, outx, outy, FRAME);
-		pWind->DrawBezier(p2x + 8, p2y, p2x + 10 + 3 + 4, p2y - 4, p2x + 10 + 9 + 4, p2y - 12, outx, outy, FRAME);
+		pWind->DrawBezier(p1x + 4, p1y, p1x + 6 + 3 + 4, p1y + 4, p1x + 6 + 9 + 4, p1y + 12, outx, outy, FRAME);
+		pWind->DrawBezier(p2x + 4, p2y, p2x + 6 + 3 + 4, p2y - 4, p2x + 6 + 9 + 4, p2y - 12, outx, outy, FRAME);
 
 		//Drawing Buuble
 		pWind->DrawCircle(outx - ciDefBrushSize + 2 * ciDefBrushSize, outy, 2 * ciDefBrushSize, FRAME);
 
 	}
 	else {
-		outx = cx + 15 - (2 * ciDefBrushSize);
+		outx = cx + 10 - (2 * ciDefBrushSize);
+		p1x = p2x = p1x - 5;
 		//Darwing lines
 		pWind->DrawLine(p1x, p1y, p1x + 8, p1y, FRAME);
 		pWind->DrawLine(p2x, p2y, p2x + 8, p2y, FRAME);
-		pWind->DrawLine(in1x - 6 - (2 * ciDefBrushSize), in1y, in1x, in1y, FRAME); //The Input1-Line
-		pWind->DrawLine(in2x - 6 - (2 * ciDefBrushSize), in2y, in2x, in2y, FRAME); //The Input2-Line
-		pWind->DrawLine(outx + 3, outy, outx + 6 + (2 * ciDefBrushSize), outy, FRAME); //The Output-Line
+		pWind->DrawLine(in1x - 6 - (2 * ciDefBrushSize), in1y, in1x - 5, in1y, FRAME); //The Input1-Line
+		pWind->DrawLine(in2x - 6 - (2 * ciDefBrushSize), in2y, in2x - 5, in2y, FRAME); //The Input2-Line
+		pWind->DrawLine(outx + 3, outy, outx + 4 + (2 * ciDefBrushSize), outy, FRAME); //The Output-Line
 		pWind->DrawLine(p1x, p1y - 1, p2x, p2y, FRAME);
 		if (in == 3) { //Checking for 3 input Gate 
 			int in3x = in1x, in3y = cy;
-			pWind->DrawLine(in3x - 6 - (2 * ciDefBrushSize), in3y, in3x, in3y, FRAME); //The Input3-Line
+			pWind->DrawLine(in3x - 6 - (2 * ciDefBrushSize), in3y, in3x - 4, in3y, FRAME); //The Input3-Line
 		}
 		//Drawing Arc
 		//pWind->DrawBezier(p1x + 8, p1y, p1x + 8 + 5 , outy + 8, p1x + 8 + 8 , outy + 3, outx, outy, FRAME);
@@ -1760,7 +1887,7 @@ void Output::DrawNot_Buffer(GraphicsInfo g, bool isBuffer, bool highlighted, boo
 	int cx = g.x1, cy = g.y1; //Centre Point
 	int p1x, p1y, p2x, p2y, inx, iny, outx, outy; //Vertices of Triangle and input/output Points
 
-	p1x = p2x = inx = cx - 15 + (2 * ciDefBrushSize);
+	p1x = p2x = inx = cx - 18 + (2 * ciDefBrushSize);
 	p1y = cy + 21; p2y = cy - 21;
 	iny = outy = cy;
 
@@ -1770,21 +1897,21 @@ void Output::DrawNot_Buffer(GraphicsInfo g, bool isBuffer, bool highlighted, boo
 
 	if (isBuffer) {
 		//BUFFER Gate
-		outx = cx + 15 - (2 * ciDefBrushSize);
+		outx = cx + 9 - (2 * ciDefBrushSize);
 		//Drawing lines 
-		pWind->DrawLine(inx - 6 - (2 * ciDefBrushSize), iny, inx, iny, FRAME); //The Input-Line
-		pWind->DrawLine(outx, outy, outx + 6 + (2 * ciDefBrushSize), outy, FRAME); //The Output-Line
-																				   //Drawing Trianlge
+		pWind->DrawLine(inx - 3 - (2 * ciDefBrushSize), iny, inx, iny, FRAME); //The Input-Line
+		pWind->DrawLine(outx, outy, outx + 5 + (2 * ciDefBrushSize), outy, FRAME); //The Output-Line
+		//Drawing Trianlge
 		pWind->DrawTriangle(p1x, p1y, p2x, p2y, outx, outy, FRAME);
 	}
 	else {
 		// NOT GATE
-		outx = cx + 14 - (2 * ciDefBrushSize);
+		outx = cx + 9 - (2 * ciDefBrushSize);
 		//Drawing lines 
-		pWind->DrawLine(inx - 6 - (2 * ciDefBrushSize), iny, inx, iny, FRAME); //The Input-Line
-		pWind->DrawLine(outx + 4 * ciDefBrushSize - 1, outy, outx + 7 + (2 * ciDefBrushSize), outy, FRAME);//The Output-Line
+		pWind->DrawLine(inx - 3 - (2 * ciDefBrushSize), iny, inx, iny, FRAME); //The Input-Line
+		pWind->DrawLine(outx + 4 * ciDefBrushSize - 1, outy, outx + 5 + (2 * ciDefBrushSize), outy, FRAME);//The Output-Line
 
-																										   //Drawing Trianlge
+  	    //Drawing Trianlge
 		pWind->DrawTriangle(p1x, p1y, p2x, p2y, outx, outy, FRAME);
 		//Darwing Bubble
 		pWind->DrawCircle(outx + 2 * ciDefBrushSize, outy, 2 * ciDefBrushSize, FRAME);
@@ -1796,7 +1923,7 @@ void Output::DrawOr_Nor(GraphicsInfo g, int in, bool isNor, bool highlighted, bo
 	int p1x, p1y, p2x, p2y, hx1, hx2, hy1, hy2, kx, ky, ky2; //Helping Points
 	int in1x, in1y, in2x, in2y, outx, outy; // the 2 Inputs & Output
 
-	in1x = in2x = cx - 15 + (2 * ciDefBrushSize);
+	in1x = in2x = cx - 16 + (2 * ciDefBrushSize);
 	in1y = cy - 13;
 	in2y = cy + 13; outy = cy;
 
@@ -1810,18 +1937,18 @@ void Output::DrawOr_Nor(GraphicsInfo g, int in, bool isNor, bool highlighted, bo
 	if (notValid) pWind->SetPen(UI.ErrorColor);
 	if (isNor) {
 		//NOR GATE
-		outy = cy; outx = cx + 14 - (2 * ciDefBrushSize);
-		kx = (outx + hx1) / 2;
+		outy = cy; outx = cx + 10 - (2 * ciDefBrushSize);
+		kx = (outx + hx1) / 2 - 2;
 		ky = (outy + hy1) / 2;
 		ky2 = (outy + hy2) / 2;
 
 		//Draw lines
-		pWind->DrawLine(in1x - 6 - (2 * ciDefBrushSize), in1y, in1x, in1y, FRAME); //The Input1-Line
-		pWind->DrawLine(in2x - 6 - (2 * ciDefBrushSize), in2y, in2x, in2y, FRAME); //The Input2-Line
-		pWind->DrawLine(outx + 4 * ciDefBrushSize - 1, outy, outx + 7 + (2 * ciDefBrushSize), outy, FRAME); //The Output-Line
+		pWind->DrawLine(in1x - 5 - (2 * ciDefBrushSize), in1y, in1x, in1y, FRAME); //The Input1-Line
+		pWind->DrawLine(in2x - 5 - (2 * ciDefBrushSize), in2y, in2x, in2y, FRAME); //The Input2-Line
+		pWind->DrawLine(outx + 4 * ciDefBrushSize - 1, outy, outx + 4 + (2 * ciDefBrushSize), outy, FRAME); //The Output-Line
 		if (in == 3) { //Checking for 3 input Gate 
 			int in3x = in1x + 2 * (ciDefBrushSize == 1 ? 2 : 1), in3y = cy;
-			pWind->DrawLine(in3x - 8 - (2 * ciDefBrushSize), in3y, in3x, in3y, FRAME); //The Input3-Line
+			pWind->DrawLine(in3x - 6 - (2 * ciDefBrushSize), in3y, in3x, in3y, FRAME); //The Input3-Line
 		}
 		//Draw Buuble
 		pWind->DrawCircle(outx + 2 * ciDefBrushSize, outy, 2 * ciDefBrushSize, FRAME);
@@ -1834,17 +1961,17 @@ void Output::DrawOr_Nor(GraphicsInfo g, int in, bool isNor, bool highlighted, bo
 
 	else {
 		//OR GATE
-		outx = cx + 15 - (2 * ciDefBrushSize);
+		outx = cx + 14 - (2 * ciDefBrushSize);
 		kx = (outx + hx1) / 2;
 		ky = (outy + hy1) / 2;
 		ky2 = (outy + hy2) / 2;
 		//Draw lines
-		pWind->DrawLine(in1x - 6 - (2 * ciDefBrushSize), in1y, in1x, in1y, FRAME); //The Input1-Line
-		pWind->DrawLine(in2x - 6 - (2 * ciDefBrushSize), in2y, in2x, in2y, FRAME); //The Input2-Line
-		pWind->DrawLine(outx, outy, outx + 6 + (2 * ciDefBrushSize), outy, FRAME); //The Output-Line
+		pWind->DrawLine(in1x - 5 - (2 * ciDefBrushSize), in1y, in1x, in1y, FRAME); //The Input1-Line
+		pWind->DrawLine(in2x - 5 - (2 * ciDefBrushSize), in2y, in2x, in2y, FRAME); //The Input2-Line
+		pWind->DrawLine(outx, outy, outx  + (2 * ciDefBrushSize) - 2, outy, FRAME); //The Output-Line
 		if (in == 3) { //Checking for 3 input Gate 
 			int in3x = in1x + 2 * (ciDefBrushSize == 1 ? 2 : 1), in3y = cy;
-			pWind->DrawLine(in3x - 8 - (2 * ciDefBrushSize), in3y, in3x, in3y, FRAME); //The Input3-Line
+			pWind->DrawLine(in3x - 6 - (2 * ciDefBrushSize), in3y, in3x, in3y, FRAME); //The Input3-Line
 		}
 		//Draw Bezier
 		pWind->DrawBezier(p1x, p1y, hx1, hy1, kx, ky, outx, outy, FRAME);
@@ -1862,29 +1989,29 @@ void Output::DrawXor_Xnor(GraphicsInfo g, int in, bool isXNor, bool highlighted,
 	int in1x, in1y, in2x, in2y, outx, outy; // the 2 Inputs And Output
 	int hx1, hx2, hy1, hy2, kx, ky, ky2, p1x, p1y, p2x, p2y; //Helping Points
 
-	in1x = in2x = cx - 15 + (2 * ciDefBrushSize);
+	in1x = in2x = cx - 17 + (2 * ciDefBrushSize);
 	in1y = cy - 13;
 	in2y = cy + 13;
 
-	p1x = p2x = cx - 22;
+	p1x = p2x = cx - 24;
 	p2y = hy2 = cy + 21;
 	p1y = hy1 = cy - 21;
-	hx1 = hx2 = cx;
-	int xi = 10; //X-Increment
+	hx1 = hx2 = cx -2;
+	int xi = 8; //X-Increment
 
 	pWind->SetPen(UI.DrawColor);
 	if (highlighted) pWind->SetPen(UI.SelectColor);
 	if (notValid) pWind->SetPen(UI.ErrorColor);
 	if (isXNor) {
 		//XNOR GATE
-		outy = cy; outx = cx + 14 - (2 * ciDefBrushSize);
-		kx = (outx + hx1) / 2;
-		ky = (outy + hy1) / 2;
-		ky2 = (outy + hy2) / 2;
+		outy = cy; outx = cx + 11 - (2 * ciDefBrushSize);
+		kx = (outx + hx1) / 2  - 2;
+		ky = (outy + hy1) / 2 ;
+		ky2 = (outy + hy2) / 2 ;
 		//Draw lines
-		pWind->DrawLine(in1x - 6 - (2 * ciDefBrushSize), in1y, in1x, in1y, FRAME); //The Input1-Line
-		pWind->DrawLine(in2x - 6 - (2 * ciDefBrushSize), in2y, in2x, in2y, FRAME); //The Input2-Line
-		pWind->DrawLine(outx + 4 * ciDefBrushSize - 1, outy, outx - 1 + (2 * ciDefBrushSize), outy, FRAME); //The Output-Line
+		pWind->DrawLine(in1x - 3 - (2 * ciDefBrushSize), in1y, in1x, in1y, FRAME); //The Input1-Line
+		pWind->DrawLine(in2x - 3 - (2 * ciDefBrushSize), in2y, in2x, in2y, FRAME); //The Input2-Line
+		//pWind->DrawLine(outx + 4 * ciDefBrushSize - 1, outy, outx - 1 + (2 * ciDefBrushSize) , outy, FRAME); //The Output-Line
 		if (in == 3) { //Checking for 3 input Gate 
 			int in3x = in1x, in3y = cy;
 			pWind->DrawLine(in3x - 6 - (2 * ciDefBrushSize), in3y, in3x, in3y, FRAME); //The Input3-Line
@@ -1906,8 +2033,8 @@ void Output::DrawXor_Xnor(GraphicsInfo g, int in, bool isXNor, bool highlighted,
 		ky = (outy + hy1) / 2;
 		ky2 = (outy + hy2) / 2;
 		//Draw lines
-		pWind->DrawLine(in1x - 6 - (2 * ciDefBrushSize), in1y, in1x, in1y, FRAME); //The Input1-Line
-		pWind->DrawLine(in2x - 6 - (2 * ciDefBrushSize), in2y, in2x, in2y, FRAME); //The Input2-Line
+		pWind->DrawLine(in1x - 4 - (2 * ciDefBrushSize), in1y, in1x, in1y, FRAME); //The Input1-Line
+		pWind->DrawLine(in2x - 4 - (2 * ciDefBrushSize), in2y, in2x, in2y, FRAME); //The Input2-Line
 		pWind->DrawLine(outx, outy, outx + (2 * ciDefBrushSize) - 1, outy, FRAME); //The Output-Line
 		if (in == 3) { //Checking for 3 input Gate 
 			int in3x = in1x, in3y = cy;
@@ -1922,6 +2049,7 @@ void Output::DrawXor_Xnor(GraphicsInfo g, int in, bool isXNor, bool highlighted,
 	}
 
 }
+
 void Output::DrawLed(GraphicsInfo g, bool isON, bool highlighted, bool notValid) const
 {
 	pWind->SetPen(UI.DrawColor);
@@ -1954,6 +2082,7 @@ void Output::DrawLed(GraphicsInfo g, bool isON, bool highlighted, bool notValid)
 	pWind->DrawLine(cx - radius*(1 / sqrt(2)), cy + radius*(1 / sqrt(2)), cx - (radius + 4)*(1 / sqrt(2)), cy + (radius + 4)*(1 / sqrt(2)), FRAME);
 
 }
+
 void Output::DrawSwtich(GraphicsInfo g, bool isON, bool highlighted, bool notValid) const
 {
 	pWind->SetPen(UI.DrawColor);
@@ -1976,6 +2105,7 @@ void Output::DrawSwtich(GraphicsInfo g, bool isON, bool highlighted, bool notVal
 
 
 }
+
 void Output::setUsedPixel(int i, int j, CellType c) {
 	usedPixels[i][j] = c;
 }
@@ -1992,6 +2122,8 @@ void Output::setArrayOfComponents(int i, int j, Component * c)
 
 Component * Output::getArrayOfComponents(int i, int j)
 {
+	if (i > 44 || j > 77) return NULL; //IBRAHIM IF I DIDN'T ADD THIS LINE THE PROGRAM WILL TERMINATE FOR NO KNOWN REASON 
+	//Giving that the error is that j is always  4096 
 	return arrayOfComponents[i][j];
 }
 

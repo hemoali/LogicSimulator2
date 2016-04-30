@@ -26,6 +26,8 @@ void Component::setLabel(string s){
 }
 string Component::getLabel(){ return m_Label; }
 
+
+
 void Component::setDelete(bool d){
 	deleted = d;
 }

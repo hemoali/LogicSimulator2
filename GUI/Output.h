@@ -46,15 +46,19 @@ public:
 	void DrawSwtich(GraphicsInfo, bool = false, bool = false, bool = false) const;
 	void DrawCleanImage(image*, int x,int y);
 	bool DrawConnection(GraphicsInfo r_GfxInfo, int inputPin, GraphicsInfo compCenterLocationbool, vector<Cell>&, bool selected = false) const;
-	void DrawRClickMenu_CorrectPoints(int& x, int& y, int type, bool = true);
-	image* StoreBeforeMenu(int, int);
+	
+	
 	void storeDrawingAreaImage(image*& img); 
 	void drawStoredDrawingAreaImage(image*& img);
 	void drawRectangle(int x1, int y1, int x2, int y2);
 
-	void DrawAfterMenu(image* img,int x, int y);
-	bfs_node* bfs(bfs_node* bf, int requX, int requY, vector<bfs_node*> allNodes) const;
+	image* StoreBeforeMenu(int, int, int);
+	void DrawAfterMenu(image* img, int x, int y, int type);
+	void DrawRClickMenu_CorrectPoints(int& x, int& y, int type, bool = true);
+	void DeleteGate(Component*& C,bool undo = false ,bool completetly = false);
+
 	
+	bfs_node* bfs(bfs_node* bf, int requX, int requY, vector<bfs_node*> allNodes) const;
 	void clearConnections(vector<Connection*> & allConnections, int originalX, int originalY, bool isInput, bool setDeleted = false);
 	void changeConnectionColor(Connection * connection, color Color = BLUE);
 	void PrintMsg(string msg, color Color = UI.MsgColor) const;	//Print a message on Status bar
@@ -68,6 +72,7 @@ public:
 	void clearConnectionsFromGrid(vector<Connection*> allOutputConnections, vector<Connection*> allInputConnections);
 
 	void printMatrix(string msg);
+
 	~Output();
 };
 #endif
