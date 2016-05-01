@@ -32,109 +32,111 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 	Component* preComp = NULL;
 	while (true) {
 		bool drawConnection = false;
-		if (pWind->GetButtonState(LEFT_BUTTON, xT, yT) == BUTTON_DOWN && yT >= 20 && yT < UI.height - UI.StatusBarHeight) {
-
-			Component* comp = NULL;
-			for (int i = 0; i < pManager->allComponentsCorners.size(); i++)
+		if (pWind->GetButtonState(LEFT_BUTTON, xT, yT) == BUTTON_DOWN && yT >= 20 && xT >= UI.LeftToolBarWidth && yT < UI.height - UI.StatusBarHeight) {
+			if((yT > UI.ToolBarHeight)||(yT <= UI.ToolBarHeight && !UI.isTopToolBarVisible))
 			{
-				if (dynamic_cast<Connection*>(pManager->getComponent(i)))
-					continue;
-				if (xT >= pManager->allComponentsCorners[i].x1&&xT <= pManager->allComponentsCorners[i].x2&& yT >= pManager->allComponentsCorners[i].y1&&yT <= pManager->allComponentsCorners[i].y2)
+				Component* comp = NULL;
+				for (int i = 0; i < pManager->allComponentsCorners.size(); i++)
 				{
-					comp = pManager->getComponent(i);
-					if (xT >= pManager->allComponentsCorners[i].x2 - UI.GATE_Width / 2 + 11 && yT > (pManager->allComponentsCorners[i].y1 + UI.GATE_Height / 2) - 3 && yT < (pManager->allComponentsCorners[i].y1 + UI.GATE_Height / 2) + 3)
+					if (dynamic_cast<Connection*>(pManager->getComponent(i)))
+						continue;
+					if (xT >= pManager->allComponentsCorners[i].x1&&xT <= pManager->allComponentsCorners[i].x2&& yT >= pManager->allComponentsCorners[i].y1&&yT <= pManager->allComponentsCorners[i].y2)
 					{
-						pWind->SetPen(UI.ErrorColor, 5);
-						pWind->DrawLine(pManager->allComponentsCorners[i].x2 - UI.GATE_Width / 2 + 11, pManager->allComponentsCorners[i].y1 + UI.GATE_Height / 2, pManager->allComponentsCorners[i].x2 - UI.GATE_Width / 2 + 12, pManager->allComponentsCorners[i].y1 + UI.GATE_Height / 2, FRAME);
-						startXPointForConnections = xT;
-						startYPointForConnections = yT;
-						drawConnection = true;
-					}
-				}
-			}
-			if (drawConnection)
-			{
-				return ADD_CONNECTION;
-			}
-			if (comp != NULL &&comp->getDelete()) comp = NULL;
-
-			if (comp != NULL) {
-				if (isSelectMode)
-				{
-					for (size_t i = 0; i < selectedComponents.size(); i++)
-					{
-						if (selectedComponents[i].second == comp)
-							return MULTI_MOVE;
-					}
-				}
-				return MOVE;
-			}
-			else {
-				bool found = false;
-				vector <Connection*> allConnections;
-				pManager->getAllConnections(allConnections);
-
-				for (size_t i = 0; i < allConnections.size(); i++)
-				{
-					allConnections[i]->selectYourSelf(pManager->GetOutput(), UI.ConnColor);
-				}
-				if (isSelectMode)
-				{
-					for (size_t i = 0; i < selectedComponents.size(); i++)
-					{
-						selectedComponents[i].second->Draw(pManager->GetOutput(), false);
-					}
-					setSelectMode(false);
-					selectedComponents.clear();
-
-				}
-
-
-				for (size_t i = 0; i < allConnections.size() && !found; i++)
-				{
-					for (size_t j = 0; j < allConnections[i]->getCellsBeforeAddingConnection().size() - 1; j++)
-					{
-						Cell cell = allConnections[i]->getCellsBeforeAddingConnection()[j];
-						Cell cell2 = allConnections[i]->getCellsBeforeAddingConnection()[j + 1];
-						if (cell.x > cell2.x)
+						comp = pManager->getComponent(i);
+						if (xT >= pManager->allComponentsCorners[i].x2 - UI.GATE_Width / 2 + 11 && yT > (pManager->allComponentsCorners[i].y1 + UI.GATE_Height / 2) - 3 && yT < (pManager->allComponentsCorners[i].y1 + UI.GATE_Height / 2) + 3)
 						{
-							if (xT > cell2.x * UI.GRID_SIZE && xT < cell.x * UI.GRID_SIZE && abs(yT - cell.y * UI.GRID_SIZE) <= 3)
-							{
-								allConnections[i]->selectYourSelf(pManager->GetOutput(), UI.SelectColor);
-								found = true;
-								break;
-							}
-						}
-						else if (cell.x < cell2.x) {
-							if (xT < cell2.x * UI.GRID_SIZE && xT > cell.x * UI.GRID_SIZE && abs(yT - cell.y * UI.GRID_SIZE) <= 3)
-							{
-								allConnections[i]->selectYourSelf(pManager->GetOutput(), UI.SelectColor);
-								found = true;
-								break;
-							}
-						}
-						else if (cell.y > cell2.y)
-						{
-							if (yT > cell2.y * UI.GRID_SIZE && yT < cell.y * UI.GRID_SIZE && abs(xT - cell.x * UI.GRID_SIZE) <= 3)
-							{
-								allConnections[i]->selectYourSelf(pManager->GetOutput(), UI.SelectColor);
-								found = true;
-								break;
-							}
-						}
-						else if (cell.y < cell2.y) {
-							if (yT < cell2.y * UI.GRID_SIZE && yT > cell.y * UI.GRID_SIZE && abs(xT - cell.x * UI.GRID_SIZE) <= 3)
-							{
-								allConnections[i]->selectYourSelf(pManager->GetOutput(), UI.SelectColor);
-								found = true;
-								break;
-							}
+							pWind->SetPen(UI.ErrorColor, 5);
+							pWind->DrawLine(pManager->allComponentsCorners[i].x2 - UI.GATE_Width / 2 + 11, pManager->allComponentsCorners[i].y1 + UI.GATE_Height / 2, pManager->allComponentsCorners[i].x2 - UI.GATE_Width / 2 + 12, pManager->allComponentsCorners[i].y1 + UI.GATE_Height / 2, FRAME);
+							startXPointForConnections = xT;
+							startYPointForConnections = yT;
+							drawConnection = true;
 						}
 					}
 				}
+				if (drawConnection)
+				{
+					return ADD_CONNECTION;
+				}
+				if (comp != NULL &&comp->getDelete()) comp = NULL;
 
-				if (!found) {
-					return MULTI_SELECT;
+				if (comp != NULL) {
+					if (isSelectMode)
+					{
+						for (size_t i = 0; i < selectedComponents.size(); i++)
+						{
+							if (selectedComponents[i].second == comp)
+								return MULTI_MOVE;
+						}
+					}
+					return MOVE;
+				}
+				else {
+					bool found = false;
+					vector <Connection*> allConnections;
+					pManager->getAllConnections(allConnections);
+
+					for (size_t i = 0; i < allConnections.size(); i++)
+					{
+						allConnections[i]->selectYourSelf(pManager->GetOutput(), UI.ConnColor);
+					}
+					if (isSelectMode)
+					{
+						for (size_t i = 0; i < selectedComponents.size(); i++)
+						{
+							selectedComponents[i].second->Draw(pManager->GetOutput(), false);
+						}
+						setSelectMode(false);
+						selectedComponents.clear();
+
+					}
+
+
+					for (size_t i = 0; i < allConnections.size() && !found; i++)
+					{
+						for (size_t j = 0; j < allConnections[i]->getCellsBeforeAddingConnection().size() - 1; j++)
+						{
+							Cell cell = allConnections[i]->getCellsBeforeAddingConnection()[j];
+							Cell cell2 = allConnections[i]->getCellsBeforeAddingConnection()[j + 1];
+							if (cell.x > cell2.x)
+							{
+								if (xT > cell2.x * UI.GRID_SIZE && xT < cell.x * UI.GRID_SIZE && abs(yT - cell.y * UI.GRID_SIZE) <= 3)
+								{
+									allConnections[i]->selectYourSelf(pManager->GetOutput(), UI.SelectColor);
+									found = true;
+									break;
+								}
+							}
+							else if (cell.x < cell2.x) {
+								if (xT < cell2.x * UI.GRID_SIZE && xT > cell.x * UI.GRID_SIZE && abs(yT - cell.y * UI.GRID_SIZE) <= 3)
+								{
+									allConnections[i]->selectYourSelf(pManager->GetOutput(), UI.SelectColor);
+									found = true;
+									break;
+								}
+							}
+							else if (cell.y > cell2.y)
+							{
+								if (yT > cell2.y * UI.GRID_SIZE && yT < cell.y * UI.GRID_SIZE && abs(xT - cell.x * UI.GRID_SIZE) <= 3)
+								{
+									allConnections[i]->selectYourSelf(pManager->GetOutput(), UI.SelectColor);
+									found = true;
+									break;
+								}
+							}
+							else if (cell.y < cell2.y) {
+								if (yT < cell2.y * UI.GRID_SIZE && yT > cell.y * UI.GRID_SIZE && abs(xT - cell.x * UI.GRID_SIZE) <= 3)
+								{
+									allConnections[i]->selectYourSelf(pManager->GetOutput(), UI.SelectColor);
+									found = true;
+									break;
+								}
+							}
+						}
+					}
+
+					if (!found) {
+						return MULTI_SELECT;
+					}
 				}
 			}
 		}
@@ -307,6 +309,7 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 
 			//Divide x coord of the point clicked by the menu item width (int division)
 			//if division result is 0 ==> first item is clicked, if 1 ==> 2nd item and so on
+			pWind->FlushMouseQueue();
 			if (s == LEFT_CLICK)
 			{
 				switch (ClickedItemOrder)
