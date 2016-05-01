@@ -133,6 +133,7 @@ void Load::Execute()
 
 	file.close();
 	pManager->GetOutput()->PrintMsg("Design loaded successfully");
+	pManager->GetInput()->reShowToolbar();
 
 }
 void Load::Undo()

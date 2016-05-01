@@ -123,7 +123,7 @@ void ApplicationManager::ExecuteAction(ActionType ActType)
 	{
 		pAct->Execute();
 		delete pAct;
-		pAct = NULL;
+		pAct = NULL;		
 	}
 }
 ////////////////////////////////////////////////////////////////////

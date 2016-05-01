@@ -33,7 +33,7 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 	while (true) {
 		bool drawConnection = false;
 		if (pWind->GetButtonState(LEFT_BUTTON, xT, yT) == BUTTON_DOWN && yT >= 20 && xT >= UI.LeftToolBarWidth && yT < UI.height - UI.StatusBarHeight) {
-			if((yT > UI.ToolBarHeight)||(yT <= UI.ToolBarHeight && !UI.isTopToolBarVisible))
+			if ((yT > UI.ToolBarHeight) || (yT <= UI.ToolBarHeight && !UI.isTopToolBarVisible))
 			{
 				Component* comp = NULL;
 				for (int i = 0; i < pManager->allComponentsCorners.size(); i++)
@@ -55,11 +55,13 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 				}
 				if (drawConnection)
 				{
+					pWind->DrawImage(storedImageBeforeShowingAddBar, 0, 0, UI.width, UI.height); UI.isTopToolBarVisible = false;
 					return ADD_CONNECTION;
 				}
 				if (comp != NULL &&comp->getDelete()) comp = NULL;
 
 				if (comp != NULL) {
+					pWind->DrawImage(storedImageBeforeShowingAddBar, 0, 0, UI.width, UI.height); UI.isTopToolBarVisible = false;
 					if (isSelectMode)
 					{
 						for (size_t i = 0; i < selectedComponents.size(); i++)
@@ -135,6 +137,7 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 					}
 
 					if (!found) {
+						pWind->DrawImage(storedImageBeforeShowingAddBar, 0, 0, UI.width, UI.height); UI.isTopToolBarVisible = false;
 						return MULTI_SELECT;
 					}
 				}
@@ -381,8 +384,9 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 		if (y > UI.ToolBarHeight && y < UI.height - UI.StatusBarHeight)
 		{
 			//user want to select/unselect a statement i;
-			if (s == RIGHT_CLICK)
+			if (s == RIGHT_CLICK) {
 				return RIGHT_CLICKSELECT;
+			}
 			else
 				pWind->GetMouseClick(x, y, true); //Remove the last Saved Click
 		}
@@ -422,9 +426,11 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 
 }
 void Input::reShowToolbar() {
-	pWind->StoreImage(storedImageBeforeShowingAddBar, 0, 0, UI.width, UI.height);
-	pWind->DrawImage("images\\Menu\\top_bar_normal.jpg", UI.LeftToolBarWidth, 0, UI.width - UI.LeftToolBarWidth - 14, UI.TopToolBarHeight);
-	UI.isTopToolBarVisible = true;
+	if (!UI.isTopToolBarVisible) {
+		pWind->StoreImage(storedImageBeforeShowingAddBar, 0, 0, UI.width, UI.height);
+		pWind->DrawImage("images\\Menu\\top_bar_normal.jpg", UI.LeftToolBarWidth, 0, UI.width - UI.LeftToolBarWidth - 14, UI.TopToolBarHeight);
+		UI.isTopToolBarVisible = true;
+	}
 }
 
 buttonstate Input::GetButtonStatus(const button btMouse, int &iX, int &iY) const {

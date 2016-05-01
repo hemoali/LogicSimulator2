@@ -122,6 +122,7 @@ void Move::Execute()
 		Comp->setDelete(false);
 		Comp->Draw(pManager->GetOutput());
 	}
+	pManager->GetInput()->reShowToolbar();
 
 }
 

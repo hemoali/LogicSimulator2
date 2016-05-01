@@ -6,7 +6,6 @@ RightClick::RightClick(ApplicationManager* pApp) :Action(pApp)
 	C = NULL;
 }
 
-
 bool RightClick::ReadActionParameters(image* img) {
 	int x, y; //Point Coordinates
 	GraphicsInfo MenuRectangle; //the Menu Region
@@ -133,6 +132,7 @@ void RightClick::Execute() {
 		C->Draw(pOut, false);
 
 	}
+	pManager->GetInput()->reShowToolbar();
 }
 void RightClick::Undo()
 {

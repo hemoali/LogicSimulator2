@@ -51,6 +51,7 @@ void AddANDgate2::Execute()
 		for (int i = GInfotmp.y1 / UI.GRID_SIZE + 1; i <= GInfotmp.y2 / UI.GRID_SIZE; i++)
 		{for (int j = GInfotmp.x1 / UI.GRID_SIZE; j <= GInfotmp.x2 / UI.GRID_SIZE; j++)	{	pManager->GetOutput()->setArrayOfComponents(i,j,pA);}}
 	}
+	pManager->GetInput()->reShowToolbar();
 }
 
 void AddANDgate2::Undo()

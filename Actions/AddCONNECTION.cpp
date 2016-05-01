@@ -134,6 +134,7 @@ void AddConnection::Execute()
 	outputComponent->Draw(pManager->GetOutput(), false);
 	outputComponent->setDelete(false);
 	outputComponent->Draw(pManager->GetOutput(), false);
+	pManager->GetInput()->reShowToolbar();
 
 }
 

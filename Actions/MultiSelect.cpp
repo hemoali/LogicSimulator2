@@ -86,6 +86,7 @@ void MultiSelect::Execute()
 			pManager->GetInput()->setSelectedComponents(allSelectedComponents);
 		}
 	}
+	pManager->GetInput()->reShowToolbar();
 }
 void MultiSelect::Undo()
 {}
