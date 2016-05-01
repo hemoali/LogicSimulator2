@@ -13,7 +13,6 @@ __declspec(selectany) //This line to prevent "redefinition error"
 struct UI_Info	//User Interface Info.
 {
 	MODE AppMode;		//Application Mode (design or simulation)
-	bool componentSelected = false, isTopToolBarVisible = false, isAddEnabled = false;;
 	static const int	width = 1200, height = 700,	//Window width and height
 		wx = 100, wy = 15,			//Window starting coordinates
 		StatusBarHeight = 50,	//Status Bar Height

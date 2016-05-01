@@ -6,7 +6,6 @@ Input::Input(window* pW)
 {
 	pWind = pW; //point to the passed window
 	isSelectMode = false;
-	storedImageBeforeShowingAddBar = new image;
 }
 
 void Input::GetPointClicked(int &x, int &y, bool DrawGate, bool DrawConnection)
@@ -32,116 +31,112 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 	Component* preComp = NULL;
 	while (true) {
 		bool drawConnection = false;
-		if (pWind->GetButtonState(LEFT_BUTTON, xT, yT) == BUTTON_DOWN && yT >= 20 && xT >= UI.LeftToolBarWidth && yT < UI.height - UI.StatusBarHeight) {
-			if ((yT > UI.ToolBarHeight) || (yT <= UI.ToolBarHeight && !UI.isTopToolBarVisible))
+		if (pWind->GetButtonState(LEFT_BUTTON, xT, yT) == BUTTON_DOWN && yT >= UI.ToolBarHeight + 20 && xT >= UI.LeftToolBarWidth && yT < UI.height - UI.StatusBarHeight) {
+
+			Component* comp = NULL;
+			for (int i = 0; i < pManager->allComponentsCorners.size(); i++)
 			{
-				Component* comp = NULL;
-				for (int i = 0; i < pManager->allComponentsCorners.size(); i++)
+				if (dynamic_cast<Connection*>(pManager->getComponent(i)))
+					continue;
+				if (xT >= pManager->allComponentsCorners[i].x1&&xT <= pManager->allComponentsCorners[i].x2&& yT >= pManager->allComponentsCorners[i].y1&&yT <= pManager->allComponentsCorners[i].y2)
 				{
-					if (dynamic_cast<Connection*>(pManager->getComponent(i)))
-						continue;
-					if (xT >= pManager->allComponentsCorners[i].x1&&xT <= pManager->allComponentsCorners[i].x2&& yT >= pManager->allComponentsCorners[i].y1&&yT <= pManager->allComponentsCorners[i].y2)
+					comp = pManager->getComponent(i);
+					if (xT >= pManager->allComponentsCorners[i].x2 - UI.GATE_Width / 2 + 11 && yT > (pManager->allComponentsCorners[i].y1 + UI.GATE_Height / 2) - 3 && yT < (pManager->allComponentsCorners[i].y1 + UI.GATE_Height / 2) + 3)
 					{
-						comp = pManager->getComponent(i);
-						if (xT >= pManager->allComponentsCorners[i].x2 - UI.GATE_Width / 2 + 11 && yT > (pManager->allComponentsCorners[i].y1 + UI.GATE_Height / 2) - 3 && yT < (pManager->allComponentsCorners[i].y1 + UI.GATE_Height / 2) + 3)
-						{
-							pWind->SetPen(UI.ErrorColor, 5);
-							pWind->DrawLine(pManager->allComponentsCorners[i].x2 - UI.GATE_Width / 2 + 11, pManager->allComponentsCorners[i].y1 + UI.GATE_Height / 2, pManager->allComponentsCorners[i].x2 - UI.GATE_Width / 2 + 12, pManager->allComponentsCorners[i].y1 + UI.GATE_Height / 2, FRAME);
-							startXPointForConnections = xT;
-							startYPointForConnections = yT;
-							drawConnection = true;
-						}
-					}
-				}
-				if (drawConnection)
-				{
-					pWind->DrawImage(storedImageBeforeShowingAddBar, 0, 0, UI.width, UI.height); UI.isTopToolBarVisible = false;
-					return ADD_CONNECTION;
-				}
-				if (comp != NULL &&comp->getDelete()) comp = NULL;
-
-				if (comp != NULL) {
-					pWind->DrawImage(storedImageBeforeShowingAddBar, 0, 0, UI.width, UI.height); UI.isTopToolBarVisible = false;
-					if (isSelectMode)
-					{
-						for (size_t i = 0; i < selectedComponents.size(); i++)
-						{
-							if (selectedComponents[i].second == comp)
-								return MULTI_MOVE;
-						}
-					}
-					return MOVE;
-				}
-				else {
-					bool found = false;
-					vector <Connection*> allConnections;
-					pManager->getAllConnections(allConnections);
-
-					for (size_t i = 0; i < allConnections.size(); i++)
-					{
-						allConnections[i]->selectYourSelf(pManager->GetOutput(), UI.ConnColor);
-					}
-					if (isSelectMode)
-					{
-						for (size_t i = 0; i < selectedComponents.size(); i++)
-						{
-							selectedComponents[i].second->Draw(pManager->GetOutput(), false);
-						}
-						setSelectMode(false);
-						selectedComponents.clear();
-
-					}
-
-
-					for (size_t i = 0; i < allConnections.size() && !found; i++)
-					{
-						for (size_t j = 0; j < allConnections[i]->getCellsBeforeAddingConnection().size() - 1; j++)
-						{
-							Cell cell = allConnections[i]->getCellsBeforeAddingConnection()[j];
-							Cell cell2 = allConnections[i]->getCellsBeforeAddingConnection()[j + 1];
-							if (cell.x > cell2.x)
-							{
-								if (xT > cell2.x * UI.GRID_SIZE && xT < cell.x * UI.GRID_SIZE && abs(yT - cell.y * UI.GRID_SIZE) <= 3)
-								{
-									allConnections[i]->selectYourSelf(pManager->GetOutput(), UI.SelectColor);
-									found = true;
-									break;
-								}
-							}
-							else if (cell.x < cell2.x) {
-								if (xT < cell2.x * UI.GRID_SIZE && xT > cell.x * UI.GRID_SIZE && abs(yT - cell.y * UI.GRID_SIZE) <= 3)
-								{
-									allConnections[i]->selectYourSelf(pManager->GetOutput(), UI.SelectColor);
-									found = true;
-									break;
-								}
-							}
-							else if (cell.y > cell2.y)
-							{
-								if (yT > cell2.y * UI.GRID_SIZE && yT < cell.y * UI.GRID_SIZE && abs(xT - cell.x * UI.GRID_SIZE) <= 3)
-								{
-									allConnections[i]->selectYourSelf(pManager->GetOutput(), UI.SelectColor);
-									found = true;
-									break;
-								}
-							}
-							else if (cell.y < cell2.y) {
-								if (yT < cell2.y * UI.GRID_SIZE && yT > cell.y * UI.GRID_SIZE && abs(xT - cell.x * UI.GRID_SIZE) <= 3)
-								{
-									allConnections[i]->selectYourSelf(pManager->GetOutput(), UI.SelectColor);
-									found = true;
-									break;
-								}
-							}
-						}
-					}
-
-					if (!found) {
-						pWind->DrawImage(storedImageBeforeShowingAddBar, 0, 0, UI.width, UI.height); UI.isTopToolBarVisible = false;
-						return MULTI_SELECT;
+						pWind->SetPen(UI.ErrorColor, 5);
+						pWind->DrawLine(pManager->allComponentsCorners[i].x2 - UI.GATE_Width / 2 + 11, pManager->allComponentsCorners[i].y1 + UI.GATE_Height / 2, pManager->allComponentsCorners[i].x2 - UI.GATE_Width / 2 + 12, pManager->allComponentsCorners[i].y1 + UI.GATE_Height / 2, FRAME);
+						startXPointForConnections = xT;
+						startYPointForConnections = yT;
+						drawConnection = true;
 					}
 				}
 			}
+			if (drawConnection)
+			{
+				return ADD_CONNECTION;
+			}
+			if (comp != NULL &&comp->getDelete()) comp = NULL;
+
+			if (comp != NULL) {
+				if (isSelectMode)
+				{
+					for (size_t i = 0; i < selectedComponents.size(); i++)
+					{
+						if (selectedComponents[i].second == comp)
+							return MULTI_MOVE;
+					}
+				}
+				return MOVE;
+			}
+			else {
+				bool found = false;
+				vector <Connection*> allConnections;
+				pManager->getAllConnections(allConnections);
+
+				for (size_t i = 0; i < allConnections.size(); i++)
+				{
+					allConnections[i]->selectYourSelf(pManager->GetOutput(), UI.ConnColor);
+				}
+				if (isSelectMode)
+				{
+					for (size_t i = 0; i < selectedComponents.size(); i++)
+					{
+						selectedComponents[i].second->Draw(pManager->GetOutput(), false);
+					}
+					setSelectMode(false);
+					selectedComponents.clear();
+
+				}
+
+
+				for (size_t i = 0; i < allConnections.size() && !found; i++)
+				{
+					for (size_t j = 0; j < allConnections[i]->getCellsBeforeAddingConnection().size() - 1; j++)
+					{
+						Cell cell = allConnections[i]->getCellsBeforeAddingConnection()[j];
+						Cell cell2 = allConnections[i]->getCellsBeforeAddingConnection()[j + 1];
+						if (cell.x > cell2.x)
+						{
+							if (xT > cell2.x * UI.GRID_SIZE && xT < cell.x * UI.GRID_SIZE && abs(yT - cell.y * UI.GRID_SIZE) <= 3)
+							{
+								allConnections[i]->selectYourSelf(pManager->GetOutput(), UI.SelectColor);
+								found = true;
+								break;
+							}
+						}
+						else if (cell.x < cell2.x) {
+							if (xT < cell2.x * UI.GRID_SIZE && xT > cell.x * UI.GRID_SIZE && abs(yT - cell.y * UI.GRID_SIZE) <= 3)
+							{
+								allConnections[i]->selectYourSelf(pManager->GetOutput(), UI.SelectColor);
+								found = true;
+								break;
+							}
+						}
+						else if (cell.y > cell2.y)
+						{
+							if (yT > cell2.y * UI.GRID_SIZE && yT < cell.y * UI.GRID_SIZE && abs(xT - cell.x * UI.GRID_SIZE) <= 3)
+							{
+								allConnections[i]->selectYourSelf(pManager->GetOutput(), UI.SelectColor);
+								found = true;
+								break;
+							}
+						}
+						else if (cell.y < cell2.y) {
+							if (yT < cell2.y * UI.GRID_SIZE && yT > cell.y * UI.GRID_SIZE && abs(xT - cell.x * UI.GRID_SIZE) <= 3)
+							{
+								allConnections[i]->selectYourSelf(pManager->GetOutput(), UI.SelectColor);
+								found = true;
+								break;
+							}
+						}
+					}
+				}
+
+				if (!found) {
+					return MULTI_SELECT;
+				}
+			}
+
 		}
 		else {
 			//Get the coordinates of the user click 
@@ -156,7 +151,7 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 				int hoverX, hoverY;
 				pWind->GetMouseCoord(hoverX, hoverY);
 				//If top bar and design mode and top bar down
-				if (hoverY >= 5 && hoverY < UI.ToolBarHeight - 20 && hoverX > UI.LeftToolBarWidth && UI.isTopToolBarVisible && UI.AppMode == DESIGN && !UI.componentSelected)
+				if (hoverY >= 5 && hoverY < UI.ToolBarHeight - 20 && hoverX > UI.LeftToolBarWidth && UI.AppMode == DESIGN)
 				{
 					vector<pair<int, int> > TopItemsRanges;
 					TopItemsRanges.push_back(make_pair(107, 170));
@@ -226,36 +221,20 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 					{
 						switch (HoveredLeftItemOrder + 14)
 						{
-						case DADD: {if (!UI.isAddEnabled)pWind->DrawImage("images\\Menu\\left_bar_add_hovered.jpg", 0, 0, UI.LeftToolBarWidth, UI.height); break; }
-						case DSIMULATION: {if (!UI.isAddEnabled)pWind->DrawImage("images\\Menu\\left_bar_simulate_hovered.jpg", 0, 0, UI.LeftToolBarWidth, UI.height);
-										  else pWind->DrawImage("images\\Menu\\left_bar_simulate_hovered_and_enabled.jpg", 0, 0, UI.LeftToolBarWidth, UI.height);  break; }
-						case DNEW: {if (!UI.isAddEnabled)pWind->DrawImage("images\\Menu\\left_bar_new_hovered.jpg", 0, 0, UI.LeftToolBarWidth, UI.height);
-								   else pWind->DrawImage("images\\Menu\\left_bar_new_hovered_and_enabled.jpg", 0, 0, UI.LeftToolBarWidth, UI.height); break; }
-						case DSAVE: {if (!UI.isAddEnabled)pWind->DrawImage("images\\Menu\\left_bar_save_hovered.jpg", 0, 0, UI.LeftToolBarWidth, UI.height); else
-							pWind->DrawImage("images\\Menu\\left_bar_save_hovered_and_enabled.jpg", 0, 0, UI.LeftToolBarWidth, UI.height); break; }
-						case DLOAD: {if (!UI.isAddEnabled)pWind->DrawImage("images\\Menu\\left_bar_load_hovered.jpg", 0, 0, UI.LeftToolBarWidth, UI.height); else
-							pWind->DrawImage("images\\Menu\\left_bar_load_hovered_and_enabled.jpg", 0, 0, UI.LeftToolBarWidth, UI.height); break; }
-						case DEXIT: {if (!UI.isAddEnabled)pWind->DrawImage("images\\Menu\\left_bar_exit_hovered.jpg", 0, 0, UI.LeftToolBarWidth, UI.height); else
-							pWind->DrawImage("images\\Menu\\left_bar_exit_hovered_and_enabled.jpg", 0, 0, UI.LeftToolBarWidth, UI.height); break; }
-						default: {if (!UI.isAddEnabled) pWind->DrawImage("images\\Menu\\left_bar_normal.jpg", 0, 0, UI.LeftToolBarWidth, UI.height);
-								 else  pWind->DrawImage("images\\Menu\\left_bar_add_enabled.jpg", 0, 0, UI.LeftToolBarWidth, UI.height);  break;
-						}
+						case DSIMULATION: pWind->DrawImage("images\\Menu\\left_bar_simulate_hovered.jpg", 0, 0, UI.LeftToolBarWidth, UI.height); break;
+						case DNEW:pWind->DrawImage("images\\Menu\\left_bar_new_hovered.jpg", 0, 0, UI.LeftToolBarWidth, UI.height); break;
+						case DSAVE: pWind->DrawImage("images\\Menu\\left_bar_save_hovered.jpg", 0, 0, UI.LeftToolBarWidth, UI.height); break;
+						case DLOAD: pWind->DrawImage("images\\Menu\\left_bar_load_hovered.jpg", 0, 0, UI.LeftToolBarWidth, UI.height); break;
+						case DEXIT:pWind->DrawImage("images\\Menu\\left_bar_exit_hovered.jpg", 0, 0, UI.LeftToolBarWidth, UI.height); break;
+						default: pWind->DrawImage("images\\Menu\\left_bar_normal.jpg", 0, 0, UI.LeftToolBarWidth, UI.height); break;
 						}
 					}
 					oldLeftHoverItem = HoveredLeftItemOrder;
 				}
 				else {
 					oldTopHoveredItemOrder = oldLeftHoverItem = -1;
-					if (!UI.componentSelected && UI.isTopToolBarVisible) {
-
-						pWind->DrawImage("images\\Menu\\top_bar_normal.jpg", UI.LeftToolBarWidth, 0, UI.width - UI.LeftToolBarWidth - 14, UI.TopToolBarHeight);
-					}if (!UI.isAddEnabled)
-					{
-						pWind->DrawImage("images\\Menu\\left_bar_normal.jpg", 0, 0, UI.LeftToolBarWidth, UI.height);
-					}
-					else {
-						pWind->DrawImage("images\\Menu\\left_bar_add_enabled.jpg", 0, 0, UI.LeftToolBarWidth, UI.height);
-					}
+					pWind->DrawImage("images\\Menu\\top_bar_normal.jpg", UI.LeftToolBarWidth, 0, UI.width - UI.LeftToolBarWidth - 14, UI.TopToolBarHeight);
+					pWind->DrawImage("images\\Menu\\left_bar_normal.jpg", 0, 0, UI.LeftToolBarWidth, UI.height);					
 
 					Utils::correctPointClicked(hoverX, hoverY, true, false);
 					if (Utils::CheckPointInBorders(hoverX, hoverY)) {
@@ -280,7 +259,7 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 	if (UI.AppMode == DESIGN)	//application is in design mode
 	{
 		//[1] If user clicks on the Toolbar
-		if (y >= 5 && y < UI.ToolBarHeight - 20 && x > UI.LeftToolBarWidth && UI.isAddEnabled && UI.isTopToolBarVisible)
+		if (y >= 5 && y < UI.ToolBarHeight - 20 && x > UI.LeftToolBarWidth)
 		{
 			pWind->GetMouseClick(x, y);
 			//TODO
@@ -317,19 +296,19 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 			{
 				switch (ClickedItemOrder)
 				{
-				case D2AND: pWind->DrawImage(storedImageBeforeShowingAddBar, 0, 0, UI.width, UI.height); UI.isTopToolBarVisible = false;  return ADD_AND_GATE_2;
-				case D3AND: pWind->DrawImage(storedImageBeforeShowingAddBar, 0, 0, UI.width, UI.height); UI.isTopToolBarVisible = false;  return ADD_AND_GATE_3;
-				case D2OR:pWind->DrawImage(storedImageBeforeShowingAddBar, 0, 0, UI.width, UI.height); UI.isTopToolBarVisible = false;  return ADD_OR_GATE_2;
-				case D2XOR:pWind->DrawImage(storedImageBeforeShowingAddBar, 0, 0, UI.width, UI.height);  UI.isTopToolBarVisible = false; return ADD_XOR_GATE_2;
-				case D3XOR:pWind->DrawImage(storedImageBeforeShowingAddBar, 0, 0, UI.width, UI.height); UI.isTopToolBarVisible = false;  return ADD_XOR_GATE_3;
-				case DBUFFER:pWind->DrawImage(storedImageBeforeShowingAddBar, 0, 0, UI.width, UI.height); UI.isTopToolBarVisible = false;  return ADD_Buff;
-				case DNOT: pWind->DrawImage(storedImageBeforeShowingAddBar, 0, 0, UI.width, UI.height); UI.isTopToolBarVisible = false;  return ADD_INV;
-				case D2NAND: pWind->DrawImage(storedImageBeforeShowingAddBar, 0, 0, UI.width, UI.height); UI.isTopToolBarVisible = false;  return ADD_NAND_GATE_2;
-				case D2NOR:pWind->DrawImage(storedImageBeforeShowingAddBar, 0, 0, UI.width, UI.height); UI.isTopToolBarVisible = false;  return ADD_NOR_GATE_2;
-				case D3NOR:pWind->DrawImage(storedImageBeforeShowingAddBar, 0, 0, UI.width, UI.height); UI.isTopToolBarVisible = false;  return ADD_NOR_GATE_3;
-				case D2XNOR: pWind->DrawImage(storedImageBeforeShowingAddBar, 0, 0, UI.width, UI.height);  UI.isTopToolBarVisible = false; return ADD_XNOR_GATE_2;
-				case DSWITCH:pWind->DrawImage(storedImageBeforeShowingAddBar, 0, 0, UI.width, UI.height); UI.isTopToolBarVisible = false;  return ADD_Switch;
-				case DLED:pWind->DrawImage(storedImageBeforeShowingAddBar, 0, 0, UI.width, UI.height); return ADD_LED;
+				case D2AND:  return ADD_AND_GATE_2;
+				case D3AND:  return ADD_AND_GATE_3;
+				case D2OR:  return ADD_OR_GATE_2;
+				case D2XOR: return ADD_XOR_GATE_2;
+				case D3XOR:  return ADD_XOR_GATE_3;
+				case DBUFFER:  return ADD_Buff;
+				case DNOT:  return ADD_INV;
+				case D2NAND:  return ADD_NAND_GATE_2;
+				case D2NOR:  return ADD_NOR_GATE_2;
+				case D3NOR:  return ADD_NOR_GATE_3;
+				case D2XNOR:  return ADD_XNOR_GATE_2;
+				case DSWITCH:  return ADD_Switch;
+				case DLED: return ADD_LED;
 				default: return DSN_TOOL;	//A click on empty place in desgin toolbar
 				}
 			}
@@ -355,23 +334,6 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 			}
 			switch (ClickedItemOrder + 14)
 			{
-			case DADD: {
-				if (!UI.isAddEnabled)
-				{
-					UI.isAddEnabled = true;
-					pWind->StoreImage(storedImageBeforeShowingAddBar, 0, 0, UI.width, UI.height);
-					pWind->DrawImage("images\\Menu\\top_bar_normal.jpg", UI.LeftToolBarWidth, 0, UI.width - UI.LeftToolBarWidth - 14, UI.TopToolBarHeight);
-					UI.isTopToolBarVisible = true;
-					pWind->DrawImage("images\\Menu\\left_bar_add_enabled.jpg", 0, 0, UI.LeftToolBarWidth, UI.height);
-				}
-				else {
-					pWind->DrawImage(storedImageBeforeShowingAddBar, 0, 0, UI.width, UI.height);
-					UI.isAddEnabled = false;
-					UI.isTopToolBarVisible = false;
-					pWind->DrawImage("images\\Menu\\left_bar_normal.jpg", 0, 0, UI.LeftToolBarWidth, UI.height);
-				}
-				break;
-			}
 			case DSIMULATION:return Simulate; break;
 			case DNEW:return NEW; break;
 			case DSAVE:return SAVE; break;
@@ -424,13 +386,6 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 	}
 	pWind->FlushMouseQueue();
 
-}
-void Input::reShowToolbar() {
-	if (!UI.isTopToolBarVisible) {
-		pWind->StoreImage(storedImageBeforeShowingAddBar, 0, 0, UI.width, UI.height);
-		pWind->DrawImage("images\\Menu\\top_bar_normal.jpg", UI.LeftToolBarWidth, 0, UI.width - UI.LeftToolBarWidth - 14, UI.TopToolBarHeight);
-		UI.isTopToolBarVisible = true;
-	}
 }
 
 buttonstate Input::GetButtonStatus(const button btMouse, int &iX, int &iY) const {

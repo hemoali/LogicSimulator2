@@ -101,6 +101,8 @@ void RightClick::Execute() {
 			pOut->clearConnections(allInConnections, C->getCenterLocation().x1, C->getCenterLocation().y1, true, true);
 			pOut->clearConnections(allOutConnections, C->getCenterLocation().x1, C->getCenterLocation().y1, false, true);
 
+			
+
 			//Remove From All Component
 			//Delete the Component  Selected 
 			/*int index = -1, vectorSize = pManager->allComponentsCorners.size();
@@ -132,7 +134,6 @@ void RightClick::Execute() {
 		C->Draw(pOut, false);
 
 	}
-	pManager->GetInput()->reShowToolbar();
 }
 void RightClick::Undo()
 {

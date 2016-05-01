@@ -14,7 +14,6 @@ private:
 	bool isSelectMode;
 	vector<pair<int, Component*> > selectedComponents;
 	int startXPointForConnections, startYPointForConnections;
-	image* storedImageBeforeShowingAddBar;
 public:
 	Input(window*);
 	void GetPointClicked(int &, int &, bool drawImage = false, bool drawConnection = false);	//Get coordinate where user clicks
@@ -35,8 +34,6 @@ public:
 		x = startXPointForConnections;
 		y = startYPointForConnections;
 	}
-
-	void reShowToolbar();
 	
 	~Input();
 };

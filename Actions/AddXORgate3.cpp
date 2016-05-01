@@ -57,7 +57,7 @@ void AddXORgate3::Execute()
 		}
 		pA->setSmallCleanImageBeforeAddingComp(smallImageBeforeAddingComponent);
 	}
-	pManager->GetInput()->reShowToolbar();
+	
 }
 
 void AddXORgate3::Undo()

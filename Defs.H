@@ -103,7 +103,6 @@ enum DsgnMenuItem //The items of the design menu (you should add more items)
 	DSWITCH,
 	DLED,
 	DCONNECTION,
-	DADD,
 	DSIMULATION,
 	DNEW,
 	DSAVE,

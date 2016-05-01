@@ -56,7 +56,7 @@ void  Utils::correctPointClicked(int &x, int &y, bool DrawGate, bool DrawConnect
 }
 bool Utils::CheckPoint(GraphicsInfo r_GfxInfo, CellType usedPixels[44][74], bool isMoving, bool fillArray) {
 	int xbegin = (r_GfxInfo.x1 - UI.GATE_Width / 2.0) / UI.GRID_SIZE, xend = (r_GfxInfo.x1 + UI.GATE_Width / 2.0) / UI.GRID_SIZE, ybegin = (r_GfxInfo.y1 - UI.GATE_Height / 2.0) / UI.GRID_SIZE, yend = (r_GfxInfo.y1 + UI.GATE_Height / 2.0) / UI.GRID_SIZE;
-	if (xbegin -1 <= 0 || xend + 1 > 73 || ybegin < 1 || yend + 1 > 43)
+	if (xbegin -1 <= 2 || xend + 1 > 73 || ybegin < 3 || yend + 1 > 43)
 	{
 		return 0;
 	}
@@ -73,7 +73,7 @@ bool Utils::CheckPoint(GraphicsInfo r_GfxInfo, CellType usedPixels[44][74], bool
 			}
 		}
 	}
-	if ((r_GfxInfo.x1 - UI.GATE_Width / 2.0) <= UI.LeftToolBarWidth + 20 || (r_GfxInfo.y1 - UI.GATE_Height / 2.0) <=  8 || (r_GfxInfo.x1 + UI.GATE_Width / 2.0) >= UI.width - 16 || (r_GfxInfo.y1 + UI.GATE_Height / 2.0) >= UI.height - UI.StatusBarHeight)return 0;
+	if ((r_GfxInfo.x1 - UI.GATE_Width / 2.0) <= UI.LeftToolBarWidth + 20 || (r_GfxInfo.y1 - UI.GATE_Height / 2.0) <=  UI.ToolBarHeight+8 || (r_GfxInfo.x1 + UI.GATE_Width / 2.0) >= UI.width - 16 || (r_GfxInfo.y1 + UI.GATE_Height / 2.0) >= UI.height - UI.StatusBarHeight)return 0;
 
 	if (fillArray) {
 		for (int i = ybegin + 1; i <= yend; i++)
@@ -95,13 +95,13 @@ bool Utils::CheckPoint(GraphicsInfo r_GfxInfo, CellType usedPixels[44][74], bool
 	return 1;
 }
 bool Utils::CheckPoint(int x, int y, CellType usedPixels[44][74]) {
-	if ((x - UI.GATE_Width / 2.0) <= UI.LeftToolBarWidth + 20 || (y - UI.GATE_Height / 2.0) <= (20) || (x + UI.GATE_Width / 2.0) >= UI.width - 16 || (y + UI.GATE_Height / 2.0) >= (UI.height - UI.StatusBarHeight)) {
+	if ((x - UI.GATE_Width / 2.0) <= UI.LeftToolBarWidth + 20 || (y - UI.GATE_Height / 2.0) <= (UI.ToolBarHeight+20) || (x + UI.GATE_Width / 2.0) >= UI.width - 16 || (y + UI.GATE_Height / 2.0) >= (UI.height - UI.StatusBarHeight)) {
 		return 0;
 	}
 	return 1;
 }
 bool Utils::CheckPointInBorders(int x, int y) {
-	if (x< UI.LeftToolBarWidth + 20 || y <= (20) || (x)>UI.width - 20 || (y) >= (UI.height - UI.StatusBarHeight - 20)) {
+	if (x< UI.LeftToolBarWidth + 20 || y <= (UI.ToolBarHeight + 20) || (x)>UI.width - 20 || (y) >= (UI.height - UI.StatusBarHeight - 20)) {
 		return 0;
 	}
 	return 1;

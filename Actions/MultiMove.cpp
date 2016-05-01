@@ -96,7 +96,7 @@ void MultiMove::Execute()
 	}
 	pIn->setSelectMode(false);
 	pIn->getSelectedComponents().clear();
-	pManager->GetInput()->reShowToolbar();
+	
 
 }
 
