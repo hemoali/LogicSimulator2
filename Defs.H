@@ -55,6 +55,7 @@ enum ActionType
 	DEL, //Delete a Component, a Connection
 	EDIT_Label,	//Edit Label of a Component, a Connection
 
+	NEW,
 	SAVE,		//Save the whole Circuit to a file
 	LOAD,		//Load a Circuit from a file
 
@@ -102,7 +103,9 @@ enum DsgnMenuItem //The items of the design menu (you should add more items)
 	DSWITCH,
 	DLED,
 	DCONNECTION,
+	DADD,
 	DSIMULATION,
+	DNEW,
 	DSAVE,
 	DLOAD,
 	DEXIT,

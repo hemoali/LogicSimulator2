@@ -35,8 +35,10 @@ Output::Output(ApplicationManager* pManager)
 	ChangeTitle("Programming Techniques Project");
 
 	DrawGrid();
-	CreateDesignToolBar();	//Create the desgin toolbar
-	CreateStatusBar();		//Create Status bar
+	CreateLeftToolBar();
+	//CreateTopToolBar();
+	//CreateDesignToolBar();	//Create the desgin toolbar
+	//CreateStatusBar();		//Create Status bar
 
 	memset(usedPixels, 0, sizeof usedPixels);
 	memset(arrayOfIntersections, -1, sizeof arrayOfIntersections);
@@ -83,7 +85,7 @@ void Output::PrintMsg(string msg, color Color) const
 {
 	ClearStatusBar();	//Clear Status bar to print message on it
 						// Set the Message offset from the Status Bar
-	int MsgX = 25;
+	int MsgX = 85+25;
 	int MsgY = UI.StatusBarHeight - 10;
 
 	// Print the Message
@@ -95,7 +97,7 @@ void Output::PrintMsg(string msg, color Color) const
 void Output::ClearStatusBar()const
 {
 	// Set the Message offset from the Status Bar
-	int MsgX = 25;
+	int MsgX = 85+25;
 	int MsgY = UI.StatusBarHeight - 10;
 
 	//Overwrite using bachground color to erase the message
@@ -115,15 +117,32 @@ void Output::DrawGrid()const {
 
 }
 //////////////////////////////////////////////////////////////////////////////////////////
-//Clears the drawing (degin) area
+//Clears the drawing (degin) area:: Not needed
 void Output::ClearDrawingArea() const
 {
-	pWind->SetPen(RED, 1);
-	pWind->SetBrush(WHITE);
-	pWind->DrawRectangle(0, 0, UI.width, UI.height);
-	DrawGrid();
-	CreateDesignToolBar();	//Create the desgin toolbar
-	CreateStatusBar();
+	//pWind->SetPen(RED, 1);
+	//pWind->SetBrush(WHITE);
+	//pWind->DrawRectangle(0, 0, UI.width, UI.height);
+	//DrawGrid();
+	//CreateDesignToolBar();	//Create the desgin toolbar
+	//CreateStatusBar();
+
+}
+//////////////////////////////////////////////////////////////////////////////////////////
+//Draw the left bar
+void Output::CreateLeftToolBar() const
+{
+	UI.AppMode = DESIGN;
+	pWind->DrawImage("images\\Menu\\left_bar_normal.jpg",0, 0, UI.LeftToolBarWidth, UI.height);
+}
+void Output::CreateLeftSimulationToolBar() const
+{
+	/*UI.AppMode = SIMULATION;
+	pWind->DrawImage("images\\Menu\\left_bar_add_enabled.jpg", 0, 0, UI.LeftToolBarWidth, UI.height);*/
+}
+void Output::CreateTopToolBar() const
+{
+	pWind->DrawImage("images\\Menu\\top_bar_normal.jpg", UI.LeftToolBarWidth, 0, UI.width - UI.LeftToolBarWidth-14, UI.TopToolBarHeight);
 
 }
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -552,10 +571,10 @@ void Output::DrawCleanImage(image* img, int x, int y)
 	pWind->DrawImage(img, x - UI.GRID_SIZE - 5, y - UI.GRID_SIZE - 5, 2 * UI.GRID_SIZE + 4, UI.GATE_Height + 3);
 }
 void Output::storeDrawingAreaImage(image*& img) {
-	pWind->StoreImage(img, 0, UI.ToolBarHeight, pWind->GetWidth(), pWind->GetHeight() - UI.StatusBarHeight);
+	pWind->StoreImage(img, UI.LeftToolBarWidth,0, pWind->GetWidth() - UI.LeftToolBarWidth, pWind->GetHeight() - UI.StatusBarHeight);
 }
 void Output::drawStoredDrawingAreaImage(image*& img) {
-	pWind->DrawImage(img, 0, UI.ToolBarHeight, pWind->GetWidth(), pWind->GetHeight() - UI.StatusBarHeight);
+	pWind->DrawImage(img, UI.LeftToolBarWidth, 0, pWind->GetWidth() - UI.LeftToolBarWidth, pWind->GetHeight() - UI.StatusBarHeight);
 }
 
 void Output::drawRectangle(int x1, int y1, int x2, int y2) {
@@ -1053,7 +1072,7 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 	}
 
 	pWind->StoreImage(storedImg, 0, 0, pWind->GetWidth(), pWind->GetHeight());
-	pWind->StoreImage(storedDrawingImg, 0, UI.ToolBarHeight, pWind->GetWidth(), pWind->GetHeight() - UI.StatusBarHeight);
+	pWind->StoreImage(storedDrawingImg, UI.LeftToolBarWidth, 0, pWind->GetWidth() - UI.LeftToolBarWidth, pWind->GetHeight() - UI.StatusBarHeight );
 
 	pWind->SetPen(BLUE, 2);
 	while (true)
@@ -1079,7 +1098,7 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 		if (Utils::CheckPoint(x, y, usedPixels)) {
 			if ((x != iXOld || y != iYOld) || (!alreadyHighlighted && moving && x == iXOld && y == iYOld)) {
 				alreadyHighlighted = true;
-				pWind->DrawImage(storedDrawingImg, 0, UI.ToolBarHeight, pWind->GetWidth(), pWind->GetHeight() - UI.StatusBarHeight);
+				pWind->DrawImage(storedDrawingImg, UI.LeftToolBarWidth,0, pWind->GetWidth() - UI.LeftToolBarWidth, pWind->GetHeight() - UI.StatusBarHeight);
 
 				if (x != iXOld) {
 					RectULX = RectULX + (x - iXOld);
@@ -1232,7 +1251,7 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 			draw = false;
 			break;
 		}
-		else if (!wrong && Utils::CheckPoint({ x,y }, usedPixels, moving, false) && (pWind->GetMouseClick(tX, tY) == LEFT_CLICK) || ( (pWind->GetButtonState(LEFT_BUTTON, tX, tY) == BUTTON_UP))) {
+		else if (!wrong && Utils::CheckPoint({ x,y }, usedPixels, moving, false) && (pWind->GetMouseClick(tX, tY) == LEFT_CLICK) || ((pWind->GetButtonState(LEFT_BUTTON, tX, tY) == BUTTON_UP))) {
 			if ((moving && (noOfTotalConnections == drawnConnectionsCount)) || !moving)
 			{
 				Utils::correctPointClicked(x, y, true, false);
@@ -1269,8 +1288,8 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 		}
 		pWind->DownButtons();
 		pWind->FlushMouseQueue();
-}
-//	printMatrix("Final single move");
+	}
+	//	printMatrix("Final single move");
 	pWind->FlushMouseQueue();
 	PrintMsg("");
 	delete storedDrawingImg;
@@ -1319,7 +1338,7 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 	}
 
 	pWind->StoreImage(storedImg, 0, 0, pWind->GetWidth(), pWind->GetHeight());
-	pWind->StoreImage(storedDrawingImg, 0, UI.ToolBarHeight, pWind->GetWidth(), pWind->GetHeight() - UI.StatusBarHeight);
+	pWind->StoreImage(storedDrawingImg, UI.LeftToolBarWidth, 0, pWind->GetWidth() - UI.LeftToolBarWidth, pWind->GetHeight() - UI.StatusBarHeight);
 
 	pWind->SetPen(UI.SelectColor, 2);
 	int oldox = 0, oldoy = 0;
@@ -1337,7 +1356,7 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 			continue;
 		}
 		if (Utils::CheckPoint(ox, oy, usedPixels) && (ox != oldox || oy != oldoy)) {
-			pWind->DrawImage(storedDrawingImg, 0, UI.ToolBarHeight, pWind->GetWidth(), pWind->GetHeight() - UI.StatusBarHeight);
+			pWind->DrawImage(storedDrawingImg, UI.LeftToolBarWidth,0, pWind->GetWidth() - UI.LeftToolBarWidth, pWind->GetHeight() - UI.StatusBarHeight);
 		}
 		for (size_t m = 0; m < allSelectedComponents.size(); m++)
 		{
