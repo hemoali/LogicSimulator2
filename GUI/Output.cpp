@@ -85,7 +85,7 @@ void Output::PrintMsg(string msg, color Color) const
 {
 	ClearStatusBar();	//Clear Status bar to print message on it
 						// Set the Message offset from the Status Bar
-	int MsgX = 85+25;
+	int MsgX = 85 + 25;
 	int MsgY = UI.StatusBarHeight - 10;
 
 	// Print the Message
@@ -97,7 +97,7 @@ void Output::PrintMsg(string msg, color Color) const
 void Output::ClearStatusBar()const
 {
 	// Set the Message offset from the Status Bar
-	int MsgX = 85+25;
+	int MsgX = 85 + 25;
 	int MsgY = UI.StatusBarHeight - 10;
 
 	//Overwrite using bachground color to erase the message
@@ -135,11 +135,11 @@ void Output::ClearDrawingArea() const
 void Output::CreateLeftToolBar() const
 {
 	UI.AppMode = DESIGN;
-	pWind->DrawImage("images\\Menu\\left_bar_normal.jpg",0, 0, UI.LeftToolBarWidth, UI.height);
+	pWind->DrawImage("images\\Menu\\left_bar_normal.jpg", 0, 0, UI.LeftToolBarWidth, UI.height);
 }
 void Output::CreateTopToolBar() const
 {
-	pWind->DrawImage("images\\Menu\\top_bar_normal.jpg", UI.LeftToolBarWidth, 0, UI.width - UI.LeftToolBarWidth-14, UI.TopToolBarHeight);
+	pWind->DrawImage("images\\Menu\\top_bar_normal.jpg", UI.LeftToolBarWidth, 0, UI.width - UI.LeftToolBarWidth - 14, UI.TopToolBarHeight);
 
 }
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -498,7 +498,7 @@ void Output::DrawRClickMenu_CorrectPoints(int& x, int& y, int type, bool draw)
 	}
 }
 
-image * Output::StoreBeforeMenu(int x, int y,int type)
+image * Output::StoreBeforeMenu(int x, int y, int type)
 {
 	int Height;
 	switch (type)
@@ -547,7 +547,7 @@ void Output::DrawCleanImage(image* img, int x, int y)
 	pWind->DrawImage(img, x - UI.GRID_SIZE - 5, y - UI.GRID_SIZE - 5, 2 * UI.GRID_SIZE + 4, UI.GATE_Height + 3);
 }
 void Output::storeDrawingAreaImage(image*& img) {
-	pWind->StoreImage(img, UI.LeftToolBarWidth,0, pWind->GetWidth() - UI.LeftToolBarWidth, pWind->GetHeight() - UI.StatusBarHeight);
+	pWind->StoreImage(img, UI.LeftToolBarWidth, 0, pWind->GetWidth() - UI.LeftToolBarWidth, pWind->GetHeight() - UI.StatusBarHeight);
 }
 void Output::drawStoredDrawingAreaImage(image*& img) {
 	pWind->DrawImage(img, UI.LeftToolBarWidth, 0, pWind->GetWidth() - UI.LeftToolBarWidth, pWind->GetHeight() - UI.StatusBarHeight);
@@ -557,7 +557,7 @@ void Output::drawRectangle(int x1, int y1, int x2, int y2) {
 	pWind->DrawRectangle(x1, y1, x2, y2, FRAME);
 }
 
-void Output::DeleteGate(Component *& C, bool undo , bool completetly)
+void Output::DeleteGate(Component *& C, bool undo, bool completetly)
 {
 	if (undo) {
 		//Undo
@@ -605,11 +605,11 @@ void Output::DeleteGate(Component *& C, bool undo , bool completetly)
 		GInfotmp.y2 = GInfo.y1 + UI.GATE_Height / 2;
 		for (int i = GInfotmp.y1 / UI.GRID_SIZE + 1; i <= GInfotmp.y2 / UI.GRID_SIZE; i++)
 		{
-			for (int j = GInfotmp.x1 / UI.GRID_SIZE; j <= GInfotmp.x2 / UI.GRID_SIZE; j++) { 
-				pOut->setArrayOfComponents(i, j, NULL); 
+			for (int j = GInfotmp.x1 / UI.GRID_SIZE; j <= GInfotmp.x2 / UI.GRID_SIZE; j++) {
+				pOut->setArrayOfComponents(i, j, NULL);
 			}
 		}
-		
+
 		// Removing Connection
 		vector<Connection*> allInConnections, allOutConnections;
 		C->getAllInputConnections(allInConnections);
@@ -1122,7 +1122,7 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 	}
 
 	pWind->StoreImage(storedImg, 0, 0, pWind->GetWidth(), pWind->GetHeight());
-	pWind->StoreImage(storedDrawingImg, UI.LeftToolBarWidth, 0, pWind->GetWidth() - UI.LeftToolBarWidth, pWind->GetHeight() - UI.StatusBarHeight );
+	pWind->StoreImage(storedDrawingImg, UI.LeftToolBarWidth, 0, pWind->GetWidth() - UI.LeftToolBarWidth, pWind->GetHeight() - UI.StatusBarHeight);
 
 	pWind->SetPen(BLUE, 2);
 	while (true)
@@ -1148,7 +1148,7 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 		if (Utils::CheckPoint(x, y, usedPixels)) {
 			if ((x != iXOld || y != iYOld) || (!alreadyHighlighted && moving && x == iXOld && y == iYOld)) {
 				alreadyHighlighted = true;
-				pWind->DrawImage(storedDrawingImg, UI.LeftToolBarWidth,0, pWind->GetWidth() - UI.LeftToolBarWidth, pWind->GetHeight() - UI.StatusBarHeight);
+				pWind->DrawImage(storedDrawingImg, UI.LeftToolBarWidth, 0, pWind->GetWidth() - UI.LeftToolBarWidth, pWind->GetHeight() - UI.StatusBarHeight);
 
 				if (x != iXOld) {
 					RectULX = RectULX + (x - iXOld);
@@ -1406,7 +1406,7 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 			continue;
 		}
 		if (Utils::CheckPoint(ox, oy, usedPixels) && (ox != oldox || oy != oldoy)) {
-			pWind->DrawImage(storedDrawingImg, UI.LeftToolBarWidth,0, pWind->GetWidth() - UI.LeftToolBarWidth, pWind->GetHeight() - UI.StatusBarHeight);
+			pWind->DrawImage(storedDrawingImg, UI.LeftToolBarWidth, 0, pWind->GetWidth() - UI.LeftToolBarWidth, pWind->GetHeight() - UI.StatusBarHeight);
 		}
 		for (size_t m = 0; m < allSelectedComponents.size(); m++)
 		{
@@ -1844,7 +1844,7 @@ void Output::DrawNot_Buffer(GraphicsInfo g, bool isBuffer, bool highlighted, boo
 		//Drawing lines 
 		pWind->DrawLine(inx - 3 - (2 * ciDefBrushSize), iny, inx, iny, FRAME); //The Input-Line
 		pWind->DrawLine(outx, outy, outx + 5 + (2 * ciDefBrushSize), outy, FRAME); //The Output-Line
-		//Drawing Trianlge
+																				   //Drawing Trianlge
 		pWind->DrawTriangle(p1x, p1y, p2x, p2y, outx, outy, FRAME);
 	}
 	else {
@@ -1854,7 +1854,7 @@ void Output::DrawNot_Buffer(GraphicsInfo g, bool isBuffer, bool highlighted, boo
 		pWind->DrawLine(inx - 3 - (2 * ciDefBrushSize), iny, inx, iny, FRAME); //The Input-Line
 		pWind->DrawLine(outx + 4 * ciDefBrushSize - 1, outy, outx + 5 + (2 * ciDefBrushSize), outy, FRAME);//The Output-Line
 
-  	    //Drawing Trianlge
+																										   //Drawing Trianlge
 		pWind->DrawTriangle(p1x, p1y, p2x, p2y, outx, outy, FRAME);
 		//Darwing Bubble
 		pWind->DrawCircle(outx + 2 * ciDefBrushSize, outy, 2 * ciDefBrushSize, FRAME);
@@ -1911,7 +1911,7 @@ void Output::DrawOr_Nor(GraphicsInfo g, int in, bool isNor, bool highlighted, bo
 		//Draw lines
 		pWind->DrawLine(in1x - 5 - (2 * ciDefBrushSize), in1y, in1x, in1y, FRAME); //The Input1-Line
 		pWind->DrawLine(in2x - 5 - (2 * ciDefBrushSize), in2y, in2x, in2y, FRAME); //The Input2-Line
-		pWind->DrawLine(outx, outy, outx  + (2 * ciDefBrushSize) - 2, outy, FRAME); //The Output-Line
+		pWind->DrawLine(outx, outy, outx + (2 * ciDefBrushSize) - 2, outy, FRAME); //The Output-Line
 		if (in == 3) { //Checking for 3 input Gate 
 			int in3x = in1x + 2 * (ciDefBrushSize == 1 ? 2 : 1), in3y = cy;
 			pWind->DrawLine(in3x - 6 - (2 * ciDefBrushSize), in3y, in3x, in3y, FRAME); //The Input3-Line
@@ -1939,7 +1939,7 @@ void Output::DrawXor_Xnor(GraphicsInfo g, int in, bool isXNor, bool highlighted,
 	p1x = p2x = cx - 24;
 	p2y = hy2 = cy + 21;
 	p1y = hy1 = cy - 21;
-	hx1 = hx2 = cx -2;
+	hx1 = hx2 = cx - 2;
 	int xi = 8; //X-Increment
 
 	pWind->SetPen(UI.DrawColor);
@@ -1948,13 +1948,13 @@ void Output::DrawXor_Xnor(GraphicsInfo g, int in, bool isXNor, bool highlighted,
 	if (isXNor) {
 		//XNOR GATE
 		outy = cy; outx = cx + 11 - (2 * ciDefBrushSize);
-		kx = (outx + hx1) / 2  - 2;
-		ky = (outy + hy1) / 2 ;
-		ky2 = (outy + hy2) / 2 ;
+		kx = (outx + hx1) / 2 - 2;
+		ky = (outy + hy1) / 2;
+		ky2 = (outy + hy2) / 2;
 		//Draw lines
 		pWind->DrawLine(in1x - 3 - (2 * ciDefBrushSize), in1y, in1x, in1y, FRAME); //The Input1-Line
 		pWind->DrawLine(in2x - 3 - (2 * ciDefBrushSize), in2y, in2x, in2y, FRAME); //The Input2-Line
-		//pWind->DrawLine(outx + 4 * ciDefBrushSize - 1, outy, outx - 1 + (2 * ciDefBrushSize) , outy, FRAME); //The Output-Line
+																				   //pWind->DrawLine(outx + 4 * ciDefBrushSize - 1, outy, outx - 1 + (2 * ciDefBrushSize) , outy, FRAME); //The Output-Line
 		if (in == 3) { //Checking for 3 input Gate 
 			int in3x = in1x, in3y = cy;
 			pWind->DrawLine(in3x - 6 - (2 * ciDefBrushSize), in3y, in3x, in3y, FRAME); //The Input3-Line
@@ -2066,7 +2066,7 @@ void Output::setArrayOfComponents(int i, int j, Component * c)
 Component * Output::getArrayOfComponents(int i, int j)
 {
 	if (i > 44 || j > 77) return NULL; //IBRAHIM IF I DIDN'T ADD THIS LINE THE PROGRAM WILL TERMINATE FOR NO KNOWN REASON 
-	//Giving that the error is that j is always  4096 
+									   //Giving that the error is that j is always  4096 
 	return arrayOfComponents[i][j];
 }
 

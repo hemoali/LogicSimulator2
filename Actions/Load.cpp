@@ -69,7 +69,7 @@ void Load::Execute()
 	for (int i = 0; i < compCount; i++)
 	{
 		file >> compName >> point.x1 >> point.y1 >> compLabel;
-		if (compLabel.size() == 1) { 
+		if (compLabel.size() == 1) {
 			//Means that the label is empty as we have put an extra L 
 			//char at the begining of te saved label to know whetherit has a name or not
 			// in order to avoid misreading the input file
@@ -80,7 +80,7 @@ void Load::Execute()
 		}
 		//Completing the Component Corners
 		point.x2 = point.x1 + UI.GATE_Width;
-		point.y2 = point.y1 + UI.GRID_HEIGHT;
+		point.y2 = point.y1 + UI.GATE_Height;
 		if (compName == "AND2")
 		{
 			AND2*ptr = new AND2(point, 3);
@@ -186,7 +186,7 @@ void Load::Execute()
 				pManager->GetOutput()->setArrayOfComponents(k, l, pA);
 			}
 		}
-		
+
 		//Don't FILL Used Pixels Now
 		GraphicsInfo gfx = pA->getCornersLocation();
 		Component* C = pA;
@@ -201,7 +201,7 @@ void Load::Execute()
 			{
 				if (xbegin == j || xend == j)
 				{
-					if (pOut->getUsedPixel(i,j) != INTERSECTION)
+					if (pOut->getUsedPixel(i, j) != INTERSECTION)
 					{
 						pOut->setUsedPixel(i, j, PIN);
 					}
@@ -238,7 +238,7 @@ void Load::Execute()
 		else {
 			compLabel = compLabel.substr(1, compLabel.size());
 		}
-		theConnection->AddConnectionSilent(c1, c2, c3, c4,compLabel);
+		theConnection->AddConnectionSilent(c1, c2, c3, c4, compLabel);
 	}
 	pManager->GetOutput()->PrintMsg("Design loaded successfully");
 	file.close();
