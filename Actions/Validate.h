@@ -4,6 +4,7 @@
 class Validate :
 	public Action
 {
+	string msg;
 public:
 	Validate(ApplicationManager*pApp);
 	//Reads parameters required for action to execute

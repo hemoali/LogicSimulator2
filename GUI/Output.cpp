@@ -2069,18 +2069,18 @@ void Output::DrawSwtich(GraphicsInfo g, bool isON, bool highlighted, bool notVal
 	pWind->SetPen(UI.DrawColor);
 	if (highlighted) pWind->SetPen(UI.SelectColor);
 	if (notValid) pWind->SetPen(UI.ErrorColor);
-	int cx = g.x1, cy = g.y1; //Centre Points
+	int cx = g.x1-6, cy = g.y1; //Centre Points
 							  //the rectangle
 	if (isON)
 	{
-		pWind->DrawImage("images\\Menu\\SWITCH_ON.jpg", cx - 16, cy - 16, 32, 32);
+		pWind->DrawImage("images\\Menu\\SWITCH_ON.jpg", cx - 13, cy - 16, 32-4, 32);
 	}
 	else
 	{
-		pWind->DrawImage("images\\Menu\\SWITCH_OFF.jpg", cx - 16, cy - 16, 32, 32);
+		pWind->DrawImage("images\\Menu\\SWITCH_OFF.jpg", cx - 13, cy - 16, 32-4, 32);
 	}
 	//the output line
-	pWind->DrawLine(cx + 12, cy, cx + 22, cy);
+	pWind->DrawLine(cx + 12, cy, cx + 18, cy);
 
 
 

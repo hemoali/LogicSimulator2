@@ -7,6 +7,7 @@
 
 Validate::Validate(ApplicationManager*pApp) : Action(pApp)
 {
+	msg = "";
 }
 
 bool Validate::ReadActionParameters(image *I)
@@ -19,6 +20,7 @@ bool Validate::validateOutputComponent(Component* comp) {
 		return true;
 	}
 	if (comp == NULL || comp->getOutputPin()->connectedConnectionsCount() == 0) {
+		msg = "Error: Floating pins";
 		return false;
 	}
 	bool t[3] = { true, true, true };
@@ -36,6 +38,7 @@ bool Validate::validateInputComponent(Component* comp) {
 	if (comp == NULL || ((comp->getNumOfInputs() == 3 && (comp->getInputPin(0)->getConnection() == NULL || comp->getInputPin(1)->getConnection() == NULL || comp->getInputPin(2)->getConnection() == NULL))
 		|| (comp->getNumOfInputs() == 2 && (comp->getInputPin(0)->getConnection() == NULL || comp->getInputPin(1)->getConnection() == NULL))
 		|| (comp->getNumOfInputs() == 1 && (comp->getInputPin(0)->getConnection() == NULL)))) {
+		msg = "Error: Floating pins";
 		return false;
 	}
 	bool t[3] = { true, true, true };
@@ -58,6 +61,7 @@ bool Validate::validateInputComponent(Component* comp) {
 }
 void Validate::Execute()
 {
+	msg = "";
 	bool isValid = true;
 	for (size_t i = 0; i < pManager->allComponentsCorners.size() && isValid; i++)
 	{
@@ -68,43 +72,34 @@ void Validate::Execute()
 		if (comp->getDelete())continue;
 		if (!dynamic_cast<LED*> (comp))
 		{
-			if (comp->getOutputPin()->getConnection(0) == NULL) {
-				isValid = false;
-				break;
-			}
-			else {
-				isValid = validateOutputComponent(comp);
-			}
+			isValid = validateOutputComponent(comp);
 		}
-		string msg = "Valid";
 		if (isValid)
 		{
 			if (!dynamic_cast<SWITCH*> (comp))
 			{
-				if ((comp->getNumOfInputs() == 3 && (comp->getInputPin(0)->getConnection() == NULL || comp->getInputPin(1)->getConnection() == NULL || comp->getInputPin(2)->getConnection() == NULL))
-					|| (comp->getNumOfInputs() == 2 && (comp->getInputPin(0)->getConnection() == NULL || comp->getInputPin(1)->getConnection() == NULL))
-					|| (comp->getNumOfInputs() == 1 && (comp->getInputPin(0)->getConnection() == NULL))) {
-					isValid = false;
-					break;
-				}
-				else {
-					isValid = validateInputComponent(comp);
-				}
+				isValid = validateInputComponent(comp);
 			}
 			if (!isValid)
 			{
-				msg = "First level isn't all switches or there exists some floating pins";
+				if (msg == "")
+				{
+					msg = "First level isn't all switches";
+				}
 			}
 		}
 		else {
-			msg = "Last level isn't all leds or there exists some floating pins";
+			if (msg == "")
+			{
+				msg = "Last level isn't all LEDs";
+			}
 		}
 	}
 	if (isValid)
 	{
 		pManager->GetInput()->switchMode(SIMULATION);
 	}
-	pManager->GetOutput()->PrintMsg((isValid) ? "true" : "false");
+	pManager->GetOutput()->PrintMsg(msg);
 	Sleep(600);
 }
 void Validate::Undo()
