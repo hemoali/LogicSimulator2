@@ -50,12 +50,13 @@ void LED::selectYourSelf(Output* pOut, color Color) {
 
 void LED::save(int id, ofstream & file)
 {
-	file << "LED  "<<this->getID()<<"  " << this->getLabel() << "  " << m_GfxInfo.x1 << "  " << m_GfxInfo.y1 << endl;
+	file << "LED  "<< "  " << m_GfxInfo.x1 << "  " << m_GfxInfo.y1 << " L" << this->getLabel() << endl;
 }
 
-void LED::load(ApplicationManager*pM)
+void LED::load(string s, ApplicationManager*pM)
 {
 	pM->AddComponent(this);
+	this->setLabel(s);
 }
 
 ActionType LED::getComponentActionType() {

@@ -43,8 +43,9 @@ public:
 	void getAllConnections(vector<Connection*>& allConnections);
 	Component* getComponent(int);
 
-	//Get compcount
+	//Compcount Setter And Getter
 	int getCompCount();
+	void setCompCount(int n);
 
 	//destructor
 	~ApplicationManager();

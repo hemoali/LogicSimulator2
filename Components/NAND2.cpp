@@ -52,12 +52,13 @@ void NAND2::selectYourSelf(Output* pOut, color Color) {
 void NAND2::save(int id, ofstream & file)
 {
 
-	file << "NAND2  "<<this->getID()<<"  "/* << this->getLabel() << "  " */<< m_GfxInfo.x1 << "  " << m_GfxInfo.y1 << endl;
+	file << "NAND2  "<<"  "<< m_GfxInfo.x1 << "  " << m_GfxInfo.y1 << " L" << this->getLabel() << endl;
 }
 
-void NAND2::load(ApplicationManager*pM)
+void NAND2::load(string s, ApplicationManager*pM)
 {
 	pM->AddComponent(this);
+	this->setLabel(s);
 }
 ActionType NAND2::getComponentActionType() {
 	return ADD_NAND_GATE_2;

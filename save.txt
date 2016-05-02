@@ -1,7 +1,0 @@
-3
-XOR3  1  536  344
-LED  2  asd  760  312
-SWITCH  3  456  360
-Connections
-3  2  1
--1

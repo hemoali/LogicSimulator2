@@ -52,12 +52,13 @@ void XOR2::selectYourSelf(Output* pOut, color Color) {
 void XOR2::save(int id, ofstream & file)
 {
 
-	file << "XOR2  "<<this->getID()<<"  "/* << this->getLabel() << "  " */<< m_GfxInfo.x1 << "  " << m_GfxInfo.y1 << endl;
+	file << "XOR2  " << "  " << m_GfxInfo.x1 << "  " << m_GfxInfo.y1 << " L" << this->getLabel() << endl;
 }
 
-void XOR2::load(ApplicationManager*pM)
+void XOR2::load(string s, ApplicationManager*pM)
 {
 	pM->AddComponent(this);
+	this->setLabel(s);
 }
 ActionType XOR2::getComponentActionType() {
 	return ADD_XOR_GATE_2;

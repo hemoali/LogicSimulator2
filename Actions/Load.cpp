@@ -1,6 +1,5 @@
 #include "Load.h"
 #include<string>
-#include<vector>
 #include"..\Components\Component.h"
 #include"..\Components\AND2.h"
 #include"..\Components\AND3.h"
@@ -17,6 +16,9 @@
 #include"..\Components\XOR3.h"
 #include"..\ApplicationManager.h"
 #include"..\Components\Connection.h"
+#include "AddConnection.h"
+
+
 
 Load::Load(ApplicationManager*pApp) : Action(pApp)
 {
@@ -28,112 +30,207 @@ bool Load::ReadActionParameters(image *I)
 }
 void Load::Execute()
 {
-	file.open("save.txt");
-	vector<Connection*>allConnections;
+	Output *pOut = pManager->GetOutput();
+	for (int i = 0; i < pManager->allComponentsCorners.size(); i++) {
+		Component *C = pManager->getComponent(i);
+		if (dynamic_cast<Gate*> (C)) {
+			C->setDelete(true);
+			C->Draw(pOut);
+			//Removing Connections
+			vector<Connection*> allInConnections, allOutConnections;
+			C->getAllInputConnections(allInConnections);
+			C->getAllOutputConnections(allOutConnections);
+			pOut->clearConnections(allInConnections, C->getCenterLocation().x1, C->getCenterLocation().y1, true, true);
+			pOut->clearConnections(allOutConnections, C->getCenterLocation().x1, C->getCenterLocation().y1, false, true);
+			//Deleteion Completely
+			delete C;
+		}
+	}
+	// clear status bar
+	pOut->ClearStatusBar();
+	//Clear Drawing Area
+	pOut->ClearDrawingArea();
+	//Resetting Interface
+	pOut->resetInterfaceArrays();
+	pManager->setCompCount(0);
+	pManager->allComponentsCorners.resize(0);
+
+	//Why don't you take a screenshot and save only the arrays in another file //To serach that later
+	file.open("save");
 	vector<Component*>listOfGates;
-	int compCount, ID, src, dest, pnum;
+	int compCount, src, dest, pnum, connectionCount = 0;
 	string compName, compLabel;
 	GraphicsInfo point;
+	Component* pA = 0;
+	//New Image For creating Gate Object
+	image* img = new image;
+	//Loading Gates
 	file >> compCount;
 	for (int i = 0; i < compCount; i++)
 	{
-		file >> compName >> ID >> /*compLabel >>*/ point.x1 >> point.y1;
+		file >> compName >> point.x1 >> point.y1 >> compLabel;
+		if (compLabel.size() == 1) { 
+			//Means that the label is empty as we have put an extra L 
+			//char at the begining of te saved label to know whetherit has a name or not
+			// in order to avoid misreading the input file
+			compLabel = "";
+		}
+		else {
+			compLabel = compLabel.substr(1, compLabel.size());
+		}
+		//Completing the Component Corners
+		point.x2 = point.x1 + UI.GATE_Width;
+		point.y2 = point.y1 + UI.GRID_HEIGHT;
 		if (compName == "AND2")
 		{
 			AND2*ptr = new AND2(point, 3);
+			pA = ptr;
 			listOfGates.push_back(ptr);
-			ptr->load(pManager);
+			ptr->load(compLabel, pManager);
 		}
 		else if (compName == "AND3")
 		{
 			AND3*ptr = new AND3(point, 3);
+			pA = ptr;
 			listOfGates.push_back(ptr);
-			ptr->load(pManager);
+			ptr->load(compLabel, pManager);
 		}
 		else if (compName == "BUFFER")
 		{
 			BUFFER*ptr = new BUFFER(point, 3);
+			pA = ptr;
 			listOfGates.push_back(ptr);
-			ptr->load(pManager);
+			ptr->load(compLabel, pManager);
 		}
 		else if (compName == "LED")
 		{
 			LED*ptr = new LED(point, 3);
+			pA = ptr;
 			listOfGates.push_back(ptr);
-			ptr->load(pManager);
+			ptr->load(compLabel, pManager);
 		}
 		else if (compName == "NAND2")
 		{
 			NAND2*ptr = new NAND2(point, 3);
+			pA = ptr;
 			listOfGates.push_back(ptr);
-			ptr->load(pManager);
+			ptr->load(compLabel, pManager);
 		}
 		else if (compName == "NOR2")
 		{
 			NOR2*ptr = new NOR2(point, 3);
+			pA = ptr;
 			listOfGates.push_back(ptr);
-			ptr->load(pManager);
+			ptr->load(compLabel, pManager);
 		}
 		else if (compName == "NOR3")
 		{
 			NOR3*ptr = new NOR3(point, 3);
+			pA = ptr;
 			listOfGates.push_back(ptr);
-			ptr->load(pManager);
+			ptr->load(compLabel, pManager);
 		}
 		else if (compName == "NOT")
 		{
 			NOT*ptr = new NOT(point, 3);
+			pA = ptr;
 			listOfGates.push_back(ptr);
-			ptr->load(pManager);
+			ptr->load(compLabel, pManager);
 		}
 		else if (compName == "OR2")
 		{
 			OR2*ptr = new OR2(point, 3);
+			pA = ptr;
 			listOfGates.push_back(ptr);
-			ptr->load(pManager);
+			ptr->load(compLabel, pManager);
 		}
 		else if (compName == "SWITCH")
 		{
 			SWITCH*ptr = new SWITCH(point, 3);
+			pA = ptr;
 			listOfGates.push_back(ptr);
-			ptr->load(pManager);
+			ptr->load(compLabel, pManager);
 		}
 		else if (compName == "XNOR2")
 		{
 			XNOR2*ptr = new XNOR2(point, 3);
+			pA = ptr;
 			listOfGates.push_back(ptr);
-			ptr->load(pManager);
+			ptr->load(compLabel, pManager);
 		}
 		else if (compName == "XOR2")
 		{
 			XOR2*ptr = new XOR2(point, 3);
+			pA = ptr;
 			listOfGates.push_back(ptr);
-			ptr->load(pManager);
+			ptr->load(compLabel, pManager);
 		}
 		else if (compName == "XOR3")
 		{
 			XOR3*ptr = new XOR3(point, 3);
+			pA = ptr;
 			listOfGates.push_back(ptr);
-			ptr->load(pManager);
+			ptr->load(compLabel, pManager);
 		}
+		//Filling the needed arrays
+		GraphicsInfo GInfotmp = point;
+		int Len = UI.GATE_Width;
+		int Wdth = UI.GATE_Height;
+		pManager->allComponentsCorners.push_back(point);
+		pA->setSmallCleanImageBeforeAddingComp(img);
+		for (int k = GInfotmp.y1 / UI.GRID_SIZE + 1; k <= GInfotmp.y2 / UI.GRID_SIZE; k++) {
+			for (int l = GInfotmp.x1 / UI.GRID_SIZE; l <= GInfotmp.x2 / UI.GRID_SIZE; l++) {
+				pManager->GetOutput()->setArrayOfComponents(k, l, pA);
+			}
+		}
+		
+		//Don't FILL Used Pixels Now
+		/*GraphicsInfo gfx = C->getCornersLocation();
+		Component* C = pA;
+		int xbegin = (C->getCenterLocation().x1 - UI.GATE_Width / 2.0) / UI.GRID_SIZE;
+		int xend = (C->getCenterLocation().x1 + UI.GATE_Width / 2.0) / UI.GRID_SIZE;
+		int ybegin = (C->getCenterLocation().y1 - UI.GATE_Height / 2.0) / UI.GRID_SIZE;
+		int yend = (C->getCenterLocation().y1 + UI.GATE_Height / 2.0) / UI.GRID_SIZE;
+		for (int i = ybegin + 1; i <= yend; i++)
+		{
+			for (int j = xbegin; j <= xend; j++)
+			{
+				pOut->setUsedPixel(i, j, GATE);
+			}
+		}*/
+
+		//Draw the Loaded Gate 
+		pA->Draw(pOut);
 	}
+
+	//Loading The Connection What've saved in connection 
+	//the input pin Coordinates and the output pin Coordinates
+	//Then I initiated the ADD CONNECTION Action With Silent Parameter to draw it without 
+	// The need to press mouse buttons like normal
 	file >> compName;
-	do
+	file >> connectionCount;
+	int c1, c2, c3, c4;
+	c1 = c2 = c3 = c4 = 0;
+	for (int l = 0; l < connectionCount; l++)
 	{
-		file >> src;
-		if (src == -1)
-			break;
-		file >> dest >> pnum;
-		Connection*ptr = new Connection(point, listOfGates[src - 1]->getOutputPin(), listOfGates[dest - 1]->getInputPin(pnum));
-		ptr->load(pManager);
-
+		// (c1,c2) Point of The output Pin (Source Pin)
+		// (c3,c4) Point of The input pin (Dest pin)
+		file >> c1 >> c2 >> c3 >> c4 >> compLabel;
+		//Adding Connection Action Silently
+		AddConnection *theConnection = new AddConnection(pManager);
+		if (compLabel.size() == 1) {
+			//Means that the label is empty as we have put an extra L 
+			//char at the begining of te saved label to know whetherit has a name or not
+			// in order to avoid misreading the input file
+			compLabel = "";
+		}
+		else {
+			compLabel = compLabel.substr(1, compLabel.size());
+		}
+		theConnection->AddConnectionSilent(c1, c2, c3, c4,compLabel);
 	}
-	while (src != -1);
-	pManager->getAllConnections(allConnections);
-
-	file.close();
 	pManager->GetOutput()->PrintMsg("Design loaded successfully");
-	
+	file.close();
 
 }
 void Load::Undo()

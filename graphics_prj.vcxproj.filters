@@ -240,6 +240,13 @@
     <ClCompile Include="Actions\MultiMove.cpp">
       <Filter>Actions</Filter>
     </ClCompile>
+    <ClCompile Include="Actions\EditLabel.cpp">
+      <Filter>Actions</Filter>
+    </ClCompile>
+    <ClCompile Include="Actions\Delete.cpp">
+      <Filter>Actions</Filter>
+    </ClCompile>
+    <ClCompile Include="Actions\MultiDelete.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Defs.H" />
@@ -439,6 +446,13 @@
     <ClInclude Include="Actions\MultiMove.h">
       <Filter>Actions</Filter>
     </ClInclude>
+    <ClInclude Include="Actions\EditLabel.h">
+      <Filter>Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="Actions\Delete.h">
+      <Filter>Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="Actions\MultiDelete.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

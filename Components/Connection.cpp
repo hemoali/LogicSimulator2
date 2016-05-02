@@ -93,12 +93,37 @@ void Connection::selectYourSelf(Output* pOut, color Color) {
 
 void Connection::save(int id, ofstream & file)
 {
-	file << this->getSourcePin()->getComponent()->getID() << "  " << this->getDestPin()->getComponent()->getID() << "  " << this->getDestPin()->getPosition() << "\n";
+	Component *theInputPinComponent;
+	Component *theOutputPinComponent;
+	Connection *theConnection = this;
+	theInputPinComponent = theConnection->getDestPin()->getComponent();
+	int inputPosistion = theConnection->getDestPin()->getPosition();
+	theOutputPinComponent = theConnection->getSourcePin()->getComponent();
+	int c1, c2, c3, c4;
+	c1 = c2 = c3 = c4 = 0;
+	switch (inputPosistion) {
+	case 0:
+		c3 = theInputPinComponent->getCenterLocation().x1 - 10;
+		c4 = theInputPinComponent->getCenterLocation().y1 - 13;
+		break;
+	case 2:
+		c3 = theInputPinComponent->getCenterLocation().x1 - 10;
+		c4 = theInputPinComponent->getCenterLocation().y1 + 13;
+		break;
+	case 1:
+		c3 = theInputPinComponent->getCenterLocation().x1 - 10;
+		c4 = theInputPinComponent->getCenterLocation().y1;
+		break;
+	}
+	c1 = theOutputPinComponent->getCenterLocation().x1 + 9;
+	c2 = theOutputPinComponent->getCenterLocation().y1;
+	file << "  " << c1 << "  " << c2 << "  " << c3 << "  " << c4 << " L" << this->getLabel() <<  endl;
 }
 
-void Connection::load(ApplicationManager*pM)
+void Connection::load(string s, ApplicationManager*pM)
 {
 	pM->AddComponent(this);
+	this->setLabel(s);
 }
 ActionType Connection::getComponentActionType() {
 	return ADD_CONNECTION;

@@ -53,12 +53,13 @@ void OR2::selectYourSelf(Output* pOut, color Color) {
 void OR2::save(int id, ofstream & file)
 {
 
-	file << "OR2  "<<this->getID()<<"  "/* << this->getLabel() << "  " */<< m_GfxInfo.x1 << "  " << m_GfxInfo.y1 << endl;
+	file << "OR2  "<<"  "<< m_GfxInfo.x1 << "  " << m_GfxInfo.y1 << " L" << this->getLabel() << endl;
 }
 
-void OR2::load(ApplicationManager*pM)
+void OR2::load(string s, ApplicationManager*pM)
 {
 	pM->AddComponent(this);
+	this->setLabel(s);
 }
 ActionType OR2::getComponentActionType() {
 	return ADD_OR_GATE_2;

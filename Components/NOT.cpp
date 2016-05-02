@@ -52,12 +52,13 @@ void NOT::selectYourSelf(Output* pOut, color Color) {
 void NOT::save(int id, ofstream & file)
 {
 
-	file << "NOT  "<<this->getID()<<"  "/* << this->getLabel() << "  " */<< m_GfxInfo.x1 << "  " << m_GfxInfo.y1 << endl;
+	file << "NOT  "<<"  "<< m_GfxInfo.x1 << "  " << m_GfxInfo.y1 << " L" << this->getLabel() << endl;
 }
 
-void NOT::load(ApplicationManager*pM)
+void NOT::load(string s, ApplicationManager*pM)
 {
 	pM->AddComponent(this);
+	this->setLabel(s);
 }
 ActionType NOT::getComponentActionType() {
 	return ADD_INV;

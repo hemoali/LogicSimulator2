@@ -440,11 +440,12 @@ void Input::switchMode(MODE appMode) {
 buttonstate Input::GetButtonStatus(const button btMouse, int &iX, int &iY) const {
 	return pWind->GetButtonState(btMouse, iX, iY);
 }
-string Input::GetSrting(Output *pOut, string sOriginal = "")
+string Input::GetSrting(Output *pOut, string sOriginal = "",bool EditingLabel)
 {
 	string s = "";
 	char ch;
 	keytype k;
+	if(EditingLabel) pOut->PrintMsg(sOriginal);
 	while ((k = pWind->WaitKeyPress(ch)) != '\n' && (int)ch != 13) {
 		if (k == ESCAPE) {
 			s = "";
@@ -487,6 +488,25 @@ vector<pair<int, Component*> >& Input::getSelectedComponents()
 {
 	return selectedComponents;
 }
+
+void Input::CorrectPointClickedSilent(int& x, int& y, bool drawImage, bool drawConnection)
+{
+	Utils::correctPointClicked(x, y, drawImage, drawConnection);
+}
+
+string Input::EditComponenetLabel(Output *pOut)
+{
+	//To be Modified Later with Menus 
+	string msg = "Type the new name";
+	string ret = this->GetSrting(pOut, msg,true);
+	return ret;
+}
+
+void Input::getExactConnectionLocation(int & x, int & y)
+{
+	Utils::correctPointClicked(x, y, true, false);
+}
+
 
 Input::~Input()
 {

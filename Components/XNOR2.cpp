@@ -51,12 +51,13 @@ void XNOR2::selectYourSelf(Output* pOut, color Color) {
 void XNOR2::save(int id, ofstream & file)
 {
 
-	file << "XNOR2  "<<this->getID()<<"  "/* << this->getLabel() << "  " */<< m_GfxInfo.x1 << "  " << m_GfxInfo.y1 << endl;
+	file << "XNOR2  "<<this->getID()<<"  "<< m_GfxInfo.x1 << "  " << m_GfxInfo.y1 << " L" << this->getLabel() << endl;
 }
 
-void XNOR2::load(ApplicationManager*pM)
+void XNOR2::load(string s, ApplicationManager*pM)
 {
 	pM->AddComponent(this);
+	this->setLabel(s);
 }
 ActionType XNOR2::getComponentActionType() {
 	return ADD_XNOR_GATE_2;

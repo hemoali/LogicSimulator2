@@ -2,12 +2,18 @@
 #define _RIGHT_CLICK
 #include "Action.h"
 #include "../Components/Gate.h"
+#include "../Components/Connection.h"
+#include "../Actions/EditLabel.h"
+#include "../Actions/Delete.h"
+#include "../Actions/MultiDelete.h"
 class RightClick : public Action
 {
 private:
 	ActionType SelectedAction;
 	int actionNum;
 	Component* C;
+	Action* theAction;
+
 public:
 
 	RightClick(ApplicationManager*);
@@ -21,6 +27,8 @@ public:
 	virtual void Undo();
 	//To redo this action (code depends on action type)
 	virtual void Redo();
+	//Return the ACtion
+	virtual Action* getAction();
 	~RightClick();
 };
 #endif
