@@ -1974,7 +1974,7 @@ void Output::DrawXor_Xnor(GraphicsInfo g, int in, bool isXNor, bool highlighted,
 		pWind->DrawLine(outx, outy, outx + (2 * ciDefBrushSize) - 1, outy, FRAME); //The Output-Line
 		if (in == 3) { //Checking for 3 input Gate 
 			int in3x = in1x, in3y = cy;
-			pWind->DrawLine(in3x - 6 - (2 * ciDefBrushSize), in3y, in3x, in3y, FRAME); //The Input3-Line
+			pWind->DrawLine(in3x - 4 - (2 * ciDefBrushSize), in3y, in3x, in3y, FRAME); //The Input3-Line
 		}
 		//Draw Bezier
 		pWind->DrawBezier(p1x + xi, p1y, hx1, hy1, kx, ky, outx, outy, FRAME);

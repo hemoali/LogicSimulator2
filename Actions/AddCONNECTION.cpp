@@ -44,7 +44,7 @@ void AddConnection::Execute()
 
 	for (int i = 0; i < pManager->allComponentsCorners.size(); i++)
 	{
-		if (dynamic_cast<Connection*>(pManager->getComponent(i)))
+		if (dynamic_cast<Connection*>(pManager->getComponent(i)) || pManager->getComponent(i)->getDelete())
 			continue;
 		if (Cx1 >= pManager->allComponentsCorners[i].x1&&Cx1 <= pManager->allComponentsCorners[i].x2&& Cy1 >= pManager->allComponentsCorners[i].y1&&Cy1 <= pManager->allComponentsCorners[i].y2)
 		{

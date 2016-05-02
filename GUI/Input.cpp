@@ -36,7 +36,7 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 			Component* comp = NULL;
 			for (int i = 0; i < pManager->allComponentsCorners.size(); i++)
 			{
-				if (dynamic_cast<Connection*>(pManager->getComponent(i)))
+				if (dynamic_cast<Connection*>(pManager->getComponent(i)) ||pManager->getComponent(i)->getDelete())
 					continue;
 				if (xT >= pManager->allComponentsCorners[i].x1&&xT <= pManager->allComponentsCorners[i].x2&& yT >= pManager->allComponentsCorners[i].y1&&yT <= pManager->allComponentsCorners[i].y2)
 				{
@@ -272,7 +272,7 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 					Utils::correctPointClicked(hoverX, hoverY, true, false);
 					if (Utils::CheckPointInBorders(hoverX, hoverY)) {
 						Component* comp = pManager->GetOutput()->getArrayOfComponents(hoverY / UI.GRID_SIZE, hoverX / UI.GRID_SIZE);
-						if (comp != NULL && comp != preComp)
+						if (comp != NULL && !comp->getDelete() && comp != preComp)
 						{
 							pManager->GetOutput()->PrintMsg(comp->getLabel());
 						}
