@@ -12,6 +12,7 @@ class Connection :	public Component
 	InputPin* DstPin;	//The Destination pin of this connection (an input pin of certain Component)
 	vector<Cell> cellsBeforeAddingConnection;
 	bool isDrawn;
+	GraphicsInfo clickedPoints;// clicked points for adding connection
 public:
 	//Connection(const GraphicsInfo &r_GfxInfo, Component *pS=NULL,Component *pD=NULL, int Pin=0);
 	Connection(const GraphicsInfo &r_GfxInfo, OutputPin *pSrcPin,InputPin *pDstPin);
@@ -39,6 +40,9 @@ public:
 
 	void setCellsBeforeAddingConnection(vector<Cell> cellsBeforeAddingConnection);
 	vector<Cell>& getCellsBeforeAddingConnection();
+
+	void setClickedPoints(int x1,int y1,int x2,int y2);
+	GraphicsInfo getClickedPoints();
 
 	virtual void save(int, ofstream &);
 	virtual void load(string s, ApplicationManager*);

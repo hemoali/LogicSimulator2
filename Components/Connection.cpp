@@ -91,32 +91,23 @@ void Connection::selectYourSelf(Output* pOut, color Color) {
 	pOut->changeConnectionColor(this, Color);
 }
 
+void Connection::setClickedPoints(int x1, int y1, int x2, int y2)
+{
+	clickedPoints.x1 = x1;
+	clickedPoints.y1 = y1;
+	clickedPoints.x2 = x2;
+	clickedPoints.y2 = y2;
+}
+
+GraphicsInfo Connection::getClickedPoints()
+{
+	return clickedPoints;
+}
+
 void Connection::save(int id, ofstream & file)
 {
-	Component *theInputPinComponent;
-	Component *theOutputPinComponent;
-	Connection *theConnection = this;
-	theInputPinComponent = theConnection->getDestPin()->getComponent();
-	int inputPosistion = theConnection->getDestPin()->getPosition();
-	theOutputPinComponent = theConnection->getSourcePin()->getComponent();
-	int c1, c2, c3, c4;
-	c1 = c2 = c3 = c4 = 0;
-	switch (inputPosistion) {
-	case 0:
-		c3 = theInputPinComponent->getCenterLocation().x1 - 10;
-		c4 = theInputPinComponent->getCenterLocation().y1 - 13;
-		break;
-	case 2:
-		c3 = theInputPinComponent->getCenterLocation().x1 - 10;
-		c4 = theInputPinComponent->getCenterLocation().y1 + 13;
-		break;
-	case 1:
-		c3 = theInputPinComponent->getCenterLocation().x1 - 10;
-		c4 = theInputPinComponent->getCenterLocation().y1;
-		break;
-	}
-	c1 = theOutputPinComponent->getCenterLocation().x1 + 9;
-	c2 = theOutputPinComponent->getCenterLocation().y1;
+	int inputPosistion = getDestPin()->getPosition();
+	int c1 = clickedPoints.x1, c2 = clickedPoints.y1, c3 = clickedPoints.x2, c4 = clickedPoints.y2;
 	file << "  " << c1 << "  " << c2 << "  " << c3 << "  " << c4 << " L" << this->getLabel() <<  endl;
 }
 

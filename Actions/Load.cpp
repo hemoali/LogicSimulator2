@@ -80,7 +80,7 @@ void Load::Execute()
 		}
 		//Completing the Component Corners
 		point.x2 = point.x1 + UI.GATE_Width;
-		point.y2 = point.y1 + UI.GRID_HEIGHT;
+		point.y2 = point.y1 + UI.GATE_Height;
 		if (compName == "AND2")
 		{
 			AND2*ptr = new AND2(point, 3);

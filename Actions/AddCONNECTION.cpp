@@ -113,6 +113,7 @@ void AddConnection::Execute()
 				Connection *pA = new Connection(GInfo, outputComponent->getOutputPin(), inputComponent->getInputPin(inputPin));
 				pManager->AddComponent(pA);
 				pManager->allComponentsCorners.push_back(GInfo);
+				pA->setClickedPoints(Cx1, Cy1, Cx2, Cy2);
 				pA->setCellsBeforeAddingConnection(cellsBeforeAddingConnection);
 				outputComponent->getOutputPin()->ConnectTo(pA);
 				inputComponent->getInputPin(inputPin)->setConnection(pA);
