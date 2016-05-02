@@ -69,6 +69,16 @@ void AddConnection::Execute()
 		Sleep(100);
 	}
 	else{
+		//Check for feedback
+		for (size_t i = 0; i < inputComponent->getOutputPin()->connectedConnectionsCount(); i++)
+		{
+			if (inputComponent->getOutputPin()->getConnection(i)->getDestPin()->getComponent() == outputComponent) {
+				pManager->GetOutput()->PrintMsg("Feedback is disabled!", UI.ErrorColor);
+				Sleep(600);
+				goto end;
+				break;
+			}
+		}
 		numOfInputs = inputComponent->getNumOfInputs();
 		int inputPin;
 		if (numOfInputs == 3)
@@ -135,7 +145,7 @@ void AddConnection::Execute()
 			}
 		}
 	}
-	if (outputComponent!=NULL)
+	end: if (outputComponent!=NULL)
 	{
 		// Remove red pin
 		outputComponent->setDelete(true);
