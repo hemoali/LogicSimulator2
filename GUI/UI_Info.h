@@ -24,7 +24,9 @@ struct UI_Info	//User Interface Info.
 		TopToolBarHeight = 109,
 		ToolBarHeight = TopToolBarHeight,	//Tool Bar Height (distance from top of window to bottom line of toolbar);
 		TopToolBarItemsGap = 27,
-		RightClickCMenuH = 60;
+		RightClickCMenuH = 60,
+		WarningMenuWidth = 357,
+		WarningMenuHeight = 136;
 
 	color DrawColor;		//Drawing color
 	color SelectColor;		//Highlighting color for gates and connections

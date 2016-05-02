@@ -624,6 +624,42 @@ void Output::DeleteGate(Component *& C, bool undo, bool completetly)
 	}
 }
 
+void Output::DrawWarningMenues(char type)
+{
+	int xbegin, xend, ybegin, yend;
+	xbegin = UI.width / 2 - UI.WarningMenuWidth / 2;
+	ybegin = UI.height / 2 - UI.WarningMenuHeight / 2;
+	string imageURL;
+	switch (type) {
+	case 'L':
+		imageURL = "images\\Menu\\LoadConfirmationMenu.jpg";
+		pWind->DrawImage(imageURL,xbegin,ybegin, UI.WarningMenuWidth, UI.WarningMenuHeight);
+		break;
+	}
+}
+
+image* Output::StoreBeforeWarning()
+{
+	int xbegin, xend, ybegin, yend;
+	xbegin = UI.width / 2 - UI.WarningMenuWidth / 2;
+	ybegin = UI.height / 2 - UI.WarningMenuHeight / 2;
+	image * ptr = new image;
+	pWind->StoreImage(ptr, xbegin,ybegin,UI.WarningMenuWidth,UI.WarningMenuHeight);
+	return ptr;
+}
+
+void Output::DrawAfterWarning(image * theWarningImage)
+{
+	int xbegin = 0, ybegin = 0;
+	xbegin = UI.width / 2 - UI.WarningMenuWidth / 2;
+	ybegin = UI.height / 2 - UI.WarningMenuHeight / 2;
+	pWind->DrawImage(theWarningImage, xbegin, ybegin, UI.WarningMenuWidth, UI.WarningMenuHeight);
+}
+
+void Output::loadWarningSound(char type)
+{
+}
+
 void Output::storeImage(image * img, int x1, int y1, int x2, int y2)
 {
 	pWind->StoreImage(img, x1, y1, x2, y2);

@@ -1,6 +1,8 @@
-2
-XOR3    520  344 L
-XOR3    344  344 L
+3
+AND2    248  232 Lwevwevwe
+AND3    488  392 Lcasca
+XOR3    776  264 Lvasvasvsvr
 Connections
-1
-  377  368  534  368 Las
+2
+  281  256  502  403 Lcascasc
+  521  416  790  288 Lcwevwe

@@ -56,6 +56,11 @@ public:
 	void DrawAfterMenu(image* img, int x, int y, int type);
 	void DrawRClickMenu_CorrectPoints(int& x, int& y, int type, bool = true);
 	void DeleteGate(Component*& C, bool undo = false, bool completetly = false);
+	
+	void DrawWarningMenues(char type);
+	image* StoreBeforeWarning();
+	void DrawAfterWarning(image* theWarningImage);
+	void loadWarningSound(char type);
 
 	void storeImage(image* img, int x1, int y1, int x2, int y2);
 
