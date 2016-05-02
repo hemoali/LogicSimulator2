@@ -34,7 +34,7 @@ public:
 		x = startXPointForConnections;
 		y = startYPointForConnections;
 	}
-	
+	void switchMode(MODE appMode);
 	~Input();
 };
 #endif

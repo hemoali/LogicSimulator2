@@ -135,95 +135,12 @@ void Output::CreateLeftToolBar() const
 	UI.AppMode = DESIGN;
 	pWind->DrawImage("images\\Menu\\left_bar_normal.jpg",0, 0, UI.LeftToolBarWidth, UI.height);
 }
-void Output::CreateLeftSimulationToolBar() const
-{
-	/*UI.AppMode = SIMULATION;
-	pWind->DrawImage("images\\Menu\\left_bar_add_enabled.jpg", 0, 0, UI.LeftToolBarWidth, UI.height);*/
-}
 void Output::CreateTopToolBar() const
 {
 	pWind->DrawImage("images\\Menu\\top_bar_normal.jpg", UI.LeftToolBarWidth, 0, UI.width - UI.LeftToolBarWidth-14, UI.TopToolBarHeight);
 
 }
 //////////////////////////////////////////////////////////////////////////////////////////
-//Draws the menu (toolbar) in the Design mode
-void Output::CreateDesignToolBar() const
-{
-	pWind->DrawRectangle(0, 0, UI.width, UI.ToolBarHeight + 10);
-	UI.AppMode = DESIGN;	//Design Mode
-
-							//You can draw the tool bar icons in any way you want.
-
-							//First prepare List of images for each menu item
-	string MenuItemImages[DITEMSCOUNT];
-	MenuItemImages[D2AND] = "images\\Menu\\AND2.jpg";
-	MenuItemImages[D3AND] = "images\\Menu\\AND3.jpg";
-	MenuItemImages[D2OR] = "images\\Menu\\OR2.jpg";
-	MenuItemImages[D2XOR] = "images\\Menu\\XOR2.jpg";
-	MenuItemImages[D3XOR] = "images\\Menu\\XOR3.jpg";
-	MenuItemImages[DBUFFER] = "images\\Menu\\BUFFER.jpg";
-	MenuItemImages[DNOT] = "images\\Menu\\NOT.jpg";
-	MenuItemImages[D2NAND] = "images\\Menu\\NAND2.jpg";
-	MenuItemImages[D2NOR] = "images\\Menu\\NOR2.jpg";
-	MenuItemImages[D3NOR] = "images\\Menu\\NOR3.jpg";
-	MenuItemImages[D2XNOR] = "images\\Menu\\XNOR2.jpg";
-	MenuItemImages[DLED] = "images\\Menu\\LED_ON.jpg";
-	MenuItemImages[DSWITCH] = "images\\Menu\\SWITCH_ON_TOOLBAR.jpg";
-	MenuItemImages[DCONNECTION] = "images\\Menu\\CONNECTION.jpg";
-
-	MenuItemImages[DSIMULATION] = "images\\Menu\\SIMULATION.jpg";
-	MenuItemImages[DSAVE] = "images\\Menu\\SAVE.jpg";
-	MenuItemImages[DLOAD] = "images\\Menu\\LOAD.jpg";
-	MenuItemImages[DEXIT] = "images\\Menu\\EXIT.jpg";
-
-	//TODO: Prepare image for each menu item and add it to the list
-
-	//Draw menu item one image at a time
-	for (int i = 0; i < DITEMSCOUNT; i++)
-	{
-		pWind->DrawImage(MenuItemImages[i], i*UI.ToolItemWidth + ((i == 0) ? 5 : (i + 1) * 5), 5, UI.ToolItemWidth, UI.ToolBarHeight);
-	}
-
-	//Draw a line under the toolbar
-	pWind->SetPen(RED, 3);
-	pWind->DrawLine(0, UI.ToolBarHeight + 10, UI.width, UI.ToolBarHeight + 10);
-
-}
-//////////////////////////////////////////////////////////////////////////////////////////
-//Draws the menu (toolbar) in the simulation mode
-void Output::CreateSimulationToolBar() const
-{
-	//pWind->DrawRectangle(0, UI.ToolBarHeight, UI.width, UI.height - UI.StatusBarHeight);
-	pWind->DrawRectangle(0, 0, UI.width, UI.ToolBarHeight + 10);
-	UI.AppMode = SIMULATION;	//Simulation Mode
-	string MenuItemImages[SITEMSCOUNT];
-	/*
-	SVALIDATE,	//Simulate menu item
-	SSIMULATE,
-	STT,	//Truth table menu item
-	SDESIGN,
-	SSAVE,
-	SLOAD,
-	SEXIT,
-	SITEMSCOUNT*/
-	MenuItemImages[SVALIDATE] = "images\\Menu\\VALIDATE.jpg";
-	MenuItemImages[SSIMULATE] = "images\\Menu\\SIMULATE.jpg";
-	MenuItemImages[STT] = "images\\Menu\\TT.jpg";
-	MenuItemImages[SDESIGN] = "images\\Menu\\DESIGN.jpg";
-	MenuItemImages[SSAVE] = "images\\Menu\\SAVE.jpg";
-	MenuItemImages[SLOAD] = "images\\Menu\\LOAD.jpg";
-	MenuItemImages[SEXIT] = "images\\Menu\\EXIT.jpg";
-	//TODO: Write code to draw the simualtion toolbar (similar to that of design toolbar drawing)
-
-	for (int i = 0; i < SITEMSCOUNT; i++)
-		pWind->DrawImage(MenuItemImages[i], i*UI.ToolItemWidth + ((i == 0) ? 5 : (i + 1) * 5), 6, UI.ToolItemWidth, UI.ToolBarHeight);
-
-	//Draw a line under the toolbar
-	pWind->SetPen(RED, 3);
-	pWind->DrawLine(0, UI.ToolBarHeight + 10, UI.width, UI.ToolBarHeight + 10);
-
-}
-
 bool Output::DrawString(string s, GraphicsInfo Gfx_info) const {
 	pWind->DrawString(Gfx_info.x1, Gfx_info.y1, s);
 	return true;
@@ -1182,7 +1099,7 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 				}
 				case ADD_Switch:
 				{
-					DrawSwtich(Gfx, true, moving, wrong);
+					DrawSwtich(Gfx, false, moving, wrong);
 					break;
 				}
 				case ADD_LED:

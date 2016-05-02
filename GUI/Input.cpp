@@ -231,10 +231,43 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 					}
 					oldLeftHoverItem = HoveredLeftItemOrder;
 				}
+				else if (hoverY >= 0 && hoverY < UI.height && UI.AppMode == SIMULATION && hoverX <= UI.LeftToolBarWidth - 12 && hoverX >= 5) {
+
+					vector<pair<int, int> > LeftItemsRanges;
+					LeftItemsRanges.push_back(make_pair(6, 85));
+					LeftItemsRanges.push_back(make_pair(103, 180));
+					LeftItemsRanges.push_back(make_pair(197, 273));
+
+					int HoveredLeftItemOrder = -1;//TODO:Modify
+
+					for (size_t i = 0; i < LeftItemsRanges.size(); i++)
+					{
+						if (hoverY >= LeftItemsRanges[i].first && hoverY <= LeftItemsRanges[i].second) {
+							HoveredLeftItemOrder = i;
+						}
+					}
+					if (HoveredLeftItemOrder != oldLeftHoverItem)
+					{
+						switch (HoveredLeftItemOrder)
+						{
+						case SDESIGN: pWind->DrawImage("images\\Menu\\left_bar_simulation_design_hovered.jpg", 0, 0, UI.LeftToolBarWidth, UI.height); break;
+						case STT:pWind->DrawImage("images\\Menu\\left_bar_simulation_tt_hovered.jpg", 0, 0, UI.LeftToolBarWidth, UI.height); break;
+						case SEXIT: pWind->DrawImage("images\\Menu\\left_bar_simulation_exit_hovered.jpg", 0, 0, UI.LeftToolBarWidth, UI.height); break;
+						default: pWind->DrawImage("images\\Menu\\left_bar_simulation_normal.jpg", 0, 0, UI.LeftToolBarWidth, UI.height); break;
+						}
+					}
+					oldLeftHoverItem = HoveredLeftItemOrder;
+				}
 				else {
 					oldTopHoveredItemOrder = oldLeftHoverItem = -1;
-					pWind->DrawImage("images\\Menu\\top_bar_normal.jpg", UI.LeftToolBarWidth, 0, UI.width - UI.LeftToolBarWidth - 14, UI.TopToolBarHeight);
-					pWind->DrawImage("images\\Menu\\left_bar_normal.jpg", 0, 0, UI.LeftToolBarWidth, UI.height);					
+					if (UI.AppMode == DESIGN)
+					{
+						pWind->DrawImage("images\\Menu\\top_bar_normal.jpg", UI.LeftToolBarWidth, 0, UI.width - UI.LeftToolBarWidth - 14, UI.TopToolBarHeight);
+						pWind->DrawImage("images\\Menu\\left_bar_normal.jpg", 0, 0, UI.LeftToolBarWidth, UI.height);
+					}
+					else {
+						pWind->DrawImage("images\\Menu\\left_bar_simulation_normal.jpg", 0, 0, UI.LeftToolBarWidth, UI.height);
+					}
 
 					Utils::correctPointClicked(hoverX, hoverY, true, false);
 					if (Utils::CheckPointInBorders(hoverX, hoverY)) {
@@ -334,7 +367,7 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 			}
 			switch (ClickedItemOrder + 14)
 			{
-			case DSIMULATION:return Simulate; break;
+			case DSIMULATION: {switchMode(SIMULATION); break; }
 			case DNEW:return NEW; break;
 			case DSAVE:return SAVE; break;
 			case DLOAD:return LOAD; break;
@@ -358,22 +391,28 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 	}
 	else	//Application is in Simulation mode
 	{
-		//if (y > 0 && y < UI.ToolBarHeight) {
-		//	int ClickedItemOrder = -1;//TODO:Modify
-		//	for (; x > 0; ClickedItemOrder++) {
-		//		x -= (UI.ToolItemWidth + 5);
-		//	}
-		//	switch (ClickedItemOrder) {
-		//	case SVALIDATE: return Validate;
-		//	case SSIMULATE: return Simulate;
-		//	case STT: return Create_TruthTable;
-		//	case SDESIGN: return DSN_MODE;
-		//	case SSAVE: return SAVE;
-		//	case SLOAD: return LOAD;
-		//	case SEXIT: return EXIT;
-		//	default: return DSN_TOOL; //TODO:
-		//	}
-		//}
+		if (y >= 0 && y < UI.height && x <= UI.LeftToolBarWidth - 12 && x >= 5) {
+			pWind->GetMouseClick(x, y);
+			vector<pair<int, int> > LeftItemsRanges;
+			LeftItemsRanges.push_back(make_pair(6, 85));
+			LeftItemsRanges.push_back(make_pair(103, 180));
+			LeftItemsRanges.push_back(make_pair(197, 273));
+
+			int ClickedItemOrder = -1;//TODO:Modify
+
+			for (size_t i = 0; i < LeftItemsRanges.size(); i++)
+			{
+				if (y >= LeftItemsRanges[i].first && y <= LeftItemsRanges[i].second) {
+					ClickedItemOrder = i;
+				}
+			}
+			switch (ClickedItemOrder) {
+			case SDESIGN: {switchMode(DESIGN); break; }
+			case STT: return Create_TruthTable;
+			case SEXIT: return EXIT;
+			default: return DSN_TOOL; //TODO:
+			}
+		}
 		//return SIM_MODE;	//This should be changed after creating the compelete simulation bar 
 		//[2] User clicks on the drawing area //TODO:
 		if (y >= UI.ToolBarHeight && y < UI.height - UI.StatusBarHeight)
@@ -387,7 +426,17 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 	pWind->FlushMouseQueue();
 
 }
-
+void Input::switchMode(MODE appMode) {
+	if (appMode == DESIGN)
+	{
+		UI.AppMode = DESIGN;
+		pWind->DrawImage("images\\Menu\\left_bar_normal.jpg", 0, 0, UI.LeftToolBarWidth, UI.height);
+	}
+	else {
+		pWind->DrawImage("images\\Menu\\left_bar_simulation_normal.jpg", 0, 0, UI.LeftToolBarWidth, UI.height);
+		UI.AppMode = SIMULATION;
+	}
+}
 buttonstate Input::GetButtonStatus(const button btMouse, int &iX, int &iY) const {
 	return pWind->GetButtonState(btMouse, iX, iY);
 }

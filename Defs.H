@@ -116,12 +116,8 @@ enum DsgnMenuItem //The items of the design menu (you should add more items)
 enum SimMenuItem //The items of the simulation menu (you should add more items)
 {
 	//Note: Items are ordered here as they appear in menu
-	SVALIDATE,	//Simulate menu item
-	SSIMULATE,
-	STT,	//Truth table menu item
 	SDESIGN,
-	SSAVE,
-	SLOAD,
+	STT,	//Truth table menu item
 	SEXIT,
 	SITEMSCOUNT		//no. of simulation menu items ==> This should be the last line in this enum
 
