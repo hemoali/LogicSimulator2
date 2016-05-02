@@ -36,7 +36,7 @@ Output::Output(ApplicationManager* pManager)
 
 	DrawGrid();
 	CreateLeftToolBar();
-	//CreateTopToolBar();
+	CreateTopToolBar();
 	//CreateDesignToolBar();	//Create the desgin toolbar
 	//CreateStatusBar();		//Create Status bar
 
@@ -121,9 +121,11 @@ void Output::DrawGrid()const {
 void Output::ClearDrawingArea() const
 {
 	//pWind->SetPen(RED, 1);
-	//pWind->SetBrush(WHITE);
-	//pWind->DrawRectangle(0, 0, UI.width, UI.height);
-	//DrawGrid();
+	pWind->SetBrush(WHITE);
+	pWind->DrawRectangle(0, 0, UI.width, UI.height);
+	DrawGrid();
+	CreateLeftToolBar();
+	CreateTopToolBar();
 	//CreateDesignToolBar();	//Create the desgin toolbar
 	//CreateStatusBar();
 
@@ -620,6 +622,11 @@ void Output::DeleteGate(Component *& C, bool undo , bool completetly)
 			C = NULL;
 		}
 	}
+}
+
+void Output::storeImage(image * img, int x1, int y1, int x2, int y2)
+{
+	pWind->StoreImage(img, x1, y1, x2, y2);
 }
 
 

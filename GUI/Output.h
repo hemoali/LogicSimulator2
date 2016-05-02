@@ -34,9 +34,9 @@ public:
 
 	bool DrawString(string s, GraphicsInfo Gfx_info) const;
 	void DrawGrid() const;
-	
+
 	// Draw  
-	bool SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image*, bool moving=false, Component* comp = NULL);
+	bool SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image*, bool moving = false, Component* comp = NULL);
 	bool SetMultiDragImage(int x, int y, Component* mainMovingComponent, vector< pair<int, Component*> > allSelectedComponents);
 	void DrawNot_Buffer(GraphicsInfo, bool = false, bool = false, bool = false) const;
 	void DrawAnd_Nand(GraphicsInfo, int = 2, bool = false, bool = false, bool = false) const;
@@ -44,20 +44,21 @@ public:
 	void DrawXor_Xnor(GraphicsInfo, int = 2, bool = false, bool = false, bool = false) const;
 	void DrawLed(GraphicsInfo, bool = false, bool = false, bool = false) const;
 	void DrawSwtich(GraphicsInfo, bool = false, bool = false, bool = false) const;
-	void DrawCleanImage(image*, int x,int y);
+	void DrawCleanImage(image*, int x, int y);
 	bool DrawConnection(GraphicsInfo r_GfxInfo, int inputPin, GraphicsInfo compCenterLocationbool, vector<Cell>&, bool selected = false) const;
-	
-	
-	void storeDrawingAreaImage(image*& img); 
+
+
+	void storeDrawingAreaImage(image*& img);
 	void drawStoredDrawingAreaImage(image*& img);
 	void drawRectangle(int x1, int y1, int x2, int y2);
 
 	image* StoreBeforeMenu(int, int, int);
 	void DrawAfterMenu(image* img, int x, int y, int type);
 	void DrawRClickMenu_CorrectPoints(int& x, int& y, int type, bool = true);
-	void DeleteGate(Component*& C,bool undo = false ,bool completetly = false);
+	void DeleteGate(Component*& C, bool undo = false, bool completetly = false);
 
-	
+	void storeImage(image* img, int x1, int y1, int x2, int y2);
+
 	bfs_node* bfs(bfs_node* bf, int requX, int requY, vector<bfs_node*> allNodes) const;
 	void clearConnections(vector<Connection*> & allConnections, int originalX, int originalY, bool isInput, bool setDeleted = false);
 	void changeConnectionColor(Connection * connection, color Color = BLUE);
@@ -68,7 +69,7 @@ public:
 
 	void setArrayOfComponents(int i, int j, Component*);
 	Component* getArrayOfComponents(int i, int j);
-	
+
 	void clearConnectionsFromGrid(vector<Connection*> allOutputConnections, vector<Connection*> allInputConnections);
 
 	void printMatrix(string msg);
