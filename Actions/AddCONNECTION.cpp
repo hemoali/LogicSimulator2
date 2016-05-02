@@ -2,6 +2,7 @@
 #include <iostream>
 AddConnection::AddConnection(ApplicationManager *pApp) :Action(pApp)
 {
+	Silent = false;
 }
 
 AddConnection::~AddConnection(void)
@@ -13,16 +14,20 @@ bool AddConnection::ReadActionParameters(image * smallImageBeforeAddingComponent
 	//Get a Pointer to the Input / Output Interfaces
 	Output* pOut = pManager->GetOutput();
 	Input* pIn = pManager->GetInput();
+	if (!Silent) {
+		//Print Action Message
+		pOut->PrintMsg("Connection : Click to select the Source");
+		pIn->GetPointClicked(Cx1, Cy1);
+		pOut->PrintMsg("Connection : Click to select the Destination");
+		pIn->GetPointClicked(Cx2, Cy2);
 
-	//Print Action Message
-	//pOut->PrintMsg("Connection : Click to select the Source");
-	pIn->GetPointClicked(Cx1, Cy1);
-
-	pOut->PrintMsg("Connection : Click to select the Destination");
-	pIn->GetPointClicked(Cx2, Cy2);
-	//Clear Status Bar
-	pOut->ClearStatusBar();
-
+		//Clear Status Bar
+		pOut->ClearStatusBar();
+	}
+	else {
+		pIn->CorrectPointClickedSilent(Cx1, Cy1);
+		pIn->CorrectPointClickedSilent(Cx2, Cy2);
+	}
 	return true;
 }
 
@@ -112,10 +117,11 @@ void AddConnection::Execute()
 				outputComponent->getOutputPin()->ConnectTo(pA);
 				inputComponent->getInputPin(inputPin)->setConnection(pA);
 				inputComponent->getInputPin(inputPin)->setPosition(numOfInputs);
-				
-				string s = "Please enter connection label: ";
-				pManager->GetOutput()->PrintMsg(s);
-				gateLabel = pManager->GetInput()->GetSrting(pManager->GetOutput(), s);
+				if (!Silent) {
+					string s = "Please enter connection label: ";
+					pManager->GetOutput()->PrintMsg(s);
+					gateLabel = pManager->GetInput()->GetSrting(pManager->GetOutput(), s);
+				}
 				pA->setLabel(gateLabel);
 				pA->setIsDrawn(true);
 				
@@ -135,6 +141,17 @@ void AddConnection::Execute()
 	outputComponent->setDelete(false);
 	outputComponent->Draw(pManager->GetOutput(), false);
 
+}
+
+void AddConnection::AddConnectionSilent(int c1, int c2, int c3, int c4,string s)
+{
+	Silent = true;
+	Cx1 = c1;
+	Cy1 = c2;
+	Cx2 = c3;
+	Cy2 = c4;
+	gateLabel = s ;
+	this->Execute();
 }
 
 

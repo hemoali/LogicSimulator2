@@ -19,7 +19,7 @@ public:
 
 	void setOutputPinStatus(int n, STATUS s);
 	virtual void save(int, ofstream &);
-	virtual void load(ApplicationManager*);
+	virtual void load(string s, ApplicationManager*);
 	virtual ActionType getComponentActionType();
 
 	virtual ~SWITCH();

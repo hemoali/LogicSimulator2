@@ -2127,6 +2127,15 @@ Component * Output::getArrayOfComponents(int i, int j)
 	return arrayOfComponents[i][j];
 }
 
+void Output::resetInterfaceArrays()
+{
+	memset(usedPixels, 0, sizeof usedPixels);
+	memset(arrayOfIntersections, -1, sizeof arrayOfIntersections);
+	memset(arrayOfCorners, 0, sizeof arrayOfCorners);
+	memset(connectionsCountAtPixel, 0, sizeof connectionsCountAtPixel);
+	memset(arrayOfComponents, NULL, sizeof arrayOfComponents);
+}
+
 Output::~Output()
 {
 	delete pWind;

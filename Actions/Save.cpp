@@ -13,13 +13,16 @@ bool Save::ReadActionParameters(image *I)
 }
 void Save::Execute()
 {
-	file.open("save.txt");
+	vector<pair <int, int >> thePoints;
+	Output *pOut = pManager->GetOutput();
+	file.open("save");
 	int compCount = 0;
+	int ConnectionCount = 0;
 	for (int i = 0; i < pManager->getCompCount(); i++)
 	{
 		if (dynamic_cast<Connection*>(pManager->getComponent(i)))
-			continue;
-		compCount++;
+			ConnectionCount++;
+		else compCount++;
 	}
 	file << compCount << "\n";
 	for (int i = 0; i < pManager->getCompCount(); i++)
@@ -29,6 +32,7 @@ void Save::Execute()
 		pManager->getComponent(i)->save(i + 1, file);
 	}
 	file << "Connections\n";
+	file << ConnectionCount << '\n';
 	for (int i = 0; i < pManager->getCompCount(); i++)
 	{
 		if (dynamic_cast<Connection*>(pManager->getComponent(i)))
@@ -36,7 +40,6 @@ void Save::Execute()
 			pManager->getComponent(i)->save(i + 1, file);
 		}
 	}
-	file << "-1";
 	file.close();
 	pManager->GetOutput()->PrintMsg("Design saved successfully");
 }

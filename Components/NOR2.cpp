@@ -52,12 +52,13 @@ void NOR2::selectYourSelf(Output* pOut, color Color) {
 void NOR2::save(int id, ofstream & file)
 {
 
-	file << "NOR2  "<<this->getID()<<"  "/* << this->getLabel() << "  " */<< m_GfxInfo.x1 << "  " << m_GfxInfo.y1 << endl;
+	file << "NOR2  "<<"  "<< m_GfxInfo.x1 << "  " << m_GfxInfo.y1 << " L" << this->getLabel() << endl;
 }
 
-void NOR2::load(ApplicationManager*pM)
+void NOR2::load(string s, ApplicationManager*pM)
 {
 	pM->AddComponent(this);
+	this->setLabel(s);
 }
 ActionType NOR2::getComponentActionType() {
 	return ADD_NOR_GATE_2;

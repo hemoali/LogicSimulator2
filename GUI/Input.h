@@ -35,9 +35,12 @@ public:
 		y = startYPointForConnections;
 	}
 	
+	void CorrectPointClickedSilent(int&, int&, bool drawImage = false, bool drawConnection = false);
 
 	string EditComponenetLabel(Output *);
 	void getExactConnectionLocation(int&x, int&y);
+
+
 
 	~Input();
 };

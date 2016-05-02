@@ -57,12 +57,13 @@ void SWITCH::selectYourSelf(Output* pOut, color Color) {
 void SWITCH::save(int id, ofstream & file)
 {
 
-	file << "SWITCH  "<<this->getID()<<"  "/* << this->getLabel() << "  " */<< m_GfxInfo.x1 << "  " << m_GfxInfo.y1 << endl;
+	file << "SWITCH  "<< " "<< m_GfxInfo.x1 << "  " << m_GfxInfo.y1 << " L" << this->getLabel() << endl;
 }
 
-void SWITCH::load(ApplicationManager*pM)
+void SWITCH::load(string s, ApplicationManager*pM)
 {
 	pM->AddComponent(this);
+	this->setLabel(s);
 }
 ActionType SWITCH::getComponentActionType() {
 	return ADD_Switch;

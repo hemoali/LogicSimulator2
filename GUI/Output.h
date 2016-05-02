@@ -73,6 +73,9 @@ public:
 
 	void printMatrix(string msg);
 
+	//Resetting Interface
+	void resetInterfaceArrays();
+
 	~Output();
 };
 #endif

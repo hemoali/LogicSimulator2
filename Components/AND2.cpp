@@ -49,12 +49,14 @@ void AND2::selectYourSelf(Output* pOut, color Color) {
 void AND2::save(int id, ofstream & file)
 {
 
-	file << "AND2  "<<this->getID()<<"  "/* << this->getLabel() << "  " */<< m_GfxInfo.x1 << "  " << m_GfxInfo.y1 << endl;
+	file << "AND2  "<<"  " << m_GfxInfo.x1 << "  " << m_GfxInfo.y1 << " L" << this->getLabel() << endl;
 }
 
-void AND2::load(ApplicationManager*pM)
+void AND2::load(string s, ApplicationManager*pM)
 {
 	pM->AddComponent(this);
+	this->setLabel(s);
+	
 }
 ActionType AND2::getComponentActionType() {
 	return ADD_AND_GATE_2;

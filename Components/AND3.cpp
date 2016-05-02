@@ -50,12 +50,13 @@ void AND3::selectYourSelf(Output* pOut, color Color) {
 void AND3::save(int id, ofstream & file)
 {
 
-	file << "AND3  "<<this->getID()<<"  "/* << this->getLabel() << "  " */<< m_GfxInfo.x1 << "  " << m_GfxInfo.y1 << endl;
+	file << "AND3  "<<"  "<< m_GfxInfo.x1 << "  " << m_GfxInfo.y1 <<  " L" << this->getLabel() << endl;
 }
 
-void AND3::load(ApplicationManager*pM)
+void AND3::load(string s, ApplicationManager*pM)
 {
 	pM->AddComponent(this);
+	this->setLabel(s);
 }
 ActionType AND3::getComponentActionType() {
 	return ADD_AND_GATE_3;

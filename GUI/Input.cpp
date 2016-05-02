@@ -26,6 +26,7 @@ void Input::getMouseCoordinates(int & x, int & y)
 //This function reads the position where the user clicks to determine the desired action
 ActionType Input::GetUserAction(ApplicationManager *pManager)
 {
+
 	int x = 0, y = 0, xT, yT, hoverXOld = 0, hoverYOld = 0;
 	clicktype s = LEFT_CLICK;
 	Component* preComp = NULL;
@@ -332,6 +333,11 @@ void Input::setSelectedComponents(vector<pair<int, Component*> > comp)
 vector<pair<int, Component*> >& Input::getSelectedComponents()
 {
 	return selectedComponents;
+}
+
+void Input::CorrectPointClickedSilent(int& x, int& y, bool drawImage, bool drawConnection)
+{
+	Utils::correctPointClicked(x, y, drawImage, drawConnection);
 }
 
 string Input::EditComponenetLabel(Output *pOut)

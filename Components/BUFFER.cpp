@@ -55,12 +55,13 @@ void BUFFER::selectYourSelf(Output* pOut, color Color) {
 void BUFFER::save(int id, ofstream & file)
 {
 
-	file << "BUFFER  "<<this->getID()<<"  " << /*this->getLabel() << "  " <<*/ m_GfxInfo.x1 << "  " << m_GfxInfo.y1 << endl;
+	file << "BUFFER  "<<"  " <<  m_GfxInfo.x1 << "  " << m_GfxInfo.y1 << " L" << this->getLabel() << endl;
 }
 
-void BUFFER::load(ApplicationManager*pM)
+void BUFFER::load(string s, ApplicationManager*pM)
 {
 	pM->AddComponent(this);
+	this->setLabel(s);
 }
 ActionType BUFFER::getComponentActionType() {
 	return ADD_Buff;

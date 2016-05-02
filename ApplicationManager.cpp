@@ -119,7 +119,8 @@ void ApplicationManager::ExecuteAction(ActionType ActType)
 		pAct = new MultiSelect(this);
 		break;
 	case LOAD:
-		//pAct = new Load(this);
+		pAct = new Load(this);
+		break;
 	case EXIT:
 		// Exit action here
 		break;
@@ -165,6 +166,10 @@ void ApplicationManager::getAllConnections(vector<Connection*>& allConnections) 
 int ApplicationManager::getCompCount()
 {
 	return CompCount;
+}
+void ApplicationManager::setCompCount(int n)
+{
+	CompCount = n;
 }
 ////////////////////////////////////////////////////////////////////
 Component * ApplicationManager::getComponent(int idx)
