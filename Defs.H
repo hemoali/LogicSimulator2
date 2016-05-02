@@ -39,7 +39,7 @@ enum ActionType
 
 	Create_TruthTable,	//Create Truth Table of the Circuit
 	Simulate,
-	Validate,
+	Validat,
 
 	Change_Switch,		//Change Switch Status in Simulation Mode // ????? TODO:
 

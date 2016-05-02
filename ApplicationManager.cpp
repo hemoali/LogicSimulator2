@@ -20,6 +20,7 @@
 #include"Actions\Save.h"
 #include"Actions\Load.h"
 #include "Actions\MultiSelect.h"
+#include "Actions\Validate.h"
 ApplicationManager::ApplicationManager()
 {
 	CompCount = 0;
@@ -120,6 +121,9 @@ void ApplicationManager::ExecuteAction(ActionType ActType)
 		break;
 	case LOAD:
 		pAct = new Load(this);
+		break;
+	case Simulate:
+		pAct = new Validate(this);
 		break;
 	case EXIT:
 		// Exit action here

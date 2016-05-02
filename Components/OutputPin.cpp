@@ -5,6 +5,10 @@ OutputPin::OutputPin(int r_FanOut)
 {
 	m_Conn = 0;		//initially Pin is not connected to anything.
 	m_FanOut = r_FanOut > MAX_CONNS ? MAX_CONNS : r_FanOut;	//set the fan out of the pin.
+	for (size_t i = 0; i < r_FanOut; i++)
+	{
+		m_Connections[i] = NULL;
+	}
 }
 
 //Functionn ConnectTo:

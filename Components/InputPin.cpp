@@ -2,6 +2,7 @@
 
 InputPin::InputPin() 
 {
+	setConnection(NULL);
 }
 
 void InputPin::setComponent(Component *pCmp)

@@ -1,20 +1,16 @@
-#ifndef _SAVE_H
-#define _SAVE_H
-
-
-#include"Action.h"
-#include<fstream>
-class Save : public Action
+#ifndef _VALIDATE_H
+#define _VALIDATE_H
+#include "Action.h"
+class Validate :
+	public Action
 {
-protected:
-	ofstream file;
 public:
-	Save(ApplicationManager*pApp);
-
+	Validate(ApplicationManager*pApp);
 	//Reads parameters required for action to execute
 	virtual bool ReadActionParameters(image *);
 
-
+	bool validateOutputComponent(Component* comp);
+	bool validateInputComponent(Component* comp);
 	//Execute action (code depends on action type)
 	virtual void Execute();
 
@@ -23,7 +19,8 @@ public:
 
 	//To redo this action (code depends on action type)
 	virtual void Redo();
-	~Save();
+
+	virtual ~Validate();
 };
 
 #endif

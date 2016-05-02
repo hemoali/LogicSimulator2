@@ -367,7 +367,7 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 			}
 			switch (ClickedItemOrder + 14)
 			{
-			case DSIMULATION: {switchMode(SIMULATION); break; }
+			case DSIMULATION: {return Simulate; break; }
 			case DNEW:return NEW; break;
 			case DSAVE:return SAVE; break;
 			case DLOAD:return LOAD; break;

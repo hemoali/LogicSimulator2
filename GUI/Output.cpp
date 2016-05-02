@@ -1377,6 +1377,8 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 	}
 	//	printMatrix("Final single move");
 	pWind->FlushMouseQueue();
+	pWind->DownButtons();
+
 	PrintMsg("");
 	delete storedDrawingImg;
 	delete storedImg;

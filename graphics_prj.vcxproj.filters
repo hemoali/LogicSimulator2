@@ -247,6 +247,7 @@
       <Filter>Actions</Filter>
     </ClCompile>
     <ClCompile Include="Actions\MultiDelete.cpp" />
+    <ClCompile Include="Actions\Validate.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Defs.H" />
@@ -453,6 +454,7 @@
       <Filter>Actions</Filter>
     </ClInclude>
     <ClInclude Include="Actions\MultiDelete.h" />
+    <ClInclude Include="Actions\Validate.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

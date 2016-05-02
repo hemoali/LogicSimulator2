@@ -16,9 +16,9 @@ bool AddConnection::ReadActionParameters(image * smallImageBeforeAddingComponent
 	Input* pIn = pManager->GetInput();
 	if (!Silent) {
 		//Print Action Message
-		pOut->PrintMsg("Connection : Click to select the Source");
-		pIn->GetPointClicked(Cx1, Cy1);
+		pIn->getConnectionStartPoint(Cx1,Cy1);
 		pOut->PrintMsg("Connection : Click to select the Destination");
+		pIn->GetPointClicked(Cx2, Cy2);
 		pIn->GetPointClicked(Cx2, Cy2);
 
 		//Clear Status Bar
@@ -135,13 +135,14 @@ void AddConnection::Execute()
 			}
 		}
 	}
-	// Remove red pin
-	outputComponent->setDelete(true);
-	outputComponent->Draw(pManager->GetOutput(), false);
-	outputComponent->setDelete(false);
-	outputComponent->Draw(pManager->GetOutput(), false);
-	
-
+	if (outputComponent!=NULL)
+	{
+		// Remove red pin
+		outputComponent->setDelete(true);
+		outputComponent->Draw(pManager->GetOutput(), false);
+		outputComponent->setDelete(false);
+		outputComponent->Draw(pManager->GetOutput(), false);
+	}
 }
 
 void AddConnection::AddConnectionSilent(int c1, int c2, int c3, int c4,string s)
