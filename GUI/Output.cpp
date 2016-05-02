@@ -1372,13 +1372,12 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 				}
 			}
 		}
-		pWind->DownButtons();
+		pWind->DownButtons(true);
 		pWind->FlushMouseQueue();
 	}
 	//	printMatrix("Final single move");
 	pWind->FlushMouseQueue();
-	pWind->DownButtons();
-
+	pWind->DownButtons(false);
 	PrintMsg("");
 	delete storedDrawingImg;
 	delete storedImg;
@@ -1440,7 +1439,7 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 		{
 
 			pWind->FlushMouseQueue();
-			pWind->DownButtons();
+			pWind->DownButtons(true);
 			continue;
 		}
 		if (Utils::CheckPoint(ox, oy, usedPixels) && (ox != oldox || oy != oldoy)) {
@@ -1777,12 +1776,13 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 		}
 
 		pWind->FlushMouseQueue();
-		pWind->DownButtons();
+		pWind->DownButtons(true);
 		oldox = ox;
 		oldoy = oy;
 	}
 
 	pWind->FlushMouseQueue();
+	pWind->DownButtons(false);
 	printMatrix("Multi-Move");
 	PrintMsg("");
 	delete storedDrawingImg;

@@ -210,8 +210,8 @@ class window {
     // be wanted by the user
     void FlushKeyQueue();
     void FlushMouseQueue();
-	void DownButtons() {
-		bsLeft = bsRight = BUTTON_DOWN;
+	void DownButtons(bool down) {
+		if (down)bsLeft = bsRight = BUTTON_DOWN; else bsLeft = bsRight = BUTTON_UP;
 	}
     // Sets the color of the current brush, which is used when drawing with
     // the FILLED style.  Returns the last selected color.

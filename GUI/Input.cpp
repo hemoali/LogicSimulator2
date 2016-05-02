@@ -32,7 +32,6 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 	while (true) {
 		bool drawConnection = false;
 		if (pWind->GetButtonState(LEFT_BUTTON, xT, yT) == BUTTON_DOWN && yT >= UI.ToolBarHeight + 20 && xT >= UI.LeftToolBarWidth && yT < UI.height - UI.StatusBarHeight) {
-
 			Component* comp = NULL;
 			for (int i = 0; i < pManager->allComponentsCorners.size(); i++)
 			{
