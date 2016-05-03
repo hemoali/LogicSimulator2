@@ -6,6 +6,7 @@
 #include "../Actions/EditLabel.h"
 #include "../Actions/Delete.h"
 #include "../Actions/MultiDelete.h"
+#include "../Actions/ModifyConnection.h"
 class RightClick : public Action
 {
 private:

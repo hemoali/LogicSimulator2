@@ -248,6 +248,7 @@
     </ClCompile>
     <ClCompile Include="Actions\MultiDelete.cpp" />
     <ClCompile Include="Actions\Validate.cpp" />
+    <ClCompile Include="Actions\ModifyConnection.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Defs.H" />
@@ -455,6 +456,7 @@
     </ClInclude>
     <ClInclude Include="Actions\MultiDelete.h" />
     <ClInclude Include="Actions\Validate.h" />
+    <ClInclude Include="Actions\ModifyConnection.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

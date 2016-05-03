@@ -496,6 +496,7 @@ void Input::CorrectPointClickedSilent(int& x, int& y, bool drawImage, bool drawC
 string Input::EditComponenetLabel(Output *pOut)
 {
 	//To be Modified Later with Menus 
+	pWind->FlushKeyQueue();
 	string msg = "Type the new name";
 	string ret = this->GetSrting(pOut, msg,true);
 	return ret;

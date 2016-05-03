@@ -55,6 +55,7 @@ enum ActionType
 	EDIT_Label,	//Edit Label of a Component, a Connection
 	DEL, //Delete a Component, a Connection
 	Multi_Del,
+	Modify_Connection,
 
 	NEW,
 	SAVE,		//Save the whole Circuit to a file

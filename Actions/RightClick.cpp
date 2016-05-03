@@ -16,6 +16,14 @@ bool RightClick::ReadActionParameters(image* img) {
 	pIn->getSelectionPoint(x, y); //New Member Function in input Class to get the selected points coordinates
 	//pOut->PrintMsg("Right Select"); //Debugging Code
 
+	//Checking for MultiSelect having some Gates Or MultiSlect With No Gates(i.e. Connections Only)  
+	//This Code will be kept if we are supporting MultiSelect Components
+	int atLeastOneGateinMS = 0;
+	if (pIn->getSelectMode()) {
+		vector<pair<int, Component*>> V = pIn->getSelectedComponents();
+		if (V.size() != 0) atLeastOneGateinMS = V.size();
+	}
+
 	//Check Which Component is Selected and gets a pointer to that Component
 	for (int i = 0; i < pManager->allComponentsCorners.size(); i++) {
 		//Checking For Coordinates of the Selected Gate 
@@ -51,7 +59,10 @@ bool RightClick::ReadActionParameters(image* img) {
 		MenuRectangle.x1 = x;
 		MenuRectangle.x2 = x + UI.RightClickMenuLength;
 		MenuRectangle.y1 = y;
-		MenuRectangle.y2 = y + UI.RightClickMenuHeight;
+		if (pIn->getSelectMode()) 
+			MenuRectangle.y2 = y + UI.RightClickCMenuH/2;
+		else
+			MenuRectangle.y2 = y + UI.RightClickMenuHeight;
 		//New member function to wait for Selection Point.
 		pIn->WaitSelectionPoint(x, y);
 		//Check if the new Point is in the Menu Bar or Not
@@ -81,6 +92,13 @@ bool RightClick::ReadActionParameters(image* img) {
 			for (int i = 0; i < V.size(); i++) {
 				V[i].second->Draw(pOut, false);
 			}
+			vector <Connection*> allConnections;
+			pManager->getAllConnections(allConnections);
+
+			for (size_t i = 0; i < allConnections.size(); i++)
+			{
+				allConnections[i]->selectYourSelf(pOut, UI.ConnColor);
+			}
 			pIn->setSelectMode(false);
 		}
 		pOut->ClearStatusBar();
@@ -91,6 +109,21 @@ bool RightClick::ReadActionParameters(image* img) {
 	pIn->getExactConnectionLocation(x, y);
 	C =  pOut->getArrayOfComponents(y / UI.GRID_SIZE, x / UI.GRID_SIZE);
 	if (C != NULL && dynamic_cast<Connection*> (C)) {
+		
+		if (pIn->getSelectMode() && atLeastOneGateinMS != 0 ) {
+			vector<pair<int, Component*>> V = pIn->getSelectedComponents();
+			for (int i = 0; i < V.size(); i++) {
+				V[i].second->Draw(pOut, false);
+			}
+			vector <Connection*> allConnections;
+			pManager->getAllConnections(allConnections);
+
+			for (size_t i = 0; i < allConnections.size(); i++)
+			{
+				allConnections[i]->selectYourSelf(pOut, UI.ConnColor);
+			}
+			pIn->setSelectMode(false);
+		}
 		//Get Gates information And Print this info
 		Connection* D = (Connection*)C;
 		string pinSource, pinDestination;
@@ -109,7 +142,7 @@ bool RightClick::ReadActionParameters(image* img) {
 		MenuRectangle.x1 = x;
 		MenuRectangle.x2 = x + UI.RightClickMenuLength;
 		MenuRectangle.y1 = y;
-		MenuRectangle.y2 = y + UI.RightClickCMenuH;
+		MenuRectangle.y2 = y + UI.RightClickCMenuH + UI.RightClickCMenuH/2;
 		//New member function to wait for Selection Point.
 		pIn->WaitSelectionPoint(x, y);
 		//Check if the new Point is in the Menu Bar or Not
@@ -118,11 +151,22 @@ bool RightClick::ReadActionParameters(image* img) {
 			int theIconWidth = 30, actionNum = -1;
 			y -= MenuRectangle.y1;
 			actionNum = y / 30;
-			SelectedAction = (actionNum ==  0) ? EDIT_Label : DEL; //41 is DEL number in THE Action Enum
+			switch (actionNum) {
+			case 0:
+				SelectedAction = EDIT_Label;
+				break;
+			case 1:
+				SelectedAction = Modify_Connection;
+				break;
+			case 2:
+				SelectedAction = DEL;
+				break;
+			default:
+				actionNum = -1;
+			}
 		}
-
 		//Make the Connection look Normal 
-		pOut->changeConnectionColor(D, BLACK);
+		pOut->changeConnectionColor(D, UI.ConnColor);
 		//Delete the DrawMenu
 		if (img != NULL)
 			pOut->DrawAfterMenu(img, MenuRectangle.x1, MenuRectangle.y1, 2);
@@ -132,12 +176,33 @@ bool RightClick::ReadActionParameters(image* img) {
 			for (int i = 0; i < V.size(); i++) {
 				V[i].second->Draw(pOut, false);
 			}
+			vector <Connection*> allConnections;
+			pManager->getAllConnections(allConnections);
+
+			for (size_t i = 0; i < allConnections.size(); i++)
+			{
+				allConnections[i]->selectYourSelf(pOut, UI.ConnColor);
+			}
 			pIn->setSelectMode(false);
 		}
 		if (actionNum != -1) return true;
 	}
 	if (C == NULL) {
 		//User Right Clicked on a free space
+		if (pIn->getSelectMode()) {
+			vector<pair<int, Component*>> V = pIn->getSelectedComponents();
+			for (int i = 0; i < V.size(); i++) {
+				V[i].second->Draw(pOut, false);
+			}
+			vector <Connection*> allConnections;
+			pManager->getAllConnections(allConnections);
+
+			for (size_t i = 0; i < allConnections.size(); i++)
+			{
+				allConnections[i]->selectYourSelf(pOut, UI.ConnColor);
+			}
+			pIn->setSelectMode(false);
+		}
 		//Correct Point First call with false parameter (No Drawing)
 		pOut->DrawRClickMenu_CorrectPoints(x, y, 3, false);
 		//Take ScreenShot of the Original non Modified Region
@@ -161,13 +226,7 @@ bool RightClick::ReadActionParameters(image* img) {
 		if (img != NULL)
 			pOut->DrawAfterMenu(img, MenuRectangle.x1, MenuRectangle.y1, 3);
 		pOut->ClearStatusBar();
-		if(pIn->getSelectMode()) {
-			vector<pair<int, Component*>> V = pIn->getSelectedComponents();
-			for (int i = 0; i < V.size(); i++) {
-				V[i].second->Draw(pOut, false);
-			}
-			pIn->setSelectMode(false);
-		}
+		
 		if (actionNum != -1) return true;
 	}
 
@@ -200,6 +259,10 @@ void RightClick::Execute() {
 		}
 		case DEL: {
 			theAction = new Delete(pManager,C);
+			break;
+		}
+		case Modify_Connection: {
+			theAction = new ModifyConnection(pManager,(Connection*)(C));
 			break;
 		}
 		case Multi_Del: {
