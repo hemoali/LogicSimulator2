@@ -22,6 +22,7 @@ public:
 	virtual void Execute();
 	//Adding a Silent Function
 	void AddConnectionSilent(int c1, int c2, int c3, int c4,string s);
+	bool validateOutputComponent(Component* comp, Component* dstComp);
 
 	virtual void Undo();
 	virtual void Redo();

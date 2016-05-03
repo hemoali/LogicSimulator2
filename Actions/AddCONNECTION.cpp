@@ -30,7 +30,21 @@ bool AddConnection::ReadActionParameters(image * smallImageBeforeAddingComponent
 	}
 	return true;
 }
-
+bool AddConnection::validateOutputComponent(Component* comp, Component* dstComp) {
+	if (comp == NULL)
+	{
+		return true;
+	}
+	if (comp == dstComp) {
+		return false;
+	}
+	bool t[3] = { true, true, true };
+	for (size_t j = 0; j < comp->getOutputPin()->connectedConnectionsCount(); j++)
+	{
+		t[j] = validateOutputComponent(comp->getOutputPin()->getConnection(j)->getDestPin()->getComponent(), dstComp);
+	}
+	return t[0] && t[1] && t[2];
+}
 void AddConnection::Execute()
 {
 	//Get Center point of the Gate
@@ -70,15 +84,20 @@ void AddConnection::Execute()
 	}
 	else{
 		//Check for feedback
+		bool isValidRegardingFeedback = true;
 		for (size_t i = 0; i < inputComponent->getOutputPin()->connectedConnectionsCount(); i++)
 		{
-			if (inputComponent->getOutputPin()->getConnection(i)->getDestPin()->getComponent() == outputComponent) {
-				pManager->GetOutput()->PrintMsg("Feedback is disabled!", UI.ErrorColor);
+			isValidRegardingFeedback = isValidRegardingFeedback && validateOutputComponent(inputComponent->getOutputPin()->getConnection(i)->getDestPin()->getComponent(),outputComponent);
+		
+			if (!isValidRegardingFeedback)
+			{
+				pManager->GetOutput()->PrintMsg("Feedback isn't allowed", UI.ErrorColor);
 				Sleep(600);
 				goto end;
 				break;
 			}
 		}
+		
 		numOfInputs = inputComponent->getNumOfInputs();
 		int inputPin;
 		if (numOfInputs == 3)
