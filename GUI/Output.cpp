@@ -2036,7 +2036,7 @@ void Output::DrawLed(GraphicsInfo g, bool isON, bool highlighted, bool notValid)
 	pWind->SetPen(UI.DrawColor);
 	if (highlighted) pWind->SetPen(UI.SelectColor);
 	if (notValid) pWind->SetPen(UI.ErrorColor);
-	int cx = g.x1, cy = g.y1, radius = 12; //Centre Points
+	int cx = g.x1-3, cy = g.y1, radius = 10; //Centre Points
 	if (!isON)
 	{
 		pWind->SetBrush(GRAY);
@@ -2048,7 +2048,7 @@ void Output::DrawLed(GraphicsInfo g, bool isON, bool highlighted, bool notValid)
 		pWind->DrawCircle(cx, cy, radius, FILLED);
 	}
 	int inx = cx - radius - 10, iny = cy; // one input 
-	pWind->DrawLine(inx, iny, cx - radius, cy, FRAME);//input line (left)
+	pWind->DrawLine(inx+3, iny, cx - radius, cy, FRAME);//input line (left)
 													  ///////////////------->>> lines of the fram <<<-------///////////////
 	pWind->DrawLine(cx + radius, cy, cx + radius + 4, cy, FRAME); //right
 	pWind->DrawLine(cx, cy + radius, cx, cy + radius + 4, FRAME); //lower
