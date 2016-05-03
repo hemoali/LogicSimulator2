@@ -40,7 +40,7 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 				if (xT >= pManager->allComponentsCorners[i].x1&&xT <= pManager->allComponentsCorners[i].x2&& yT >= pManager->allComponentsCorners[i].y1&&yT <= pManager->allComponentsCorners[i].y2)
 				{
 					comp = pManager->getComponent(i);
-					if (xT >= pManager->allComponentsCorners[i].x2 - UI.GATE_Width / 2 + 8 && yT > (pManager->allComponentsCorners[i].y1 + UI.GATE_Height / 2) - 3 && yT < (pManager->allComponentsCorners[i].y1 + UI.GATE_Height / 2) + 3)
+					if (xT >= pManager->allComponentsCorners[i].x2 - UI.GATE_Width / 2 + 8 && yT > (pManager->allComponentsCorners[i].y1 + UI.GATE_Height / 2) - 6 && yT < (pManager->allComponentsCorners[i].y1 + UI.GATE_Height / 2) + 6)
 					{
 						pWind->SetPen(UI.ErrorColor, 5);
 						pWind->DrawLine(pManager->allComponentsCorners[i].x2 - UI.GATE_Width / 2 + 11, pManager->allComponentsCorners[i].y1 + UI.GATE_Height / 2, pManager->allComponentsCorners[i].x2 - UI.GATE_Width / 2 + 12, pManager->allComponentsCorners[i].y1 + UI.GATE_Height / 2, FRAME);

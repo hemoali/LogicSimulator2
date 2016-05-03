@@ -544,7 +544,7 @@ void Output::DrawAfterMenu(image * img, int x, int y, int type)
 
 void Output::DrawCleanImage(image* img, int x, int y)
 {
-	pWind->DrawImage(img, x - UI.GRID_SIZE - 5, y - UI.GRID_SIZE - 5, 2 * UI.GRID_SIZE + 4, UI.GATE_Height + 3);
+	pWind->DrawImage(img, x - UI.GRID_SIZE - 5, y - UI.GRID_SIZE - 5, 2 * UI.GRID_SIZE + 5, UI.GATE_Height + 3);
 }
 void Output::storeDrawingAreaImage(image*& img) {
 	pWind->StoreImage(img, UI.LeftToolBarWidth, 0, pWind->GetWidth() - UI.LeftToolBarWidth, pWind->GetHeight() - UI.StatusBarHeight);
@@ -633,7 +633,7 @@ void Output::DrawWarningMenues(char type)
 	switch (type) {
 	case 'L':
 		imageURL = "images\\Menu\\LoadConfirmationMenu.jpg";
-		pWind->DrawImage(imageURL,xbegin,ybegin, UI.WarningMenuWidth, UI.WarningMenuHeight);
+		pWind->DrawImage(imageURL, xbegin, ybegin, UI.WarningMenuWidth, UI.WarningMenuHeight);
 		break;
 	}
 }
@@ -644,7 +644,7 @@ image* Output::StoreBeforeWarning()
 	xbegin = UI.width / 2 - UI.WarningMenuWidth / 2;
 	ybegin = UI.height / 2 - UI.WarningMenuHeight / 2;
 	image * ptr = new image;
-	pWind->StoreImage(ptr, xbegin,ybegin,UI.WarningMenuWidth,UI.WarningMenuHeight);
+	pWind->StoreImage(ptr, xbegin, ybegin, UI.WarningMenuWidth, UI.WarningMenuHeight);
 	return ptr;
 }
 
@@ -700,7 +700,9 @@ void Output::changeConnectionColor(Connection * connection, color Color) {
 				if (cell2.x < cell.x) {
 					b1 = true;
 					if (!PreviousIsIntersection)
+					{
 						pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE, cell.x * UI.GRID_SIZE - 10, cell.y*UI.GRID_SIZE);
+					}
 					else {
 						PreviousIsIntersection = false;
 						pWind->DrawLine(cell.x * UI.GRID_SIZE - 6, cell.y*UI.GRID_SIZE, cell.x * UI.GRID_SIZE - 10, cell.y*UI.GRID_SIZE);
@@ -709,12 +711,16 @@ void Output::changeConnectionColor(Connection * connection, color Color) {
 					pWind->DrawBezier(cell.x * UI.GRID_SIZE - 10, cell.y*UI.GRID_SIZE, cell.x * UI.GRID_SIZE - 14, cell.y*UI.GRID_SIZE - 6, cell.x * UI.GRID_SIZE - 18, cell.y*UI.GRID_SIZE - 8, cell.x * UI.GRID_SIZE - 22, cell.y*UI.GRID_SIZE);
 					pWind->SetPen(Color, 2);
 					if (j + 2 < connection->getCellsBeforeAddingConnection().size() && arrayOfIntersections[connection->getCellsBeforeAddingConnection()[j + 2].y][connection->getCellsBeforeAddingConnection()[j + 2].x] != 0)
+					{
 						pWind->DrawLine(cell.x * UI.GRID_SIZE - 22, cell.y*UI.GRID_SIZE, cell.x * UI.GRID_SIZE - 32, cell.y*UI.GRID_SIZE);
+					}
 				}
 				else {
 					b1 = false;
 					if (!PreviousIsIntersection)
+					{
 						pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE, cell.x * UI.GRID_SIZE + 10, cell.y*UI.GRID_SIZE);
+					}
 					else {
 						PreviousIsIntersection = false;
 						pWind->DrawLine(cell.x * UI.GRID_SIZE + 6, cell.y*UI.GRID_SIZE, cell.x * UI.GRID_SIZE + 10, cell.y*UI.GRID_SIZE);
@@ -723,7 +729,9 @@ void Output::changeConnectionColor(Connection * connection, color Color) {
 					pWind->DrawBezier(cell.x * UI.GRID_SIZE + 10, cell.y*UI.GRID_SIZE, cell.x * UI.GRID_SIZE + 14, cell.y*UI.GRID_SIZE - 6, cell.x * UI.GRID_SIZE + 18, cell.y*UI.GRID_SIZE - 8, cell.x * UI.GRID_SIZE + 22, cell.y*UI.GRID_SIZE);
 					pWind->SetPen(Color, 2);
 					if (j + 2 < connection->getCellsBeforeAddingConnection().size() && arrayOfIntersections[connection->getCellsBeforeAddingConnection()[j + 2].y][connection->getCellsBeforeAddingConnection()[j + 2].x] != 0)
+					{
 						pWind->DrawLine(cell.x * UI.GRID_SIZE + 22, cell.y*UI.GRID_SIZE, cell.x * UI.GRID_SIZE + 32, cell.y*UI.GRID_SIZE);
+					}
 				}
 				PreviousIsIntersection = true;
 				Vertical0Horizontal1Nothing2 = -1;
@@ -731,8 +739,15 @@ void Output::changeConnectionColor(Connection * connection, color Color) {
 			else if (usedPixels[cell2.y][cell2.x] == INTERSECTION && cell2.cellType == HORIZONTAL) {
 				if (cell2.y < cell.y) {
 					b2 = true;
-					if (!PreviousIsIntersection2)
-						pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE, cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE - 10);
+					if (!PreviousIsIntersection2) {
+						if (arrayOfIntersections[cell.y][cell.x] != 0)
+						{
+							pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE, cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE - 10);
+						}
+						else {
+							pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE - 6, cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE - 10);
+						}
+					}
 					else {
 						PreviousIsIntersection2 = false;
 						pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE - 6, cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE - 10);
@@ -741,12 +756,22 @@ void Output::changeConnectionColor(Connection * connection, color Color) {
 					pWind->DrawBezier(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE - 10, cell.x * UI.GRID_SIZE + 6, cell.y*UI.GRID_SIZE - 14, cell.x * UI.GRID_SIZE + 8, cell.y*UI.GRID_SIZE - 18, cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE - 22);
 					pWind->SetPen(Color, 2);
 					if (j + 2 < connection->getCellsBeforeAddingConnection().size() && arrayOfIntersections[connection->getCellsBeforeAddingConnection()[j + 2].y][connection->getCellsBeforeAddingConnection()[j + 2].x] != 1)
+					{
 						pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE - 22, cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE - 32);
+					}
 				}
 				else {
 					b2 = false;
 					if (!PreviousIsIntersection2)
-						pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE, cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE + 10);
+					{
+						if (arrayOfIntersections[cell.y][cell.x] != 0)
+						{
+							pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE, cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE + 10);
+						}
+						else {
+							pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE + 6, cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE + 10);
+						}
+					}
 					else {
 						PreviousIsIntersection2 = false;
 						pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE + 6, cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE + 10);
@@ -755,7 +780,9 @@ void Output::changeConnectionColor(Connection * connection, color Color) {
 					pWind->DrawBezier(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE + 10, cell.x * UI.GRID_SIZE + 6, cell.y*UI.GRID_SIZE + 14, cell.x * UI.GRID_SIZE + 8, cell.y*UI.GRID_SIZE + 18, cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE + 22);
 					pWind->SetPen(Color, 2);
 					if (j + 2 < connection->getCellsBeforeAddingConnection().size() && arrayOfIntersections[connection->getCellsBeforeAddingConnection()[j + 2].y][connection->getCellsBeforeAddingConnection()[j + 2].x] != 1)
+					{
 						pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE + 22, cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE + 32);
+					}
 				}
 				PreviousIsIntersection2 = true;
 				Vertical0Horizontal1Nothing2 = -1;
@@ -774,11 +801,23 @@ void Output::changeConnectionColor(Connection * connection, color Color) {
 				{
 					if (cell2.x > cell.x) {
 						isCell2XGreaterThanCellX = true;
-						pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE, cell2.x * UI.GRID_SIZE + 4, cell2.y*UI.GRID_SIZE);
+						if (!PreviousIsIntersection)
+						{
+							pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE, cell2.x * UI.GRID_SIZE + 4, cell2.y*UI.GRID_SIZE);
+						}
+						else {
+							pWind->DrawLine(cell.x * UI.GRID_SIZE + 6, cell.y*UI.GRID_SIZE, cell2.x * UI.GRID_SIZE + 4, cell2.y*UI.GRID_SIZE);
+						}
 					}
 					else {
 						isCell2XGreaterThanCellX = false;
-						pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE, cell2.x * UI.GRID_SIZE + 6, cell2.y*UI.GRID_SIZE);
+						if (!PreviousIsIntersection)
+						{
+							pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE, cell2.x * UI.GRID_SIZE + 6, cell2.y*UI.GRID_SIZE);
+						}
+						else {
+							pWind->DrawLine(cell.x * UI.GRID_SIZE - 6, cell.y*UI.GRID_SIZE, cell2.x * UI.GRID_SIZE + 6, cell2.y*UI.GRID_SIZE);
+						}
 					}
 				}
 				else if (Vertical0Horizontal1Nothing2 == 0) {
@@ -789,6 +828,7 @@ void Output::changeConnectionColor(Connection * connection, color Color) {
 					else {
 						isCell2YGreaterThanCellY = true;
 						pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE, cell2.x * UI.GRID_SIZE, cell2.y*UI.GRID_SIZE - 6);
+
 					}
 				}
 			}
@@ -1197,7 +1237,7 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 				GraphicsInfo Gfx;
 				Gfx.x1 = RectULX + UI.GATE_Width / 2;
 				Gfx.y1 = RectULY + UI.GATE_Height / 2;
-				pWind->StoreImage(smallCleanImageBeforeAddingGate, Gfx.x1 - UI.GRID_SIZE - 5, Gfx.y1 - UI.GRID_SIZE - 5, 2 * UI.GRID_SIZE + 4, UI.GATE_Height + 3);
+				pWind->StoreImage(smallCleanImageBeforeAddingGate, Gfx.x1 - UI.GRID_SIZE - 5, Gfx.y1 - UI.GRID_SIZE - 5, 2 * UI.GRID_SIZE + 5, UI.GATE_Height + 3);
 
 				switch (ActType) {
 				case ADD_Buff: {
@@ -1828,7 +1868,7 @@ void Output::DrawAnd_Nand(GraphicsInfo g, int in, bool isNand, bool highlighted,
 		pWind->DrawLine(p2x, p2y, p2x + 4, p2y, FRAME);
 		pWind->DrawLine(in1x - 6 - (2 * ciDefBrushSize), in1y, in1x - 6, in1y, FRAME); //The Input1-Line
 		pWind->DrawLine(in2x - 6 - (2 * ciDefBrushSize), in2y, in2x - 6, in2y, FRAME); //The Input2-Line
-		pWind->DrawLine(outx + 3 * ciDefBrushSize - 1, outy, outx + 4 + (2 * ciDefBrushSize), outy, FRAME); //The Output-Line
+		pWind->DrawLine(outx + 3 * ciDefBrushSize - 1, outy, outx + 5 + (2 * ciDefBrushSize), outy, FRAME); //The Output-Line
 		pWind->DrawLine(p1x, p1y - 1, p2x, p2y, FRAME);
 		if (in == 3) { //Checking for 3 input Gate 
 			int in3x = in1x, in3y = cy;
@@ -1850,7 +1890,7 @@ void Output::DrawAnd_Nand(GraphicsInfo g, int in, bool isNand, bool highlighted,
 		pWind->DrawLine(p2x, p2y, p2x + 8, p2y, FRAME);
 		pWind->DrawLine(in1x - 6 - (2 * ciDefBrushSize), in1y, in1x - 5, in1y, FRAME); //The Input1-Line
 		pWind->DrawLine(in2x - 6 - (2 * ciDefBrushSize), in2y, in2x - 5, in2y, FRAME); //The Input2-Line
-		pWind->DrawLine(outx + 3, outy, outx + 4 + (2 * ciDefBrushSize), outy, FRAME); //The Output-Line
+		pWind->DrawLine(outx + 3, outy, outx + 5 + (2 * ciDefBrushSize), outy, FRAME); //The Output-Line
 		pWind->DrawLine(p1x, p1y - 1, p2x, p2y, FRAME);
 		if (in == 3) { //Checking for 3 input Gate 
 			int in3x = in1x, in3y = cy;
@@ -1881,7 +1921,7 @@ void Output::DrawNot_Buffer(GraphicsInfo g, bool isBuffer, bool highlighted, boo
 		outx = cx + 9 - (2 * ciDefBrushSize);
 		//Drawing lines 
 		pWind->DrawLine(inx - 3 - (2 * ciDefBrushSize), iny, inx, iny, FRAME); //The Input-Line
-		pWind->DrawLine(outx, outy, outx + 5 + (2 * ciDefBrushSize), outy, FRAME); //The Output-Line
+		pWind->DrawLine(outx, outy, outx + 6 + (2 * ciDefBrushSize), outy, FRAME); //The Output-Line
 																				   //Drawing Trianlge
 		pWind->DrawTriangle(p1x, p1y, p2x, p2y, outx, outy, FRAME);
 	}
@@ -1890,7 +1930,7 @@ void Output::DrawNot_Buffer(GraphicsInfo g, bool isBuffer, bool highlighted, boo
 		outx = cx + 9 - (2 * ciDefBrushSize);
 		//Drawing lines 
 		pWind->DrawLine(inx - 3 - (2 * ciDefBrushSize), iny, inx, iny, FRAME); //The Input-Line
-		pWind->DrawLine(outx + 4 * ciDefBrushSize - 1, outy, outx + 5 + (2 * ciDefBrushSize), outy, FRAME);//The Output-Line
+		pWind->DrawLine(outx + 4 * ciDefBrushSize - 1, outy, outx + 6 + (2 * ciDefBrushSize), outy, FRAME);//The Output-Line
 
 																										   //Drawing Trianlge
 		pWind->DrawTriangle(p1x, p1y, p2x, p2y, outx, outy, FRAME);
@@ -1926,7 +1966,7 @@ void Output::DrawOr_Nor(GraphicsInfo g, int in, bool isNor, bool highlighted, bo
 		//Draw lines
 		pWind->DrawLine(in1x - 5 - (2 * ciDefBrushSize), in1y, in1x, in1y, FRAME); //The Input1-Line
 		pWind->DrawLine(in2x - 5 - (2 * ciDefBrushSize), in2y, in2x, in2y, FRAME); //The Input2-Line
-		pWind->DrawLine(outx + 4 * ciDefBrushSize - 1, outy, outx + 4 + (2 * ciDefBrushSize), outy, FRAME); //The Output-Line
+		pWind->DrawLine(outx + 4 * ciDefBrushSize - 1, outy, outx + 5 + (2 * ciDefBrushSize), outy, FRAME); //The Output-Line
 		if (in == 3) { //Checking for 3 input Gate 
 			int in3x = in1x + 2 * (ciDefBrushSize == 1 ? 2 : 1), in3y = cy;
 			pWind->DrawLine(in3x - 6 - (2 * ciDefBrushSize), in3y, in3x, in3y, FRAME); //The Input3-Line
@@ -1949,7 +1989,7 @@ void Output::DrawOr_Nor(GraphicsInfo g, int in, bool isNor, bool highlighted, bo
 		//Draw lines
 		pWind->DrawLine(in1x - 5 - (2 * ciDefBrushSize), in1y, in1x, in1y, FRAME); //The Input1-Line
 		pWind->DrawLine(in2x - 5 - (2 * ciDefBrushSize), in2y, in2x, in2y, FRAME); //The Input2-Line
-		pWind->DrawLine(outx, outy, outx + (2 * ciDefBrushSize) - 2, outy, FRAME); //The Output-Line
+		pWind->DrawLine(outx, outy, outx + (2 * ciDefBrushSize) + 1, outy, FRAME); //The Output-Line
 		if (in == 3) { //Checking for 3 input Gate 
 			int in3x = in1x + 2 * (ciDefBrushSize == 1 ? 2 : 1), in3y = cy;
 			pWind->DrawLine(in3x - 6 - (2 * ciDefBrushSize), in3y, in3x, in3y, FRAME); //The Input3-Line
@@ -1992,7 +2032,7 @@ void Output::DrawXor_Xnor(GraphicsInfo g, int in, bool isXNor, bool highlighted,
 		//Draw lines
 		pWind->DrawLine(in1x - 3 - (2 * ciDefBrushSize), in1y, in1x, in1y, FRAME); //The Input1-Line
 		pWind->DrawLine(in2x - 3 - (2 * ciDefBrushSize), in2y, in2x, in2y, FRAME); //The Input2-Line
-																				   //pWind->DrawLine(outx + 4 * ciDefBrushSize - 1, outy, outx - 1 + (2 * ciDefBrushSize) , outy, FRAME); //The Output-Line
+		pWind->DrawLine(outx + 4 * ciDefBrushSize - 1, outy, outx + 4 + (2 * ciDefBrushSize) , outy, FRAME); //The Output-Line
 		if (in == 3) { //Checking for 3 input Gate 
 			int in3x = in1x, in3y = cy;
 			pWind->DrawLine(in3x - 6 - (2 * ciDefBrushSize), in3y, in3x, in3y, FRAME); //The Input3-Line
@@ -2016,7 +2056,7 @@ void Output::DrawXor_Xnor(GraphicsInfo g, int in, bool isXNor, bool highlighted,
 		//Draw lines
 		pWind->DrawLine(in1x - 4 - (2 * ciDefBrushSize), in1y, in1x, in1y, FRAME); //The Input1-Line
 		pWind->DrawLine(in2x - 4 - (2 * ciDefBrushSize), in2y, in2x, in2y, FRAME); //The Input2-Line
-		pWind->DrawLine(outx, outy, outx + (2 * ciDefBrushSize) - 1, outy, FRAME); //The Output-Line
+		pWind->DrawLine(outx, outy, outx + (2 * ciDefBrushSize), outy, FRAME); //The Output-Line
 		if (in == 3) { //Checking for 3 input Gate 
 			int in3x = in1x, in3y = cy;
 			pWind->DrawLine(in3x - 4 - (2 * ciDefBrushSize), in3y, in3x, in3y, FRAME); //The Input3-Line
@@ -2036,7 +2076,7 @@ void Output::DrawLed(GraphicsInfo g, bool isON, bool highlighted, bool notValid)
 	pWind->SetPen(UI.DrawColor);
 	if (highlighted) pWind->SetPen(UI.SelectColor);
 	if (notValid) pWind->SetPen(UI.ErrorColor);
-	int cx = g.x1-3, cy = g.y1, radius = 10; //Centre Points
+	int cx = g.x1 - 3, cy = g.y1, radius = 10; //Centre Points
 	if (!isON)
 	{
 		pWind->SetBrush(GRAY);
@@ -2048,7 +2088,7 @@ void Output::DrawLed(GraphicsInfo g, bool isON, bool highlighted, bool notValid)
 		pWind->DrawCircle(cx, cy, radius, FILLED);
 	}
 	int inx = cx - radius - 10, iny = cy; // one input 
-	pWind->DrawLine(inx+3, iny, cx - radius, cy, FRAME);//input line (left)
+	pWind->DrawLine(inx + 3, iny, cx - radius, cy, FRAME);//input line (left)
 													  ///////////////------->>> lines of the fram <<<-------///////////////
 	pWind->DrawLine(cx + radius, cy, cx + radius + 4, cy, FRAME); //right
 	pWind->DrawLine(cx, cy + radius, cx, cy + radius + 4, FRAME); //lower
@@ -2069,18 +2109,18 @@ void Output::DrawSwtich(GraphicsInfo g, bool isON, bool highlighted, bool notVal
 	pWind->SetPen(UI.DrawColor);
 	if (highlighted) pWind->SetPen(UI.SelectColor);
 	if (notValid) pWind->SetPen(UI.ErrorColor);
-	int cx = g.x1-6, cy = g.y1; //Centre Points
+	int cx = g.x1 - 6, cy = g.y1; //Centre Points
 							  //the rectangle
 	if (isON)
 	{
-		pWind->DrawImage("images\\Menu\\SWITCH_ON.jpg", cx - 13, cy - 16, 32-4, 32);
+		pWind->DrawImage("images\\Menu\\SWITCH_ON.jpg", cx - 13, cy - 16, 32 - 4, 32);
 	}
 	else
 	{
-		pWind->DrawImage("images\\Menu\\SWITCH_OFF.jpg", cx - 13, cy - 16, 32-4, 32);
+		pWind->DrawImage("images\\Menu\\SWITCH_OFF.jpg", cx - 13, cy - 16, 32 - 4, 32);
 	}
 	//the output line
-	pWind->DrawLine(cx + 12, cy, cx + 18, cy);
+	pWind->DrawLine(cx + 12, cy, cx + 21, cy);
 
 
 

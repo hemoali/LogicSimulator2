@@ -1,8 +1,10 @@
-3
-AND2    248  232 Lwevwevwe
-AND3    488  392 Lcasca
-XOR3    776  264 Lvasvasvsvr
+4
+XOR3    328  344 Lasd
+XOR3    552  264 Lads
+XOR3    360  248 Lasd
+XOR3    440  424 Lasd
 Connections
-2
-  281  256  502  403 Lcascasc
-  521  416  790  288 Lcwevwe
+3
+  361  368  566  288 Ldsa
+  393  272  454  435 Lsad
+  361  368  566  301 Ldsa
