@@ -2093,7 +2093,7 @@ void Output::DrawLed(GraphicsInfo g, bool isON, bool highlighted, bool notValid)
 	}
 	else
 	{
-		pWind->SetBrush(DARKGREEN);
+		pWind->SetBrush(color(161, 192, 88));
 		pWind->DrawCircle(cx, cy, radius, FILLED);
 	}
 	int inx = cx - radius - 10, iny = cy; // one input 
