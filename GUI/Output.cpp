@@ -457,7 +457,7 @@ void Output::DrawRClickMenu_CorrectPoints(int& x, int& y, int type, bool draw)
 		Height = UI.RightClickMenuHeight;
 		break;
 	case 2:
-		Height = UI.RightClickCMenuH;
+		Height = UI.RightClickCMenuH + UI.RightClickCMenuH/2;
 		break;
 	case 3:
 		Height = UI.RightClickCMenuH / 2;
@@ -507,7 +507,7 @@ image * Output::StoreBeforeMenu(int x, int y, int type)
 		Height = UI.RightClickMenuHeight;
 		break;
 	case 2:
-		Height = UI.RightClickCMenuH;
+		Height = UI.RightClickCMenuH + UI.RightClickCMenuH/2;
 		break;
 	case 3:
 		Height = UI.RightClickCMenuH / 2;
@@ -530,7 +530,7 @@ void Output::DrawAfterMenu(image * img, int x, int y, int type)
 		Height = UI.RightClickMenuHeight;
 		break;
 	case 2:
-		Height = UI.RightClickCMenuH;
+		Height = UI.RightClickCMenuH + UI.RightClickCMenuH/2;
 		break;
 	case 3:
 		Height = UI.RightClickCMenuH / 2;
@@ -540,6 +540,7 @@ void Output::DrawAfterMenu(image * img, int x, int y, int type)
 		break;
 	}
 	pWind->DrawImage(img, x, y, UI.RightClickMenuLength, Height);
+	delete img;
 }
 
 void Output::DrawCleanImage(image* img, int x, int y)

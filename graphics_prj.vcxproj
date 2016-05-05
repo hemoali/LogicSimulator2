@@ -143,6 +143,7 @@
     <ClCompile Include="Actions\Delete.cpp" />
     <ClCompile Include="Actions\EditLabel.cpp" />
     <ClCompile Include="Actions\Load.cpp" />
+    <ClCompile Include="Actions\ModifyConnection.cpp" />
     <ClCompile Include="Actions\Move.cpp" />
     <ClCompile Include="Actions\MultiDelete.cpp" />
     <ClCompile Include="Actions\MultiMove.cpp" />
@@ -248,6 +249,7 @@
     <ClInclude Include="Actions\Delete.h" />
     <ClInclude Include="Actions\EditLabel.h" />
     <ClInclude Include="Actions\Load.h" />
+    <ClInclude Include="Actions\ModifyConnection.h" />
     <ClInclude Include="Actions\Move.h" />
     <ClInclude Include="Actions\MultiDelete.h" />
     <ClInclude Include="Actions\MultiMove.h" />
