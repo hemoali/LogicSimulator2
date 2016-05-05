@@ -6,7 +6,7 @@
 Input::Input(window* pW)
 {
 	pWind = pW; //point to the passed window
-	isSelectMode = isSelectionContainConnections= false;
+	isSelectMode = isSelectionContainConnections = false;
 }
 
 void Input::GetPointClicked(int &x, int &y, bool DrawGate, bool DrawConnection)
@@ -27,10 +27,31 @@ void Input::getMouseCoordinates(int & x, int & y)
 //This function reads the position where the user clicks to determine the desired action
 ActionType Input::GetUserAction(ApplicationManager *pManager)
 {
+
+	//	pWind->GetKeyPress(c2);
+		/*if ((int(c1)) == 13 && c2 == 'Z') {
+			cout << "UNDO";
+		}
+		else if ((int(c1)) == 13 && c2 == 'Y') {
+			cout << "READO";
+		}*/
 	int x = 0, y = 0, xT, yT, hoverXOld = 0, hoverYOld = 0, oldTopHoveredItemOrder = -1, oldLeftHoverItem = -1;
 	clicktype s = LEFT_CLICK;
 	Component* preComp = NULL;
 	while (true) {
+		// Check for keyboard hotkeys
+		char c1;
+		keytype key = pWind->GetKeyPress(c1);
+		if (key == UNDO) {
+			return UNDOACTION;
+		}
+		else if (key == REDO) {
+			return REDOACTION;
+		}
+
+		//cout << c2;
+		// Working with mouse
+
 		bool drawConnection = false;
 		if (pWind->GetButtonState(LEFT_BUTTON, xT, yT) == BUTTON_DOWN && yT >= UI.ToolBarHeight + 20 && xT >= UI.LeftToolBarWidth && yT < UI.height - UI.StatusBarHeight) {
 			if (UI.AppMode == DESIGN)
@@ -64,7 +85,7 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 					{
 						for (size_t i = 0; i < selectedComponents.size(); i++)
 						{
-							if (!dynamic_cast<Connection*>(selectedComponents[i].second)&& selectedComponents[i].second == comp)
+							if (!dynamic_cast<Connection*>(selectedComponents[i].second) && selectedComponents[i].second == comp)
 								return MULTI_MOVE;
 						}
 					}

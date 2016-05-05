@@ -184,6 +184,11 @@ static LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lP
 				wipInput->SetKeyInfo(hwnd, FUNCTION, 12);
 			}
 			break;
+		case VK_CONTROL:
+			if (wipInput != NULL) {
+				wipInput->SetKeyInfo(hwnd, FUNCTION, 13);
+			}
+			break;
 		}
 		return 0;
 
@@ -534,6 +539,16 @@ keytype window::GetKeyPress(char &cKey) {
 
 	kqueTmp = kqueInput.Remove();
 	if (kqueTmp != NULL) {
+		if (kqueTmp->kqueNext != NULL)
+		{
+			if ((int)kqueTmp->cValue == 13 && (int)kqueTmp->kqueNext->cValue == 26)
+			{
+				return UNDO;
+			}if ((int)kqueTmp->cValue == 13 && (int)kqueTmp->kqueNext->cValue == 25)
+			{
+				return REDO;
+			}
+		}
 		cKey = kqueTmp->cValue;
 		ktTmp = kqueTmp->ktInfo;
 
