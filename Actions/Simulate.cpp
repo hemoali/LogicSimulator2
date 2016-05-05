@@ -24,6 +24,15 @@ void Simulate::spreadTheWord(Component* comp) {
 }
 void Simulate::Execute()
 {
+	for (size_t i = 0; i < pManager->allComponentsCorners.size(); i++)
+	{
+		Component* comp = pManager->getComponent(i);
+		if ((dynamic_cast<SWITCH*>(comp)) || (dynamic_cast<Connection*>(comp) || comp->getDelete())) continue;
+		for (size_t i = 0; i < comp->getNumOfInputs(); i++)
+		{
+			comp->setInputPinStatus(i, UNDEFINED);
+		}
+	}
 	int totalComponentsCount = 0, operatedItemsCount = 0;
 	vector<Component*> toBeOperatedComponents;
 	// Send switches signals to all next components
@@ -83,10 +92,11 @@ void Simulate::Execute()
 		if (comp->getDelete()) continue;
 		if (dynamic_cast<Connection*>(comp))
 		{
-			if (((Connection*)comp)->getSourcePin()->getStatus()== HIGH) 
+			if (((Connection*)comp)->getSourcePin()->getStatus() == HIGH)
 			{
 				((Connection*)comp)->selectYourSelf(pManager->GetOutput(), UI.OneValueConnection);
-			}else{
+			}
+			else {
 				((Connection*)comp)->selectYourSelf(pManager->GetOutput(), UI.DrawColor);
 			}
 		}

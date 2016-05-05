@@ -57,6 +57,8 @@ void Connection::deleteConnection(Output* pOut) {
 	setDelete(true);
 	DstPin->setConnection(NULL);
 	SrcPin->removeConnectedConnection(this);
+	DstPin = NULL;
+	SrcPin = NULL;
 }
 
 int Connection::GetOutPinStatus()	//returns status of outputpin if LED, return -1
@@ -77,6 +79,7 @@ void Connection::setInputPinStatus(int n, STATUS s)
 
 void Connection::setCellsBeforeAddingConnection(vector<Cell> cellsBeforeAddingConnection)
 {
+	this->cellsBeforeAddingConnection.clear();
 	for (size_t i = 0; i < cellsBeforeAddingConnection.size(); i++)
 	{
 		this->cellsBeforeAddingConnection.push_back({ cellsBeforeAddingConnection[i].x ,cellsBeforeAddingConnection[i].y,cellsBeforeAddingConnection[i].cellType });

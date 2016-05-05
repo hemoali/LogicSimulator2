@@ -20,9 +20,6 @@ int InputPin::getPosition(){ return position; }
 
 STATUS InputPin::getStatus()
 {
-	if (getConnection() != NULL) {
-		setStatus(static_cast<STATUS>(getConnection()->getSourcePin()->getComponent()->GetOutPinStatus()));
-	}
 	return Pin::getStatus();
 }
 
