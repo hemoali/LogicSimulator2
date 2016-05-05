@@ -26,6 +26,9 @@ Output::Output(ApplicationManager* pManager)
 	UI.HumpColor = BLACK;
 	UI.SelectedHumpColor = DARKBLUE;// color(23, 79, 181);
 
+	UI.OneValueConnection = color(0,200,0);
+	UI.OneValueHumpColor = color(0,175,0);
+
 	UI.MsgColor = BLUE;
 	UI.ErrorColor = RED;
 	UI.BkGrndColor = WHITE;
@@ -709,6 +712,7 @@ void Output::changeConnectionColor(Connection * connection, color Color) {
 						pWind->DrawLine(cell.x * UI.GRID_SIZE - 6, cell.y*UI.GRID_SIZE, cell.x * UI.GRID_SIZE - 10, cell.y*UI.GRID_SIZE);
 					}
 					if (Color == UI.SelectColor) pWind->SetPen(UI.SelectedHumpColor, 2); else if (Color == UI.ConnColor) pWind->SetPen(UI.HumpColor, 2);
+					if (Color == UI.OneValueConnection) { pWind->SetPen(UI.OneValueHumpColor, 2); }
 					pWind->DrawBezier(cell.x * UI.GRID_SIZE - 10, cell.y*UI.GRID_SIZE, cell.x * UI.GRID_SIZE - 14, cell.y*UI.GRID_SIZE - 6, cell.x * UI.GRID_SIZE - 18, cell.y*UI.GRID_SIZE - 8, cell.x * UI.GRID_SIZE - 22, cell.y*UI.GRID_SIZE);
 					pWind->SetPen(Color, 2);
 					if (j + 2 < connection->getCellsBeforeAddingConnection().size() && arrayOfIntersections[connection->getCellsBeforeAddingConnection()[j + 2].y][connection->getCellsBeforeAddingConnection()[j + 2].x] != 0)
@@ -727,6 +731,7 @@ void Output::changeConnectionColor(Connection * connection, color Color) {
 						pWind->DrawLine(cell.x * UI.GRID_SIZE + 6, cell.y*UI.GRID_SIZE, cell.x * UI.GRID_SIZE + 10, cell.y*UI.GRID_SIZE);
 					}
 					if (Color == UI.SelectColor) pWind->SetPen(UI.SelectedHumpColor, 2); else if (Color == UI.ConnColor) pWind->SetPen(UI.HumpColor, 2);
+					if (Color == UI.OneValueConnection) { pWind->SetPen(UI.OneValueHumpColor, 2); }
 					pWind->DrawBezier(cell.x * UI.GRID_SIZE + 10, cell.y*UI.GRID_SIZE, cell.x * UI.GRID_SIZE + 14, cell.y*UI.GRID_SIZE - 6, cell.x * UI.GRID_SIZE + 18, cell.y*UI.GRID_SIZE - 8, cell.x * UI.GRID_SIZE + 22, cell.y*UI.GRID_SIZE);
 					pWind->SetPen(Color, 2);
 					if (j + 2 < connection->getCellsBeforeAddingConnection().size() && arrayOfIntersections[connection->getCellsBeforeAddingConnection()[j + 2].y][connection->getCellsBeforeAddingConnection()[j + 2].x] != 0)
@@ -754,6 +759,7 @@ void Output::changeConnectionColor(Connection * connection, color Color) {
 						pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE - 6, cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE - 10);
 					}
 					if (Color == UI.SelectColor) pWind->SetPen(UI.SelectedHumpColor, 2); else if (Color == UI.ConnColor) pWind->SetPen(UI.HumpColor, 2);
+					if (Color == UI.OneValueConnection) { pWind->SetPen(UI.OneValueHumpColor, 2); }
 					pWind->DrawBezier(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE - 10, cell.x * UI.GRID_SIZE + 6, cell.y*UI.GRID_SIZE - 14, cell.x * UI.GRID_SIZE + 8, cell.y*UI.GRID_SIZE - 18, cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE - 22);
 					pWind->SetPen(Color, 2);
 					if (j + 2 < connection->getCellsBeforeAddingConnection().size() && arrayOfIntersections[connection->getCellsBeforeAddingConnection()[j + 2].y][connection->getCellsBeforeAddingConnection()[j + 2].x] != 1)
@@ -778,6 +784,7 @@ void Output::changeConnectionColor(Connection * connection, color Color) {
 						pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE + 6, cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE + 10);
 					}
 					if (Color == UI.SelectColor) pWind->SetPen(UI.SelectedHumpColor, 2); else if (Color == UI.ConnColor) pWind->SetPen(UI.HumpColor, 2);
+					if (Color == UI.OneValueConnection) { pWind->SetPen(UI.OneValueHumpColor, 2); }
 					pWind->DrawBezier(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE + 10, cell.x * UI.GRID_SIZE + 6, cell.y*UI.GRID_SIZE + 14, cell.x * UI.GRID_SIZE + 8, cell.y*UI.GRID_SIZE + 18, cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE + 22);
 					pWind->SetPen(Color, 2);
 					if (j + 2 < connection->getCellsBeforeAddingConnection().size() && arrayOfIntersections[connection->getCellsBeforeAddingConnection()[j + 2].y][connection->getCellsBeforeAddingConnection()[j + 2].x] != 1)

@@ -69,11 +69,27 @@ void Simulate::Execute()
 		}
 
 	}
+	//Light up leds
 	for (size_t i = 0; i < pManager->allComponentsCorners.size(); i++)
 	{
 		Component* comp = pManager->getComponent(i);
 		if ((dynamic_cast<Connection*>(comp) || comp->getDelete())) continue;
 		if (dynamic_cast<LED*>(comp)) { comp->Draw(pManager->GetOutput(), false); }
+	}
+	//light up connections
+	for (size_t i = 0; i < pManager->allComponentsCorners.size(); i++)
+	{
+		Component* comp = pManager->getComponent(i);
+		if (comp->getDelete()) continue;
+		if (dynamic_cast<Connection*>(comp))
+		{
+			if (((Connection*)comp)->getSourcePin()->getStatus()== HIGH) 
+			{
+				((Connection*)comp)->selectYourSelf(pManager->GetOutput(), UI.OneValueConnection);
+			}else{
+				((Connection*)comp)->selectYourSelf(pManager->GetOutput(), UI.DrawColor);
+			}
+		}
 	}
 }
 void Simulate::Undo()
