@@ -577,7 +577,15 @@ void Output::DeleteGate(Component *& C, bool undo, bool completetly)
 		{
 			for (int j = xbegin; j <= xend; j++)
 			{
-				pOut->setUsedPixel(i, j, GATE);
+				if (xbegin == j || xend == j)
+				{
+					if (usedPixels[i][j] != INTERSECTION)
+					{
+						usedPixels[i][j] = PIN;
+					}
+					continue;
+				}
+				usedPixels[i][j] = GATE;
 			}
 		}
 		//Drawing the Connections

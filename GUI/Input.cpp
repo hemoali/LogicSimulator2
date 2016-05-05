@@ -42,13 +42,12 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 		// Check for keyboard hotkeys
 		char c1;
 		keytype key = pWind->GetKeyPress(c1);
-		if (key == UNDO) {
+		if ((int)c1 == 26) {
 			return UNDOACTION;
 		}
-		else if (key == REDO) {
+		else if ((int)c1 == 25) {
 			return REDOACTION;
 		}
-
 		//cout << c2;
 		// Working with mouse
 

@@ -539,18 +539,19 @@ keytype window::GetKeyPress(char &cKey) {
 
 	kqueTmp = kqueInput.Remove();
 	if (kqueTmp != NULL) {
+		cKey = kqueTmp->cValue;
+		ktTmp = kqueTmp->ktInfo;
 		if (kqueTmp->kqueNext != NULL)
 		{
 			if ((int)kqueTmp->cValue == 13 && (int)kqueTmp->kqueNext->cValue == 26)
 			{
 				return UNDO;
-			}if ((int)kqueTmp->cValue == 13 && (int)kqueTmp->kqueNext->cValue == 25)
+			}
+			if ((int)kqueTmp->cValue == 13 && (int)kqueTmp->kqueNext->cValue == 25)
 			{
 				return REDO;
 			}
-		}
-		cKey = kqueTmp->cValue;
-		ktTmp = kqueTmp->ktInfo;
+		}	
 
 		delete kqueTmp;
 		return ktTmp;

@@ -254,6 +254,7 @@
     <ClCompile Include="Actions\ModifyConnection.cpp">
       <Filter>Actions</Filter>
     </ClCompile>
+    <ClCompile Include="Actions\Action.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Defs.H" />

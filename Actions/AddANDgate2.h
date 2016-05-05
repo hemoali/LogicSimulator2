@@ -14,11 +14,6 @@ public:
 	virtual bool  ReadActionParameters(image* );
 	//Execute action (code depends on action type)
 	virtual void Execute();
-
-	virtual void Undo();
-	virtual void Redo();
-
-
 };
 
 #endif

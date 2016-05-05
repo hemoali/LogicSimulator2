@@ -1,13 +1,14 @@
 #ifndef APPLICATION_MANAGER_H
 #define APPLICATION_MANAGER_H
 
-#include "Defs.h"
 #include "GUI\Output.h"
 #include "GUI\Input.h"
-#include "Actions\Action.h"
 #include <vector>
+#include <stack>
+using namespace std;
 class Component;
 class Connection;
+class Action;
 //Main class that manages everything in the application.
 class ApplicationManager
 {
@@ -20,8 +21,9 @@ private:
 
 	Output* OutputInterface; //pointer to the Output Clase Interface
 	Input* InputInterface; //pointer to the Input Clase Interface
-
 public:	
+	stack <Action*> undoActions, redoActions;
+
 	ApplicationManager(); //constructor
 
 	//Reads the required action from the user and returns the corresponding action type

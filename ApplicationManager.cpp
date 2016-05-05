@@ -129,15 +129,32 @@ void ApplicationManager::ExecuteAction(ActionType ActType)
 	case SimulateAction:
 		pAct = new Simulate(this);
 		break;
-	case EXIT:
+	case UNDOACTION: {
+		if (undoActions.size() > 0)
+		{
+			Action* act = undoActions.top();
+			act->Undo();
+			undoActions.pop();
+			redoActions.push(act);
+		}
+		break;
+	}case REDOACTION: {
+		if (redoActions.size() > 0) {
+			Action* act = redoActions.top();
+			act->Redo();
+			redoActions.pop();
+			undoActions.push(act);
+		}
+		break;
+	}case EXIT:
 		// Exit action here
 		break;
 	}
 	if (pAct)
 	{
 		pAct->Execute();
-		delete pAct;
-		pAct = NULL;		
+		//delete pAct;
+		//pAct = NULL;
 	}
 }
 ////////////////////////////////////////////////////////////////////
