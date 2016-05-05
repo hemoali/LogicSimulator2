@@ -251,7 +251,9 @@
     <ClCompile Include="Actions\Simulate.cpp">
       <Filter>Actions</Filter>
     </ClCompile>
-    <ClCompile Include="Actions\ModifyConnection.cpp" />
+    <ClCompile Include="Actions\ModifyConnection.cpp">
+      <Filter>Actions</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Defs.H" />
