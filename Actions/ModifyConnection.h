@@ -3,6 +3,7 @@
 class ModifyConnection :
 	public Action
 {
+	int Cx1, Cy1, Cx2, Cy2;
 	Connection *theConnection; // The Selected Connection
 public:
 	ModifyConnection(ApplicationManager* pApp);
@@ -11,6 +12,7 @@ public:
 	
 	~ModifyConnection();
 
+	bool validateOutputComponent(Component* comp, Component* dstComp);
 	//Reads parameters required for action to execute
 	virtual bool ReadActionParameters(image * = NULL);
 

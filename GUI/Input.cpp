@@ -365,7 +365,22 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 			}
 			switch (ClickedItemOrder + 14)
 			{
-			case DSIMULATION: {return ValidateAction; break; }
+			case DSIMULATION: {
+				bool returnValidateion = false;
+
+				for (size_t i = 0; i < pManager->allComponentsCorners.size(); i++)
+				{
+					Component* comp = pManager->getComponent(i);
+					if (!comp->getDelete())
+					{
+						returnValidateion = true;
+					}
+					else {
+						pManager->GetOutput()->PrintMsg("Please add components first!", UI.ErrorColor);
+					}
+				}
+				if (returnValidateion) { return ValidateAction; };
+				break; }
 			case DNEW:return NEW; break;
 			case DSAVE:return SAVE; break;
 			case DLOAD:return LOAD; break;
@@ -421,7 +436,7 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 				if (x >= pManager->allComponentsCorners[i].x1&&x <= pManager->allComponentsCorners[i].x2&& y >= pManager->allComponentsCorners[i].y1&&y <= pManager->allComponentsCorners[i].y2)
 				{
 					((SWITCH*)pManager->getComponent(i))->setOutputPinStatus(static_cast<STATUS>(!((SWITCH*)pManager->getComponent(i))->GetOutPinStatus()));
-					((SWITCH*)pManager->getComponent(i))->Draw(pManager->GetOutput(),false);
+					((SWITCH*)pManager->getComponent(i))->Draw(pManager->GetOutput(), false);
 					pWind->FlushMouseQueue();
 					return SimulateAction;
 				}
