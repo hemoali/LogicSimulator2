@@ -1450,7 +1450,7 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 	bool isMovingSucceded = false;
 	for (size_t m = 0; m < allSelectedComponents.size(); m++)
 	{
-		Component* comp = allSelectedComponents[m].second;
+		Component* comp = allSelectedComponents[m].second; if (dynamic_cast<Connection*>(allSelectedComponents[m].second)) continue;
 		int iXOld = currentX + (allSelectedComponents[m].second->getCenterLocation().x1 - mainMovingComponent->getCenterLocation().x1);
 		int iYOld = currentY + (allSelectedComponents[m].second->getCenterLocation().y1 - mainMovingComponent->getCenterLocation().y1);
 		int RectULX = iXOld - UI.GATE_Width / 2;
@@ -1496,6 +1496,7 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 		}
 		for (size_t m = 0; m < allSelectedComponents.size(); m++)
 		{
+			if (dynamic_cast<Connection*>(allSelectedComponents[m].second)) continue;
 			int drawnConnectionsCount = 0;
 			int noOfTotalConnections = 0;
 			int x = ox + (allSelectedComponents[m].second->getCenterLocation().x1 - mainMovingComponent->getCenterLocation().x1);
@@ -1629,6 +1630,7 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 		bool toContinue = true;
 		for (size_t m = 0; m < isComponentDrawn.size(); m++)
 		{
+			if (dynamic_cast<Connection*>(allSelectedComponents[m].second)) continue;
 			if (isComponentDrawn[m] == false)
 			{
 				toContinue = false;
@@ -1639,6 +1641,7 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 			//Change corners
 			for (size_t m = 0; m < allSelectedComponents.size(); m++)
 			{
+				if (dynamic_cast<Connection*>(allSelectedComponents[m].second)) continue;
 				GraphicsInfo Gfx;
 				Gfx.x1 = RectULXY[m].first + UI.GATE_Width / 2;
 				Gfx.y1 = RectULXY[m].second + UI.GATE_Height / 2;
@@ -1668,6 +1671,7 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 			}
 			for (size_t m = 0; m < allSelectedComponents.size(); m++)
 			{
+				if (dynamic_cast<Connection*>(allSelectedComponents[m].second)) continue;
 				GraphicsInfo Gfx;
 				Gfx.x1 = RectULXY[m].first + UI.GATE_Width / 2;
 				Gfx.y1 = RectULXY[m].second + UI.GATE_Height / 2;
@@ -1690,6 +1694,7 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 			vector <Connection*> allDrawnConnections;
 			for (size_t m = 0; m < allSelectedComponents.size(); m++)
 			{
+				if (dynamic_cast<Connection*>(allSelectedComponents[m].second)) continue;
 				GraphicsInfo Gfx;
 				Gfx.x1 = RectULXY[m].first + UI.GATE_Width / 2;
 				Gfx.y1 = RectULXY[m].second + UI.GATE_Height / 2;
@@ -1761,6 +1766,7 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 			//Remove gates
 			for (size_t m = 0; m < allSelectedComponents.size(); m++)
 			{
+				if (dynamic_cast<Connection*>(allSelectedComponents[m].second)) continue;
 				GraphicsInfo Gfx;
 				Gfx.x1 = RectULXY[m].first + UI.GATE_Width / 2;
 				Gfx.y1 = RectULXY[m].second + UI.GATE_Height / 2;
@@ -1785,6 +1791,7 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 				{
 					for (size_t m = 0; m < allSelectedComponents.size(); m++)
 					{
+						if (dynamic_cast<Connection*>(allSelectedComponents[m].second)) continue;
 						if (Utils::CheckPoint({ originalXY[m].first,originalXY[m].second }, usedPixels, true)) {
 
 							allSelectedComponents[m].second->setDelete(false);
@@ -1795,6 +1802,7 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 					}
 					for (size_t m = 0; m < allSelectedComponents.size(); m++)
 					{
+						if (dynamic_cast<Connection*>(allSelectedComponents[m].second)) continue;
 						vector<Connection*> allInputConnections, allOutputConnections;
 
 						allSelectedComponents[m].second->getAllInputConnections(allInputConnections);

@@ -6,7 +6,7 @@
 Input::Input(window* pW)
 {
 	pWind = pW; //point to the passed window
-	isSelectMode = false;
+	isSelectMode = isSelectionContainConnections= false;
 }
 
 void Input::GetPointClicked(int &x, int &y, bool DrawGate, bool DrawConnection)
@@ -64,7 +64,7 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 					{
 						for (size_t i = 0; i < selectedComponents.size(); i++)
 						{
-							if (selectedComponents[i].second == comp)
+							if (!dynamic_cast<Connection*>(selectedComponents[i].second)&& selectedComponents[i].second == comp)
 								return MULTI_MOVE;
 						}
 					}
@@ -86,8 +86,8 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 							selectedComponents[i].second->Draw(pManager->GetOutput(), false);
 						}
 						setSelectMode(false);
+						isSelectionContainConnections = false;
 						selectedComponents.clear();
-
 					}
 					for (size_t i = 0; i < allConnections.size() && !found; i++)
 					{
@@ -501,11 +501,19 @@ void Input::WaitSelectionPoint(int &X, int &Y)
 	pWind->WaitMouseClick(X, Y);
 }
 
+void Input::setisSelectionContainConnections(bool b)
+{
+	isSelectionContainConnections = b;
+}
+
 void Input::setSelectMode(bool b)
 {
 	isSelectMode = b;
 }
-
+bool Input::getisSelectionContainConnections()
+{
+	return isSelectionContainConnections;
+}
 bool Input::getSelectMode()
 {
 	return isSelectMode;

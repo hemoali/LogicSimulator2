@@ -1,5 +1,6 @@
 #include "MultiSelect.h"
 #include "..\Utils.h"
+#include<iostream>
 MultiSelect::MultiSelect(ApplicationManager* pManager) :Action(pManager) {
 
 }
@@ -45,22 +46,40 @@ void MultiSelect::Execute()
 						if (!dynamic_cast<Connection*>(pManager->getComponent(i)) && !pManager->getComponent(i)->getDelete())
 						{
 							allSelectedComponents.push_back(make_pair(i, pManager->getComponent(i)));
-							pManager->getComponent(i)->Draw(pManager->GetOutput(), true);
+							pManager->getComponent(i)->Draw(pOut, true);
 							vector<Connection*> allInConnections, allOutConnections;
 							pManager->getComponent(i)->getAllInputConnections(allInConnections);
 							pManager->getComponent(i)->getAllOutputConnections(allOutConnections);
 							for (size_t i = 0; i < allInConnections.size(); i++)
 							{
-								allInConnections[i]->selectYourSelf(pManager->GetOutput(), UI.SelectColor);
+								allInConnections[i]->selectYourSelf(pOut, UI.SelectColor);
 							}
 							for (size_t i = 0; i < allOutConnections.size(); i++)
 							{
-								allOutConnections[i]->selectYourSelf(pManager->GetOutput(), UI.SelectColor);
+								allOutConnections[i]->selectYourSelf(pOut, UI.SelectColor);
+							}
+						}
+					}
+					if (dynamic_cast<Connection*> (pManager->getComponent(i)) && !pManager->getComponent(i)->getDelete())
+					{
+						Connection* conn = (Connection*)pManager->getComponent(i);
+						for (size_t j = 0; j < conn->getCellsBeforeAddingConnection().size(); j++)
+						{
+							Cell c =  conn->getCellsBeforeAddingConnection()[j];
+							if (
+								(x > initX && c.x *UI.GRID_SIZE< x &&  c.x*UI.GRID_SIZE > initX && initY < y &&  c.y*UI.GRID_SIZE < y &&  c.y*UI.GRID_SIZE > initY) ||
+								(x<initX &&  c.x*UI.GRID_SIZE > x &&  c.x*UI.GRID_SIZE < initX && initY < y &&  c.y*UI.GRID_SIZE < y &&  c.y*UI.GRID_SIZE > initY) ||
+								(x<initX &&  c.x*UI.GRID_SIZE > x &&  c.x*UI.GRID_SIZE < initX && initY > y &&  c.y *UI.GRID_SIZE > y &&  c.y*UI.GRID_SIZE < initY) ||
+								(x > initX &&  c.x*UI.GRID_SIZE < x &&  c.x*UI.GRID_SIZE > initX && initY > y &&  c.y*UI.GRID_SIZE > y &&  c.y *UI.GRID_SIZE < initY)
+								) {
+								allSelectedComponents.push_back(make_pair(i, pManager->getComponent(i)));
+								pManager->getComponent(i)->selectYourSelf(pOut, UI.SelectColor);
+								pIn->setisSelectionContainConnections(true);
+								break;
 							}
 						}
 					}
 				}
-
 			}
 		}
 		pOut->drawStoredDrawingAreaImage(originalImage);
@@ -68,25 +87,30 @@ void MultiSelect::Execute()
 		{
 			for (size_t i = 0; i < allSelectedComponents.size(); i++)
 			{
-				allSelectedComponents[i].second->Draw(pManager->GetOutput(), true);
+				if (dynamic_cast<Connection*>(allSelectedComponents[i].second))
+				{
+					allSelectedComponents[i].second->selectYourSelf(pOut, UI.SelectColor);
+					continue;
+				}
+				allSelectedComponents[i].second->Draw(pOut, true);
 				vector<Connection*> allInConnections, allOutConnections;
 				allSelectedComponents[i].second->getAllInputConnections(allInConnections);
 				allSelectedComponents[i].second->getAllOutputConnections(allOutConnections);
 				for (size_t i = 0; i < allInConnections.size(); i++)
 				{
-					allInConnections[i]->selectYourSelf(pManager->GetOutput(), UI.SelectColor);
+					allInConnections[i]->selectYourSelf(pOut, UI.SelectColor);
 				}
 				for (size_t i = 0; i < allOutConnections.size(); i++)
 				{
-					allOutConnections[i]->selectYourSelf(pManager->GetOutput(), UI.SelectColor);
+					allOutConnections[i]->selectYourSelf(pOut, UI.SelectColor);
 				}
 			}
 
-			pManager->GetInput()->setSelectMode(true);
-			pManager->GetInput()->setSelectedComponents(allSelectedComponents);
+			pIn->setSelectMode(true);
+			pIn->setSelectedComponents(allSelectedComponents);
 		}
 	}
-	
+
 }
 void MultiSelect::Undo()
 {}
