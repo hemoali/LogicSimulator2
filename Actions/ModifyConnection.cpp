@@ -50,7 +50,6 @@ void ModifyConnection::Execute()
 	//remove conenctoin from pins
 	theConnection->getSourcePin()->removeConnectedConnection(theConnection);
 	theConnection->getDestPin()->setConnection(NULL);
-
 	bool isCorrectNewConnection = false;
 	while (!isCorrectNewConnection) {
 

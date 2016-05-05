@@ -27,8 +27,9 @@ void Delete::Execute()
 			pOut->DeleteGate(theComponent);
 		else if (theComponent != NULL && dynamic_cast<Connection*> (theComponent))
 		{
-			//Deleting Connection
-
+			vector<Connection*> connection;
+			connection.push_back((Connection*)theComponent);
+			pOut->clearConnections(connection, -1, -1, false, true);
 		}
 	}
 	else {

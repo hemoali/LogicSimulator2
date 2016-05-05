@@ -20,6 +20,10 @@ void Save::Execute()
 	int ConnectionCount = 0;
 	for (int i = 0; i < pManager->getCompCount(); i++)
 	{
+		if (pManager->getComponent(i)->getDelete())
+		{
+			continue;
+		}
 		if (dynamic_cast<Connection*>(pManager->getComponent(i)))
 			ConnectionCount++;
 		else compCount++;
@@ -27,6 +31,10 @@ void Save::Execute()
 	file << compCount << "\n";
 	for (int i = 0; i < pManager->getCompCount(); i++)
 	{
+		if (pManager->getComponent(i)->getDelete())
+		{
+			continue;
+		}
 		if (dynamic_cast<Connection*>(pManager->getComponent(i)))
 			continue;
 		pManager->getComponent(i)->save(i + 1, file);
@@ -35,6 +43,10 @@ void Save::Execute()
 	file << ConnectionCount << '\n';
 	for (int i = 0; i < pManager->getCompCount(); i++)
 	{
+		if (pManager->getComponent(i)->getDelete())
+		{
+			continue;
+		}
 		if (dynamic_cast<Connection*>(pManager->getComponent(i)))
 		{
 			pManager->getComponent(i)->save(i + 1, file);
