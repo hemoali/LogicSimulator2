@@ -1,8 +1,8 @@
 #include "Pin.h"
-
+#include"InputPin.h"
 Pin::Pin()
 {
-	m_Status = LOW;	//Default Status is LOW
+	m_Status = UNDEFINED;
 }
 
 void Pin::setStatus(STATUS r_Status)

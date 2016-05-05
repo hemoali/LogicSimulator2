@@ -1,0 +1,90 @@
+#include "Simulate.h"
+#include"..\ApplicationManager.h"
+#include "..\Components\LED.h"
+#include "..\Components\SWITCH.h"
+#include "..\Components\Connection.h"
+#include "..\Components\Component.h"
+Simulate::Simulate(ApplicationManager*pApp) : Action(pApp)
+{
+}
+
+bool Simulate::ReadActionParameters(image *I)
+{
+	return false;
+}
+///vector<Component*> levelComponents;
+
+void Simulate::spreadTheWord(Component* comp) {
+	for (size_t i = 0; i < comp->getOutputPin()->connectedConnectionsCount(); i++)
+	{
+		comp->getOutputPin()->getConnection(i)->getDestPin()->setStatus(static_cast<STATUS>(comp->GetOutPinStatus()));
+		//spreadTheWord(comp->getOutputPin()->getConnection(i)->getDestPin()->getComponent());
+	//	levelComponents.push_back(comp->getOutputPin()->getConnection(i)->getDestPin()->getComponent());
+	}
+}
+void Simulate::Execute()
+{
+	int totalComponentsCount = 0, operatedItemsCount = 0;
+	vector<Component*> toBeOperatedComponents;
+	// Send switches signals to all next components
+	for (size_t i = 0; i < pManager->allComponentsCorners.size(); i++)
+	{
+		Component* comp = pManager->getComponent(i);
+		if ((dynamic_cast<Connection*>(comp) || comp->getDelete())) continue;
+		if (dynamic_cast<SWITCH*>(comp))
+		{
+			for (size_t i = 0; i < comp->getOutputPin()->connectedConnectionsCount(); i++)
+			{
+				comp->getOutputPin()->getConnection(i)->getDestPin()->setStatus(static_cast<STATUS>(comp->GetOutPinStatus()));
+			}
+		}
+		else if (!dynamic_cast<LED*>(comp)) { toBeOperatedComponents.push_back(comp); totalComponentsCount++; }
+	}
+	//Go to all LEDS and calcaulate the pins values
+	while (operatedItemsCount < totalComponentsCount)
+	{
+		for (size_t i = 0; i < toBeOperatedComponents.size(); i++)
+		{
+			Component* comp = toBeOperatedComponents[i];
+			bool isAllPinsHaveStatus = true;
+			for (size_t j = 0; j < comp->getNumOfInputs(); j++)
+			{
+				if (comp->getInputPin(j)->getStatus() == UNDEFINED)
+				{
+					isAllPinsHaveStatus = false;
+				}
+			}
+			if (!isAllPinsHaveStatus)
+			{
+				continue;
+			}
+			else {
+				comp->Operate();
+				for (size_t k = 0; k < comp->getOutputPin()->connectedConnectionsCount(); k++)
+				{
+					comp->getOutputPin()->getConnection(k)->getDestPin()->setStatus(static_cast<STATUS>(comp->GetOutPinStatus()));
+				}
+				operatedItemsCount++;
+			}
+		}
+
+	}
+	for (size_t i = 0; i < pManager->allComponentsCorners.size(); i++)
+	{
+		Component* comp = pManager->getComponent(i);
+		if ((dynamic_cast<Connection*>(comp) || comp->getDelete())) continue;
+		if (dynamic_cast<LED*>(comp)) { comp->Draw(pManager->GetOutput(), false); }
+	}
+}
+void Simulate::Undo()
+{
+
+}
+void Simulate::Redo()
+{
+
+}
+Simulate::~Simulate()
+{
+
+}

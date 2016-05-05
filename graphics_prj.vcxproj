@@ -150,6 +150,7 @@
     <ClCompile Include="Actions\RightClick.cpp" />
     <ClCompile Include="Actions\Save.cpp" />
     <ClCompile Include="Actions\Select.cpp" />
+    <ClCompile Include="Actions\Simulate.cpp" />
     <ClCompile Include="Actions\Validate.cpp" />
     <ClCompile Include="CMUgraphicsLib\auxil.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
@@ -254,6 +255,7 @@
     <ClInclude Include="Actions\RightClick.h" />
     <ClInclude Include="Actions\Save.h" />
     <ClInclude Include="Actions\Select.h" />
+    <ClInclude Include="Actions\Simulate.h" />
     <ClInclude Include="Actions\Validate.h" />
     <ClInclude Include="CMUgraphicsLib\auxil.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>

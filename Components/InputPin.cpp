@@ -1,5 +1,6 @@
 #include "InputPin.h"
-
+#include "Connection.h"
+#include "Component.h"
 InputPin::InputPin() 
 {
 	setConnection(NULL);
@@ -16,6 +17,14 @@ Component* InputPin::getComponent()
 }
 void InputPin::setPosition(int p){ this->position = p; }
 int InputPin::getPosition(){ return position; }
+
+STATUS InputPin::getStatus()
+{
+	if (getConnection() != NULL) {
+		setStatus(static_cast<STATUS>(getConnection()->getSourcePin()->getComponent()->GetOutPinStatus()));
+	}
+	return Pin::getStatus();
+}
 
 void InputPin::setConnection(Connection* pConn){ inConnection = pConn; }
 Connection* InputPin::getConnection(){

@@ -38,8 +38,8 @@ enum ActionType
 	ADD_Label,			//Add Label to a Component, a Connection
 
 	Create_TruthTable,	//Create Truth Table of the Circuit
-	Simulate,
-	Validat,
+	SimulateAction,
+	ValidateAction,
 
 	Change_Switch,		//Change Switch Status in Simulation Mode // ????? TODO:
 
@@ -70,13 +70,14 @@ enum ActionType
 
 	STATUS_BAR,		//A click on the status bar
 	DSN_TOOL,	//A click on an empty place in the design tool bar
-
+	SELECT_SIM
 };
 //Possible Status for the pin
 enum STATUS
 {
 	LOW,
-	HIGH
+	HIGH,
+	UNDEFINED
 };
 
 enum  MODE	//Modes of operation

@@ -1,10 +1,10 @@
 4
-XOR3    328  344 Lasd
-XOR3    552  264 Lads
-XOR3    360  248 Lasd
-XOR3    440  424 Lasd
+SWITCH   360  264 LA
+SWITCH   360  376 LB
+LED    760  312 LC
+AND2    536  312 Lj
 Connections
 3
-  361  368  566  288 Ldsa
-  393  272  454  435 Lsad
-  361  368  566  301 Ldsa
+  393  288  550  323 Lhg
+  393  400  550  349 Ljh
+  569  336  774  336 Lgfh

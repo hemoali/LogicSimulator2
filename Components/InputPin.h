@@ -16,6 +16,8 @@ public:
 	Connection* getConnection();
 	void setPosition(int p);
 	int getPosition();
+
+	STATUS getStatus();
 };
 
 #endif

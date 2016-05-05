@@ -6,6 +6,7 @@ SWITCH::SWITCH(const GraphicsInfo &r_GfxInfo, int r_FanOut) :Component(r_GfxInfo
 {
 	m_OutputPin.setComponent(this);
 	setNumOfInputs(0);
+	setOutputPinStatus(LOW);
 }
 
 
@@ -39,7 +40,7 @@ int SWITCH::GetInputPinStatus(int n)
 }
 
 //Set status of an input pin to HIGH or LOW
-void SWITCH::setOutputPinStatus(int n, STATUS s)
+void SWITCH::setOutputPinStatus(STATUS s)
 {
 	getOutputPin()->setStatus(s);
 }

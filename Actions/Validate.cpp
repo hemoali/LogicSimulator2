@@ -4,7 +4,7 @@
 #include"..\Components\Connection.h"
 #include"..\Components\LED.h"
 #include"..\Components\SWITCH.h"
-
+#include "Simulate.h"
 Validate::Validate(ApplicationManager*pApp) : Action(pApp)
 {
 	msg = "";
@@ -98,6 +98,8 @@ void Validate::Execute()
 	if (isValid)
 	{
 		pManager->GetInput()->switchMode(SIMULATION);
+		Action* act = new Simulate(pManager);
+		act->Execute();
 	}
 	pManager->GetOutput()->PrintMsg(msg);
 	Sleep(600);

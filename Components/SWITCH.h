@@ -17,7 +17,7 @@ public:
 
 	virtual void setInputPinStatus(int n, STATUS s); virtual void selectYourSelf(Output* pOut, color Color);
 
-	void setOutputPinStatus(int n, STATUS s);
+	void setOutputPinStatus(STATUS s);
 	virtual void save(int, ofstream &);
 	virtual void load(string s, ApplicationManager*);
 	virtual ActionType getComponentActionType();
