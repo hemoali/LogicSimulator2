@@ -1359,7 +1359,6 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 		pWind->DownButtons(true);
 		pWind->FlushMouseQueue();
 	}
-	//	printMatrix("Final single move");
 	pWind->FlushMouseQueue();
 	pWind->DownButtons(false);
 	PrintMsg("");
@@ -1775,7 +1774,6 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 
 	pWind->FlushMouseQueue();
 	pWind->DownButtons(false);
-	printMatrix("Multi-Move");
 	PrintMsg("");
 	delete storedDrawingImg;
 	delete storedImg;
