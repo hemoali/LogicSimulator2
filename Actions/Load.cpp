@@ -24,9 +24,6 @@ using namespace std;
 
 Load::Load(ApplicationManager*pApp) : Action(pApp)
 {
-	// clear undo/redo stacks
-	while (!pManager->undoActions.empty()) pManager->undoActions.pop();
-	while (!pManager->redoActions.empty()) pManager->redoActions.pop();
 }
 bool Load::ReadActionParameters(image *I)
 {
@@ -278,7 +275,12 @@ void Load::Execute()
 		}
 		pManager->GetOutput()->PrintMsg("Design loaded successfully");
 		file.close();
-	}
+
+		// clear undo/redo stacks
+		while (!pManager->undoActions.empty()) pManager->undoActions.pop();
+		while (!pManager->redoActions.empty()) pManager->redoActions.pop(); 
+}
+
 }
 void Load::Undo()
 {

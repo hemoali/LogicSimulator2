@@ -3,6 +3,7 @@
 #include "..\Utils.h"
 #include <iostream>
 #include "..\Components\SWITCH.h"
+#include "..\Actions\ChangeSwitch.h"
 Input::Input(window* pW)
 {
 	pWind = pW; //point to the passed window
@@ -455,8 +456,8 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 					continue;
 				if (x >= pManager->allComponentsCorners[i].x1&&x <= pManager->allComponentsCorners[i].x2&& y >= pManager->allComponentsCorners[i].y1&&y <= pManager->allComponentsCorners[i].y2)
 				{
-					((SWITCH*)pManager->getComponent(i))->setOutputPinStatus(static_cast<STATUS>(!((SWITCH*)pManager->getComponent(i))->GetOutPinStatus()));
-					((SWITCH*)pManager->getComponent(i))->Draw(pManager->GetOutput(), false);
+					ChangeSwitch* act = new ChangeSwitch(pManager, (SWITCH*)pManager->getComponent(i));
+					act->Execute();
 					pWind->FlushMouseQueue();
 					return SimulateAction;
 				}

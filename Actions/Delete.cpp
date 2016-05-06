@@ -7,9 +7,10 @@ Delete::Delete(ApplicationManager* pApp) :Action(pApp)
 
 }
 
-Delete::Delete(ApplicationManager* pApp, Component* C) : Action(pApp)
+Delete::Delete(ApplicationManager* pApp, Component* C, bool pushToUndo) : Action(pApp)
 {
 	theComponent = C;
+	this->pushToUndo = pushToUndo;
 }
 
 bool Delete::ReadActionParameters(image *)
@@ -61,8 +62,11 @@ void Delete::Execute()
 			connection.push_back((Connection*)theComponent);
 			pOut->clearConnections(connection, -1, -1, false, true);
 		}
-		pManager->undoActions.push(this);
-		Action::pA = theComponent;
+		if (pushToUndo)
+		{
+			pManager->undoActions.push(this);
+			Action::pA = theComponent;
+		}
 	}
 	else {
 		pOut->PrintMsg("It's not deleted.. Error");

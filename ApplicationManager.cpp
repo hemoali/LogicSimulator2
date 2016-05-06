@@ -130,20 +130,32 @@ void ApplicationManager::ExecuteAction(ActionType ActType)
 		pAct = new Simulate(this);
 		break;
 	case UNDOACTION: {
-		if (undoActions.size() > 0)
+		if (UI.AppMode == DESIGN && undoActions.size() > 0)
 		{
 			Action* act = undoActions.top();
 			act->Undo();
 			undoActions.pop();
 			redoActions.push(act);
 		}
+		else if (UI.AppMode == SIMULATION && simulationUndoActions.size() > 0) {
+			Action* act = simulationUndoActions.top();
+			act->Undo();
+			simulationUndoActions.pop();
+			simulationRedoActions.push(act);
+		}
 		break;
 	}case REDOACTION: {
-		if (redoActions.size() > 0) {
+		if (UI.AppMode == DESIGN && redoActions.size() > 0) {
 			Action* act = redoActions.top();
 			act->Redo();
 			redoActions.pop();
 			undoActions.push(act);
+		}
+		else if (UI.AppMode == SIMULATION && simulationRedoActions.size() > 0) {
+			Action* act = simulationRedoActions.top();
+			act->Redo();
+			simulationRedoActions.pop();
+			simulationUndoActions.push(act);
 		}
 		break;
 	}case EXIT:

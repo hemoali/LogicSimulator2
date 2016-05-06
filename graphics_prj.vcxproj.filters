@@ -255,6 +255,9 @@
       <Filter>Actions</Filter>
     </ClCompile>
     <ClCompile Include="Actions\Action.cpp" />
+    <ClCompile Include="Actions\ChangeSwitch.cpp">
+      <Filter>Actions</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Defs.H" />
@@ -466,6 +469,9 @@
       <Filter>Actions</Filter>
     </ClInclude>
     <ClInclude Include="Actions\ModifyConnection.h" />
+    <ClInclude Include="Actions\ChangeSwitch.h">
+      <Filter>Actions</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

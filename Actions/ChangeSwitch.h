@@ -1,20 +1,18 @@
 #pragma once
 #include "Action.h"
 #include "../Components/Connection.h"
-#include "../Components/Gate.h"
-class Delete :
+#include "../Components/SWITCH.h"
+class ChangeSwitch :
 	public Action
 {
-	Component *theComponent;
-	vector<Connection*> allInputConnections, allOutputConnections;
-	bool pushToUndo;
+	SWITCH *theComponent;
+	int oldStatus, newStatus;
 public:
-	Delete(ApplicationManager* pApp);
-	Delete(ApplicationManager * pApp, Component * C, bool pushToUndo = true);
+	ChangeSwitch(ApplicationManager* pApp);
+	ChangeSwitch(ApplicationManager * pApp, SWITCH * C);
 
 	//Reads parameters required for action to execute
 	virtual bool ReadActionParameters(image * = NULL);
-	void Delete::reconnectConenction(Connection* conn);
 	//Execute action (code depends on action type)
 	virtual void Execute();
 
@@ -24,6 +22,6 @@ public:
 	//To redo this action (code depends on action type)
 	virtual void Redo();
 
-	~Delete();
+	~ChangeSwitch();
 };
 

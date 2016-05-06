@@ -28,9 +28,11 @@ void MultiDelete::Execute()
 	Output* pOut = pManager->GetOutput();
 	if (this->ReadActionParameters()) {
 		for (int i = 0; i < theVector.size(); i++) {
-			Action* act = new Delete(pManager, theVector[i].second);
+			Action* act = new Delete(pManager, theVector[i].second, false);
+			allDeleteActions.push_back(act);
 			act->Execute();
 		}
+		pManager->undoActions.push(this);
 	}
 	else {
 		pOut->PrintMsg("Error deleting the selected gate(s) ");
@@ -39,8 +41,16 @@ void MultiDelete::Execute()
 
 void MultiDelete::Undo()
 {
+	for (size_t i = 0; i < allDeleteActions.size(); i++)
+	{
+		allDeleteActions[i]->Undo();
+	}
 }
 
 void MultiDelete::Redo()
 {
+	for (size_t i = 0; i < allDeleteActions.size(); i++)
+	{
+		allDeleteActions[i]->Redo();
+	}
 }
