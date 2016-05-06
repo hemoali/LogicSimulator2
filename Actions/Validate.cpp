@@ -63,6 +63,7 @@ void Validate::Execute()
 {
 	msg = "";
 	bool isValid = true;
+	int cnt = 0;
 	for (size_t i = 0; i < pManager->allComponentsCorners.size() && isValid; i++)
 	{
 		Component* comp = pManager->getComponent(i);
@@ -70,6 +71,7 @@ void Validate::Execute()
 		if (dynamic_cast<Connection*> (comp))continue;
 
 		if (comp->getDelete())continue;
+		cnt++;
 		if (!dynamic_cast<LED*> (comp))
 		{
 			isValid = validateOutputComponent(comp);
@@ -95,7 +97,7 @@ void Validate::Execute()
 			}
 		}
 	}
-	if (isValid)
+	if (isValid && cnt >0)
 	{
 		pManager->GetInput()->switchMode(SIMULATION);
 		Action* act = new Simulate(pManager);

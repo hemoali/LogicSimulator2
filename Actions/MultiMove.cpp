@@ -81,8 +81,8 @@ void MultiMove::Execute()
 				pManager->allComponentsCorners[pIn->getSelectedComponents()[i].first].x2 = pIn->getSelectedComponents()[i].second->getCornersLocation().x2;
 				pManager->allComponentsCorners[pIn->getSelectedComponents()[i].first].y2 = pIn->getSelectedComponents()[i].second->getCornersLocation().y2;
 
-				pManager->undoActions.push(this);
-			}
+			}		
+			pManager->undoActions.push(this);
 		}
 		else {
 			for (int i = 0; i < pIn->getSelectedComponents().size(); i++)

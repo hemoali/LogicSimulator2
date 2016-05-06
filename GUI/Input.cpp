@@ -27,14 +27,6 @@ void Input::getMouseCoordinates(int & x, int & y)
 //This function reads the position where the user clicks to determine the desired action
 ActionType Input::GetUserAction(ApplicationManager *pManager)
 {
-
-	//	pWind->GetKeyPress(c2);
-		/*if ((int(c1)) == 13 && c2 == 'Z') {
-			cout << "UNDO";
-		}
-		else if ((int(c1)) == 13 && c2 == 'Y') {
-			cout << "READO";
-		}*/
 	int x = 0, y = 0, xT, yT, hoverXOld = 0, hoverYOld = 0, oldTopHoveredItemOrder = -1, oldLeftHoverItem = -1;
 	clicktype s = LEFT_CLICK;
 	Component* preComp = NULL;
@@ -48,7 +40,15 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 		else if ((int)c1 == 25) {
 			return REDOACTION;
 		}
-		//cout << c2;
+		else if((int)c1==4){
+			switchMode(DESIGN);
+		}
+		else if ((int)c1 == 18) {
+			return ValidateAction;
+		}
+		else if ((int)c1 == 19) {
+			return SAVE;
+		}
 		// Working with mouse
 
 		bool drawConnection = false;
