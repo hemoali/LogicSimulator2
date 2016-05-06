@@ -55,6 +55,7 @@ bool Connection::getIsDrawn() {
 
 void Connection::deleteConnection(Output* pOut) {
 	setDelete(true);
+	setIsDrawn(false);
 	DstPin->setConnection(NULL);
 	SrcPin->removeConnectedConnection(this);
 }

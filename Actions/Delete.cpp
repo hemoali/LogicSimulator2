@@ -1,7 +1,4 @@
 #include "Delete.h"
-
-
-
 Delete::Delete(ApplicationManager* pApp) :Action(pApp)
 {
 
@@ -138,16 +135,28 @@ void Delete::Undo()
 		// reconnect Connection
 		for (size_t i = 0; i < allInputConnections.size(); i++)
 		{
+			if (allInputConnections[i]->getIsDrawn())
+			{
+				continue;
+			}
 			reconnectConenction(allInputConnections[i]);
 		}
+
 		for (size_t i = 0; i < allOutputConnections.size(); i++)
 		{
+			if (allOutputConnections[i]->getIsDrawn())
+			{
+				continue;
+			}
 			reconnectConenction(allOutputConnections[i]);
 		}
 	}
 	else if (theComponent != NULL && dynamic_cast<Connection*> (theComponent))
 	{
-		reconnectConenction((Connection*)theComponent);
+		if (!((Connection*)theComponent)->getIsDrawn())
+		{
+			reconnectConenction((Connection*)theComponent);
+		}
 	}
 }
 
