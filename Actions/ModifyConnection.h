@@ -1,15 +1,31 @@
 #pragma once
 #include "Action.h"
+class InputPin;
+class OutputPin;
 class ModifyConnection :
 	public Action
 {
 	int Cx1, Cy1, Cx2, Cy2;
 	Connection *theConnection; // The Selected Connection
+
+	Component* outputComponent = NULL;
+	Component*inputComponent = NULL;
+	Component*oldOutputComponent = NULL;
+	Component*oldInputComponent = NULL;
+	InputPin* newInputPin = NULL;
+	OutputPin* newOutputPin = NULL;
+	InputPin* oldInputPin = NULL;
+	OutputPin* oldOutputPin = NULL;
+
+	vector <Cell> oldCells, newCells;
+	int inputPin, oldInputPinPosition;
+
+	GraphicsInfo GInfo, oldGInfo;
 public:
 	ModifyConnection(ApplicationManager* pApp);
 
 	ModifyConnection(ApplicationManager* pApp, Connection* C);
-	
+
 	~ModifyConnection();
 
 	bool validateOutputComponent(Component* comp, Component* dstComp);

@@ -44,20 +44,23 @@ bool ModifyConnection::ReadActionParameters(image *I)
 }
 void ModifyConnection::Execute()
 {
+
+	for (size_t i = 0; i < theConnection->getCellsBeforeAddingConnection().size(); i++)
+	{
+		oldCells.push_back(theConnection->getCellsBeforeAddingConnection()[i]);
+	}
+
 	Output* pOut = pManager->GetOutput();
 	vector<Connection*> connection; connection.push_back(theConnection);
 	pOut->clearConnections(connection, -1, -1, false, false);
 	//remove conenctoin from pins
 	theConnection->getSourcePin()->removeConnectedConnection(theConnection);
 	theConnection->getDestPin()->setConnection(NULL);
+
 	bool isCorrectNewConnection = false;
 	while (!isCorrectNewConnection) {
 
 		ReadActionParameters(NULL);
-
-		Component* outputComponent = NULL;
-		Component*inputComponent = NULL;
-
 		int numOfInputs = 0;
 		int indxOfInputComponent;
 
@@ -105,7 +108,6 @@ void ModifyConnection::Execute()
 				}
 			}
 			numOfInputs = inputComponent->getNumOfInputs();
-			int inputPin;
 			if (numOfInputs == 3)
 			{
 				if (Cy2 <= pManager->allComponentsCorners[indxOfInputComponent].y2 - UI.GATE_Height / 2 - 6)numOfInputs = inputPin = 0;
@@ -127,11 +129,21 @@ void ModifyConnection::Execute()
 				Sleep(100);
 			}
 			else {
-				GraphicsInfo GInfo;
+				//Save old graphics info
+				oldGInfo.x1 = theConnection->getCornersLocation().x1;
+				oldGInfo.y1 = theConnection->getCornersLocation().y1;
+				oldGInfo.x2 = theConnection->getCornersLocation().x2;
+				oldGInfo.y2 = theConnection->getCornersLocation().y2;
+				oldInputComponent = theConnection->getDestPin()->getComponent();
+				oldOutputComponent = theConnection->getSourcePin()->getComponent();
+				oldInputPin = theConnection->getDestPin();
+				oldOutputPin = theConnection->getSourcePin();
+				oldInputPinPosition = theConnection->getDestPin()->getPosition();
+				//New Data
 				GInfo.x1 = outputComponent->getCenterLocation().x1 + UI.GATE_Width / 2 - 2;
 				GInfo.y1 = outputComponent->getCenterLocation().y1;
 				GInfo.x2 = inputComponent->getCenterLocation().x1 - UI.GATE_Width / 2 - 2;
-
+				vector<Cell> cellsBeforeAddingConnection;
 				if (numOfInputs == 0)
 				{
 					GInfo.y2 = inputComponent->getCenterLocation().y1 - UI.GATE_Height / 2 + 13;
@@ -142,12 +154,13 @@ void ModifyConnection::Execute()
 				else {
 					GInfo.y2 = inputComponent->getCenterLocation().y1 + UI.GATE_Height / 2 - 2;
 				}
-				vector<Cell> cellsBeforeAddingConnection;
 				if (pManager->GetOutput()->DrawConnection(GInfo, numOfInputs, inputComponent->getCenterLocation(), cellsBeforeAddingConnection) && !(outputComponent->getOutputPin()->connectedConnectionsCount() == FANOUT))
 				{
 					theConnection->setCornersLocation(GInfo);
-					theConnection->setSourcePin(outputComponent->getOutputPin());
-					theConnection->setDestPin(inputComponent->getInputPin(inputPin));
+
+					theConnection->setSourcePin(newOutputPin = outputComponent->getOutputPin());
+					theConnection->setDestPin(newInputPin = inputComponent->getInputPin(inputPin));
+
 					for (size_t i = 0; i < pManager->allComponentsCorners.size(); i++)
 					{
 						if (dynamic_cast<Connection*>(pManager->getComponent(i)) && pManager->getComponent(i) == theConnection) {
@@ -155,6 +168,7 @@ void ModifyConnection::Execute()
 							pManager->allComponentsCorners[i].x2 = GInfo.x2;
 							pManager->allComponentsCorners[i].y1 = GInfo.y1;
 							pManager->allComponentsCorners[i].y2 = GInfo.y2;
+							break;
 						}
 					}
 					theConnection->setCellsBeforeAddingConnection(cellsBeforeAddingConnection);
@@ -162,15 +176,16 @@ void ModifyConnection::Execute()
 					inputComponent->getInputPin(inputPin)->setConnection(theConnection);
 					inputComponent->getInputPin(inputPin)->setPosition(numOfInputs);
 					theConnection->setIsDrawn(true);
-
 					for (size_t i = 0; i < cellsBeforeAddingConnection.size(); i++)
 					{
+						newCells.push_back(cellsBeforeAddingConnection[i]);
 						pManager->GetOutput()->setArrayOfComponents(cellsBeforeAddingConnection[i].y, cellsBeforeAddingConnection[i].x, theConnection);
 					}
 					isCorrectNewConnection = true;
+					pManager->undoActions.push(this);
 				}
 				else {
-					pManager->GetOutput()->PrintMsg("No Available Connection"); 
+					pManager->GetOutput()->PrintMsg("No Available Connection");
 					isCorrectNewConnection = false;
 				}
 			}
@@ -187,11 +202,72 @@ void ModifyConnection::Execute()
 }
 void ModifyConnection::Undo()
 {
+	Output* pOut = pManager->GetOutput();
+	vector<Connection*> connection; connection.push_back(theConnection);
+	pOut->clearConnections(connection, -1, -1, false, false);
+	//remove conenctoin from pins
+	theConnection->getSourcePin()->removeConnectedConnection(theConnection);
+	theConnection->getDestPin()->setConnection(NULL);
 
+	theConnection->setCornersLocation(oldGInfo);
+	theConnection->setSourcePin(oldOutputPin);
+	theConnection->setDestPin(oldInputPin);
+
+	for (size_t i = 0; i < pManager->allComponentsCorners.size(); i++)
+	{
+		if (dynamic_cast<Connection*>(pManager->getComponent(i)) && pManager->getComponent(i) == theConnection) {
+			pManager->allComponentsCorners[i].x1 = oldGInfo.x1;
+			pManager->allComponentsCorners[i].x2 = oldGInfo.x2;
+			pManager->allComponentsCorners[i].y1 = oldGInfo.y1;
+			pManager->allComponentsCorners[i].y2 = oldGInfo.y2;
+		}
+	}
+	theConnection->setCellsBeforeAddingConnection(oldCells);
+	oldOutputComponent->getOutputPin()->ConnectTo(theConnection);
+	oldInputComponent->getInputPin(oldInputPinPosition)->setConnection(theConnection);
+	oldInputComponent->getInputPin(oldInputPinPosition)->setPosition(oldInputPinPosition);
+	theConnection->setIsDrawn(true);
+	pManager->GetOutput()->DrawConnection(oldGInfo, oldInputPinPosition, oldInputComponent->getCenterLocation(), oldCells);
+	for (size_t i = 0; i < oldCells.size(); i++)
+	{
+		pManager->GetOutput()->setArrayOfComponents(oldCells[i].y, oldCells[i].x, theConnection);
+	}
 }
 void ModifyConnection::Redo()
 {
+	Output* pOut = pManager->GetOutput();
+	vector<Connection*> connection; connection.push_back(theConnection);
+	pOut->clearConnections(connection, -1, -1, false, false);
+	//remove conenctoin from pins
+	theConnection->getSourcePin()->removeConnectedConnection(theConnection);
+	theConnection->getDestPin()->setConnection(NULL);
 
+	theConnection->setCornersLocation(GInfo);
+
+	theConnection->setSourcePin(newOutputPin);
+	theConnection->setDestPin(newInputPin);
+
+	for (size_t i = 0; i < pManager->allComponentsCorners.size(); i++)
+	{
+		if (dynamic_cast<Connection*>(pManager->getComponent(i)) && pManager->getComponent(i) == theConnection) {
+			pManager->allComponentsCorners[i].x1 = GInfo.x1;
+			pManager->allComponentsCorners[i].x2 = GInfo.x2;
+			pManager->allComponentsCorners[i].y1 = GInfo.y1;
+			pManager->allComponentsCorners[i].y2 = GInfo.y2;
+		}
+	}
+	theConnection->setCellsBeforeAddingConnection(newCells);
+	outputComponent->getOutputPin()->ConnectTo(theConnection);
+	inputComponent->getInputPin(inputPin)->setConnection(theConnection);
+	inputComponent->getInputPin(inputPin)->setPosition(inputPin);
+	theConnection->setIsDrawn(true);
+
+	pManager->GetOutput()->DrawConnection(GInfo, inputPin, inputComponent->getCenterLocation(), newCells);
+
+	for (size_t i = 0; i < newCells.size(); i++)
+	{
+		pManager->GetOutput()->setArrayOfComponents(newCells[i].y, newCells[i].x, theConnection);
+	}
 }
 ModifyConnection::~ModifyConnection()
 {

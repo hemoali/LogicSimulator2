@@ -24,7 +24,9 @@ using namespace std;
 
 Load::Load(ApplicationManager*pApp) : Action(pApp)
 {
-
+	// clear undo/redo stacks
+	while (!pManager->undoActions.empty()) pManager->undoActions.pop();
+	while (!pManager->redoActions.empty()) pManager->redoActions.pop();
 }
 bool Load::ReadActionParameters(image *I)
 {
