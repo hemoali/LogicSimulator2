@@ -9,7 +9,6 @@ class Move :
 	image* oldSmallCleanImage;
 	image* newSmallImageForGate;
 
-
 public:
 	Move(ApplicationManager *pApp);
 	virtual ~Move();

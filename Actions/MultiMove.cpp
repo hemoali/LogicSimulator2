@@ -49,6 +49,13 @@ void MultiMove::Execute()
 			{
 				comp = pIn->getSelectedComponents()[i].second;
 			}
+			//Store old data before moving
+			selectedComponents.push_back(c);
+			oldSmallCleanImage.push_back(c->getSmallCleanImageBeforeAddingComp());
+			oldGraphicsInfo.push_back({ c->getCenterLocation().x1 ,  c->getCenterLocation().y1 });
+			compIdx.push_back(pIn->getSelectedComponents()[i].first);
+
+			//start moving process
 			c->setDelete(true);
 			c->Draw(pManager->GetOutput());
 
@@ -66,11 +73,15 @@ void MultiMove::Execute()
 		if (pOut->SetMultiDragImage(x, y, comp, pIn->getSelectedComponents())) {
 			for (int i = 0; i < pIn->getSelectedComponents().size(); i++)
 			{
+				newCoor.push_back({ pIn->getSelectedComponents()[i].second->getCenterLocation().x1,pIn->getSelectedComponents()[i].second->getCenterLocation().y1 });
+				newSmallImageForGate.push_back(pIn->getSelectedComponents()[i].second->getSmallCleanImageBeforeAddingComp());
+
 				pManager->allComponentsCorners[pIn->getSelectedComponents()[i].first].x1 = pIn->getSelectedComponents()[i].second->getCornersLocation().x1;
 				pManager->allComponentsCorners[pIn->getSelectedComponents()[i].first].y1 = pIn->getSelectedComponents()[i].second->getCornersLocation().y1;
 				pManager->allComponentsCorners[pIn->getSelectedComponents()[i].first].x2 = pIn->getSelectedComponents()[i].second->getCornersLocation().x2;
 				pManager->allComponentsCorners[pIn->getSelectedComponents()[i].first].y2 = pIn->getSelectedComponents()[i].second->getCornersLocation().y2;
 
+				pManager->undoActions.push(this);
 			}
 		}
 		else {
@@ -96,15 +107,183 @@ void MultiMove::Execute()
 	}
 	pIn->setSelectMode(false);
 	pIn->getSelectedComponents().clear();
-	
+
 
 }
 
 void MultiMove::Undo()
-{}
+{
+	Output* pOut = pManager->GetOutput();
+	for (size_t i = 0; i < selectedComponents.size(); i++)
+	{
+		pA = selectedComponents[i];
+
+		pA->setDelete(true);
+		pA->Draw(pOut, false);
+		//free new location
+		int xbegin = (newCoor[i].x1 - UI.GATE_Width / 2.0) / UI.GRID_SIZE, xend = (newCoor[i].x1 + UI.GATE_Width / 2.0) / UI.GRID_SIZE, ybegin = (newCoor[i].y1 - UI.GATE_Height / 2.0) / UI.GRID_SIZE, yend = (newCoor[i].y1 + UI.GATE_Height / 2.0) / UI.GRID_SIZE;
+		for (int i = ybegin + 1; i <= yend; i++)
+		{
+			for (int j = xbegin; j <= xend; j++)
+			{
+				pOut->setUsedPixel(i, j, EMPTY);
+				pOut->setArrayOfComponents(i, j, NULL);
+			}
+		}
+		//remove new Connections
+		vector<Connection*> allInputConnections, allOutputConnections;
+		pA->getAllInputConnections(allInputConnections);
+		pA->getAllOutputConnections(allOutputConnections);
+
+		pOut->clearConnections(allInputConnections, pA->getCenterLocation().x1, pA->getCenterLocation().y1, true, false);
+		pOut->clearConnections(allOutputConnections, pA->getCenterLocation().x1, pA->getCenterLocation().y1, false, false);
+
+		//redraw and reassign data
+
+		pA->setNewCenterLocation(oldGraphicsInfo[i]);
+		pManager->allComponentsCorners[compIdx[i]].x1 = oldGraphicsInfo[i].x1 - UI.GATE_Width / 2;
+		pManager->allComponentsCorners[compIdx[i]].y1 = oldGraphicsInfo[i].y1 - UI.GATE_Height / 2;
+		pManager->allComponentsCorners[compIdx[i]].x2 = oldGraphicsInfo[i].x1 + UI.GATE_Width / 2;
+		pManager->allComponentsCorners[compIdx[i]].y2 = oldGraphicsInfo[i].y1 + UI.GATE_Height / 2;
+		pA->setSmallCleanImageBeforeAddingComp(oldSmallCleanImage[i]);
+
+		pA->setDelete(false);
+		pA->Draw(pOut, false);
+		//refill old location
+		xbegin = (oldGraphicsInfo[i].x1 - UI.GATE_Width / 2.0) / UI.GRID_SIZE;
+		xend = (oldGraphicsInfo[i].x1 + UI.GATE_Width / 2.0) / UI.GRID_SIZE;
+		ybegin = (oldGraphicsInfo[i].y1 - UI.GATE_Height / 2.0) / UI.GRID_SIZE;
+		yend = (oldGraphicsInfo[i].y1 + UI.GATE_Height / 2.0) / UI.GRID_SIZE;
+		for (int i = ybegin + 1; i <= yend; i++)
+		{
+			for (int j = xbegin; j <= xend; j++)
+			{
+				if (xbegin == j || xend == j)
+				{
+					pOut->setUsedPixel(i, j, PIN);
+					continue;
+				}
+				pOut->setArrayOfComponents(i, j, pA);
+				pOut->setUsedPixel(i, j, GATE);
+			}
+		}
+		//redraw old connections
+		for (size_t j = 0; j < allInputConnections.size(); j++)
+		{
+			GraphicsInfo currentGfx = allInputConnections[j]->getCornersLocation();
+			currentGfx.x2 = currentGfx.x2 - (newCoor[i].x1 - oldGraphicsInfo[i].x1);
+			currentGfx.y2 = currentGfx.y2 - (newCoor[i].y1 - oldGraphicsInfo[i].y1);
+			allInputConnections[j]->setCornersLocation({ currentGfx.x1 ,currentGfx.y1,currentGfx.x2 ,currentGfx.y2 });
+			pOut->DrawConnection(currentGfx, allInputConnections[j]->getDestPin()->getPosition(), { oldGraphicsInfo[i].x1, oldGraphicsInfo[i].y1,0,0 }, allInputConnections[j]->getCellsBeforeAddingConnection(), false);
+
+			for (size_t k = 0; k < allInputConnections[j]->getCellsBeforeAddingConnection().size(); k++)
+			{
+				pManager->GetOutput()->setArrayOfComponents(allInputConnections[j]->getCellsBeforeAddingConnection()[k].y, allInputConnections[j]->getCellsBeforeAddingConnection()[k].x, allInputConnections[j]);
+			}
+		}
+		for (size_t j = 0; j < allOutputConnections.size(); j++)
+		{
+			GraphicsInfo currentGfx = allOutputConnections[j]->getCornersLocation();
+			currentGfx.x1 = currentGfx.x1 - (newCoor[i].x1 - oldGraphicsInfo[i].x1);
+			currentGfx.y1 = currentGfx.y1 - (newCoor[i].y1 - oldGraphicsInfo[i].y1);
+			allOutputConnections[j]->setCornersLocation({ currentGfx.x1 ,currentGfx.y1,currentGfx.x2 ,currentGfx.y2 });
+			Component* dstComp = allOutputConnections[j]->getDestPin()->getComponent();
+			pOut->DrawConnection(currentGfx, allOutputConnections[j]->getDestPin()->getPosition(), { dstComp->getCenterLocation().x1, dstComp->getCenterLocation().y1,0,0 }, allOutputConnections[j]->getCellsBeforeAddingConnection(), false);
+
+			for (size_t k = 0; k < allOutputConnections[j]->getCellsBeforeAddingConnection().size(); k++)
+			{
+				pManager->GetOutput()->setArrayOfComponents(allOutputConnections[j]->getCellsBeforeAddingConnection()[k].y, allOutputConnections[j]->getCellsBeforeAddingConnection()[k].x, allOutputConnections[j]);
+			}
+		}
+
+	}
+}
 
 void MultiMove::Redo()
-{}
+{
+	Output* pOut = pManager->GetOutput();
+	for (size_t i = 0; i < selectedComponents.size(); i++)
+	{
+		pA = selectedComponents[i];
+		pA->setDelete(true);
+		pA->Draw(pOut, false);
+		//free new location
+		int xbegin = (oldGraphicsInfo[i].x1 - UI.GATE_Width / 2.0) / UI.GRID_SIZE, xend = (oldGraphicsInfo[i].x1 + UI.GATE_Width / 2.0) / UI.GRID_SIZE, ybegin = (oldGraphicsInfo[i].y1 - UI.GATE_Height / 2.0) / UI.GRID_SIZE, yend = (oldGraphicsInfo[i].y1 + UI.GATE_Height / 2.0) / UI.GRID_SIZE;
+		for (int i = ybegin + 1; i <= yend; i++)
+		{
+			for (int j = xbegin; j <= xend; j++)
+			{
+				pOut->setUsedPixel(i, j, EMPTY);
+				pOut->setArrayOfComponents(i, j, NULL);
+			}
+		}
+		//remove new Connections
+		vector<Connection*> allInputConnections, allOutputConnections;
+		pA->getAllInputConnections(allInputConnections);
+		pA->getAllOutputConnections(allOutputConnections);
+
+		pOut->clearConnections(allInputConnections, pA->getCenterLocation().x1, pA->getCenterLocation().y1, true, false);
+		pOut->clearConnections(allOutputConnections, pA->getCenterLocation().x1, pA->getCenterLocation().y1, false, false);
+
+		//redraw and reassign data
+
+		pA->setNewCenterLocation(newCoor[i]);
+		pManager->allComponentsCorners[compIdx[i]].x1 = newCoor[i].x1 - UI.GATE_Width / 2;
+		pManager->allComponentsCorners[compIdx[i]].y1 = newCoor[i].y1 - UI.GATE_Height / 2;
+		pManager->allComponentsCorners[compIdx[i]].x2 = newCoor[i].x1 + UI.GATE_Width / 2;
+		pManager->allComponentsCorners[compIdx[i]].y2 = newCoor[i].y1 + UI.GATE_Height / 2;
+		pA->setSmallCleanImageBeforeAddingComp(newSmallImageForGate[i]);
+
+		pA->setDelete(false);
+		pA->Draw(pOut, false);
+		//refill old location
+		xbegin = (newCoor[i].x1 - UI.GATE_Width / 2.0) / UI.GRID_SIZE;
+		xend = (newCoor[i].x1 + UI.GATE_Width / 2.0) / UI.GRID_SIZE;
+		ybegin = (newCoor[i].y1 - UI.GATE_Height / 2.0) / UI.GRID_SIZE;
+		yend = (newCoor[i].y1 + UI.GATE_Height / 2.0) / UI.GRID_SIZE;
+		for (int i = ybegin + 1; i <= yend; i++)
+		{
+			for (int j = xbegin; j <= xend; j++)
+			{
+				if (xbegin == j || xend == j)
+				{
+					pOut->setUsedPixel(i, j, PIN);
+					continue;
+				}
+				pOut->setArrayOfComponents(i, j, pA);
+				pOut->setUsedPixel(i, j, GATE);
+			}
+		}
+		//redraw old connections
+		for (size_t j = 0; j < allInputConnections.size(); j++)
+		{
+			GraphicsInfo currentGfx = allInputConnections[j]->getCornersLocation();
+			currentGfx.x2 = currentGfx.x2 + (newCoor[i].x1 - oldGraphicsInfo[i].x1);
+			currentGfx.y2 = currentGfx.y2 + (newCoor[i].y1 - oldGraphicsInfo[i].y1);
+			allInputConnections[j]->setCornersLocation({ currentGfx.x1 ,currentGfx.y1,currentGfx.x2 ,currentGfx.y2 });
+			pOut->DrawConnection(currentGfx, allInputConnections[j]->getDestPin()->getPosition(), { newCoor[i].x1, newCoor[i].y1,0,0 }, allInputConnections[j]->getCellsBeforeAddingConnection(), false);
+
+			for (size_t k = 0; k < allInputConnections[j]->getCellsBeforeAddingConnection().size(); k++)
+			{
+				pManager->GetOutput()->setArrayOfComponents(allInputConnections[j]->getCellsBeforeAddingConnection()[k].y, allInputConnections[j]->getCellsBeforeAddingConnection()[k].x, allInputConnections[j]);
+			}
+		}
+		for (size_t j = 0; j < allOutputConnections.size(); j++)
+		{
+			GraphicsInfo currentGfx = allOutputConnections[j]->getCornersLocation();
+			currentGfx.x1 = currentGfx.x1 + (newCoor[i].x1 - oldGraphicsInfo[i].x1);
+			currentGfx.y1 = currentGfx.y1 + (newCoor[i].y1 - oldGraphicsInfo[i].y1);
+			allOutputConnections[j]->setCornersLocation({ currentGfx.x1 ,currentGfx.y1,currentGfx.x2 ,currentGfx.y2 });
+			Component* dstComp = allOutputConnections[j]->getDestPin()->getComponent();
+			pOut->DrawConnection(currentGfx, allOutputConnections[j]->getDestPin()->getPosition(), { dstComp->getCenterLocation().x1, dstComp->getCenterLocation().y1,0,0 }, allOutputConnections[j]->getCellsBeforeAddingConnection(), false);
+
+			for (size_t k = 0; k < allOutputConnections[j]->getCellsBeforeAddingConnection().size(); k++)
+			{
+				pManager->GetOutput()->setArrayOfComponents(allOutputConnections[j]->getCellsBeforeAddingConnection()[k].y, allOutputConnections[j]->getCellsBeforeAddingConnection()[k].x, allOutputConnections[j]);
+			}
+		}
+	}
+}
 
 
 MultiMove::~MultiMove()
