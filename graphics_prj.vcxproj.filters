@@ -516,5 +516,8 @@
     <Text Include="save.txt">
       <Filter>Components</Filter>
     </Text>
+    <Text Include="TruthTable.txt">
+      <Filter>Actions</Filter>
+    </Text>
   </ItemGroup>
 </Project>

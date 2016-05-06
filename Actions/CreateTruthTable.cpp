@@ -8,6 +8,7 @@
 #include"Action.h"
 #include<vector>
 #include <iostream>
+#include<fstream>
 #include <windows.h>
 
 using namespace std;
@@ -24,6 +25,8 @@ bool CreateTruthTable::ReadActionParameters(image *I)
 void CreateTruthTable::Execute()
 {
 	Output* pOut = pManager->GetOutput();
+	ofstream file;
+	file.open("TruthTable.txt");
 	int NumOfInputs = 0, NumOfOutputs = 0;
 	for (size_t i = 0; i < pManager->allComponentsCorners.size(); i++)
 	{
@@ -63,7 +66,7 @@ void CreateTruthTable::Execute()
 		}
 		Action* pAct = new Simulate(pManager);
 		pAct->Execute();
-		Sleep(500);
+		Sleep(250);
 		delete pAct;
 		for (int j = 0; j < NumOfInputs; j++)
 		{
@@ -73,7 +76,7 @@ void CreateTruthTable::Execute()
 			}
 			else
 			{
-				// To Do : create the truth table in a text file
+				file << AllCompination[i][j] << "  ";
 			}
 		}
 		for (size_t j = 0; j < pManager->allComponentsCorners.size(); j++)
@@ -87,13 +90,21 @@ void CreateTruthTable::Execute()
 				}
 				else
 				{
-					// To Do : create the truth table in a text file
+					file << comp->GetInputPinStatus(0) << "  ";
 				}
 			}
 		}
+		if (NumOfInputs <= 5)
+		{
 			cout << endl;
+		}
+		else
+		{
+			file << endl;
+		}
 	}
 	pOut->PrintMsg("The truth table has been created sucessfully");
+	file.close();
 }
 
 void CreateTruthTable::Undo()
