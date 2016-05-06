@@ -55,7 +55,6 @@ public:
 	image* StoreBeforeMenu(int, int, int);
 	void DrawAfterMenu(image* img, int x, int y, int type);
 	void DrawRClickMenu_CorrectPoints(int& x, int& y, int type, bool = true);
-	void DeleteGate(Component*& C, bool undo = false, bool completetly = false);
 	
 	void DrawWarningMenues(char type);
 	image* StoreBeforeWarning();

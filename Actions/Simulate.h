@@ -9,7 +9,6 @@ public:
 	//Reads parameters required for action to execute
 	virtual bool ReadActionParameters(image *);
 
-	void spreadTheWord(Component* comp);
 	//Execute action (code depends on action type)
 	virtual void Execute();
 

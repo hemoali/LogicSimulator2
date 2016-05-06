@@ -239,6 +239,7 @@ bfs_node* Output::bfs(bfs_node* bf, int requX, int requY, vector<bfs_node*> allN
 
 bool Output::DrawConnection(GraphicsInfo GfxInfo, int inputPin, GraphicsInfo compCenterLocation, vector<Cell>& cellsBeforeAddingConnection, bool selected) const
 {
+	cellsBeforeAddingConnection.clear();
 	vector<bfs_node*> allNodes;
 	bfs_node* current = new bfs_node;
 
@@ -561,72 +562,6 @@ void Output::drawRectangle(int x1, int y1, int x2, int y2) {
 	pWind->DrawRectangle(x1, y1, x2, y2, FRAME);
 }
 
-void Output::DeleteGate(Component *& C, bool undo, bool completetly)
-{
-	if (undo) {
-		//Undo
-		Output *pOut = this;
-		C->setDelete(false);
-		C->Draw(pOut);
-		GraphicsInfo gfx = C->getCornersLocation();
-		int xbegin = (C->getCenterLocation().x1 - UI.GATE_Width / 2.0) / UI.GRID_SIZE;
-		int xend = (C->getCenterLocation().x1 + UI.GATE_Width / 2.0) / UI.GRID_SIZE;
-		int ybegin = (C->getCenterLocation().y1 - UI.GATE_Height / 2.0) / UI.GRID_SIZE;
-		int yend = (C->getCenterLocation().y1 + UI.GATE_Height / 2.0) / UI.GRID_SIZE;
-		for (int i = ybegin + 1; i <= yend; i++)
-		{
-			for (int j = xbegin; j <= xend; j++)
-			{
-				pOut->setUsedPixel(i, j, GATE);
-			}
-		}
-		//Drawing the Connections
-		//Reasigning the array
-	}
-	else {
-		Output *pOut = this;
-		string s = "Gate: " + (C->getLabel()) + " has been deleted successfully";
-		pOut->PrintMsg(s);
-		C->setDelete(true);
-		C->Draw(pOut);
-		GraphicsInfo gfx = C->getCornersLocation();
-		int xbegin = (C->getCenterLocation().x1 - UI.GATE_Width / 2.0) / UI.GRID_SIZE;
-		int xend = (C->getCenterLocation().x1 + UI.GATE_Width / 2.0) / UI.GRID_SIZE;
-		int ybegin = (C->getCenterLocation().y1 - UI.GATE_Height / 2.0) / UI.GRID_SIZE;
-		int yend = (C->getCenterLocation().y1 + UI.GATE_Height / 2.0) / UI.GRID_SIZE;
-		//Removeing Used Pixels and the Array of components reserved cells
-		for (int i = ybegin + 1; i <= yend; i++)
-		{
-			for (int j = xbegin; j <= xend; j++)
-			{
-				pOut->setUsedPixel(i, j, EMPTY);
-			}
-		}
-		GraphicsInfo GInfotmp, GInfo = C->getCornersLocation();
-		GInfotmp.x1 = GInfo.x1 - UI.GATE_Width / 2;
-		GInfotmp.x2 = GInfo.x1 + UI.GATE_Width / 2;
-		GInfotmp.y1 = GInfo.y1 - UI.GATE_Height / 2;
-		GInfotmp.y2 = GInfo.y1 + UI.GATE_Height / 2;
-		for (int i = GInfotmp.y1 / UI.GRID_SIZE + 1; i <= GInfotmp.y2 / UI.GRID_SIZE; i++)
-		{
-			for (int j = GInfotmp.x1 / UI.GRID_SIZE; j <= GInfotmp.x2 / UI.GRID_SIZE; j++) {
-				pOut->setArrayOfComponents(i, j, NULL);
-			}
-		}
-
-		// Removing Connection
-		vector<Connection*> allInConnections, allOutConnections;
-		C->getAllInputConnections(allInConnections);
-		C->getAllOutputConnections(allOutConnections);
-
-		pOut->clearConnections(allInConnections, C->getCenterLocation().x1, C->getCenterLocation().y1, true, true);
-		pOut->clearConnections(allOutConnections, C->getCenterLocation().x1, C->getCenterLocation().y1, false, true);
-		if (completetly) {
-			delete C;
-			C = NULL;
-		}
-	}
-}
 
 void Output::DrawWarningMenues(char type)
 {
@@ -1450,7 +1385,7 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 	bool isMovingSucceded = false;
 	for (size_t m = 0; m < allSelectedComponents.size(); m++)
 	{
-		Component* comp = allSelectedComponents[m].second;
+		Component* comp = allSelectedComponents[m].second; if (dynamic_cast<Connection*>(allSelectedComponents[m].second)) continue;
 		int iXOld = currentX + (allSelectedComponents[m].second->getCenterLocation().x1 - mainMovingComponent->getCenterLocation().x1);
 		int iYOld = currentY + (allSelectedComponents[m].second->getCenterLocation().y1 - mainMovingComponent->getCenterLocation().y1);
 		int RectULX = iXOld - UI.GATE_Width / 2;
@@ -1496,6 +1431,7 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 		}
 		for (size_t m = 0; m < allSelectedComponents.size(); m++)
 		{
+			if (dynamic_cast<Connection*>(allSelectedComponents[m].second)) continue;
 			int drawnConnectionsCount = 0;
 			int noOfTotalConnections = 0;
 			int x = ox + (allSelectedComponents[m].second->getCenterLocation().x1 - mainMovingComponent->getCenterLocation().x1);
@@ -1629,6 +1565,7 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 		bool toContinue = true;
 		for (size_t m = 0; m < isComponentDrawn.size(); m++)
 		{
+			if (dynamic_cast<Connection*>(allSelectedComponents[m].second)) continue;
 			if (isComponentDrawn[m] == false)
 			{
 				toContinue = false;
@@ -1639,6 +1576,7 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 			//Change corners
 			for (size_t m = 0; m < allSelectedComponents.size(); m++)
 			{
+				if (dynamic_cast<Connection*>(allSelectedComponents[m].second)) continue;
 				GraphicsInfo Gfx;
 				Gfx.x1 = RectULXY[m].first + UI.GATE_Width / 2;
 				Gfx.y1 = RectULXY[m].second + UI.GATE_Height / 2;
@@ -1668,6 +1606,7 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 			}
 			for (size_t m = 0; m < allSelectedComponents.size(); m++)
 			{
+				if (dynamic_cast<Connection*>(allSelectedComponents[m].second)) continue;
 				GraphicsInfo Gfx;
 				Gfx.x1 = RectULXY[m].first + UI.GATE_Width / 2;
 				Gfx.y1 = RectULXY[m].second + UI.GATE_Height / 2;
@@ -1690,6 +1629,7 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 			vector <Connection*> allDrawnConnections;
 			for (size_t m = 0; m < allSelectedComponents.size(); m++)
 			{
+				if (dynamic_cast<Connection*>(allSelectedComponents[m].second)) continue;
 				GraphicsInfo Gfx;
 				Gfx.x1 = RectULXY[m].first + UI.GATE_Width / 2;
 				Gfx.y1 = RectULXY[m].second + UI.GATE_Height / 2;
@@ -1761,6 +1701,7 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 			//Remove gates
 			for (size_t m = 0; m < allSelectedComponents.size(); m++)
 			{
+				if (dynamic_cast<Connection*>(allSelectedComponents[m].second)) continue;
 				GraphicsInfo Gfx;
 				Gfx.x1 = RectULXY[m].first + UI.GATE_Width / 2;
 				Gfx.y1 = RectULXY[m].second + UI.GATE_Height / 2;
@@ -1785,6 +1726,7 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 				{
 					for (size_t m = 0; m < allSelectedComponents.size(); m++)
 					{
+						if (dynamic_cast<Connection*>(allSelectedComponents[m].second)) continue;
 						if (Utils::CheckPoint({ originalXY[m].first,originalXY[m].second }, usedPixels, true)) {
 
 							allSelectedComponents[m].second->setDelete(false);
@@ -1795,6 +1737,7 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 					}
 					for (size_t m = 0; m < allSelectedComponents.size(); m++)
 					{
+						if (dynamic_cast<Connection*>(allSelectedComponents[m].second)) continue;
 						vector<Connection*> allInputConnections, allOutputConnections;
 
 						allSelectedComponents[m].second->getAllInputConnections(allInputConnections);

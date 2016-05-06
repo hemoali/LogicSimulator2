@@ -18,7 +18,7 @@ bool AddNANDgate2::ReadActionParameters(image * smallImageBeforeAddingComponent)
 	//Print Action Message
 	pOut->PrintMsg(" 2-Input NAND gate : Click to add the gate");
 
-	if (pOut->SetDragImage(ADD_NAND_GATE_2, GInfo, smallImageBeforeAddingComponent)){
+	if (pOut->SetDragImage(ADD_NAND_GATE_2, GInfo, smallImageBeforeAddingComponent)) {
 		string s = "Please enter gate label: ";
 		pOut->PrintMsg(s);
 		gateLabel = pIn->GetSrting(pOut, s);
@@ -35,26 +35,22 @@ bool AddNANDgate2::ReadActionParameters(image * smallImageBeforeAddingComponent)
 void AddNANDgate2::Execute()
 {
 	//Get Center point of the Gate
-	  image* smallImageBeforeAddingComponent = new image; if (ReadActionParameters(smallImageBeforeAddingComponent)){
+	image* smallImageBeforeAddingComponent = new image; if (ReadActionParameters(smallImageBeforeAddingComponent)) {
 
-	//Calculate the rectangle Corners
-	int Len = UI.GATE_Width;
-	int Wdth = UI.GATE_Height;
+		//Calculate the rectangle Corners
+		int Len = UI.GATE_Width;
+		int Wdth = UI.GATE_Height;
 
-	
-	GraphicsInfo GInfotmp;
 
-	GInfotmp.x1 = GInfo.x1 - Len / 2;
-	GInfotmp.x2 = GInfo.x1 + Len / 2;
-	GInfotmp.y1 = GInfo.y1 - Wdth / 2;
-	GInfotmp.y2 = GInfo.y1 + Wdth / 2;
-	NAND2 *pA = new NAND2(GInfotmp, FANOUT);
-	pManager->allComponentsCorners.push_back(GInfotmp);pManager->AddComponent(pA);pA->setLabel(gateLabel);for (int i = GInfotmp.y1 / UI.GRID_SIZE + 1; i <= GInfotmp.y2 / UI.GRID_SIZE; i++)		{for (int j = GInfotmp.x1 / UI.GRID_SIZE; j <= GInfotmp.x2 / UI.GRID_SIZE; j++)	{	pManager->GetOutput()->setArrayOfComponents(i,j,pA);}}pA->setSmallCleanImageBeforeAddingComp(smallImageBeforeAddingComponent);}
-	  
+		GraphicsInfo GInfotmp;
+
+		GInfotmp.x1 = GInfo.x1 - Len / 2;
+		GInfotmp.x2 = GInfo.x1 + Len / 2;
+		GInfotmp.y1 = GInfo.y1 - Wdth / 2;
+		GInfotmp.y2 = GInfo.y1 + Wdth / 2;
+		NAND2 *pA = new NAND2(GInfotmp, FANOUT);
+		pManager->allComponentsCorners.push_back(GInfotmp); pManager->AddComponent(pA); pA->setLabel(gateLabel); for (int i = GInfotmp.y1 / UI.GRID_SIZE + 1; i <= GInfotmp.y2 / UI.GRID_SIZE; i++) { for (int j = GInfotmp.x1 / UI.GRID_SIZE; j <= GInfotmp.x2 / UI.GRID_SIZE; j++) { pManager->GetOutput()->setArrayOfComponents(i, j, pA); } }pA->setSmallCleanImageBeforeAddingComp(smallImageBeforeAddingComponent);
+		pManager->undoActions.push(this);
+		Action::pA = pA;
+	}
 }
-
-void AddNANDgate2::Undo()
-{}
-
-void AddNANDgate2::Redo()
-{}

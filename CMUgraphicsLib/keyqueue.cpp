@@ -45,7 +45,7 @@ kqueuenode* kqueue::Remove() {
 	if(kqueHead != NULL) {
         kqueTmp = kqueHead;
 	    kqueHead = kqueHead->kqueNext;
-	    kqueTmp->kqueNext = NULL;
+	   // kqueTmp->kqueNext = NULL;
     } else {
         kqueTmp = NULL;
 	}

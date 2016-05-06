@@ -3,10 +3,11 @@
 #include "..\Utils.h"
 #include <iostream>
 #include "..\Components\SWITCH.h"
+#include "..\Actions\ChangeSwitch.h"
 Input::Input(window* pW)
 {
 	pWind = pW; //point to the passed window
-	isSelectMode = false;
+	isSelectMode = isSelectionContainConnections = false;
 }
 
 void Input::GetPointClicked(int &x, int &y, bool DrawGate, bool DrawConnection)
@@ -31,6 +32,26 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 	clicktype s = LEFT_CLICK;
 	Component* preComp = NULL;
 	while (true) {
+		// Check for keyboard hotkeys
+		char c1;
+		keytype key = pWind->GetKeyPress(c1);
+		if ((int)c1 == 26) {
+			return UNDOACTION;
+		}
+		else if ((int)c1 == 25) {
+			return REDOACTION;
+		}
+		else if((int)c1==4){
+			switchMode(DESIGN);
+		}
+		else if ((int)c1 == 18) {
+			return ValidateAction;
+		}
+		else if ((int)c1 == 19) {
+			return SAVE;
+		}
+		// Working with mouse
+
 		bool drawConnection = false;
 		if (pWind->GetButtonState(LEFT_BUTTON, xT, yT) == BUTTON_DOWN && yT >= UI.ToolBarHeight + 20 && xT >= UI.LeftToolBarWidth && yT < UI.height - UI.StatusBarHeight) {
 			if (UI.AppMode == DESIGN)
@@ -64,7 +85,7 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 					{
 						for (size_t i = 0; i < selectedComponents.size(); i++)
 						{
-							if (selectedComponents[i].second == comp)
+							if (!dynamic_cast<Connection*>(selectedComponents[i].second) && selectedComponents[i].second == comp)
 								return MULTI_MOVE;
 						}
 					}
@@ -86,8 +107,8 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 							selectedComponents[i].second->Draw(pManager->GetOutput(), false);
 						}
 						setSelectMode(false);
-						selectedComponents.clear();
-
+						isSelectionContainConnections = false;
+						clearSelectedComponents();
 					}
 					for (size_t i = 0; i < allConnections.size() && !found; i++)
 					{
@@ -435,8 +456,8 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 					continue;
 				if (x >= pManager->allComponentsCorners[i].x1&&x <= pManager->allComponentsCorners[i].x2&& y >= pManager->allComponentsCorners[i].y1&&y <= pManager->allComponentsCorners[i].y2)
 				{
-					((SWITCH*)pManager->getComponent(i))->setOutputPinStatus(static_cast<STATUS>(!((SWITCH*)pManager->getComponent(i))->GetOutPinStatus()));
-					((SWITCH*)pManager->getComponent(i))->Draw(pManager->GetOutput(), false);
+					ChangeSwitch* act = new ChangeSwitch(pManager, (SWITCH*)pManager->getComponent(i));
+					act->Execute();
 					pWind->FlushMouseQueue();
 					return SimulateAction;
 				}
@@ -501,11 +522,19 @@ void Input::WaitSelectionPoint(int &X, int &Y)
 	pWind->WaitMouseClick(X, Y);
 }
 
+void Input::setisSelectionContainConnections(bool b)
+{
+	isSelectionContainConnections = b;
+}
+
 void Input::setSelectMode(bool b)
 {
 	isSelectMode = b;
 }
-
+bool Input::getisSelectionContainConnections()
+{
+	return isSelectionContainConnections;
+}
 bool Input::getSelectMode()
 {
 	return isSelectMode;
@@ -538,6 +567,11 @@ string Input::EditComponenetLabel(Output *pOut)
 void Input::getExactConnectionLocation(int & x, int & y)
 {
 	Utils::correctPointClicked(x, y, true, false);
+}
+
+void Input::clearSelectedComponents()
+{
+	selectedComponents.clear();
 }
 
 

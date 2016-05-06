@@ -4,6 +4,11 @@
 class Move :
 	public Action
 {
+	GraphicsInfo oldGraphicsInfo, newCoor;
+	int compIdx;
+	image* oldSmallCleanImage;
+	image* newSmallImageForGate;
+
 public:
 	Move(ApplicationManager *pApp);
 	virtual ~Move();

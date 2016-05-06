@@ -11,6 +11,7 @@ class AddConnection:public Action
 private:
 	int Cx1,Cy1,Cx2,Cy2;// start and end point for Connections
 	bool Silent;
+	int numOfInputs;
 
 public:
 	AddConnection(ApplicationManager *pApp);

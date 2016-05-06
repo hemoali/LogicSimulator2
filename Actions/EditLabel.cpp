@@ -28,8 +28,10 @@ void EditLabel::Execute()
 	Output* pOut = pManager->GetOutput();
 	Input *pIn = pManager->GetInput();
 	if (this->ReadActionParameters()) {
+		theOriginalLabel = theComponenet->getLabel();
 		theComponenet->setLabel(theNewLabel);
 		pOut->PrintMsg("Label changed Successfully");
+		pManager->undoActions.push(this);
 	}
 	else {
 		pOut->PrintMsg("Error editing the label!");

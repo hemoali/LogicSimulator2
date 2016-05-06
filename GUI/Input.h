@@ -11,7 +11,7 @@ class Input		//The application manager should have a pointer to this class
 {
 private:
 	window *pWind;	//Pointer to the Graphics Window
-	bool isSelectMode;
+	bool isSelectMode, isSelectionContainConnections;
 	vector<pair<int, Component*> > selectedComponents;
 	int startXPointForConnections, startYPointForConnections;
 public:
@@ -26,6 +26,8 @@ public:
 	
 	void setSelectMode(bool b);
 	bool getSelectMode();
+	void Input::setisSelectionContainConnections(bool b);
+	bool Input::getisSelectionContainConnections();
 
 	void setSelectedComponents(vector<pair<int, Component*> >);
 	vector<pair<int,Component*> >& getSelectedComponents();
@@ -40,7 +42,7 @@ public:
 	string EditComponenetLabel(Output *);
 	void getExactConnectionLocation(int&x, int&y);
 
-
+	void clearSelectedComponents();
 
 	void switchMode(MODE appMode);
 	~Input();

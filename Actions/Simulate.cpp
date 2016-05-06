@@ -12,16 +12,6 @@ bool Simulate::ReadActionParameters(image *I)
 {
 	return false;
 }
-///vector<Component*> levelComponents;
-
-void Simulate::spreadTheWord(Component* comp) {
-	for (size_t i = 0; i < comp->getOutputPin()->connectedConnectionsCount(); i++)
-	{
-		comp->getOutputPin()->getConnection(i)->getDestPin()->setStatus(static_cast<STATUS>(comp->GetOutPinStatus()));
-		//spreadTheWord(comp->getOutputPin()->getConnection(i)->getDestPin()->getComponent());
-	//	levelComponents.push_back(comp->getOutputPin()->getConnection(i)->getDestPin()->getComponent());
-	}
-}
 void Simulate::Execute()
 {
 	for (size_t i = 0; i < pManager->allComponentsCorners.size(); i++)

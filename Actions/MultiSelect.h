@@ -7,7 +7,7 @@ class MultiSelect :
 public:
 	MultiSelect(ApplicationManager* pManager);
 	virtual bool ReadActionParameters(image* img = NULL);
-	
+	vector<pair<int, Component*> > allSelectedComponents;
 	virtual void Execute();
 	//To undo this action (code depends on action type)
 	virtual void Undo();

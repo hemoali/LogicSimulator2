@@ -61,8 +61,8 @@ enum ActionType
 	SAVE,		//Save the whole Circuit to a file
 	LOAD,		//Load a Circuit from a file
 
-	UNDO,		//Undo the last Action preformed
-	REDO,		//Redo the last Action canceled
+	UNDOACTION,		//Undo the last Action preformed
+	REDOACTION,		//Redo the last Action canceled
 
 	DSN_MODE,	//Switch to Design mode
 	SIM_MODE,	//Switch to Simulatiom mode
@@ -72,6 +72,7 @@ enum ActionType
 	STATUS_BAR,		//A click on the status bar
 	DSN_TOOL,	//A click on an empty place in the design tool bar
 	SELECT_SIM
+	
 };
 //Possible Status for the pin
 enum STATUS

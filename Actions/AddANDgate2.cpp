@@ -56,13 +56,8 @@ void AddANDgate2::Execute()
 			pManager->GetOutput()->setArrayOfComponents(i,j,pA);
 			}
 		}
+		pManager->undoActions.push(this);
+		Action::pA = pA;
 	}
 	
 }
-
-void AddANDgate2::Undo()
-{}
-
-void AddANDgate2::Redo()
-{}
-
