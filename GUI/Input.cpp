@@ -107,7 +107,7 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 						}
 						setSelectMode(false);
 						isSelectionContainConnections = false;
-						selectedComponents.clear();
+						clearSelectedComponents();
 					}
 					for (size_t i = 0; i < allConnections.size() && !found; i++)
 					{
@@ -566,6 +566,11 @@ string Input::EditComponenetLabel(Output *pOut)
 void Input::getExactConnectionLocation(int & x, int & y)
 {
 	Utils::correctPointClicked(x, y, true, false);
+}
+
+void Input::clearSelectedComponents()
+{
+	selectedComponents.clear();
 }
 
 

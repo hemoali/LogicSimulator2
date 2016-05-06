@@ -23,7 +23,6 @@ void MultiSelect::Execute()
 		pOut->storeDrawingAreaImage(originalImage);
 		int xOld = 0, yOld = 0;
 
-		vector<pair<int, Component*> > allSelectedComponents;
 		while (pIn->GetButtonStatus(LEFT_BUTTON, x, y) == BUTTON_DOWN) {
 			if ((x != xOld || y != yOld) && Utils::CheckPointInBorders(x, y))
 			{
@@ -108,14 +107,77 @@ void MultiSelect::Execute()
 
 			pIn->setSelectMode(true);
 			pIn->setSelectedComponents(allSelectedComponents);
+			pManager->undoActions.push(this);
 		}
 	}
 
 }
 void MultiSelect::Undo()
-{}
+{
+	Output* pOut = pManager->GetOutput();
+	Input* pIn = pManager->GetInput();
+
+	if (allSelectedComponents.size() > 0)
+	{
+		for (size_t i = 0; i < allSelectedComponents.size(); i++)
+		{
+			if (dynamic_cast<Connection*>(allSelectedComponents[i].second))
+			{
+				allSelectedComponents[i].second->selectYourSelf(pOut, UI.DrawColor);
+				continue;
+			}
+			allSelectedComponents[i].second->Draw(pOut, false);
+
+			vector<Connection*> allInConnections, allOutConnections;
+			allSelectedComponents[i].second->getAllInputConnections(allInConnections);
+			allSelectedComponents[i].second->getAllOutputConnections(allOutConnections);
+			for (size_t i = 0; i < allInConnections.size(); i++)
+			{
+				allInConnections[i]->selectYourSelf(pOut, UI.DrawColor);
+			}
+			for (size_t i = 0; i < allOutConnections.size(); i++)
+			{
+				allOutConnections[i]->selectYourSelf(pOut, UI.DrawColor);
+			}
+		}
+
+		pIn->setSelectMode(false);
+		pIn->clearSelectedComponents();
+	}
+}
 
 void MultiSelect::Redo()
-{}
+{
+	Output* pOut = pManager->GetOutput();
+	Input* pIn = pManager->GetInput();
+
+	if (allSelectedComponents.size() > 0)
+	{
+		for (size_t i = 0; i < allSelectedComponents.size(); i++)
+		{
+			if (dynamic_cast<Connection*>(allSelectedComponents[i].second))
+			{
+				allSelectedComponents[i].second->selectYourSelf(pOut, UI.SelectColor);
+				continue;
+			}
+			allSelectedComponents[i].second->Draw(pOut, true);
+
+			vector<Connection*> allInConnections, allOutConnections;
+			allSelectedComponents[i].second->getAllInputConnections(allInConnections);
+			allSelectedComponents[i].second->getAllOutputConnections(allOutConnections);
+			for (size_t i = 0; i < allInConnections.size(); i++)
+			{
+				allInConnections[i]->selectYourSelf(pOut, UI.SelectColor);
+			}
+			for (size_t i = 0; i < allOutConnections.size(); i++)
+			{
+				allOutConnections[i]->selectYourSelf(pOut, UI.SelectColor);
+			}
+		}
+
+		pIn->setSelectMode(true);
+		pIn->setSelectedComponents(allSelectedComponents);
+	}
+}
 MultiSelect::~MultiSelect()
 {}

@@ -42,7 +42,7 @@ public:
 	string EditComponenetLabel(Output *);
 	void getExactConnectionLocation(int&x, int&y);
 
-
+	void clearSelectedComponents();
 
 	void switchMode(MODE appMode);
 	~Input();
