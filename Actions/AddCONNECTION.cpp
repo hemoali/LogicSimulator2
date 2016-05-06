@@ -229,5 +229,4 @@ void AddConnection::Redo()
 	{
 		pManager->GetOutput()->setArrayOfComponents(conn->getCellsBeforeAddingConnection()[i].y, conn->getCellsBeforeAddingConnection()[i].x, pA);
 	}
-	Action::pA = pA;
 }

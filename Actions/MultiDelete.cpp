@@ -28,15 +28,8 @@ void MultiDelete::Execute()
 	Output* pOut = pManager->GetOutput();
 	if (this->ReadActionParameters()) {
 		for (int i = 0; i < theVector.size(); i++) {
-			if (!dynamic_cast<Connection*> (theVector[i].second))
-			{
-				pOut->DeleteGate(theVector[i].second);
-			}
-			else {
-				vector<Connection*> connection;
-				connection.push_back((Connection*)theVector[i].second);
-				pOut->clearConnections(connection, -1, -1, false, true);
-			}
+			Action* act = new Delete(pManager, theVector[i].second);
+			act->Execute();
 		}
 	}
 	else {

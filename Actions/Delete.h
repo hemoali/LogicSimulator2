@@ -6,13 +6,14 @@ class Delete :
 	public Action
 {
 	Component *theComponent;
+	vector<Connection*> allInputConnections, allOutputConnections;
 public:
 	Delete(ApplicationManager* pApp);
 	Delete(ApplicationManager * pApp, Component * C );
 
 	//Reads parameters required for action to execute
 	virtual bool ReadActionParameters(image * = NULL);
-
+	void Delete::reconnectConenction(Connection* conn);
 	//Execute action (code depends on action type)
 	virtual void Execute();
 
