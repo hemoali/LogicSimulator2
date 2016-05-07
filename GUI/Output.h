@@ -55,6 +55,7 @@ public:
 	image* StoreBeforeMenu(int, int, int,int w = 0);
 	void DrawAfterMenu(image* img, int x, int y, int type,int w = 0);
 	void DrawRClickMenu_CorrectPoints(int& x, int& y, int type, bool = true);
+
 	
 	void DrawWarningMenues(char type);
 	image* StoreBeforeWarning();

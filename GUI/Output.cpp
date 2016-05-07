@@ -502,6 +502,7 @@ void Output::DrawRClickMenu_CorrectPoints(int& x, int& y, int type, bool draw)
 	}
 }
 
+
 image * Output::StoreBeforeMenu(int x, int y, int type,int w)
 {
 	int Height;

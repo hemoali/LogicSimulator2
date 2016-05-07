@@ -240,6 +240,8 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 					oldTopHoveredItemOrder = HoveredItemOrder;
 				}
 				else if (hoverY >= 0 && hoverY < UI.height && UI.AppMode == DESIGN && hoverX <= UI.LeftToolBarWidth - 12 && hoverX >= 5) {
+					//Always Clear hover Bar if found
+					pManager->GetOutput()->clearHoveringImage(imgh, J, K, widthh);
 					vector<pair<int, int> > LeftItemsRanges;
 					LeftItemsRanges.push_back(make_pair(6, 85));
 					LeftItemsRanges.push_back(make_pair(103, 180));
