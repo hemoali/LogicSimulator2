@@ -44,7 +44,7 @@ public:
 
 	void clearSelectedComponents();
 
-	void switchMode(MODE appMode);
+	void switchMode(MODE appMode, ApplicationManager* pManager);
 	~Input();
 };
 #endif

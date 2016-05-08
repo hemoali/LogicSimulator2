@@ -1224,7 +1224,12 @@ void window::DrawDouble(const int iX, const int iY, const double dNumber) {
 
 	DrawString(iX, iY, cTmpStorage);
 }
-
+void window::getStringWidth(string s, int &width, int& height) {
+	SIZE size;
+	GetTextExtentPoint32A(dcActive, s.c_str(), (int)strlen(s.c_str()), &size);
+	width = size.cx;
+	height = size.cy;
+}
 void window::GetStringSize(int &iWidth, int &iHeight, const char* cpText) {
 
 	SIZE szTemp;

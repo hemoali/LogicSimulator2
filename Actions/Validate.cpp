@@ -99,7 +99,7 @@ void Validate::Execute()
 	}
 	if (isValid && cnt >0)
 	{
-		pManager->GetInput()->switchMode(SIMULATION);
+		pManager->GetInput()->switchMode(SIMULATION, pManager);
 		Action* act = new Simulate(pManager);
 		act->Execute();
 	}

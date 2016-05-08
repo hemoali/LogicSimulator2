@@ -26,8 +26,8 @@ Output::Output(ApplicationManager* pManager)
 	UI.HumpColor = BLACK;
 	UI.SelectedHumpColor = DARKBLUE;// color(23, 79, 181);
 
-	UI.OneValueConnection = color(0,200,0);
-	UI.OneValueHumpColor = color(0,175,0);
+	UI.OneValueConnection = color(0, 200, 0);
+	UI.OneValueHumpColor = color(0, 175, 0);
 
 	UI.MsgColor = BLUE;
 	UI.ErrorColor = RED;
@@ -268,8 +268,6 @@ bool Output::DrawConnection(GraphicsInfo GfxInfo, int inputPin, GraphicsInfo com
 		pWind->FlushMouseQueue();
 		return false;
 	}
-
-
 	bfs_node* target = bfs(current, destX, destY, allNodes);
 
 	if (target == NULL)
@@ -461,7 +459,7 @@ void Output::DrawRClickMenu_CorrectPoints(int& x, int& y, int type, bool draw)
 		Height = UI.RightClickMenuHeight;
 		break;
 	case 2:
-		Height = UI.RightClickCMenuH + UI.RightClickCMenuH/2;
+		Height = UI.RightClickCMenuH + UI.RightClickCMenuH / 2;
 		break;
 	case 3:
 		Height = UI.RightClickCMenuH / 2;
@@ -511,7 +509,7 @@ image * Output::StoreBeforeMenu(int x, int y, int type)
 		Height = UI.RightClickMenuHeight;
 		break;
 	case 2:
-		Height = UI.RightClickCMenuH + UI.RightClickCMenuH/2;
+		Height = UI.RightClickCMenuH + UI.RightClickCMenuH / 2;
 		break;
 	case 3:
 		Height = UI.RightClickCMenuH / 2;
@@ -534,7 +532,7 @@ void Output::DrawAfterMenu(image * img, int x, int y, int type)
 		Height = UI.RightClickMenuHeight;
 		break;
 	case 2:
-		Height = UI.RightClickCMenuH + UI.RightClickCMenuH/2;
+		Height = UI.RightClickCMenuH + UI.RightClickCMenuH / 2;
 		break;
 	case 3:
 		Height = UI.RightClickCMenuH / 2;
@@ -549,7 +547,11 @@ void Output::DrawAfterMenu(image * img, int x, int y, int type)
 
 void Output::DrawCleanImage(image* img, int x, int y)
 {
-	pWind->DrawImage(img, x - UI.GRID_SIZE - 5, y - UI.GRID_SIZE - 5, 2 * UI.GRID_SIZE + 5, UI.GATE_Height + 3);
+	pWind->DrawImage(img, x - UI.GRID_SIZE - 5, y - UI.GRID_SIZE - 5, 2 * UI.GRID_SIZE + 4, UI.GATE_Height + 3);
+	pWind->SetPen(WHITE);
+	pWind->SetBrush(WHITE);
+	pWind->DrawPixel(x - UI.GRID_SIZE - 7 + (2 * UI.GRID_SIZE + 5) + 1, y - UI.GRID_SIZE - 9 + (UI.GATE_Height + 3) / 2);
+	pWind->DrawPixel(x - UI.GRID_SIZE - 7 + (2 * UI.GRID_SIZE + 5)+1, y - UI.GRID_SIZE - 10+ (UI.GATE_Height + 3)/2);
 }
 void Output::storeDrawingAreaImage(image*& img) {
 	pWind->StoreImage(img, UI.LeftToolBarWidth, 0, pWind->GetWidth() - UI.LeftToolBarWidth, pWind->GetHeight() - UI.StatusBarHeight);
@@ -1982,7 +1984,7 @@ void Output::DrawXor_Xnor(GraphicsInfo g, int in, bool isXNor, bool highlighted,
 		//Draw lines
 		pWind->DrawLine(in1x - 3 - (2 * ciDefBrushSize), in1y, in1x, in1y, FRAME); //The Input1-Line
 		pWind->DrawLine(in2x - 3 - (2 * ciDefBrushSize), in2y, in2x, in2y, FRAME); //The Input2-Line
-		pWind->DrawLine(outx + 4 * ciDefBrushSize - 1, outy, outx + 4 + (2 * ciDefBrushSize) , outy, FRAME); //The Output-Line
+		pWind->DrawLine(outx + 4 * ciDefBrushSize - 1, outy, outx + 4 + (2 * ciDefBrushSize), outy, FRAME); //The Output-Line
 		if (in == 3) { //Checking for 3 input Gate 
 			int in3x = in1x, in3y = cy;
 			pWind->DrawLine(in3x - 6 - (2 * ciDefBrushSize), in3y, in3x, in3y, FRAME); //The Input3-Line

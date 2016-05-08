@@ -41,8 +41,8 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 		else if ((int)c1 == 25) {
 			return REDOACTION;
 		}
-		else if((int)c1==4){
-			switchMode(DESIGN);
+		else if ((int)c1 == 4) {
+			switchMode(DESIGN, pManager);
 		}
 		else if ((int)c1 == 18) {
 			return ValidateAction;
@@ -442,7 +442,7 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 				}
 			}
 			switch (ClickedItemOrder) {
-			case SDESIGN: {switchMode(DESIGN); break; }
+			case SDESIGN: {switchMode(DESIGN, pManager); break; }
 			case STT: return Create_TruthTable;
 			case SEXIT: return EXIT;
 			default: return DSN_TOOL; //TODO:
@@ -475,11 +475,32 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 		//return STATUS_BAR;
 	}
 	pWind->FlushMouseQueue();
-
 }
-void Input::switchMode(MODE appMode) {
+void Input::switchMode(MODE appMode, ApplicationManager* pManager) {
+
 	if (appMode == DESIGN)
 	{
+		for (size_t i = 0; i < pManager->allComponentsCorners.size(); i++)
+		{
+			Component* comp = pManager->getComponent(i);
+			if (comp->getDelete()) continue;
+			if (!(dynamic_cast<SWITCH*>(comp)) && !(dynamic_cast<Connection*>(comp)))
+			{
+				for (size_t i = 0; i < comp->getNumOfInputs(); i++)
+				{
+					comp->setInputPinStatus(i, UNDEFINED);
+				}
+				comp->Draw(pManager->GetOutput(), false);
+			}
+			else if(dynamic_cast<SWITCH*>(comp)) {
+				((SWITCH*)comp)->setOutputPinStatus(LOW);
+				comp->Draw(pManager->GetOutput(), false);
+			}
+			else if (dynamic_cast<Connection*>(comp)) {
+				((Connection*)comp)->selectYourSelf(pManager->GetOutput(), UI.DrawColor);
+			}
+
+		}
 		UI.AppMode = DESIGN;
 		pWind->DrawImage("images\\Menu\\top_bar_normal.jpg", UI.LeftToolBarWidth, 0, UI.width - UI.LeftToolBarWidth - 14, UI.TopToolBarHeight);
 		pWind->DrawImage("images\\Menu\\left_bar_normal.jpg", 0, 0, UI.LeftToolBarWidth, UI.height);
