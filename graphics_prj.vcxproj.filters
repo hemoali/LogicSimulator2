@@ -258,6 +258,9 @@
     <ClCompile Include="Actions\ChangeSwitch.cpp">
       <Filter>Actions</Filter>
     </ClCompile>
+    <ClCompile Include="Actions\CreateTruthTable.cpp">
+      <Filter>Actions</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Defs.H" />
@@ -472,6 +475,9 @@
     <ClInclude Include="Actions\ChangeSwitch.h">
       <Filter>Actions</Filter>
     </ClInclude>
+    <ClInclude Include="Actions\CreateTruthTable.h">
+      <Filter>Actions</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
@@ -509,6 +515,9 @@
     </Text>
     <Text Include="save.txt">
       <Filter>Components</Filter>
+    </Text>
+    <Text Include="TruthTable.txt">
+      <Filter>Actions</Filter>
     </Text>
   </ItemGroup>
 </Project>

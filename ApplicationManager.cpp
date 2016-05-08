@@ -22,6 +22,7 @@
 #include "Actions\MultiSelect.h"
 #include "Actions\Validate.h"
 #include "Actions\Simulate.h"
+#include"Actions\CreateTruthTable.h"
 ApplicationManager::ApplicationManager()
 {
 	CompCount = 0;
@@ -129,7 +130,8 @@ void ApplicationManager::ExecuteAction(ActionType ActType)
 	case SimulateAction:
 		pAct = new Simulate(this);
 		break;
-	case UNDOACTION: {
+	case UNDOACTION: 
+	{
 		if (UI.AppMode == DESIGN && undoActions.size() > 0)
 		{
 			Action* act = undoActions.top();
@@ -144,7 +146,9 @@ void ApplicationManager::ExecuteAction(ActionType ActType)
 			simulationRedoActions.push(act);
 		}
 		break;
-	}case REDOACTION: {
+	}
+	case REDOACTION: 
+	{
 		if (UI.AppMode == DESIGN && redoActions.size() > 0) {
 			Action* act = redoActions.top();
 			act->Redo();
@@ -158,7 +162,14 @@ void ApplicationManager::ExecuteAction(ActionType ActType)
 			simulationUndoActions.push(act);
 		}
 		break;
-	}case EXIT:
+	}
+	case Create_TruthTable:
+	{
+		OutputInterface->PrintMsg("Creating truth table ....");
+		pAct = new CreateTruthTable(this);
+		break;
+	}
+	case EXIT:
 		// Exit action here
 		break;
 	}

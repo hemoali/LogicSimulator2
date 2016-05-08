@@ -52,14 +52,18 @@ public:
 	void drawStoredDrawingAreaImage(image*& img);
 	void drawRectangle(int x1, int y1, int x2, int y2);
 
-	image* StoreBeforeMenu(int, int, int);
-	void DrawAfterMenu(image* img, int x, int y, int type);
+	image* StoreBeforeMenu(int, int, int,int w = 0);
+	void DrawAfterMenu(image* img, int x, int y, int type,int w = 0);
 	void DrawRClickMenu_CorrectPoints(int& x, int& y, int type, bool = true);
+
 	
 	void DrawWarningMenues(char type);
 	image* StoreBeforeWarning();
 	void DrawAfterWarning(image* theWarningImage);
-	void loadWarningSound(char type);
+
+	image* printHovering(int& x, int& y, string s, int& w, Component* C);
+	void correctHoverStartpoint(int &x, int &y, int width);
+	void clearHoveringImage(image* img,int J, int K,int widthh);
 
 	void storeImage(image* img, int x1, int y1, int x2, int y2);
 

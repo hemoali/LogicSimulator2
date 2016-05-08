@@ -500,7 +500,8 @@ void Output::DrawRClickMenu_CorrectPoints(int& x, int& y, int type, bool draw)
 	}
 }
 
-image * Output::StoreBeforeMenu(int x, int y, int type)
+
+image * Output::StoreBeforeMenu(int x, int y, int type,int w)
 {
 	int Height;
 	switch (type)
@@ -516,14 +517,22 @@ image * Output::StoreBeforeMenu(int x, int y, int type)
 		break;
 	case 5:
 		Height = UI.RightClickCMenuH / 2;
+		break;
+	case 7:
+		//HoveringBar
+		Height = UI.HoverHeight;
 		break;
 	}
 	image * ptr = new image;
-	pWind->StoreImage(ptr, x, y, UI.RightClickMenuLength, Height);
+	if (type == 7) {
+		//It's an hover part
+		pWind->StoreImage(ptr, x, y, w, Height);
+	}
+	else pWind->StoreImage(ptr, x, y, UI.RightClickMenuLength, Height);
 	return ptr;
 }
 
-void Output::DrawAfterMenu(image * img, int x, int y, int type)
+void Output::DrawAfterMenu(image * img, int x, int y, int type,int w)
 {
 	int Height;
 	switch (type)
@@ -540,9 +549,18 @@ void Output::DrawAfterMenu(image * img, int x, int y, int type)
 	case 5:
 		Height = UI.RightClickCMenuH / 2;
 		break;
+	case 7:
+		//HoveringBar
+		Height = UI.HoverHeight;
+		break;
 	}
-	pWind->DrawImage(img, x, y, UI.RightClickMenuLength, Height);
-	delete img;
+	if (type == 7) {
+		//It's an hover part
+		pWind->DrawImage(img, x, y, w, Height);
+	}
+	else pWind->DrawImage(img, x, y, UI.RightClickMenuLength, Height);
+	if (type != 7)
+		delete img;
 }
 
 void Output::DrawCleanImage(image* img, int x, int y)
@@ -597,9 +615,142 @@ void Output::DrawAfterWarning(image * theWarningImage)
 	pWind->DrawImage(theWarningImage, xbegin, ybegin, UI.WarningMenuWidth, UI.WarningMenuHeight);
 }
 
-void Output::loadWarningSound(char type)
+image * Output::printHovering(int & x, int & y, string s, int & w, Component * C)
 {
+
+	image* img = NULL;
+	int numC = 0, numS = 0, wC = 14, wS = 9, avg = 0;
+	//checking whether it's in the design Mode or 
+	if (UI.AppMode == DESIGN) {
+		for (int i = 0; i < s.size(); i++) {
+			//scanning for how many Capital Letters for determination of correct rectangle width
+			if (isupper(s[i])) numC++;
+			else numS++;
+		}
+		avg = numC*wC + numS *wS / (s.size() + 1);
+		int width = numC * wC + numS * wS + 10; 
+		// to test whether the hover appearance is good
+		/*	int len = s.size()-1;*/
+		/*	bool wasLong = false;
+		while (width > 150) {
+			wasLong = true;
+			char tmp = s[len--];
+			if (isupper(tmp)) width -= wC;
+			else width -= wS;
+		}
+		if (wasLong) {
+			s = s.substr(0, len);
+			s[len-1] = '.';
+			s[len - 2] = '.';
+			s[len - 3] = '.';
+			width -= 3 * avg;
+		}*/
+		int height = UI.HoverHeight;
+		if (!dynamic_cast<Connection*>(C)) {
+			//if it's a connection for better appearnace
+			x = C->getCenterLocation().x1 + 10;
+			y = C->getCenterLocation().y1 + 5;
+		}
+		//Correct the Points
+		this->correctHoverStartpoint(x, y, width);
+		//Store Before Hovering
+		img = this->StoreBeforeMenu(x, y, 7, width);
+		//Drawing the Hover Bar
+		pWind->SetPen(BLACK, 2);
+		pWind->SetBrush(AZURE);
+		pWind->DrawRectangle(x, y, x + width, y + height, FILLED, 3, 4);
+		pWind->DrawString(x + 5, y + 2, s);
+		w = width;
+		return img;
+	}
+	else {
+		//Simulation Mode Hovering
+		int width = 0, height = 0;
+		Connection *ptr = NULL;
+		//Checking if it's a connection Hover or other componenets hover
+		if (ptr = dynamic_cast<Connection*> (C)) {
+			string hoverLabel = "";
+			width = 20;
+			height = UI.HoverHeight;
+			//Correct the Points
+			this->correctHoverStartpoint(x, y, width);
+			//Store Before Hovering
+			img = this->StoreBeforeMenu(x, y, 7, width);
+			if (ptr->GetOutPinStatus()) { //It's a logic 1 output -> green Colour
+				hoverLabel = "1";
+				pWind->SetPen(BLACK, 2);
+				pWind->SetBrush(GREEN);
+			}
+			else { //It's a logic 0 output -> grey Colour
+				hoverLabel = "0";
+				pWind->SetPen(BLACK, 2);
+				pWind->SetBrush(GREY);
+			}
+			pWind->DrawRectangle(x, y, x + width, y + height, FILLED, 4, 4);
+			pWind->DrawString(x + 5, y + 1, hoverLabel);
+			w = width;
+		}
+		else {
+			//Other Component Hover
+			for (int i = 0; i < s.size(); i++) {
+				//scanning for how many Capital Letters for determination of correct rectangle width
+				if (isupper(s[i])) numC++;
+				else numS++;
+			}
+			width = numC * wC + numS * wS + 10;
+			height = UI.HoverHeight;
+			//Correct the Points
+			//if (C->getComponentActionType() == ADD_Switch) {
+			x = C->getCenterLocation().x1 + 10;
+			y = C->getCenterLocation().y1 + 5;
+			//}
+			this->correctHoverStartpoint(x, y, width);
+			//Store Before Hovering
+			img = this->StoreBeforeMenu(x, y, 7, width);
+			//Drawing the Hover Bar
+			pWind->SetPen(BLACK, 2);
+			pWind->SetBrush(LIGHTBLUE);
+			pWind->DrawRectangle(x, y, x + width, y + height, FILLED, 4, 4);
+			pWind->DrawString(x + 5, y + 2, s);
+			w = width;
+		}
+	}
+	return img;
 }
+
+void Output::correctHoverStartpoint(int & x, int & y, int width)
+{
+	//If Point (x,y) in the Right or Middle of the Drawing Area
+	if (x + width < UI.width) {
+		if (y + UI.HoverHeight > UI.height) {
+			// y must be corrected
+			y = y - UI.HoverHeight;
+		}
+		else {
+			//The Point(x,y) is ready for drawing HoverBar 
+		}
+	}
+	//If Point (x,y) in the Right of the Drawing Area
+	if (x + width > UI.width) {
+		// x must be corrected
+		x = UI.width - width - 40;
+		if (y + UI.HoverHeight > UI.height - UI.StatusBarHeight) {
+			// y must be corrected
+			y = y - UI.HoverHeight;
+		}
+		else {
+			//The Point(x,y) is ready for drawing HoverBar 
+		}
+	}
+}
+
+void Output::clearHoveringImage(image * img,int J, int K,int widthh)
+{
+	if(img != NULL)
+		this->DrawAfterMenu(img, J, K, 7, widthh);
+}
+
+
 
 void Output::storeImage(image * img, int x1, int y1, int x2, int y2)
 {

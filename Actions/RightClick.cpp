@@ -19,9 +19,13 @@ bool RightClick::ReadActionParameters(image* img) {
 	//Checking for MultiSelect having some Gates Or MultiSlect With No Gates(i.e. Connections Only)  
 	//This Code will be kept if we are supporting MultiSelect Components
 	int atLeastOneGateinMS = 0;
+	bool allAreOnlyConnections = false;
 	if (pIn->getSelectMode()) {
 		vector<pair<int, Component*>> V = pIn->getSelectedComponents();
-		if (V.size() != 0) atLeastOneGateinMS = V.size();
+		for (int i = 0; i < V.size(); i++) {
+			if (V[i].second->getComponentActionType() != ADD_CONNECTION)
+				atLeastOneGateinMS++;
+		}
 	}
 
 	//Check Which Component is Selected and gets a pointer to that Component
@@ -34,8 +38,8 @@ bool RightClick::ReadActionParameters(image* img) {
 		}
 	}
 
-	//Checking if the selected a Gate...
-	if (C != NULL && dynamic_cast<Gate*>(C) && !C->getDelete())
+	//Checking if the selected a Gate / Switch /LED...
+	if (C != NULL && ((dynamic_cast<Gate*>(C) || dynamic_cast<LED*> (C) || dynamic_cast<SWITCH*>(C)) && !C->getDelete()))
 	{
 		string s = "Gate : " + (C->getLabel()) + " is selected";
 		pOut->PrintMsg(s);
@@ -109,7 +113,6 @@ bool RightClick::ReadActionParameters(image* img) {
 	pIn->getExactConnectionLocation(x, y);
 	C =  pOut->getArrayOfComponents(y / UI.GRID_SIZE, x / UI.GRID_SIZE);
 	if (C != NULL && dynamic_cast<Connection*> (C)) {
-		
 		if (pIn->getSelectMode() && atLeastOneGateinMS != 0 ) {
 			vector<pair<int, Component*>> V = pIn->getSelectedComponents();
 			for (int i = 0; i < V.size(); i++) {
@@ -129,47 +132,80 @@ bool RightClick::ReadActionParameters(image* img) {
 		string pinSource, pinDestination;
 		pinSource = D->getSourcePin()->getComponent()->getLabel();
 		pinDestination = D->getDestPin()->getComponent()->getLabel();
-		string s = "Connection between Gate: " + pinSource + " and Gate: " + pinDestination + " is selected";
-		pOut->PrintMsg(s);
+		if (!pIn->getSelectMode()) {
+			string s = "Connection between Gate: " + pinSource + " and Gate: " + pinDestination + " is selected";
+			pOut->PrintMsg(s);
+		}
 		//Correct Point First call with false parameter (No Drawing)
-		pOut->DrawRClickMenu_CorrectPoints(x, y, 2, false);
+		if (pIn->getSelectMode())
+			pOut->DrawRClickMenu_CorrectPoints(x, y, 5, false);
+		else pOut->DrawRClickMenu_CorrectPoints(x, y, 2, false);
 		//Take ScreenShot of the Original non Modified Region
-		img = pOut->StoreBeforeMenu(x, y, 2);
+		if (pIn->getSelectMode())
+			img = pOut->StoreBeforeMenu(x, y, 5);
+		else img = pOut->StoreBeforeMenu(x, y, 2);
 		//Make the Connection Highlited 
-		pOut->changeConnectionColor(D);
+		if (pIn->getSelectMode())
+		{	
+			vector<pair<int, Component*>> V = pIn->getSelectedComponents();
+			for (int i = 0; i < V.size(); i++) {
+				pOut->changeConnectionColor((Connection*)(V[i].second));
+			}
+		}
+		else pOut->changeConnectionColor(D);
 		//Draw the Menu
-		pOut->DrawRClickMenu_CorrectPoints(x, y, 2); //New ember Function to draw the relevant Menu
+		if (pIn->getSelectMode())
+			pOut->DrawRClickMenu_CorrectPoints(x, y, 5);
+		else pOut->DrawRClickMenu_CorrectPoints(x, y, 2); //New ember Function to draw the relevant Menu
 		MenuRectangle.x1 = x;
 		MenuRectangle.x2 = x + UI.RightClickMenuLength;
 		MenuRectangle.y1 = y;
-		MenuRectangle.y2 = y + UI.RightClickCMenuH + UI.RightClickCMenuH/2;
+		if (pIn->getSelectMode())
+			MenuRectangle.y2 = y + UI.RightClickCMenuH / 2;
+		else MenuRectangle.y2 = y + UI.RightClickCMenuH + UI.RightClickCMenuH/2;
 		//New member function to wait for Selection Point.
 		pIn->WaitSelectionPoint(x, y);
 		//Check if the new Point is in the Menu Bar or Not
 		if (x > MenuRectangle.x1 && x < MenuRectangle.x2 && y > MenuRectangle.y1 && y < MenuRectangle.y2) {
-			//Get the Action Type and Save it in the data Member
-			int theIconWidth = 30, actionNum = -1;
-			y -= MenuRectangle.y1;
-			actionNum = y / 30;
-			switch (actionNum) {
-			case 0:
-				SelectedAction = EDIT_Label;
-				break;
-			case 1:
-				SelectedAction = Modify_Connection;
-				break;
-			case 2:
-				SelectedAction = DEL;
-				break;
-			default:
-				actionNum = -1;
+			if (pIn->getSelectMode()) {
+				SelectedAction = Multi_Del;
+			}
+			else {
+				//Get the Action Type and Save it in the data Member
+				int theIconWidth = 30, actionNum = -1;
+				y -= MenuRectangle.y1;
+				actionNum = y / 30;
+				switch (actionNum) {
+				case 0:
+					SelectedAction = EDIT_Label;
+					break;
+				case 1:
+					SelectedAction = Modify_Connection;
+					break;
+				case 2:
+					SelectedAction = DEL;
+					break;
+				default:
+					actionNum = -1;
+				}
 			}
 		}
 		//Make the Connection look Normal 
-		pOut->changeConnectionColor(D, UI.ConnColor);
+		if (pIn->getSelectMode())
+		{
+			vector<pair<int, Component*>> V = pIn->getSelectedComponents();
+			for (int i = 0; i < V.size(); i++) {
+				pOut->changeConnectionColor(((Connection*)(V[i].second)), UI.ConnColor); 
+			}
+		}
+		else pOut->changeConnectionColor(D, UI.ConnColor);
 		//Delete the DrawMenu
-		if (img != NULL)
-			pOut->DrawAfterMenu(img, MenuRectangle.x1, MenuRectangle.y1, 2);
+		if (img != NULL) {
+			if (pIn->getSelectMode()) {
+				pOut->DrawAfterMenu(img, MenuRectangle.x1, MenuRectangle.y1, 5);
+			}
+			else pOut->DrawAfterMenu(img, MenuRectangle.x1, MenuRectangle.y1, 2);
+		}
 		pOut->ClearStatusBar();
 		if (pIn->getSelectMode()) {
 			vector<pair<int, Component*>> V = pIn->getSelectedComponents();

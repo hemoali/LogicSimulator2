@@ -26,7 +26,8 @@ struct UI_Info	//User Interface Info.
 		TopToolBarItemsGap = 27,
 		RightClickCMenuH = 60,
 		WarningMenuWidth = 357,
-		WarningMenuHeight = 136;
+		WarningMenuHeight = 136,
+		HoverHeight = 24;
 
 	color DrawColor;		//Drawing color
 	color SelectColor;		//Highlighting color for gates and connections

@@ -29,6 +29,12 @@ void Input::getMouseCoordinates(int & x, int & y)
 ActionType Input::GetUserAction(ApplicationManager *pManager)
 {
 	int x = 0, y = 0, xT, yT, hoverXOld = 0, hoverYOld = 0, oldTopHoveredItemOrder = -1, oldLeftHoverItem = -1;
+
+	//For Hovering Bar
+	int widthh = 0;
+	image* imgh = NULL;
+	int J = 0, K = 0;
+
 	clicktype s = LEFT_CLICK;
 	Component* preComp = NULL;
 	while (true) {
@@ -76,6 +82,8 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 				}
 				if (drawConnection)
 				{
+					//Always Clear hover Bar if found
+					pManager->GetOutput()->clearHoveringImage(imgh, J, K, widthh);
 					return ADD_CONNECTION;
 				}
 				if (comp != NULL &&comp->getDelete()) comp = NULL;
@@ -85,10 +93,15 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 					{
 						for (size_t i = 0; i < selectedComponents.size(); i++)
 						{
-							if (!dynamic_cast<Connection*>(selectedComponents[i].second) && selectedComponents[i].second == comp)
+							if (!dynamic_cast<Connection*>(selectedComponents[i].second) && selectedComponents[i].second == comp) {
+								//Always Clear hover Bar if found //CHECKTHISSAMRA
+								pManager->GetOutput()->clearHoveringImage(imgh, J, K, widthh);
 								return MULTI_MOVE;
+							}
 						}
 					}
+					//Always Clear hover Bar if found
+					pManager->GetOutput()->clearHoveringImage(imgh, J, K, widthh);
 					return MOVE;
 				}
 				else {
@@ -106,6 +119,8 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 						{
 							selectedComponents[i].second->Draw(pManager->GetOutput(), false);
 						}
+						//Always Clear hover Bar if found
+						pManager->GetOutput()->clearHoveringImage(imgh, J, K, widthh);
 						setSelectMode(false);
 						isSelectionContainConnections = false;
 						clearSelectedComponents();
@@ -154,6 +169,8 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 					}
 
 					if (!found) {
+						//Always Clear hover Bar if found
+						pManager->GetOutput()->clearHoveringImage(imgh, J, K, widthh);
 						return MULTI_SELECT;
 					}
 				}
@@ -174,6 +191,8 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 				//If top bar and design mode and top bar down
 				if (hoverY >= 5 && hoverY < UI.ToolBarHeight - 20 && hoverX > UI.LeftToolBarWidth && UI.AppMode == DESIGN)
 				{
+					//Always Clear hover Bar if found
+					pManager->GetOutput()->clearHoveringImage(imgh, J, K, widthh);
 					vector<pair<int, int> > TopItemsRanges;
 					TopItemsRanges.push_back(make_pair(107, 170));
 					TopItemsRanges.push_back(make_pair(190, 245));
@@ -221,6 +240,8 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 					oldTopHoveredItemOrder = HoveredItemOrder;
 				}
 				else if (hoverY >= 0 && hoverY < UI.height && UI.AppMode == DESIGN && hoverX <= UI.LeftToolBarWidth - 12 && hoverX >= 5) {
+					//Always Clear hover Bar if found
+					pManager->GetOutput()->clearHoveringImage(imgh, J, K, widthh);
 					vector<pair<int, int> > LeftItemsRanges;
 					LeftItemsRanges.push_back(make_pair(6, 85));
 					LeftItemsRanges.push_back(make_pair(103, 180));
@@ -252,6 +273,8 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 					oldLeftHoverItem = HoveredLeftItemOrder;
 				}
 				else if (hoverY >= 0 && hoverY < UI.height && UI.AppMode == SIMULATION && hoverX <= UI.LeftToolBarWidth - 12 && hoverX >= 5) {
+					//Always Clear hover Bar if found
+					pManager->GetOutput()->clearHoveringImage(imgh, J, K, widthh);
 					vector<pair<int, int> > LeftItemsRanges;
 					LeftItemsRanges.push_back(make_pair(6, 85));
 					LeftItemsRanges.push_back(make_pair(103, 180));
@@ -278,6 +301,7 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 					oldLeftHoverItem = HoveredLeftItemOrder;
 				}
 				else {
+
 					oldTopHoveredItemOrder = oldLeftHoverItem = -1;
 					if (UI.AppMode == DESIGN)
 					{
@@ -293,9 +317,19 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 						Component* comp = pManager->GetOutput()->getArrayOfComponents(hoverY / UI.GRID_SIZE, hoverX / UI.GRID_SIZE);
 						if (comp != NULL && !comp->getDelete() && comp != preComp)
 						{
+							//Always Clear hover Bar if found at the transition between one component and the other
+							pManager->GetOutput()->clearHoveringImage(imgh, J, K, widthh);
+							if (comp->getLabel().size() > 0) { //The Gate Worth Drawing A hover Part
+								pWind->GetMouseCoord(J, K);
+								delete imgh;
+								imgh = NULL;
+								imgh = pManager->GetOutput()->printHovering(J, K, comp->getLabel(), widthh, comp);
+							}
 							pManager->GetOutput()->PrintMsg(comp->getLabel());
 						}
 						else if (comp == NULL) {
+							//Always Clear hover Bar if found at the transition between one component and the other
+							pManager->GetOutput()->clearHoveringImage(imgh, J, K, widthh);
 							pManager->GetOutput()->PrintMsg("");
 						}
 
@@ -414,10 +448,15 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 		{
 			//user want to select/unselect a statement i;
 			if (s == RIGHT_CLICK) {
+				//Always Clear hover Bar if found
+				pManager->GetOutput()->clearHoveringImage(imgh, J, K, widthh);
 				return RIGHT_CLICKSELECT;
 			}
-			else
+			else {
+				//Always Clear hover Bar if found
+				pManager->GetOutput()->clearHoveringImage(imgh, J, K, widthh);
 				pWind->GetMouseClick(x, y, true); //Remove the last Saved Click
+			}
 		}
 
 		//[3] User clicks on the status bar
@@ -433,7 +472,7 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 			LeftItemsRanges.push_back(make_pair(103, 180));
 			LeftItemsRanges.push_back(make_pair(197, 273));
 
-			int ClickedItemOrder = -1;//TODO:Modify
+			int ClickedItemOrder = -1;
 
 			for (size_t i = 0; i < LeftItemsRanges.size(); i++)
 			{
@@ -459,10 +498,14 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 					ChangeSwitch* act = new ChangeSwitch(pManager, (SWITCH*)pManager->getComponent(i));
 					act->Execute();
 					pWind->FlushMouseQueue();
+					//Always Clear hover Bar if found
+					pManager->GetOutput()->clearHoveringImage(imgh, J, K, widthh);
 					return SimulateAction;
 				}
 			}
 		}
+		//Always Clear hover Bar if found
+		pManager->GetOutput()->clearHoveringImage(imgh, J, K, widthh);
 		return SELECT_SIM;
 		//return SIM_MODE;	//This should be changed after creating the compelete simulation bar 
 		//[2] User clicks on the drawing area //TODO:
