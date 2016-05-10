@@ -53,7 +53,7 @@ void Save::Execute()
 		}
 	}
 	file.close();
-	pManager->GetOutput()->PrintMsg("Design saved successfully");
+	pManager->GetOutput()->PrintStatusBox("Design saved successfully");
 }
 void Save::Undo()
 {

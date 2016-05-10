@@ -103,7 +103,7 @@ void Validate::Execute()
 		Action* act = new Simulate(pManager);
 		act->Execute();
 	}
-	pManager->GetOutput()->PrintMsg(msg);
+	pManager->GetOutput()->printPopUpMessage(msg);
 	Sleep(600);
 }
 void Validate::Undo()

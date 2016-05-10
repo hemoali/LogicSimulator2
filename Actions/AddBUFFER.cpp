@@ -16,12 +16,12 @@ bool AddBUFFER::ReadActionParameters(image * smallImageBeforeAddingComponent)
 	Input* pIn = pManager->GetInput();
 
 	//Print Action Message
-	pOut->PrintMsg("BUFFER : Click to add the gate");
+	pOut->PrintStatusBox("BUFFER : Click to add the gate");
 
 	if (pOut->SetDragImage(ADD_Buff, GInfo, smallImageBeforeAddingComponent)) {
 		string s = "Please enter gate label: ";
 		pOut->PrintMsg(s);
-		gateLabel = pIn->GetSrting(pOut, s);
+		gateLabel =pIn->getStringBox();
 		done = true;
 	}
 

@@ -29,6 +29,7 @@ bool Load::ReadActionParameters(image *I)
 {
 	Output *pOut = pManager->GetOutput();
 	Input *pIn = pManager->GetInput();
+	/*
 	image *img = pOut->StoreBeforeWarning();
 	int x, y;
 	pOut->DrawWarningMenues('L');
@@ -59,6 +60,10 @@ bool Load::ReadActionParameters(image *I)
 	}
 	if (draw) return true;
 	return false;
+	*/
+	int selected = pOut->printPopUpMessage("Do you want to load? All unsaved progress will be lost.", 'L');
+	if (selected == 1) return true;
+	return false;
 }
 void Load::Execute()
 {
@@ -66,7 +71,7 @@ void Load::Execute()
 		Output *pOut = pManager->GetOutput();
 		for (int i = 0; i < pManager->allComponentsCorners.size(); i++) {
 			Component *C = pManager->getComponent(i);
-			if (dynamic_cast<Gate*> (C)) {
+			if (dynamic_cast<Gate*> (C) && !C->getDelete()) {
 				C->setDelete(true);
 				C->Draw(pOut);
 				//Removing Connections
@@ -75,9 +80,13 @@ void Load::Execute()
 				C->getAllOutputConnections(allOutConnections);
 				pOut->clearConnections(allInConnections, C->getCenterLocation().x1, C->getCenterLocation().y1, true, true);
 				pOut->clearConnections(allOutConnections, C->getCenterLocation().x1, C->getCenterLocation().y1, false, true);
-				//Deleteion Completely
-				delete C;
 			}
+		}
+		//Deleteion Completely
+		for (int i = 0; i < pManager->allComponentsCorners.size(); i++) {
+			Component *C = pManager->getComponent(i);
+			if (dynamic_cast<Gate*> (C))
+				delete C;
 		}
 		// clear status bar
 		pOut->ClearStatusBar();
@@ -273,7 +282,8 @@ void Load::Execute()
 			}
 			theConnection->AddConnectionSilent(c1, c2, c3, c4, compLabel);
 		}
-		pManager->GetOutput()->PrintMsg("Design loaded successfully");
+		//pManager->GetOutput()->PrintMsg("Design loaded successfully");
+		pOut->PrintStatusBox("Design loaded successfully");
 		file.close();
 
 		// clear undo/redo stacks

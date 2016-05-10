@@ -220,7 +220,7 @@ window::window(const int iWindWidth, const int iWindHeight, const int iWindXPos,
 	wndcWindow.lpszClassName = ccDefWindClassName;
 	RegisterClass(&wndcWindow);
 
-	hwndWindow = CreateWindow(ccDefWindClassName, ccDefWindTitle, WS_CAPTION | WS_SYSMENU | WS_VISIBLE | WS_MINIMIZEBOX, iWindXPos,
+	hwndWindow = CreateWindow(ccDefWindClassName, ccDefWindTitle,  WS_CAPTION | WS_VISIBLE , iWindXPos,
 		iWindYPos, iWindowWidth + GetSystemMetrics(SM_CXEDGE),
 		iWindowHeight + GetSystemMetrics(SM_CYCAPTION) + GetSystemMetrics(SM_CYEDGE) - 1, // Not sure why I need to subtract 1
 		HWND_DESKTOP, NULL, hInstance, 0);
@@ -311,8 +311,8 @@ window::~window() {
 			FlushMouseQueue();
 			// Can't use cout because it's destructor might be called before the 
 			// window destructor if the window is in the global scope.
-			printf("Click mouse in the graphics window to finish execution.\n");
-			WaitMouseClick(iX, iY);
+			//printf("Click mouse in the graphics window to finish execution.\n");
+			//WaitMouseClick(iX, iY);
 		}
 		wipInput->RemoveWindow(hwndWindow);
 		delete wipInput;
@@ -1226,6 +1226,7 @@ void window::DrawDouble(const int iX, const int iY, const double dNumber) {
 }
 void window::getStringWidth(string s, int &width, int& height) {
 	SIZE size;
+	SelectObject(dcActive,fontObject);
 	GetTextExtentPoint32A(dcActive, s.c_str(), (int)strlen(s.c_str()), &size);
 	width = size.cx;
 	height = size.cy;
@@ -1481,6 +1482,195 @@ void window::StoreImage(image &imgThis, const unsigned usX, const unsigned short
 	StoreImage(&imgThis, usX, usY, usWidth, usHeight);
 
 }
+//Convert String To WString then to conver it ot LPCWSTR 
+
+string window::theComponenetString = "";
+std::wstring s2ws(const std::string& s)
+{
+	int len;
+	int slength = (int)s.length() + 1;
+	len = MultiByteToWideChar(CP_ACP, 0, s.c_str(), slength, 0, 0);
+	std::wstring r(len, L'\0');
+	MultiByteToWideChar(CP_ACP, 0, s.c_str(), slength, &r[0], len);
+	return r;
+}
+
+
+LRESULT CALLBACK WndProc(HWND hwnd, UINT msg,
+	WPARAM wParam, LPARAM lParam) {
+
+	static HWND hwndEdit;
+	HWND hwndButton;
+
+	switch (msg) {
+
+	case WM_CREATE: {
+		wstring stemp;
+		stemp = s2ws(window::getTheComponenetString());
+		LPCWSTR result = stemp.c_str();
+		hwndEdit = CreateWindowW(L"Edit", result,
+			WS_CHILD | WS_VISIBLE | WS_BORDER,
+			50, 50, 150, 20, hwnd, (HMENU)3,
+			NULL, NULL);
+
+		hwndButton = CreateWindowW(L"button", L"OK",
+			WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 50, 100, 80, 25,
+			hwnd, (HMENU)4, NULL, NULL);
+
+		break;
+	}
+	case WM_COMMAND:
+
+		if (HIWORD(wParam) == BN_CLICKED) {
+
+			int len = GetWindowTextLengthW(hwndEdit) + 1;
+			wchar_t text[100];
+			
+			GetWindowTextW(hwndEdit, text, len);
+			string s;
+			for (int i = 0; text[i] != '\0'; i++) {
+				s.push_back(char(text[i]));
+			}
+			window::setWindowEditString(s);
+			SendMessage(hwnd, WM_CLOSE, 0, 0);
+		}
+
+		break;
+
+	case WM_DESTROY:
+		PostQuitMessage(0);
+		break;
+	//case WM_PAINT:
+	//{
+
+	//	PAINTSTRUCT ps;
+	//	RECT rc;
+	//	HDC hdc = BeginPaint(hwnd, &ps);
+	//	GetClientRect(hwnd, &rc);
+	//	SetBkColor(hdc, RGB(197,238,251)); // red
+	//	ExtTextOut(hdc, 0, 0, ETO_OPAQUE, &rc, 0, 0, 0);
+	//	EndPaint(hwnd, &ps);
+	//	break;
+	//}
+	}
+
+	return DefWindowProcW(hwnd, msg, wParam, lParam);
+}
+
+
+HWND window::DrawStringStatusBox(string s,int x, int y)
+{
+	//WNDCLASSW wc = { 0 };
+	//wc.lpszClassName = L"STATIC";
+	//wc.hInstance = hInstance;
+	//wc.hbrBackground = CreateSolidBrush(0x00FFFFFF);
+	//wc.lpfnWndProc = WndProc;
+	//wc.hCursor = LoadCursor(0, IDC_ARROW);
+	/*HWND D = CreateWindowW(wc.lpszClassName, NULL,  WS_VISIBLE| WS_DISABLED  | WS_EX_STATICEDGE, x, y, 400, 100, hwndWindow, NULL, (HINSTANCE)GetWindowLong(hwndWindow, GWL_HINSTANCE), NULL);*/
+	HWND D = CreateWindow("EDIT", NULL, WS_VISIBLE | WS_DISABLED | WS_EX_STATICEDGE, x, y, 400, 100, hwndWindow, NULL, (HINSTANCE)GetWindowLong(hwndWindow, GWL_HINSTANCE), NULL);
+	HDC hdc = GetDC(D); //a Handle to the device control (I don't know what the hell is this? )
+	
+	//LRESULT a = WndProc(D, WM_PAINT, 0, 0);
+	//UpdateWindow(D);
+	//Swtting the background mode to transparent NOT OPAQUE
+	SetBkMode(hdc, TRANSPARENT);
+	//Making the rectangle which is the Limits of the needed String 
+	LPRECT c = new RECT;
+	c->left = 0 ;
+	c->right =  380;
+	c->bottom = 80 ;
+	c->top = 0  ;
+	DrawText(hdc, s.c_str(), -1, c, DT_END_ELLIPSIS| DT_INTERNAL| DT_NOCLIP | DT_MODIFYSTRING | DT_VCENTER |DT_CENTER | DT_WORDBREAK );
+	SetActiveWindow(hwndWindow);
+	delete c;
+	return D;
+}
+
+
+string window::getStringBox(string s)
+{
+	window::theComponenetString = s;
+	MSG  msg;
+	WNDCLASSW wc = { 0 };
+	wc.lpszClassName = L"Type the prefered label";
+	wc.hInstance = hInstance;
+	wc.hbrBackground = GetSysColorBrush(COLOR_3DFACE);
+	wc.lpfnWndProc = WndProc;
+	wc.hCursor = LoadCursor(0, IDC_ARROW);
+
+	RegisterClassW(&wc);
+	
+	CreateWindowW(wc.lpszClassName, L"Type the prefered label",
+		WS_SYSMENU |WS_CAPTION | WS_VISIBLE ,
+		500, 300, 300, 200, hwndWindow, 0, hInstance, 0);
+	EnableWindow(hwndWindow, false);
+	while (GetMessage(&msg, NULL, 0, 0)) {
+
+		TranslateMessage(&msg);
+		DispatchMessage(&msg);
+	}
+	EnableWindow(hwndWindow, true);
+	//Make sure the window is Shown And not minimized
+	SetActiveWindow(hwndWindow);
+	return getWindowEditString();
+}
+
+void window::setActive()
+{
+	SetActiveWindow(hwndWindow);
+}
+
+int window::printMessageBox(char s[], char type)
+{
+	int ret = -1;
+	switch (type) {
+	case 'L':
+		ret = MessageBox(hwndWindow, "Do you want to load? All unsaved progress will be lost.", "Programming Technique", MB_OKCANCEL | MB_ICONINFORMATION | MB_RIGHT);
+		break;
+	case 'Q':
+		ret = MessageBox(hwndWindow, ("Do you want to exit? All unsaved progress will be lost."), ("Programming Techniques Project"), MB_YESNOCANCEL | MB_ICONSTOP | MB_RIGHT);
+		break;
+	case 'N':
+		ret = MessageBox(hwndWindow, "Do you want to make a new design? All unsaved progress will be lost.", "Programming Technique", MB_OKCANCEL | MB_ICONINFORMATION | MB_RIGHT);
+		break;
+	default:
+		if (strlen(s) > 0)
+			ret = MessageBox(hwndWindow, (s), ("Programming Techniques Project"), MB_OK | MB_ICONERROR);
+		break;
+	}
+	return ret;
+}
+
+void window::drawHovering(string s, int x, int y, int w, int h)
+{
+	HWND D = CreateWindow("STATIC", NULL, WS_VISIBLE | WS_DISABLED, x, y, 2, 2, hwndWindow, NULL, (HINSTANCE)GetWindowLong(hwndWindow, GWL_HINSTANCE), NULL);
+	HDC hdc = GetDC(D); //Getting the Handle to Deisgn control
+	LPRECT c = new RECT;
+	c->left = x;
+	c->right = w + 100;
+	c->bottom = h + 100;
+	c->top = y;
+	SetBrush(BLACK);
+	DrawTextA(hdc, s.c_str(), -1, c,  DT_LEFT | DT_WORDBREAK);
+}
+
+string window::theWindowEditString = "";
+
+ void window::setWindowEditString(string s)
+{
+	theWindowEditString = s;
+}
+
+ string window::getWindowEditString()
+{
+	return theWindowEditString;
+}
+
+ string window::getTheComponenetString()
+ {
+	 return theComponenetString;
+ }
+
 
 void window::Print() {
 

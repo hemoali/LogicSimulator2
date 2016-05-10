@@ -42,18 +42,26 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 		char c1;
 		keytype key = pWind->GetKeyPress(c1);
 		if ((int)c1 == 26) {
+			//Always Clear hover Bar if found
+			pManager->GetOutput()->clearHoveringImage(imgh, J, K, widthh);
 			return UNDOACTION;
 		}
 		else if ((int)c1 == 25) {
+			//Always Clear hover Bar if found
+			pManager->GetOutput()->clearHoveringImage(imgh, J, K, widthh);
 			return REDOACTION;
 		}
 		else if ((int)c1 == 4) {
 			switchMode(DESIGN, pManager);
 		}
 		else if ((int)c1 == 18) {
+			//Always Clear hover Bar if found
+			pManager->GetOutput()->clearHoveringImage(imgh, J, K, widthh);
 			return ValidateAction;
 		}
 		else if ((int)c1 == 19) {
+			//Always Clear hover Bar if found
+			pManager->GetOutput()->clearHoveringImage(imgh, J, K, widthh);
 			return SAVE;
 		}
 		// Working with mouse
@@ -325,12 +333,12 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 								imgh = NULL;
 								imgh = pManager->GetOutput()->printHovering(J, K, comp->getLabel(), widthh, comp);
 							}
-							pManager->GetOutput()->PrintMsg(comp->getLabel());
+							//pManager->GetOutput()->PrintMsg(comp->getLabel());
 						}
 						else if (comp == NULL) {
 							//Always Clear hover Bar if found at the transition between one component and the other
 							pManager->GetOutput()->clearHoveringImage(imgh, J, K, widthh);
-							pManager->GetOutput()->PrintMsg("");
+							//pManager->GetOutput()->PrintStatusBox("");
 						}
 
 						preComp = comp;
@@ -431,7 +439,7 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 						returnValidateion = true;
 					}
 					else {
-						pManager->GetOutput()->PrintMsg("Please add components first!", UI.ErrorColor);
+						pManager->GetOutput()->PrintStatusBox("Please add components first!", UI.ErrorColor);
 					}
 				}
 				if (returnValidateion) { return ValidateAction; };
@@ -554,6 +562,10 @@ void Input::switchMode(MODE appMode, ApplicationManager* pManager) {
 		UI.AppMode = SIMULATION;
 	}
 }
+string Input::getStringBox(string s)
+{
+	return pWind->getStringBox(s);
+}
 buttonstate Input::GetButtonStatus(const button btMouse, int &iX, int &iY) const {
 	return pWind->GetButtonState(btMouse, iX, iY);
 }
@@ -576,7 +588,7 @@ string Input::GetSrting(Output *pOut, string sOriginal = "", bool EditingLabel)
 		}
 		pOut->PrintMsg(sOriginal + " " + s);
 	}
-	pOut->PrintMsg("");
+	//pOut->PrintStatusBox(");
 	pWind->FlushMouseQueue();
 	return s;
 }

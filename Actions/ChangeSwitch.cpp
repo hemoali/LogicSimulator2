@@ -29,7 +29,7 @@ void ChangeSwitch::Execute()
 		
 	}
 	else {
-		pOut->PrintMsg("It's not deleted.. Error");
+		pOut->PrintStatusBox("It's not deleted.. Error");
 	}
 }
 void ChangeSwitch::Undo()
