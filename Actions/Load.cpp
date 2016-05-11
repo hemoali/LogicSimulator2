@@ -111,7 +111,7 @@ void Load::Execute()
 		for (int i = 0; i < compCount; i++)
 		{
 			file >> compName >> point.x1 >> point.y1 >> compLabel;
-			if (compLabel.size() == 1) {
+			if (compLabel.size() <= 1) {
 				//Means that the label is empty as we have put an extra L 
 				//char at the begining of te saved label to know whetherit has a name or not
 				// in order to avoid misreading the input file
