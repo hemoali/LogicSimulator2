@@ -19,8 +19,7 @@ bool AddNORgate3::ReadActionParameters(image * smallImageBeforeAddingComponent)
 	pOut->PrintStatusBox(" 3-Input NOR gate : Click to add the gate");
 
 	if (pOut->SetDragImage(ADD_NOR_GATE_3, GInfo, smallImageBeforeAddingComponent)){
-		string s = "Please enter gate label: ";
-		pOut->PrintMsg(s);
+
 		gateLabel =pIn->getStringBox();
 		done = true;
 	}

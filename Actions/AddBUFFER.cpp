@@ -19,8 +19,6 @@ bool AddBUFFER::ReadActionParameters(image * smallImageBeforeAddingComponent)
 	pOut->PrintStatusBox("BUFFER : Click to add the gate");
 
 	if (pOut->SetDragImage(ADD_Buff, GInfo, smallImageBeforeAddingComponent)) {
-		string s = "Please enter gate label: ";
-		pOut->PrintMsg(s);
 		gateLabel =pIn->getStringBox();
 		done = true;
 	}

@@ -19,8 +19,7 @@ bool AddNANDgate2::ReadActionParameters(image * smallImageBeforeAddingComponent)
 	pOut->PrintStatusBox(" 2-Input NAND gate : Click to add the gate");
 
 	if (pOut->SetDragImage(ADD_NAND_GATE_2, GInfo, smallImageBeforeAddingComponent)) {
-		string s = "Please enter gate label: ";
-		pOut->PrintMsg(s);
+
 		gateLabel =pIn->getStringBox();
 		done = true;
 	}

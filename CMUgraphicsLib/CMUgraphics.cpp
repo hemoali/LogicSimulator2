@@ -1592,7 +1592,7 @@ string window::getStringBox(string s)
 	window::theComponenetString = s;
 	MSG  msg;
 	WNDCLASSW wc = { 0 };
-	wc.lpszClassName = L"Type the prefered label";
+	wc.lpszClassName = L"Type the component name";
 	wc.hInstance = hInstance;
 	wc.hbrBackground = GetSysColorBrush(COLOR_3DFACE);
 	wc.lpfnWndProc = WndProc;
@@ -1600,7 +1600,7 @@ string window::getStringBox(string s)
 
 	RegisterClassW(&wc);
 	
-	CreateWindowW(wc.lpszClassName, L"Type the prefered label",
+	CreateWindowW(wc.lpszClassName, L"Type the component name",
 		WS_SYSMENU |WS_CAPTION | WS_VISIBLE ,
 		500, 300, 300, 200, hwndWindow, 0, hInstance, 0);
 	EnableWindow(hwndWindow, false);
