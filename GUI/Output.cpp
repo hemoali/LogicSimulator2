@@ -17,6 +17,7 @@ Component* Output::arrayOfComponents[44][74];
 void DRAWAFTERMENUE(Output* pOut, HWND D) {
 	pOut->pWind->setActive();
 	CloseWindow(D);
+	SendMessage(D, WM_CLOSE, 0, 0);
 
 }
 
