@@ -147,9 +147,7 @@ void AddConnection::Execute()
 				inputComponent->getInputPin(inputPin)->setConnection(pA);
 				inputComponent->getInputPin(inputPin)->setPosition(numOfInputs);
 				if (!Silent) {
-					string s = "Please enter connection label: ";
-					pManager->GetOutput()->PrintMsg(s);
-					gateLabel = pManager->GetInput()->GetSrting(pManager->GetOutput(), s);
+					gateLabel = pManager->GetInput()->getStringBox();
 				}
 				pA->setLabel(gateLabel);
 				pA->setIsDrawn(true);
