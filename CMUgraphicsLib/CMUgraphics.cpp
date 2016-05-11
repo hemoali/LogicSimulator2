@@ -1612,6 +1612,8 @@ string window::getStringBox(string s)
 	EnableWindow(hwndWindow, true);
 	//Make sure the window is Shown And not minimized
 	SetActiveWindow(hwndWindow);
+	if (getWindowEditString().size() == 0)
+		return "";
 	return getWindowEditString();
 }
 
