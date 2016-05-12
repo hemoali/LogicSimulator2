@@ -24,7 +24,7 @@ void Delete::Execute()
 		if (theComponent != NULL && (dynamic_cast<Gate*> (theComponent) || dynamic_cast<LED*>(theComponent) || dynamic_cast<SWITCH*> (theComponent))){
 			Output *pOut = pManager->GetOutput();
 			string s = "Gate: " + (theComponent->getLabel()) + " has been deleted successfully";
-			pOut->PrintMsg(s);
+			pOut->PrintStatusBox(s);
 			theComponent->setDelete(true);
 			theComponent->Draw(pOut);
 			GraphicsInfo gfx = theComponent->getCornersLocation();
@@ -66,7 +66,7 @@ void Delete::Execute()
 		}
 	}
 	else {
-		pOut->PrintMsg("It's not deleted.. Error");
+		pOut->PrintStatusBox("It's not deleted.. Error");
 	}
 }
 void Delete::reconnectConenction(Connection* conn) {
@@ -108,7 +108,7 @@ void Delete::Undo()
 	if (theComponent != NULL && dynamic_cast<Gate*> (theComponent)) {
 		Output *pOut = pManager->GetOutput();
 		string s = "Gate: " + (theComponent->getLabel()) + " has been deleted successfully";
-		pOut->PrintMsg(s);
+		pOut->PrintStatusBox(s);
 		theComponent->setDelete(false);
 		theComponent->Draw(pOut);
 		GraphicsInfo gfx = theComponent->getCornersLocation();
@@ -166,7 +166,7 @@ void Delete::Redo()
 
 	if (theComponent != NULL && dynamic_cast<Gate*> (theComponent)) {
 		string s = "Gate: " + (theComponent->getLabel()) + " has been deleted successfully";
-		pOut->PrintMsg(s);
+		pOut->PrintStatusBox(s);
 		theComponent->setDelete(true);
 		theComponent->Draw(pOut);
 		GraphicsInfo gfx = theComponent->getCornersLocation();

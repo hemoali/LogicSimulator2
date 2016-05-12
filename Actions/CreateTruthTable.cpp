@@ -103,7 +103,7 @@ void CreateTruthTable::Execute()
 			file << endl;
 		}
 	}
-	pOut->PrintMsg("The truth table has been created sucessfully");
+	pOut->PrintStatusBox("The truth table has been created sucessfully");
 	file.close();
 }
 

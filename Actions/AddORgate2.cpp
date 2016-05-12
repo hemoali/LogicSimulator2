@@ -17,12 +17,11 @@ bool AddORgate2::ReadActionParameters(image * smallImageBeforeAddingComponent)
 	Input* pIn = pManager->GetInput();
 
 	//Print Action Message
-	pOut->PrintMsg("2-Input OR Gate: Click to add the gate");
+	pOut->PrintStatusBox("2-Input OR Gate: Click to add the gate");
 
 	if (pOut->SetDragImage(ADD_OR_GATE_2, GInfo, smallImageBeforeAddingComponent)){
-		string s = "Please enter gate label: ";
-		pOut->PrintMsg(s);
-		gateLabel = pIn->GetSrting(pOut, s);
+
+		gateLabel =pIn->getStringBox();
 		done = true;
 	}
 

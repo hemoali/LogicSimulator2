@@ -11,8 +11,9 @@ This file was last modified on 05.16.1999
 #ifndef WINDOWS_H
 #define WINDOWS_H
 #include <windows.h>
-#endif //WINDOWS_H
 
+#endif //WINDOWS_H
+#include <string>
 #include "mousequeue.h"
 #include "keyqueue.h"
 #include "image.h"
@@ -137,9 +138,13 @@ private:
 	void operator=(window &);
 	window(window &);
 
+	//the String from Menu
+	static string theWindowEditString;
+	static string theComponenetString;
+
 public:
 
-
+	//static string theWindowEditString;
 	// Create a new window! iWindWidth and iWindHeight will change the size of 
 	// the window created. iWindXPos and iWindYPos is the position the window
 	// will appear on the screen
@@ -324,6 +329,18 @@ public:
 	// and stores it in an image object 
 	void StoreImage(image *imgThis, const unsigned usX, const unsigned short usY, const unsigned short usWidth, const unsigned short usHeight);
 	void StoreImage(image &imgThis, const unsigned usX, const unsigned short usY, const unsigned short usWidth, const unsigned short usHeight);
+	//
+	HWND DrawStringStatusBox(string s,int x, int y); 
+	string getStringBox(string s = "");
+	void setActive();
+
+	int printMessageBox(char s[], char type = 'V');
+
+	void drawHovering(string s, int x, int y, int w, int h);
+
+	static void setWindowEditString(string s);
+	static string getWindowEditString();
+	static string getTheComponenetString();
 
 	// Prints the contents of the window
 	void Print();

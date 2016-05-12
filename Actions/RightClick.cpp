@@ -14,7 +14,7 @@ bool RightClick::ReadActionParameters(image* img) {
 	Output *pOut = pManager->GetOutput(); //Pointer to Output Class
 	Input *pIn = pManager->GetInput(); //Pointer to Input Class
 	pIn->getSelectionPoint(x, y); //New Member Function in input Class to get the selected points coordinates
-	//pOut->PrintMsg("Right Select"); //Debugging Code
+	//pOut->PrintStatusBox("Right Select"); //Debugging Code
 
 	//Checking for MultiSelect having some Gates Or MultiSlect With No Gates(i.e. Connections Only)  
 	//This Code will be kept if we are supporting MultiSelect Components
@@ -42,7 +42,7 @@ bool RightClick::ReadActionParameters(image* img) {
 	if (C != NULL && ((dynamic_cast<Gate*>(C) || dynamic_cast<LED*> (C) || dynamic_cast<SWITCH*>(C)) && !C->getDelete()))
 	{
 		string s = "Gate : " + (C->getLabel()) + " is selected";
-		pOut->PrintMsg(s);
+		pOut->PrintStatusBox(s);
 		//Correct Point First call with false parameter (No Drawing)
 		if (pIn->getSelectMode())
 			pOut->DrawRClickMenu_CorrectPoints(x, y, 5, false);
@@ -134,7 +134,7 @@ bool RightClick::ReadActionParameters(image* img) {
 		pinDestination = D->getDestPin()->getComponent()->getLabel();
 		if (!pIn->getSelectMode()) {
 			string s = "Connection between Gate: " + pinSource + " and Gate: " + pinDestination + " is selected";
-			pOut->PrintMsg(s);
+			pOut->PrintStatusBox(s);
 		}
 		//Correct Point First call with false parameter (No Drawing)
 		if (pIn->getSelectMode())
@@ -278,16 +278,13 @@ void RightClick::Execute() {
 		switch (SelectedAction)
 		{
 		case COPY:
-			pOut->PrintMsg("Copy is Selected Remove ya Saleh when Finished");
-			Sleep(1000);
+			pOut->PrintStatusBox("Copy is Selected Remove ya Saleh when Finished");
 			break;
 		case CUT:
-			pOut->PrintMsg("CUT is Selected Remove ya Saleh when Finished");
-			Sleep(1000);
+			pOut->PrintStatusBox("CUT is Selected Remove ya Saleh when Finished");
 			break;
 		case PASTE:
-			pOut->PrintMsg("Paste is Selected Remove ya Saleh when Finished");
-			Sleep(1000);
+			pOut->PrintStatusBox("Paste is Selected Remove ya Saleh when Finished");
 			break;
 		case EDIT_Label: {
 			theAction = new EditLabel(pManager, C);
@@ -303,7 +300,7 @@ void RightClick::Execute() {
 		}
 		case Multi_Del: {
 			Input *pIn = pManager->GetInput();
-			pOut->PrintMsg("Mult Delete is Selected");
+			pOut->PrintStatusBox("Mult Delete is Selected");
 			theAction = new MultiDelete(pManager,pIn->getSelectedComponents());
 			break;
 		}

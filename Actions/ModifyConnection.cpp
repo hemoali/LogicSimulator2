@@ -33,9 +33,9 @@ bool ModifyConnection::ReadActionParameters(image *I)
 	Output* pOut = pManager->GetOutput();
 	Input* pIn = pManager->GetInput();
 
-	pOut->PrintMsg("Connection : Click to select the Source");
+	pOut->PrintStatusBox("Connection : Click to select the Source");
 	pIn->GetPointClicked(Cx1, Cy1);
-	pOut->PrintMsg("Connection : Click to select the Destination");
+	pOut->PrintStatusBox("Connection : Click to select the Destination");
 	pIn->GetPointClicked(Cx2, Cy2);
 	//Clear Status Bar
 	pOut->ClearStatusBar();
@@ -87,7 +87,7 @@ void ModifyConnection::Execute()
 
 		if (inputComponent == NULL || outputComponent == NULL || inputComponent == outputComponent || dynamic_cast<SWITCH*> (inputComponent) || dynamic_cast<LED*> (outputComponent))
 		{
-			pManager->GetOutput()->PrintMsg("Invalid Connection", UI.ErrorColor);
+			pManager->GetOutput()->PrintStatusBox("Invalid Connection", UI.ErrorColor);
 			Sleep(600);
 			isCorrectNewConnection = false;
 		}
@@ -100,7 +100,7 @@ void ModifyConnection::Execute()
 
 				if (!isValidRegardingFeedback)
 				{
-					pManager->GetOutput()->PrintMsg("Feedback isn't allowed", UI.ErrorColor);
+					pManager->GetOutput()->PrintStatusBox("Feedback isn't allowed", UI.ErrorColor);
 					Sleep(600);
 					isCorrectNewConnection = false;
 					goto end;
@@ -125,7 +125,7 @@ void ModifyConnection::Execute()
 
 			if (inputComponent->getInputPin(inputPin)->getConnection() != NULL || outputComponent->getOutputPin()->connectedConnectionsCount() == FANOUT)
 			{
-				pManager->GetOutput()->PrintMsg("Invalid Connection", UI.ErrorColor);
+				pManager->GetOutput()->PrintStatusBox("Invalid Connection", UI.ErrorColor);
 				Sleep(100);
 			}
 			else {
@@ -185,7 +185,7 @@ void ModifyConnection::Execute()
 					Utils::undoActions.push(this);
 				}
 				else {
-					pManager->GetOutput()->PrintMsg("No Available Connection");
+					pManager->GetOutput()->PrintStatusBox("No Available Connection");
 					isCorrectNewConnection = false;
 				}
 			}

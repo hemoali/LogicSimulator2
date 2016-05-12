@@ -18,6 +18,7 @@ private:
 	static CellType usedPixels[44][74];
 	static Component* arrayOfComponents[44][74];
 	ApplicationManager* pManager;
+	friend void DRAWAFTERMENUE(Output *pOut, HWND D);
 public:
 	Output(ApplicationManager* pManager); // Performs the Window Initialization
 	Input* CreateInput() const; //creates a pointer to the Input object
@@ -57,13 +58,17 @@ public:
 	void DrawRClickMenu_CorrectPoints(int& x, int& y, int type, bool = true);
 
 	
-	void DrawWarningMenues(char type);
+	void DrawWarningMenues(char type,int x= 0, int y=0);
 	image* StoreBeforeWarning();
 	void DrawAfterWarning(image* theWarningImage);
 
 	image* printHovering(int& x, int& y, string s, int& w, Component* C);
 	void correctHoverStartpoint(int &x, int &y, int width);
 	void clearHoveringImage(image* img,int J, int K,int widthh);
+
+	void PrintStatusBox(string s,color = GREEN);
+
+	int printPopUpMessage(string s, char type = 'V');
 
 	void storeImage(image* img, int x1, int y1, int x2, int y2);
 
@@ -84,6 +89,7 @@ public:
 
 	//Resetting Interface
 	void resetInterfaceArrays();
+
 
 	~Output();
 };

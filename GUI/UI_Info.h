@@ -27,7 +27,9 @@ struct UI_Info	//User Interface Info.
 		RightClickCMenuH = 60,
 		WarningMenuWidth = 357,
 		WarningMenuHeight = 136,
-		HoverHeight = 24;
+		HoverHeight = 24,
+		StatusBoxHeight = 80,
+		StatusBoxWidth = 400;
 
 	color DrawColor;		//Drawing color
 	color SelectColor;		//Highlighting color for gates and connections

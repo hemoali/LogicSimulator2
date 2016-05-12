@@ -28,6 +28,7 @@ bool Load::ReadActionParameters(image *I)
 {
 	Output *pOut = pManager->GetOutput();
 	Input *pIn = pManager->GetInput();
+	/*
 	image *img = pOut->StoreBeforeWarning();
 	int x, y;
 	pOut->DrawWarningMenues('L');
@@ -58,6 +59,10 @@ bool Load::ReadActionParameters(image *I)
 	}
 	if (draw) return true;
 	return false;
+	*/
+	int selected = pOut->printPopUpMessage("Do you want to load? All unsaved progress will be lost.", 'L');
+	if (selected == 1) return true;
+	return false;
 }
 void Load::Execute()
 {
@@ -81,7 +86,7 @@ void Load::Execute()
 		for (int i = 0; i < compCount; i++)
 		{
 			file >> compName >> point.x1 >> point.y1 >> compLabel;
-			if (compLabel.size() == 1) {
+			if (compLabel.size() <= 1) {
 				//Means that the label is empty as we have put an extra L 
 				//char at the begining of te saved label to know whetherit has a name or not
 				// in order to avoid misreading the input file
@@ -252,7 +257,8 @@ void Load::Execute()
 			}
 			theConnection->AddConnectionSilent(c1, c2, c3, c4, compLabel);
 		}
-		pManager->GetOutput()->PrintMsg("Design loaded successfully");
+		//pManager->GetOutput()->PrintMsg("Design loaded successfully");
+		pOut->PrintStatusBox("Design loaded successfully");
 		file.close();
 
 		// clear undo/redo stacks

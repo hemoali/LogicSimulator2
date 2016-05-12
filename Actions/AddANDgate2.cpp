@@ -14,12 +14,9 @@ bool AddANDgate2::ReadActionParameters(image * smallImageBeforeAddingComponent)
 	Input* pIn = pManager->GetInput();
 
 	//Print Action Message
-	pOut->PrintMsg("2-Input AND Gate: Click to add the gate, ESCAPE to stop");
+	pOut->PrintStatusBox("2-Input AND Gate: Click to add the gate, ESCAPE to stop");
 	if (pOut->SetDragImage(ADD_AND_GATE_2, GInfo, smallImageBeforeAddingComponent)){
-
-		string s = "Please enter gate label: ";
-		pOut->PrintMsg(s);
-		gateLabel = pIn->GetSrting(pOut, s);
+		gateLabel =pIn->getStringBox();
 
 		done = true;
 	}

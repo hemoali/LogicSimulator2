@@ -18,7 +18,7 @@ bool AddConnection::ReadActionParameters(image * smallImageBeforeAddingComponent
 	if (!Silent) {
 		//Print Action Message
 		pIn->getConnectionStartPoint(Cx1, Cy1);
-		pOut->PrintMsg("Connection : Click to select the Destination");
+		pOut->PrintStatusBox("Connection : Click to select the Destination");
 		pIn->GetPointClicked(Cx2, Cy2);
 		pIn->GetPointClicked(Cx2, Cy2);
 
@@ -79,7 +79,7 @@ void AddConnection::Execute()
 
 	if (inputComponent == NULL || outputComponent == NULL || inputComponent == outputComponent || dynamic_cast<SWITCH*> (inputComponent) || dynamic_cast<LED*> (outputComponent))
 	{
-		pManager->GetOutput()->PrintMsg("Invalid Connection", UI.ErrorColor);
+		pManager->GetOutput()->PrintStatusBox("Invalid Connection", UI.ErrorColor);
 		Sleep(100);
 	}
 	else {
@@ -91,7 +91,7 @@ void AddConnection::Execute()
 
 			if (!isValidRegardingFeedback)
 			{
-				pManager->GetOutput()->PrintMsg("Feedback isn't allowed", UI.ErrorColor);
+				pManager->GetOutput()->PrintStatusBox("Feedback isn't allowed", UI.ErrorColor);
 				Sleep(600);
 				goto end;
 				break;
@@ -117,7 +117,7 @@ void AddConnection::Execute()
 
 		if (inputComponent->getInputPin(inputPin)->getConnection() != NULL || outputComponent->getOutputPin()->connectedConnectionsCount() == FANOUT)
 		{
-			pManager->GetOutput()->PrintMsg("Invalid Connection", UI.ErrorColor);
+			pManager->GetOutput()->PrintStatusBox("Invalid Connection", UI.ErrorColor);
 			Sleep(100);
 		}
 		else {
@@ -147,9 +147,7 @@ void AddConnection::Execute()
 				inputComponent->getInputPin(inputPin)->setConnection(pA);
 				inputComponent->getInputPin(inputPin)->setPosition(numOfInputs);
 				if (!Silent) {
-					string s = "Please enter connection label: ";
-					pManager->GetOutput()->PrintMsg(s);
-					gateLabel = pManager->GetInput()->GetSrting(pManager->GetOutput(), s);
+					gateLabel = pManager->GetInput()->getStringBox();
 				}
 				pA->setLabel(gateLabel);
 				pA->setIsDrawn(true);
@@ -162,7 +160,7 @@ void AddConnection::Execute()
 				Action::pA = pA;
 			}
 			else {
-				pManager->GetOutput()->PrintMsg("No Available Connection");
+				pManager->GetOutput()->PrintStatusBox("No Available Connection");
 			}
 		}
 	}

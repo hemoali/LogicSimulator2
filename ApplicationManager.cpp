@@ -28,7 +28,7 @@
 ApplicationManager::ApplicationManager()
 {
 	CompCount = 0;
-
+	Exitchoice = 0;
 	for (int i = 0; i < MaxCompCount; i++)
 		CompList[i] = NULL;
 
@@ -57,6 +57,7 @@ void ApplicationManager::ExecuteAction(ActionType ActType)
 	Action* pAct = NULL;
 	string msg = "Press ESCAPE to stop";
 	string error_msg = "Please select point within workspace avoiding overlaping!";
+
 	GraphicsInfo Gfx_info;
 	Gfx_info.x1 = Gfx_info.y1 = -1;
 	switch (ActType)
@@ -167,7 +168,7 @@ void ApplicationManager::ExecuteAction(ActionType ActType)
 	}
 	case Create_TruthTable:
 	{
-		OutputInterface->PrintMsg("Creating truth table ....");
+		OutputInterface->PrintStatusBox("Creating truth table ....");
 		pAct = new CreateTruthTable(this);
 		break;
 	}
@@ -176,6 +177,7 @@ void ApplicationManager::ExecuteAction(ActionType ActType)
 		break;
 	case EXIT:
 		// Exit action here
+		Exitchoice = GetOutput()->printPopUpMessage("", 'Q');
 		break;
 	}
 	if (pAct)

@@ -13,6 +13,15 @@ int arrayOfCorners[44][74];
 int connectionsCountAtPixel[44][74];
 Component* Output::arrayOfComponents[44][74];
 
+//the Timer doen't allow passing a memberfunction pointer to it unless it's a static memberFunction
+void DRAWAFTERMENUE(Output* pOut, HWND D) {
+	pOut->pWind->setActive();
+	CloseWindow(D);
+	SendMessage(D, WM_CLOSE, 0, 0);
+
+}
+
+
 Output::Output(ApplicationManager* pManager)
 {
 	//Initialize user interface parameters
@@ -528,6 +537,10 @@ image * Output::StoreBeforeMenu(int x, int y, int type,int w)
 		//It's an hover part
 		pWind->StoreImage(ptr, x, y, w, Height);
 	}
+	else if (type == 9) {
+		//It's the status Bar
+		pWind->StoreImage(ptr, x, y, UI.StatusBoxWidth, UI.StatusBoxHeight);
+	}
 	else pWind->StoreImage(ptr, x, y, UI.RightClickMenuLength, Height);
 	return ptr;
 }
@@ -553,10 +566,18 @@ void Output::DrawAfterMenu(image * img, int x, int y, int type,int w)
 		//HoveringBar
 		Height = UI.HoverHeight;
 		break;
+	case 9:
+		//It's the status Bar
+		Height = UI.StatusBarHeight;
+		break;
 	}
 	if (type == 7) {
 		//It's an hover part
 		pWind->DrawImage(img, x, y, w, Height);
+	}
+	else if (type == 9) {
+		//It's the status Bar
+		pWind->DrawImage(img, x, y, UI.StatusBoxWidth, UI.StatusBoxHeight);
 	}
 	else pWind->DrawImage(img, x, y, UI.RightClickMenuLength, Height);
 	if (type != 7)
@@ -583,7 +604,7 @@ void Output::drawRectangle(int x1, int y1, int x2, int y2) {
 }
 
 
-void Output::DrawWarningMenues(char type)
+void Output::DrawWarningMenues(char type,int x, int y)
 {
 	int xbegin, xend, ybegin, yend;
 	xbegin = UI.width / 2 - UI.WarningMenuWidth / 2;
@@ -594,6 +615,12 @@ void Output::DrawWarningMenues(char type)
 		imageURL = "images\\Menu\\LoadConfirmationMenu.jpg";
 		pWind->DrawImage(imageURL, xbegin, ybegin, UI.WarningMenuWidth, UI.WarningMenuHeight);
 		break;
+	case 'S': 
+	{
+		imageURL = "images\\Menu\\statusBar.jpg";
+		pWind->DrawImage(imageURL, x, y, UI.StatusBoxWidth, UI.StatusBoxHeight);
+		break;
+	}
 	}
 }
 
@@ -617,35 +644,16 @@ void Output::DrawAfterWarning(image * theWarningImage)
 
 image * Output::printHovering(int & x, int & y, string s, int & w, Component * C)
 {
-
 	image* img = NULL;
-	int numC = 0, numS = 0, wC = 14, wS = 9, avg = 0;
+	int width, height;
+	pWind->SetFont(20, BOLD | ITALICIZED, BY_NAME, "Arial");
 	//checking whether it's in the design Mode or 
 	if (UI.AppMode == DESIGN) {
-		for (int i = 0; i < s.size(); i++) {
-			//scanning for how many Capital Letters for determination of correct rectangle width
-			if (isupper(s[i])) numC++;
-			else numS++;
-		}
-		avg = numC*wC + numS *wS / (s.size() + 1);
-		int width = numC * wC + numS * wS + 10; 
-		// to test whether the hover appearance is good
-		/*	int len = s.size()-1;*/
-		/*	bool wasLong = false;
-		while (width > 150) {
-			wasLong = true;
-			char tmp = s[len--];
-			if (isupper(tmp)) width -= wC;
-			else width -= wS;
-		}
-		if (wasLong) {
-			s = s.substr(0, len);
-			s[len-1] = '.';
-			s[len - 2] = '.';
-			s[len - 3] = '.';
-			width -= 3 * avg;
-		}*/
-		int height = UI.HoverHeight;
+		int h;
+		pWind->getStringWidth(s,width, h);
+		//the Clearnace
+		width += 16;
+		height = UI.HoverHeight;
 		if (!dynamic_cast<Connection*>(C)) {
 			//if it's a connection for better appearnace
 			x = C->getCenterLocation().x1 + 10;
@@ -659,13 +667,12 @@ image * Output::printHovering(int & x, int & y, string s, int & w, Component * C
 		pWind->SetPen(BLACK, 2);
 		pWind->SetBrush(AZURE);
 		pWind->DrawRectangle(x, y, x + width, y + height, FILLED, 3, 4);
-		pWind->DrawString(x + 5, y + 2, s);
+		pWind->DrawString(x + 7, y + 2, s);
 		w = width;
 		return img;
 	}
 	else {
 		//Simulation Mode Hovering
-		int width = 0, height = 0;
 		Connection *ptr = NULL;
 		//Checking if it's a connection Hover or other componenets hover
 		if (ptr = dynamic_cast<Connection*> (C)) {
@@ -692,18 +699,14 @@ image * Output::printHovering(int & x, int & y, string s, int & w, Component * C
 		}
 		else {
 			//Other Component Hover
-			for (int i = 0; i < s.size(); i++) {
-				//scanning for how many Capital Letters for determination of correct rectangle width
-				if (isupper(s[i])) numC++;
-				else numS++;
-			}
-			width = numC * wC + numS * wS + 10;
+			int h;
 			height = UI.HoverHeight;
+			pWind->getStringWidth(s, width, h);
+			//the Clearnace
+			width += 16;
 			//Correct the Points
-			//if (C->getComponentActionType() == ADD_Switch) {
 			x = C->getCenterLocation().x1 + 10;
 			y = C->getCenterLocation().y1 + 5;
-			//}
 			this->correctHoverStartpoint(x, y, width);
 			//Store Before Hovering
 			img = this->StoreBeforeMenu(x, y, 7, width);
@@ -711,7 +714,7 @@ image * Output::printHovering(int & x, int & y, string s, int & w, Component * C
 			pWind->SetPen(BLACK, 2);
 			pWind->SetBrush(LIGHTBLUE);
 			pWind->DrawRectangle(x, y, x + width, y + height, FILLED, 4, 4);
-			pWind->DrawString(x + 5, y + 2, s);
+			pWind->DrawString(x + 7, y + 2, s);
 			w = width;
 		}
 	}
@@ -750,7 +753,25 @@ void Output::clearHoveringImage(image * img,int J, int K,int widthh)
 		this->DrawAfterMenu(img, J, K, 7, widthh);
 }
 
+void Output::PrintStatusBox(string s,color Z)
+{
+	//Print a StatusBox with timer in the time stack
+	image * img;
+	//the upperleft coordinates of the StatusBox
+	int x, y;
+	x = UI.width  - UI.StatusBoxWidth ;
+	y = UI.height - UI.StatusBoxHeight;
+	//Drawing the Text
+	HWND theWin = pWind->DrawStringStatusBox(s, x, y);
+	//Timer
+	later theTimer(2000, true, &DRAWAFTERMENUE,this,theWin);
+}
 
+int Output::printPopUpMessage(string s, char type)
+{
+	char *msg = (char*)(s.c_str());
+	return (pWind->printMessageBox(msg, type));
+}
 
 void Output::storeImage(image * img, int x1, int y1, int x2, int y2)
 {
@@ -1270,10 +1291,12 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 	int RectULY = iYOld - UI.GATE_Height / 2;
 	if (!moving)
 	{
-		PrintMsg("Please select point within workspace and avoid overlaping!, press ESCAPE to stop");
+		//PrintMsg("Please select point within workspace and avoid overlaping!, press ESCAPE to stop");
+		PrintStatusBox("Please select point within workspace and avoid overlaping!, press ESCAPE to stop");
 	}
 	else {
-		PrintMsg("Please select point within workspace and avoid overlaping!");
+		//PrintMsg("Please select point within workspace and avoid overlaping!");
+		PrintStatusBox("Please select point within workspace and avoid overlaping!");
 	}
 
 	bool draw = true, isOriginalDrawn = false;
@@ -1513,7 +1536,7 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 	}
 	pWind->FlushMouseQueue();
 	pWind->DownButtons(false);
-	PrintMsg("");
+	//PrintMsg("");
 	delete storedDrawingImg;
 	delete storedImg;
 	return draw;
@@ -1524,7 +1547,8 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 	{
 		return false;
 	}
-	PrintMsg("Please select point within workspace and avoid overlaping!, press ESCAPE to stop");
+	//PrintMsg("Please select point within workspace and avoid overlaping!, press ESCAPE to stop");
+	PrintStatusBox("Please select point within workspace and avoid overlaping!, press ESCAPE to stop");
 	int successfullyDrawnComponentsCount = 0;
 	image* storedImg = new image;
 	image* storedDrawingImg = new image;
@@ -1933,7 +1957,7 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 
 	pWind->FlushMouseQueue();
 	pWind->DownButtons(false);
-	PrintMsg("");
+	//PrintMsg("");
 	delete storedDrawingImg;
 	delete storedImg;
 	return isMovingSucceded;
