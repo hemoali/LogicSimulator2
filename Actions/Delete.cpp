@@ -61,7 +61,7 @@ void Delete::Execute()
 		}
 		if (pushToUndo)
 		{
-			pManager->undoActions.push(this);
+			Utils::undoActions.push(this);
 			Action::pA = theComponent;
 		}
 	}

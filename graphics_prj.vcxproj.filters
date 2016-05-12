@@ -261,6 +261,9 @@
     <ClCompile Include="Actions\CreateTruthTable.cpp">
       <Filter>Actions</Filter>
     </ClCompile>
+    <ClCompile Include="Actions\New.cpp">
+      <Filter>Actions</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Defs.H" />
@@ -476,6 +479,9 @@
       <Filter>Actions</Filter>
     </ClInclude>
     <ClInclude Include="Actions\CreateTruthTable.h">
+      <Filter>Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="Actions\New.h">
       <Filter>Actions</Filter>
     </ClInclude>
   </ItemGroup>

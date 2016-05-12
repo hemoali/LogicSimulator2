@@ -4,6 +4,9 @@
 #include "Components\Component.h"
 #include "Components\Connection.h"
 #include "ApplicationManager.h"
+#include <vector>
+#include <stack>
+class Action;
 class Utils
 {
 public:
@@ -13,6 +16,8 @@ public:
 	static bool CheckPoint(int x, int y, CellType[44][74]);
 	static bool CheckPointInBorders(int x, int y);
 	static GraphicsInfo* Utils::getOutputDirections(GraphicsInfo GInfo, CellType usedPixels[44][74], int noOfOutputs = 4);
+	static stack <Action*> undoActions, redoActions, simulationUndoActions, simulationRedoActions;
+
 	~Utils();
 };
 

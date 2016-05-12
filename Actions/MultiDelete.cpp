@@ -32,7 +32,7 @@ void MultiDelete::Execute()
 			allDeleteActions.push_back(act);
 			act->Execute();
 		}
-		pManager->undoActions.push(this);
+		Utils::undoActions.push(this);
 	}
 	else {
 		pOut->PrintMsg("Error deleting the selected gate(s) ");

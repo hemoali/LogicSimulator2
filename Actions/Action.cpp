@@ -8,18 +8,8 @@ void Action::Undo()
 	for (int i = GInfotmp.y1 / UI.GRID_SIZE + 1; i <= GInfotmp.y2 / UI.GRID_SIZE; i++) {
 		for (int j = GInfotmp.x1 / UI.GRID_SIZE; j <= GInfotmp.x2 / UI.GRID_SIZE; j++) {
 			pManager->GetOutput()->setArrayOfComponents(i, j, NULL);
-		}
-	}
-	int xbegin = (pA->getCenterLocation().x1 - UI.GATE_Width / 2.0) / UI.GRID_SIZE;
-	int xend = (pA->getCenterLocation().x1 + UI.GATE_Width / 2.0) / UI.GRID_SIZE;
-	int ybegin = (pA->getCenterLocation().y1 - UI.GATE_Height / 2.0) / UI.GRID_SIZE;
-	int yend = (pA->getCenterLocation().y1 + UI.GATE_Height / 2.0) / UI.GRID_SIZE;
-	//Removeing Used Pixels and the Array of components reserved cells
-	for (int i = ybegin + 1; i <= yend; i++)
-	{
-		for (int j = xbegin; j <= xend; j++)
-		{
 			pManager->GetOutput()->setUsedPixel(i, j, EMPTY);
+
 		}
 	}
 }

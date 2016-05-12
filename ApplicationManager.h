@@ -5,6 +5,7 @@
 #include "GUI\Input.h"
 #include <vector>
 #include <stack>
+#include "Utils.h"
 using namespace std;
 class Component;
 class Connection;
@@ -22,7 +23,6 @@ private:
 	Output* OutputInterface; //pointer to the Output Clase Interface
 	Input* InputInterface; //pointer to the Input Clase Interface
 public:	
-	stack <Action*> undoActions, redoActions, simulationUndoActions, simulationRedoActions;
 
 	ApplicationManager(); //constructor
 

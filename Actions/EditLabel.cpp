@@ -31,7 +31,7 @@ void EditLabel::Execute()
 		theOriginalLabel = theComponenet->getLabel();
 		theComponenet->setLabel(theNewLabel);
 		pOut->PrintMsg("Label changed Successfully");
-		pManager->undoActions.push(this);
+		Utils::undoActions.push(this);
 	}
 	else {
 		pOut->PrintMsg("Error editing the label!");

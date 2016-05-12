@@ -107,7 +107,7 @@ void MultiSelect::Execute()
 
 			pIn->setSelectMode(true);
 			pIn->setSelectedComponents(allSelectedComponents);
-			pManager->undoActions.push(this);
+			Utils::undoActions.push(this);
 		}
 	}
 

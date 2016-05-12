@@ -56,7 +56,7 @@ void AddANDgate2::Execute()
 			pManager->GetOutput()->setArrayOfComponents(i,j,pA);
 			}
 		}
-		pManager->undoActions.push(this);
+		Utils::undoActions.push(this);
 		Action::pA = pA;
 	}
 	

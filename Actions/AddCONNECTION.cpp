@@ -158,7 +158,7 @@ void AddConnection::Execute()
 				{
 					pManager->GetOutput()->setArrayOfComponents(cellsBeforeAddingConnection[i].y, cellsBeforeAddingConnection[i].x, pA);
 				}
-				pManager->undoActions.push(this);
+				Utils::undoActions.push(this);
 				Action::pA = pA;
 			}
 			else {

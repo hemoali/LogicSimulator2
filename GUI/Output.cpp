@@ -565,7 +565,7 @@ void Output::DrawAfterMenu(image * img, int x, int y, int type,int w)
 
 void Output::DrawCleanImage(image* img, int x, int y)
 {
-	pWind->DrawImage(img, x - UI.GRID_SIZE - 5, y - UI.GRID_SIZE - 5, 2 * UI.GRID_SIZE + 4, UI.GATE_Height + 3);
+	pWind->DrawImage(img, x - UI.GRID_SIZE - 6, y - UI.GRID_SIZE - 5, 2 * UI.GRID_SIZE + 5, UI.GATE_Height + 3);
 	pWind->SetPen(WHITE);
 	pWind->SetBrush(WHITE);
 	pWind->DrawPixel(x - UI.GRID_SIZE - 7 + (2 * UI.GRID_SIZE + 5) + 1, y - UI.GRID_SIZE - 9 + (UI.GATE_Height + 3) / 2);
@@ -1334,8 +1334,7 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 				GraphicsInfo Gfx;
 				Gfx.x1 = RectULX + UI.GATE_Width / 2;
 				Gfx.y1 = RectULY + UI.GATE_Height / 2;
-				pWind->StoreImage(smallCleanImageBeforeAddingGate, Gfx.x1 - UI.GRID_SIZE - 5, Gfx.y1 - UI.GRID_SIZE - 5, 2 * UI.GRID_SIZE + 5, UI.GATE_Height + 3);
-
+				pWind->StoreImage(smallCleanImageBeforeAddingGate, Gfx.x1 - UI.GRID_SIZE - 6, Gfx.y1 - UI.GRID_SIZE - 5, 2 * UI.GRID_SIZE + 5, UI.GATE_Height + 3);
 				switch (ActType) {
 				case ADD_Buff: {
 					DrawNot_Buffer(Gfx, true, moving, wrong);
@@ -1583,6 +1582,7 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 		}
 		for (size_t m = 0; m < allSelectedComponents.size(); m++)
 		{
+
 			if (dynamic_cast<Connection*>(allSelectedComponents[m].second)) continue;
 			int drawnConnectionsCount = 0;
 			int noOfTotalConnections = 0;
@@ -1592,6 +1592,7 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 			Utils::correctPointClicked(x, y, true, false);
 			if ((x != xyOld[m].first || y != xyOld[m].second) || (!alreadyHighlighted[m] && x == xyOld[m].first && y == xyOld[m].second))
 			{
+
 				moved = true;
 				alreadyHighlighted[m] = true;
 				vector<Connection*> allInputConnections, allOutputConnections;
@@ -1601,7 +1602,6 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 				noOfTotalConnections = allInputConnections.size() + allOutputConnections.size();
 
 				clearConnectionsFromGrid(allOutputConnections, allInputConnections);
-
 				if (!Utils::CheckPoint({ x,y }, usedPixels, true, false)) {
 					wrong = true;
 				}
@@ -1622,7 +1622,7 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 					GraphicsInfo Gfx;
 					Gfx.x1 = RectULXY[m].first + UI.GATE_Width / 2;
 					Gfx.y1 = RectULXY[m].second + UI.GATE_Height / 2;
-					pWind->StoreImage(allSmallCleanImages[m], Gfx.x1 - UI.GRID_SIZE - 5, Gfx.y1 - UI.GRID_SIZE - 5, 2 * UI.GRID_SIZE + 4, UI.GATE_Height + 3);
+					pWind->StoreImage(allSmallCleanImages[m], Gfx.x1 - UI.GRID_SIZE - 6, Gfx.y1 - UI.GRID_SIZE - 5, 2 * UI.GRID_SIZE + 5, UI.GATE_Height + 3);
 
 					switch (allSelectedComponents[m].second->getComponentActionType()) {
 					case ADD_Buff: {
@@ -1715,6 +1715,7 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 			pWind->UpdateBuffer();
 		}
 		bool toContinue = true;
+
 		for (size_t m = 0; m < isComponentDrawn.size(); m++)
 		{
 			if (dynamic_cast<Connection*>(allSelectedComponents[m].second)) continue;
@@ -1726,6 +1727,7 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 		if (toContinue && moved)
 		{
 			//Change corners
+
 			for (size_t m = 0; m < allSelectedComponents.size(); m++)
 			{
 				if (dynamic_cast<Connection*>(allSelectedComponents[m].second)) continue;
@@ -1756,6 +1758,7 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 				}
 
 			}
+
 			for (size_t m = 0; m < allSelectedComponents.size(); m++)
 			{
 				if (dynamic_cast<Connection*>(allSelectedComponents[m].second)) continue;
@@ -1778,6 +1781,7 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 				}
 			}
 			////Reconnect
+
 			vector <Connection*> allDrawnConnections;
 			for (size_t m = 0; m < allSelectedComponents.size(); m++)
 			{
@@ -1876,6 +1880,7 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 			int tx, ty;
 			if (Utils::CheckPoint({ ox,oy }, usedPixels, true, false) && (pWind->GetMouseClick(tx, ty) == LEFT_CLICK || pWind->GetButtonState(LEFT_BUTTON, tx, ty) == BUTTON_UP)) {
 				{
+
 					for (size_t m = 0; m < allSelectedComponents.size(); m++)
 					{
 						if (dynamic_cast<Connection*>(allSelectedComponents[m].second)) continue;
@@ -1887,6 +1892,7 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 							allSelectedComponents[m].second->Draw(pManager->GetOutput(), false);
 						}
 					}
+
 					for (size_t m = 0; m < allSelectedComponents.size(); m++)
 					{
 						if (dynamic_cast<Connection*>(allSelectedComponents[m].second)) continue;
@@ -1967,8 +1973,8 @@ void Output::DrawAnd_Nand(GraphicsInfo g, int in, bool isNand, bool highlighted,
 		outx = cx + 10 - (2 * ciDefBrushSize);
 		p1x = p2x = p1x - 5;
 		//Darwing lines
-		pWind->DrawLine(p1x, p1y, p1x + 4, p1y, FRAME);
-		pWind->DrawLine(p2x, p2y, p2x + 4, p2y, FRAME);
+		pWind->DrawLine(p1x, p1y, p1x + 9, p1y, FRAME);
+		pWind->DrawLine(p2x, p2y, p2x + 9, p2y, FRAME);
 		pWind->DrawLine(in1x - 6 - (2 * ciDefBrushSize), in1y, in1x - 6, in1y, FRAME); //The Input1-Line
 		pWind->DrawLine(in2x - 6 - (2 * ciDefBrushSize), in2y, in2x - 6, in2y, FRAME); //The Input2-Line
 		pWind->DrawLine(outx + 3 * ciDefBrushSize - 1, outy, outx + 5 + (2 * ciDefBrushSize), outy, FRAME); //The Output-Line
@@ -1978,8 +1984,8 @@ void Output::DrawAnd_Nand(GraphicsInfo g, int in, bool isNand, bool highlighted,
 			pWind->DrawLine(in3x - 6 - (2 * ciDefBrushSize), in3y, in3x, in3y, FRAME); //The Input3-Line
 		}
 		//Drawing Arc
-		pWind->DrawBezier(p1x + 4, p1y, p1x + 6 + 3 + 4, p1y + 4, p1x + 6 + 9 + 4, p1y + 12, outx, outy, FRAME);
-		pWind->DrawBezier(p2x + 4, p2y, p2x + 6 + 3 + 4, p2y - 4, p2x + 6 + 9 + 4, p2y - 12, outx, outy, FRAME);
+		pWind->DrawBezier(p1x + 9, p1y, p1x + 6 + 3 + 4, p1y + 4 - 3, p1x + 6 + 9 + 4, p1y + 12, outx, outy, FRAME);
+		pWind->DrawBezier(p2x + 9, p2y, p2x + 6 + 3 + 4, p2y - 4 + 3, p2x + 6 + 9 + 4, p2y - 12, outx, outy, FRAME);
 
 		//Drawing Buuble
 		pWind->DrawCircle(outx - ciDefBrushSize + 2 * ciDefBrushSize, outy, 2 * ciDefBrushSize, FRAME);
@@ -1989,20 +1995,20 @@ void Output::DrawAnd_Nand(GraphicsInfo g, int in, bool isNand, bool highlighted,
 		outx = cx + 10 - (2 * ciDefBrushSize);
 		p1x = p2x = p1x - 5;
 		//Darwing lines
-		pWind->DrawLine(p1x, p1y, p1x + 8, p1y, FRAME);
-		pWind->DrawLine(p2x, p2y, p2x + 8, p2y, FRAME);
-		pWind->DrawLine(in1x - 6 - (2 * ciDefBrushSize), in1y, in1x - 5, in1y, FRAME); //The Input1-Line
-		pWind->DrawLine(in2x - 6 - (2 * ciDefBrushSize), in2y, in2x - 5, in2y, FRAME); //The Input2-Line
+		pWind->DrawLine(p1x, p1y, p1x + 12, p1y, FRAME);
+		pWind->DrawLine(p2x, p2y, p2x + 12, p2y, FRAME);
+		pWind->DrawLine(in1x - 7 - (2 * ciDefBrushSize), in1y, in1x - 5, in1y, FRAME); //The Input1-Line
+		pWind->DrawLine(in2x - 7 - (2 * ciDefBrushSize), in2y, in2x - 5, in2y, FRAME); //The Input2-Line
 		pWind->DrawLine(outx + 3, outy, outx + 5 + (2 * ciDefBrushSize), outy, FRAME); //The Output-Line
 		pWind->DrawLine(p1x, p1y - 1, p2x, p2y, FRAME);
 		if (in == 3) { //Checking for 3 input Gate 
 			int in3x = in1x, in3y = cy;
-			pWind->DrawLine(in3x - 6 - (2 * ciDefBrushSize), in3y, in3x - 4, in3y, FRAME); //The Input3-Line
+			pWind->DrawLine(in3x - 7 - (2 * ciDefBrushSize), in3y, in3x - 5, in3y, FRAME); //The Input3-Line
 		}
 		//Drawing Arc
 		//pWind->DrawBezier(p1x + 8, p1y, p1x + 8 + 5 , outy + 8, p1x + 8 + 8 , outy + 3, outx, outy, FRAME);
-		pWind->DrawBezier(p1x + 8, p1y, p1x + 10 + 3 + 4, p1y + 4, p1x + 10 + 9 + 4, p1y + 12, outx + 4, outy, FRAME);
-		pWind->DrawBezier(p2x + 8, p2y, p2x + 10 + 3 + 4, p2y - 4, p2x + 10 + 9 + 4, p2y - 12, outx + 4, outy, FRAME);
+		pWind->DrawBezier(p1x + 12, p1y, p1x + 14 + 3 + 4, p1y + 4-3, p1x + 10 + 9 + 4, p1y + 12, outx + 4, outy, FRAME);
+		pWind->DrawBezier(p2x + 12, p2y, p2x + 14 + 3 + 4, p2y - 4+3, p2x + 10 + 9 + 4, p2y - 12, outx + 4, outy, FRAME);
 		//pWind->DrawPixel(, );
 	}
 }

@@ -151,6 +151,7 @@
     <ClCompile Include="Actions\MultiDelete.cpp" />
     <ClCompile Include="Actions\MultiMove.cpp" />
     <ClCompile Include="Actions\MultiSelect.cpp" />
+    <ClCompile Include="Actions\New.cpp" />
     <ClCompile Include="Actions\RightClick.cpp" />
     <ClCompile Include="Actions\Save.cpp" />
     <ClCompile Include="Actions\Select.cpp" />
@@ -259,6 +260,7 @@
     <ClInclude Include="Actions\MultiDelete.h" />
     <ClInclude Include="Actions\MultiMove.h" />
     <ClInclude Include="Actions\MultiSelect.h" />
+    <ClInclude Include="Actions\New.h" />
     <ClInclude Include="Actions\RightClick.h" />
     <ClInclude Include="Actions\Save.h" />
     <ClInclude Include="Actions\Select.h" />

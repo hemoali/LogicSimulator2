@@ -55,7 +55,7 @@ void AddBUFFER::Execute()
 		pManager->AddComponent(pA); pA->setLabel(gateLabel);
 		for (int i = GInfotmp.y1 / UI.GRID_SIZE + 1; i <= GInfotmp.y2 / UI.GRID_SIZE; i++) { for (int j = GInfotmp.x1 / UI.GRID_SIZE; j <= GInfotmp.x2 / UI.GRID_SIZE; j++) { pManager->GetOutput()->setArrayOfComponents(i, j, pA); } }
 		
-		pManager->undoActions.push(this);
+		Utils::undoActions.push(this);
 		Action::pA = pA;
 	}
 

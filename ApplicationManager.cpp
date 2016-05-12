@@ -23,6 +23,8 @@
 #include "Actions\Validate.h"
 #include "Actions\Simulate.h"
 #include"Actions\CreateTruthTable.h"
+#include"Actions\New.h"
+#include "Utils.h"
 ApplicationManager::ApplicationManager()
 {
 	CompCount = 0;
@@ -132,34 +134,34 @@ void ApplicationManager::ExecuteAction(ActionType ActType)
 		break;
 	case UNDOACTION: 
 	{
-		if (UI.AppMode == DESIGN && undoActions.size() > 0)
+		if (UI.AppMode == DESIGN && Utils::undoActions.size() > 0)
 		{
-			Action* act = undoActions.top();
+			Action* act = Utils::undoActions.top();
 			act->Undo();
-			undoActions.pop();
-			redoActions.push(act);
+			Utils::undoActions.pop();
+			Utils::redoActions.push(act);
 		}
-		else if (UI.AppMode == SIMULATION && simulationUndoActions.size() > 0) {
-			Action* act = simulationUndoActions.top();
+		else if (UI.AppMode == SIMULATION && Utils::simulationUndoActions.size() > 0) {
+			Action* act = Utils::simulationUndoActions.top();
 			act->Undo();
-			simulationUndoActions.pop();
-			simulationRedoActions.push(act);
+			Utils::simulationUndoActions.pop();
+			Utils::simulationRedoActions.push(act);
 		}
 		break;
 	}
 	case REDOACTION: 
 	{
-		if (UI.AppMode == DESIGN && redoActions.size() > 0) {
-			Action* act = redoActions.top();
+		if (UI.AppMode == DESIGN && Utils::redoActions.size() > 0) {
+			Action* act = Utils::redoActions.top();
 			act->Redo();
-			redoActions.pop();
-			undoActions.push(act);
+			Utils::redoActions.pop();
+			Utils::undoActions.push(act);
 		}
-		else if (UI.AppMode == SIMULATION && simulationRedoActions.size() > 0) {
-			Action* act = simulationRedoActions.top();
+		else if (UI.AppMode == SIMULATION && Utils::simulationRedoActions.size() > 0) {
+			Action* act = Utils::simulationRedoActions.top();
 			act->Redo();
-			simulationRedoActions.pop();
-			simulationUndoActions.push(act);
+			Utils::simulationRedoActions.pop();
+			Utils::simulationUndoActions.push(act);
 		}
 		break;
 	}
@@ -169,6 +171,9 @@ void ApplicationManager::ExecuteAction(ActionType ActType)
 		pAct = new CreateTruthTable(this);
 		break;
 	}
+	case NEW:
+		pAct = new New(this);
+		break;
 	case EXIT:
 		// Exit action here
 		break;

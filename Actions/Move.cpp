@@ -101,7 +101,7 @@ void Move::Execute()
 						pManager->GetOutput()->setArrayOfComponents(i, j, Comp);
 					}
 				}
-				pManager->undoActions.push(this);
+				Utils::undoActions.push(this);
 				Action::pA = Comp;
 			}
 			else {

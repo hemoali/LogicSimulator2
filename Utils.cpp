@@ -4,6 +4,7 @@
 Utils::Utils()
 {
 }
+stack <Action*> Utils::undoActions, Utils::redoActions, Utils::simulationUndoActions, Utils::simulationRedoActions;
 GraphicsInfo* Utils::getOutputDirections(GraphicsInfo GInfo, CellType usedPixels[44][74], int noOfOutputs) {
 	GraphicsInfo* arrayOfDirections = new GraphicsInfo[noOfOutputs];
 	GInfo.x1 += UI.GRID_SIZE - (GInfo.x1 % UI.GRID_SIZE);

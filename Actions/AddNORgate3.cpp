@@ -50,7 +50,7 @@ void AddNORgate3::Execute()
 	GInfotmp.y2 = GInfo.y1 + Wdth / 2;
 	NOR3 *pA = new NOR3(GInfotmp, FANOUT);
 	pManager->allComponentsCorners.push_back(GInfotmp);pManager->AddComponent(pA);pA->setLabel(gateLabel);for (int i = GInfotmp.y1 / UI.GRID_SIZE + 1; i <= GInfotmp.y2 / UI.GRID_SIZE; i++)		{for (int j = GInfotmp.x1 / UI.GRID_SIZE; j <= GInfotmp.x2 / UI.GRID_SIZE; j++)	{	pManager->GetOutput()->setArrayOfComponents(i,j,pA);}}pA->setSmallCleanImageBeforeAddingComp(smallImageBeforeAddingComponent);
-	pManager->undoActions.push(this);
+	Utils::undoActions.push(this);
 	Action::pA = pA;
 	  }
 	  

@@ -25,7 +25,7 @@ void ChangeSwitch::Execute()
 		newStatus = !oldStatus;
 		theComponent->setOutputPinStatus(static_cast<STATUS>(newStatus));
 		theComponent->Draw(pOut, false);
-		pManager->simulationUndoActions.push(this);
+		Utils::simulationUndoActions.push(this);
 		
 	}
 	else {

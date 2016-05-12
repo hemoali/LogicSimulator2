@@ -17,10 +17,9 @@
 #include"..\ApplicationManager.h"
 #include"..\Components\Connection.h"
 #include "AddConnection.h"
+#include "New.h"
 #include <iostream>
 using namespace std;
-
-
 
 Load::Load(ApplicationManager*pApp) : Action(pApp)
 {
@@ -62,32 +61,12 @@ bool Load::ReadActionParameters(image *I)
 }
 void Load::Execute()
 {
-	if (this->ReadActionParameters()) {
-		Output *pOut = pManager->GetOutput();
-		for (int i = 0; i < pManager->allComponentsCorners.size(); i++) {
-			Component *C = pManager->getComponent(i);
-			if (dynamic_cast<Gate*> (C)) {
-				C->setDelete(true);
-				C->Draw(pOut);
-				//Removing Connections
-				vector<Connection*> allInConnections, allOutConnections;
-				C->getAllInputConnections(allInConnections);
-				C->getAllOutputConnections(allOutConnections);
-				pOut->clearConnections(allInConnections, C->getCenterLocation().x1, C->getCenterLocation().y1, true, true);
-				pOut->clearConnections(allOutConnections, C->getCenterLocation().x1, C->getCenterLocation().y1, false, true);
-				//Deleteion Completely
-				delete C;
-			}
-		}
-		// clear status bar
-		pOut->ClearStatusBar();
-		//Clear Drawing Area
-		pOut->ClearDrawingArea();
-		//Resetting Interface
-		pOut->resetInterfaceArrays();
-		pManager->setCompCount(0);
-		pManager->allComponentsCorners.resize(0);
+	New* newAction = new New(pManager);
+	Output *pOut = pManager->GetOutput();
 
+	if (newAction->ReadActionParameters(NULL)) {
+		// To clear the screen
+		newAction->Execute();
 		//Why don't you take a screenshot and save only the arrays in another file //To serach that later
 		file.open("save");
 		vector<Component*>listOfGates;
@@ -277,8 +256,8 @@ void Load::Execute()
 		file.close();
 
 		// clear undo/redo stacks
-		while (!pManager->undoActions.empty()) pManager->undoActions.pop();
-		while (!pManager->redoActions.empty()) pManager->redoActions.pop(); 
+		while (!Utils::undoActions.empty()) Utils::undoActions.pop();
+		while (!Utils::redoActions.empty()) Utils::redoActions.pop(); 
 }
 
 }

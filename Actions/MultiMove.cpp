@@ -69,8 +69,16 @@ void MultiMove::Execute()
 				}
 			}
 		}
-
-		if (pOut->SetMultiDragImage(x, y, comp, pIn->getSelectedComponents())) {
+		vector < pair<int, Component*> > selectedGates;
+		for (size_t i = 0; i < pIn->getSelectedComponents().size(); i++)
+		{
+			if (dynamic_cast<Connection*> (pIn->getSelectedComponents()[i].second))
+			{
+				continue;
+			}
+			selectedGates.push_back(pIn->getSelectedComponents()[i]);
+		}
+		if (pOut->SetMultiDragImage(x, y, comp, selectedGates)) {
 			for (int i = 0; i < pIn->getSelectedComponents().size(); i++)
 			{
 				newCoor.push_back({ pIn->getSelectedComponents()[i].second->getCenterLocation().x1,pIn->getSelectedComponents()[i].second->getCenterLocation().y1 });
@@ -80,9 +88,13 @@ void MultiMove::Execute()
 				pManager->allComponentsCorners[pIn->getSelectedComponents()[i].first].y1 = pIn->getSelectedComponents()[i].second->getCornersLocation().y1;
 				pManager->allComponentsCorners[pIn->getSelectedComponents()[i].first].x2 = pIn->getSelectedComponents()[i].second->getCornersLocation().x2;
 				pManager->allComponentsCorners[pIn->getSelectedComponents()[i].first].y2 = pIn->getSelectedComponents()[i].second->getCornersLocation().y2;
+				if (dynamic_cast<Connection*> (pIn->getSelectedComponents()[i].second))
+				{
+					((Connection*)pIn->getSelectedComponents()[i].second)->selectYourSelf(pManager->GetOutput(), UI.DrawColor);
 
-			}		
-			pManager->undoActions.push(this);
+				}
+			}
+			Utils::undoActions.push(this);
 		}
 		else {
 			for (int i = 0; i < pIn->getSelectedComponents().size(); i++)

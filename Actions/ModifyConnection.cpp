@@ -182,7 +182,7 @@ void ModifyConnection::Execute()
 						pManager->GetOutput()->setArrayOfComponents(cellsBeforeAddingConnection[i].y, cellsBeforeAddingConnection[i].x, theConnection);
 					}
 					isCorrectNewConnection = true;
-					pManager->undoActions.push(this);
+					Utils::undoActions.push(this);
 				}
 				else {
 					pManager->GetOutput()->PrintMsg("No Available Connection");

@@ -57,7 +57,7 @@ void AddXORgate3::Execute()
 		}
 		pA->setSmallCleanImageBeforeAddingComp(smallImageBeforeAddingComponent);
 		Action::pA = pA;
-		pManager->undoActions.push(this);
+		Utils::undoActions.push(this);
 	}
 	
 }
