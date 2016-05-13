@@ -4,8 +4,9 @@
 class Simulate :
 	public Action
 {
+	bool validateFirst;
 public:
-	Simulate(ApplicationManager*pApp);
+	Simulate(ApplicationManager*pApp, bool validateFirst);
 	//Reads parameters required for action to execute
 	virtual bool ReadActionParameters(image *);
 

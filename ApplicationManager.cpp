@@ -131,9 +131,12 @@ void ApplicationManager::ExecuteAction(ActionType ActType)
 		pAct = new Validate(this);
 		break;
 	case SimulateAction:
-		pAct = new Simulate(this);
+		pAct = new Simulate(this, true);
 		break;
-	case UNDOACTION: 
+	case SimulateActionWithoutValidation:
+		pAct = new Simulate(this, false);
+		break;
+	case UNDOACTION:
 	{
 		if (UI.AppMode == DESIGN && Utils::undoActions.size() > 0)
 		{
@@ -150,7 +153,7 @@ void ApplicationManager::ExecuteAction(ActionType ActType)
 		}
 		break;
 	}
-	case REDOACTION: 
+	case REDOACTION:
 	{
 		if (UI.AppMode == DESIGN && Utils::redoActions.size() > 0) {
 			Action* act = Utils::redoActions.top();

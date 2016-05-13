@@ -12,7 +12,7 @@ New::New(ApplicationManager*pApp) : Action(pApp)
 bool New::ReadActionParameters(image *I)
 {
 	Output *pOut = pManager->GetOutput();
-	Input *pIn = pManager->GetInput();
+	/*Input *pIn = pManager->GetInput();
 	image *img = pOut->StoreBeforeWarning();
 	int x, y;
 	pOut->DrawWarningMenues('L');
@@ -40,39 +40,39 @@ bool New::ReadActionParameters(image *I)
 	if (finished) {
 		pOut->DrawAfterWarning(img);
 		delete img;
-	}
-	if (draw) return true;
+	}*/
+	int selected = pOut->printPopUpMessage("Do you want to load? All unsaved progress will be lost.", 'L');
+	if (selected == 1) return true;
 	return false;
 }
 void New::Execute()
 {
-	if (ReadActionParameters(NULL)) {
 
-		Output *pOut = pManager->GetOutput();
-		for (int i = 0; i < pManager->allComponentsCorners.size(); i++) {
-			Component *C = pManager->getComponent(i);
-			if (dynamic_cast<Gate*> (C)) {
-				C->setDelete(true);
-				C->Draw(pOut);
-				//Removing Connections
-				vector<Connection*> allInConnections, allOutConnections;
-				C->getAllInputConnections(allInConnections);
-				C->getAllOutputConnections(allOutConnections);
-				pOut->clearConnections(allInConnections, C->getCenterLocation().x1, C->getCenterLocation().y1, true, true);
-				pOut->clearConnections(allOutConnections, C->getCenterLocation().x1, C->getCenterLocation().y1, false, true);
-				//Deleteion Completely
-				delete C;
-			}
+	Output *pOut = pManager->GetOutput();
+	for (int i = 0; i < pManager->allComponentsCorners.size(); i++) {
+		Component *C = pManager->getComponent(i);
+		if (dynamic_cast<Gate*> (C)) {
+			C->setDelete(true);
+			C->Draw(pOut);
+			//Removing Connections
+			vector<Connection*> allInConnections, allOutConnections;
+			C->getAllInputConnections(allInConnections);
+			C->getAllOutputConnections(allOutConnections);
+			pOut->clearConnections(allInConnections, C->getCenterLocation().x1, C->getCenterLocation().y1, true, true);
+			pOut->clearConnections(allOutConnections, C->getCenterLocation().x1, C->getCenterLocation().y1, false, true);
+			//Deleteion Completely
+			delete C;
 		}
-		// clear status bar
-		pOut->ClearStatusBar();
-		//Clear Drawing Area
-		pOut->ClearDrawingArea();
-		//Resetting Interface
-		pOut->resetInterfaceArrays();
-		pManager->setCompCount(0);
-		pManager->allComponentsCorners.resize(0);
 	}
+	// clear status bar
+	pOut->ClearStatusBar();
+	//Clear Drawing Area
+	pOut->ClearDrawingArea();
+	//Resetting Interface
+	pOut->resetInterfaceArrays();
+	pManager->setCompCount(0);
+	pManager->allComponentsCorners.resize(0);
+
 }
 void New::Undo()
 {

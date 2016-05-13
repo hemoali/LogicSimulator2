@@ -62,14 +62,14 @@ void AddConnection::Execute()
 			continue;
 		if (Cx1 >= pManager->allComponentsCorners[i].x1&&Cx1 <= pManager->allComponentsCorners[i].x2&& Cy1 >= pManager->allComponentsCorners[i].y1&&Cy1 <= pManager->allComponentsCorners[i].y2)
 		{
-			if (Cx1 > (pManager->allComponentsCorners[i].x1 + UI.GATE_Width / 2))
+			if (Cx1 > (pManager->allComponentsCorners[i].x1 + UI.GATE_Width / 2) && !dynamic_cast<LED*>( pManager->getComponent(i)))
 			{
 				outputComponent = pManager->getComponent(i);
 			}
 		}
 		if (Cx2 >= pManager->allComponentsCorners[i].x1&&Cx2 <= pManager->allComponentsCorners[i].x2&& Cy2 >= pManager->allComponentsCorners[i].y1&&Cy2 <= pManager->allComponentsCorners[i].y2)
 		{
-			if (Cx2 < (pManager->allComponentsCorners[i].x1 + UI.GATE_Width / 2))
+			if (Cx2 < (pManager->allComponentsCorners[i].x1 + UI.GATE_Width / 2) && !dynamic_cast<SWITCH*>(pManager->getComponent(i)))
 			{
 				inputComponent = pManager->getComponent(i);
 				indxOfInputComponent = i;

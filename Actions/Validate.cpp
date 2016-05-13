@@ -8,6 +8,8 @@
 Validate::Validate(ApplicationManager*pApp) : Action(pApp)
 {
 	msg = "";
+	isValid = true;
+	cnt = 0;
 }
 
 bool Validate::ReadActionParameters(image *I)
@@ -61,9 +63,7 @@ bool Validate::validateInputComponent(Component* comp) {
 }
 void Validate::Execute()
 {
-	msg = "";
-	bool isValid = true;
-	int cnt = 0;
+
 	for (size_t i = 0; i < pManager->allComponentsCorners.size() && isValid; i++)
 	{
 		Component* comp = pManager->getComponent(i);
@@ -100,11 +100,8 @@ void Validate::Execute()
 	if (isValid && cnt >0)
 	{
 		pManager->GetInput()->switchMode(SIMULATION, pManager);
-		Action* act = new Simulate(pManager);
-		act->Execute();
 	}
 	pManager->GetOutput()->printPopUpMessage(msg);
-	Sleep(600);
 }
 void Validate::Undo()
 {

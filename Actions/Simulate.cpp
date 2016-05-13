@@ -4,7 +4,8 @@
 #include "..\Components\SWITCH.h"
 #include "..\Components\Connection.h"
 #include "..\Components\Component.h"
-Simulate::Simulate(ApplicationManager*pApp) : Action(pApp)
+#include "Validate.h"
+Simulate::Simulate(ApplicationManager*pApp, bool v) : Action(pApp), validateFirst(v)
 {
 }
 
@@ -14,6 +15,20 @@ bool Simulate::ReadActionParameters(image *I)
 }
 void Simulate::Execute()
 {
+	// Check validaity
+	bool isValid = false;
+	if (validateFirst)
+	{
+		Validate * vali = new Validate(pManager);
+		vali->Execute();
+		isValid = vali->getValid();
+	}else{
+		isValid = true;
+	}
+	if (!isValid)
+	{
+		return;
+	}
 	for (size_t i = 0; i < pManager->allComponentsCorners.size(); i++)
 	{
 		Component* comp = pManager->getComponent(i);

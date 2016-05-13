@@ -60,8 +60,6 @@ bool Load::ReadActionParameters(image *I)
 	if (draw) return true;
 	return false;
 	*/
-	int selected = pOut->printPopUpMessage("Do you want to load? All unsaved progress will be lost.", 'L');
-	if (selected == 1) return true;
 	return false;
 }
 void Load::Execute()

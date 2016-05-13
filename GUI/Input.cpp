@@ -3,6 +3,7 @@
 #include "..\Utils.h"
 #include <iostream>
 #include "..\Components\SWITCH.h"
+#include "..\Components\LED.h"
 #include "..\Actions\ChangeSwitch.h"
 Input::Input(window* pW)
 {
@@ -57,7 +58,7 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 		else if ((int)c1 == 18) {
 			//Always Clear hover Bar if found
 			pManager->GetOutput()->clearHoveringImage(imgh, J, K, widthh);
-			return ValidateAction;
+			return SimulateAction;
 		}
 		else if ((int)c1 == 19) {
 			//Always Clear hover Bar if found
@@ -80,11 +81,14 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 						comp = pManager->getComponent(i);
 						if (xT >= pManager->allComponentsCorners[i].x2 - UI.GATE_Width / 2 + 8 && yT > (pManager->allComponentsCorners[i].y1 + UI.GATE_Height / 2) - 6 && yT < (pManager->allComponentsCorners[i].y1 + UI.GATE_Height / 2) + 6)
 						{
-							pWind->SetPen(UI.ErrorColor, 5);
-							pWind->DrawLine(pManager->allComponentsCorners[i].x2 - UI.GATE_Width / 2 + 11, pManager->allComponentsCorners[i].y1 + UI.GATE_Height / 2, pManager->allComponentsCorners[i].x2 - UI.GATE_Width / 2 + 12, pManager->allComponentsCorners[i].y1 + UI.GATE_Height / 2, FRAME);
-							startXPointForConnections = xT;
-							startYPointForConnections = yT;
-							drawConnection = true;
+							if (!dynamic_cast<LED*> (comp))
+							{
+								pWind->SetPen(UI.ErrorColor, 5);
+								pWind->DrawLine(pManager->allComponentsCorners[i].x2 - UI.GATE_Width / 2 + 11, pManager->allComponentsCorners[i].y1 + UI.GATE_Height / 2, pManager->allComponentsCorners[i].x2 - UI.GATE_Width / 2 + 12, pManager->allComponentsCorners[i].y1 + UI.GATE_Height / 2, FRAME);
+								startXPointForConnections = xT;
+								startYPointForConnections = yT;
+								drawConnection = true;
+							}
 						}
 					}
 				}
@@ -429,20 +433,20 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 			switch (ClickedItemOrder + 14)
 			{
 			case DSIMULATION: {
-				bool returnValidateion = false;
+				bool returnValidation = false;
 
 				for (size_t i = 0; i < pManager->allComponentsCorners.size(); i++)
 				{
 					Component* comp = pManager->getComponent(i);
 					if (!comp->getDelete())
 					{
-						returnValidateion = true;
+						returnValidation = true;
 					}
 					else {
 						pManager->GetOutput()->PrintStatusBox("Please add components first!", UI.ErrorColor);
 					}
 				}
-				if (returnValidateion) { return ValidateAction; };
+				if (returnValidation) { return SimulateAction; };
 				break; }
 			case DNEW:return NEW; break;
 			case DSAVE:return SAVE; break;
@@ -508,7 +512,7 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 					pWind->FlushMouseQueue();
 					//Always Clear hover Bar if found
 					pManager->GetOutput()->clearHoveringImage(imgh, J, K, widthh);
-					return SimulateAction;
+					return SimulateActionWithoutValidation;
 				}
 			}
 		}

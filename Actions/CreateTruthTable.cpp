@@ -64,7 +64,7 @@ void CreateTruthTable::Execute()
 				k++;
 			}
 		}
-		Action* pAct = new Simulate(pManager);
+		Action* pAct = new Simulate(pManager, false);
 		pAct->Execute();
 		Sleep(250);
 		delete pAct;
