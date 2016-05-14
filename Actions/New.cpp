@@ -7,72 +7,48 @@
 using namespace std;
 New::New(ApplicationManager*pApp) : Action(pApp)
 {
-
+	Loading = false;
 }
 bool New::ReadActionParameters(image *I)
 {
 	Output *pOut = pManager->GetOutput();
-	/*Input *pIn = pManager->GetInput();
-	image *img = pOut->StoreBeforeWarning();
-	int x, y;
-	pOut->DrawWarningMenues('L');
-	cout << '\a' << endl;
-	bool finished = false, draw = false;
-	while (!finished) {
-
-		pIn->WaitSelectionPoint(x, y);
-		int xbegin, xend, ybegin, yend;
-		xbegin = UI.width / 2 - UI.WarningMenuWidth / 2;
-		ybegin = UI.height / 2 - UI.WarningMenuHeight / 2;
-		x -= xbegin;
-		y -= ybegin;
-		if (x > 106 && x < 168 && y > 102 && y < 128) {
-			finished = true;
-			draw = true;
-		}
-		else if (x > 184 && x < 242 && y > 102 && y < 128) {
-			finished = true;
-		}
-		else if (x > 329 && x < 350 && y >= 5 && y <= 26) {
-			finished = true;
-		}
-	}
-	if (finished) {
-		pOut->DrawAfterWarning(img);
-		delete img;
-	}*/
-	int selected = pOut->printPopUpMessage("Do you want to load? All unsaved progress will be lost.", 'L');
+	int selected = pOut->printPopUpMessage("",'N');
 	if (selected == 1) return true;
 	return false;
 }
 void New::Execute()
 {
-
-	Output *pOut = pManager->GetOutput();
-	for (int i = 0; i < pManager->allComponentsCorners.size(); i++) {
-		Component *C = pManager->getComponent(i);
-		if (dynamic_cast<Gate*> (C)) {
-			C->setDelete(true);
-			C->Draw(pOut);
-			//Removing Connections
-			vector<Connection*> allInConnections, allOutConnections;
-			C->getAllInputConnections(allInConnections);
-			C->getAllOutputConnections(allOutConnections);
-			pOut->clearConnections(allInConnections, C->getCenterLocation().x1, C->getCenterLocation().y1, true, true);
-			pOut->clearConnections(allOutConnections, C->getCenterLocation().x1, C->getCenterLocation().y1, false, true);
-			//Deleteion Completely
+	if (Loading || ReadActionParameters()) {
+		Output *pOut = pManager->GetOutput();
+		for (int i = 0; i < pManager->allComponentsCorners.size(); i++) {
+			Component *C = pManager->getComponent(i);
+			if (dynamic_cast<Gate*> (C)) {
+				C->setDelete(true);
+				C->Draw(pOut);
+				//Removing Connections
+				vector<Connection*> allInConnections, allOutConnections;
+				C->getAllInputConnections(allInConnections);
+				C->getAllOutputConnections(allOutConnections);
+				pOut->clearConnections(allInConnections, C->getCenterLocation().x1, C->getCenterLocation().y1, true, true);
+				pOut->clearConnections(allOutConnections, C->getCenterLocation().x1, C->getCenterLocation().y1, false, true);
+			}
 		}
-		delete C;
+		//Deleteion Completely
+		for (int i = 0; i < pManager->allComponentsCorners.size(); i++) {
+			Component *C = pManager->getComponent(i);
+			delete C;
+		}
+		// clear status bar
+		pOut->ClearStatusBar();
+		//Clear Drawing Area
+		pOut->ClearDrawingArea();
+		//Resetting Interface
+		pOut->resetInterfaceArrays();
+		pManager->setCompCount(0);
+		pManager->allComponentsCorners.resize(0);
+		if (Loading)
+			Loading = false;
 	}
-	// clear status bar
-	pOut->ClearStatusBar();
-	//Clear Drawing Area
-	pOut->ClearDrawingArea();
-	//Resetting Interface
-	pOut->resetInterfaceArrays();
-	pManager->setCompCount(0);
-	pManager->allComponentsCorners.resize(0);
-
 }
 void New::Undo()
 {
@@ -81,6 +57,10 @@ void New::Undo()
 void New::Redo()
 {
 
+}
+void New::setLoading(bool T)
+{
+	Loading = T;
 }
 New::~New()
 {

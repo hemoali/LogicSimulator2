@@ -1963,6 +1963,16 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 	return isMovingSucceded;
 }
 
+bool Output::saveFile()
+{
+	return pWind->saveAs();
+}
+
+bool Output::loadFile()
+{
+	return pWind->loadAs();
+}
+
 void Output::printMatrix(string msg) {
 	cout << msg << endl;
 	for (size_t i = 0; i < 44; i++)

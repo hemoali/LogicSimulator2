@@ -84,6 +84,9 @@ public:
 
 	void clearConnectionsFromGrid(vector<Connection*> allOutputConnections, vector<Connection*> allInputConnections);
 
+	bool saveFile();
+	bool loadFile();
+
 	void printMatrix(string msg);
 
 	//Resetting Interface

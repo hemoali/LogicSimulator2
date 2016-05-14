@@ -47,6 +47,9 @@ public:
 	void switchMode(MODE appMode, ApplicationManager* pManager);
 	//the new getString
 	string getStringBox(string s = "");
+	//returns the Save/Load File Path 
+	string getSavePath();
+	string getLoadPath();
 
 	~Input();
 };

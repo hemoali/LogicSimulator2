@@ -5,7 +5,7 @@
 #include<fstream>
 class Load : public Action
 {
-
+	string path;
 protected:
 	ifstream file;
 public:

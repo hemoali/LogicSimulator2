@@ -22,7 +22,7 @@ int main()
 		//AppManager.UpdateInterface();
 	
 
-	}while(exitChoice != IDYES);
+	}while(exitChoice != 1);
 		
 	return 0;
 }
