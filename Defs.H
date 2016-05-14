@@ -50,9 +50,9 @@ enum ActionType
 			
 	MOVE,		//Move a Component, a Connection
 	MULTI_MOVE,
-	COPY,
-	CUT,
-	PASTE,
+	COPYAction,
+	CUTAction,
+	PASTEAction,
 	EDIT_Label,	//Edit Label of a Component, a Connection
 	DEL, //Delete a Component, a Connection
 	Multi_Del,

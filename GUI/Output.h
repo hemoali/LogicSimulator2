@@ -35,7 +35,6 @@ public:
 
 	bool DrawString(string s, GraphicsInfo Gfx_info) const;
 	void DrawGrid() const;
-
 	// Draw  
 	bool SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image*, bool moving = false, Component* comp = NULL);
 	bool SetMultiDragImage(int x, int y, Component* mainMovingComponent, vector< pair<int, Component*> > allSelectedComponents);
@@ -90,6 +89,10 @@ public:
 	//Resetting Interface
 	void resetInterfaceArrays();
 
+	void Output::storeimagefordeletegate(image* imageptr, GraphicsInfo Gfx)
+	{
+		pWind->StoreImage(imageptr, Gfx.x1 - UI.GRID_SIZE - 6, Gfx.y1 - UI.GRID_SIZE - 5, 2 * UI.GRID_SIZE + 5, UI.GATE_Height + 3);
+	}
 
 	~Output();
 };

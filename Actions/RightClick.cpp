@@ -78,7 +78,9 @@ bool RightClick::ReadActionParameters(image* img) {
 				int theIconWidth = 30, actionNum = -1;
 				y -= MenuRectangle.y1;
 				actionNum = y / 30;
-				SelectedAction = ActionType(actionNum + COPY); //Copy is the start of the needed actions in enum ActionType
+				SelectedAction = ActionType(actionNum + COPYAction); //Copy is the start of the needed actions in enum ActionType
+				if (SelectedAction == CUTAction || SelectedAction == COPYAction) { pManager->PastedComponent = C; if (SelectedAction == CUTAction)pManager->cutorcopy = CUTAction; else pManager->cutorcopy = COPYAction; }
+
 			}
 		}
 		//Delete the DrawMenu
@@ -224,6 +226,7 @@ bool RightClick::ReadActionParameters(image* img) {
 		if (actionNum != -1) return true;
 	}
 	if (C == NULL) {
+		pManager->pastepoint.x1 = x; pManager->pastepoint.y1 = y;
 		//User Right Clicked on a free space
 		if (pIn->getSelectMode()) {
 			vector<pair<int, Component*>> V = pIn->getSelectedComponents();
@@ -254,7 +257,7 @@ bool RightClick::ReadActionParameters(image* img) {
 		//Check if the new Point is in the Menu Bar or Not
 		if (x > MenuRectangle.x1 && x < MenuRectangle.x2 && y > MenuRectangle.y1 && y < MenuRectangle.y2) {
 			//Get the Action Type and Save it in the data Member
-			SelectedAction = PASTE;
+			SelectedAction = PASTEAction;
 			actionNum = 39;
 		}
 
@@ -277,14 +280,17 @@ void RightClick::Execute() {
 	if (x) {
 		switch (SelectedAction)
 		{
-		case COPY:
-			pOut->PrintStatusBox("Copy is Selected Remove ya Saleh when Finished");
+		case COPYAction:
+			pOut->PrintStatusBox("Components Copied");
+			theAction = new Copy(pManager, C);
 			break;
-		case CUT:
-			pOut->PrintStatusBox("CUT is Selected Remove ya Saleh when Finished");
+		case CUTAction:
+			pOut->PrintStatusBox("Components Cut");
+			theAction = new Cut(pManager, C);
 			break;
-		case PASTE:
-			pOut->PrintStatusBox("Paste is Selected Remove ya Saleh when Finished");
+		case PASTEAction:
+			pOut->PrintStatusBox("Components Pasted");
+			theAction = new Paste(pManager);
 			break;
 		case EDIT_Label: {
 			theAction = new EditLabel(pManager, C);

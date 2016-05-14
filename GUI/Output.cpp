@@ -1335,7 +1335,7 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 			clearConnectionsFromGrid(allOutputConnections, allInputConnections);
 			drawnConnectionsCount = 0;
 		}
-		if (!Utils::CheckPoint({ x,y }, usedPixels, moving, false)) {
+		if (!Utils::CheckPoint({ x,y }, this, moving, false)) {
 			wrong = true;
 		}
 		else {
@@ -1496,15 +1496,15 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 			draw = false;
 			break;
 		}
-		else if (!wrong && Utils::CheckPoint({ x,y }, usedPixels, moving, false) && (pWind->GetMouseClick(tX, tY) == LEFT_CLICK) || ((pWind->GetButtonState(LEFT_BUTTON, tX, tY) == BUTTON_UP))) {
+		else if (!wrong && Utils::CheckPoint({ x,y }, this, moving, false) && (pWind->GetMouseClick(tX, tY) == LEFT_CLICK) || ((pWind->GetButtonState(LEFT_BUTTON, tX, tY) == BUTTON_UP))) {
 			if ((moving && (noOfTotalConnections == drawnConnectionsCount)) || !moving)
 			{
 				Utils::correctPointClicked(x, y, true, false);
-				if (Utils::CheckPoint({ x,y }, usedPixels, moving, false))
+				if (Utils::CheckPoint({ x,y }, this, moving, false))
 				{
 					GfxInfo.x1 = x;
 					GfxInfo.y1 = y;
-					if (Utils::CheckPoint(GfxInfo, usedPixels, moving)) {
+					if (Utils::CheckPoint(GfxInfo, this, moving)) {
 						if (moving) // Reset connections on grid of pointers
 						{
 							for (size_t i = 0; i < allInputConnections.size(); i++)
@@ -1626,7 +1626,7 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 				noOfTotalConnections = allInputConnections.size() + allOutputConnections.size();
 
 				clearConnectionsFromGrid(allOutputConnections, allInputConnections);
-				if (!Utils::CheckPoint({ x,y }, usedPixels, true, false)) {
+				if (!Utils::CheckPoint({ x,y }, this, true, false)) {
 					wrong = true;
 				}
 				else {
@@ -1728,7 +1728,7 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 					}
 
 				}
-				if (!wrong && Utils::CheckPoint({ x,y }, usedPixels, true, false)) {
+				if (!wrong && Utils::CheckPoint({ x,y }, this, true, false)) {
 					isComponentDrawn[m] = true;
 				}
 				else {
@@ -1902,13 +1902,13 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 		}
 		if (toContinue) {
 			int tx, ty;
-			if (Utils::CheckPoint({ ox,oy }, usedPixels, true, false) && (pWind->GetMouseClick(tx, ty) == LEFT_CLICK || pWind->GetButtonState(LEFT_BUTTON, tx, ty) == BUTTON_UP)) {
+			if (Utils::CheckPoint({ ox,oy }, this, true, false) && (pWind->GetMouseClick(tx, ty) == LEFT_CLICK || pWind->GetButtonState(LEFT_BUTTON, tx, ty) == BUTTON_UP)) {
 				{
 
 					for (size_t m = 0; m < allSelectedComponents.size(); m++)
 					{
 						if (dynamic_cast<Connection*>(allSelectedComponents[m].second)) continue;
-						if (Utils::CheckPoint({ originalXY[m].first,originalXY[m].second }, usedPixels, true)) {
+						if (Utils::CheckPoint({ originalXY[m].first,originalXY[m].second }, this, true)) {
 
 							allSelectedComponents[m].second->setDelete(false);
 							allSelectedComponents[m].second->setNewCenterLocation({ originalXY[m].first, originalXY[m].second });

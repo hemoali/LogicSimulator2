@@ -9,6 +9,9 @@
 #include "../Components/LED.h"
 #include "../Components/SWITCH.h"
 #include "../Actions/ModifyConnection.h"
+#include"Copy.h"
+#include"Cut.h"
+#include"Paste.h"
 class RightClick : public Action
 {
 private:

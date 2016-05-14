@@ -142,7 +142,9 @@
     <ClCompile Include="Actions\AddXORgate2.cpp" />
     <ClCompile Include="Actions\AddXORgate3.cpp" />
     <ClCompile Include="Actions\ChangeSwitch.cpp" />
+    <ClCompile Include="Actions\Copy.cpp" />
     <ClCompile Include="Actions\CreateTruthTable.cpp" />
+    <ClCompile Include="Actions\Cut.cpp" />
     <ClCompile Include="Actions\Delete.cpp" />
     <ClCompile Include="Actions\EditLabel.cpp" />
     <ClCompile Include="Actions\Load.cpp" />
@@ -152,6 +154,7 @@
     <ClCompile Include="Actions\MultiMove.cpp" />
     <ClCompile Include="Actions\MultiSelect.cpp" />
     <ClCompile Include="Actions\New.cpp" />
+    <ClCompile Include="Actions\Paste.cpp" />
     <ClCompile Include="Actions\RightClick.cpp" />
     <ClCompile Include="Actions\Save.cpp" />
     <ClCompile Include="Actions\Select.cpp" />
@@ -251,7 +254,9 @@
     <ClInclude Include="Actions\AddXORgate3.h" />
     <ClInclude Include="Actions\Action.h" />
     <ClInclude Include="Actions\ChangeSwitch.h" />
+    <ClInclude Include="Actions\Copy.h" />
     <ClInclude Include="Actions\CreateTruthTable.h" />
+    <ClInclude Include="Actions\Cut.h" />
     <ClInclude Include="Actions\Delete.h" />
     <ClInclude Include="Actions\EditLabel.h" />
     <ClInclude Include="Actions\Load.h" />
@@ -261,6 +266,7 @@
     <ClInclude Include="Actions\MultiMove.h" />
     <ClInclude Include="Actions\MultiSelect.h" />
     <ClInclude Include="Actions\New.h" />
+    <ClInclude Include="Actions\Paste.h" />
     <ClInclude Include="Actions\RightClick.h" />
     <ClInclude Include="Actions\Save.h" />
     <ClInclude Include="Actions\Select.h" />

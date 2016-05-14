@@ -61,8 +61,8 @@ void New::Execute()
 			pOut->clearConnections(allInConnections, C->getCenterLocation().x1, C->getCenterLocation().y1, true, true);
 			pOut->clearConnections(allOutConnections, C->getCenterLocation().x1, C->getCenterLocation().y1, false, true);
 			//Deleteion Completely
-			delete C;
 		}
+		delete C;
 	}
 	// clear status bar
 	pOut->ClearStatusBar();

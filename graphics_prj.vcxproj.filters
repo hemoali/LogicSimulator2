@@ -246,15 +246,12 @@
     <ClCompile Include="Actions\Delete.cpp">
       <Filter>Actions</Filter>
     </ClCompile>
-    <ClCompile Include="Actions\MultiDelete.cpp" />
-    <ClCompile Include="Actions\Validate.cpp" />
     <ClCompile Include="Actions\Simulate.cpp">
       <Filter>Actions</Filter>
     </ClCompile>
     <ClCompile Include="Actions\ModifyConnection.cpp">
       <Filter>Actions</Filter>
     </ClCompile>
-    <ClCompile Include="Actions\Action.cpp" />
     <ClCompile Include="Actions\ChangeSwitch.cpp">
       <Filter>Actions</Filter>
     </ClCompile>
@@ -262,6 +259,24 @@
       <Filter>Actions</Filter>
     </ClCompile>
     <ClCompile Include="Actions\New.cpp">
+      <Filter>Actions</Filter>
+    </ClCompile>
+    <ClCompile Include="Actions\Copy.cpp">
+      <Filter>Actions</Filter>
+    </ClCompile>
+    <ClCompile Include="Actions\Cut.cpp">
+      <Filter>Actions</Filter>
+    </ClCompile>
+    <ClCompile Include="Actions\Paste.cpp">
+      <Filter>Actions</Filter>
+    </ClCompile>
+    <ClCompile Include="Actions\Action.cpp">
+      <Filter>Actions</Filter>
+    </ClCompile>
+    <ClCompile Include="Actions\MultiDelete.cpp">
+      <Filter>Actions</Filter>
+    </ClCompile>
+    <ClCompile Include="Actions\Validate.cpp">
       <Filter>Actions</Filter>
     </ClCompile>
   </ItemGroup>
@@ -469,12 +484,9 @@
     <ClInclude Include="Actions\Delete.h">
       <Filter>Actions</Filter>
     </ClInclude>
-    <ClInclude Include="Actions\MultiDelete.h" />
-    <ClInclude Include="Actions\Validate.h" />
     <ClInclude Include="Actions\Simulate.h">
       <Filter>Actions</Filter>
     </ClInclude>
-    <ClInclude Include="Actions\ModifyConnection.h" />
     <ClInclude Include="Actions\ChangeSwitch.h">
       <Filter>Actions</Filter>
     </ClInclude>
@@ -482,6 +494,24 @@
       <Filter>Actions</Filter>
     </ClInclude>
     <ClInclude Include="Actions\New.h">
+      <Filter>Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="Actions\Copy.h">
+      <Filter>Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="Actions\Cut.h">
+      <Filter>Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="Actions\Paste.h">
+      <Filter>Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="Actions\ModifyConnection.h">
+      <Filter>Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="Actions\MultiDelete.h">
+      <Filter>Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="Actions\Validate.h">
       <Filter>Actions</Filter>
     </ClInclude>
   </ItemGroup>

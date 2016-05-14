@@ -24,6 +24,9 @@ private:
 	Input* InputInterface; //pointer to the Input Clase Interface
 public:	
 	int Exitchoice;
+	Component*PastedComponent;
+	GraphicsInfo pastepoint;
+	ActionType cutorcopy;
 
 	ApplicationManager(); //constructor
 

@@ -55,7 +55,7 @@ void  Utils::correctPointClicked(int &x, int &y, bool DrawGate, bool DrawConnect
 		}
 	}
 }
-bool Utils::CheckPoint(GraphicsInfo r_GfxInfo, CellType usedPixels[44][74], bool isMoving, bool fillArray) {
+bool Utils::CheckPoint(GraphicsInfo r_GfxInfo, Output* pOut, bool isMoving, bool fillArray) {
 	int xbegin = (r_GfxInfo.x1 - UI.GATE_Width / 2.0) / UI.GRID_SIZE, xend = (r_GfxInfo.x1 + UI.GATE_Width / 2.0) / UI.GRID_SIZE, ybegin = (r_GfxInfo.y1 - UI.GATE_Height / 2.0) / UI.GRID_SIZE, yend = (r_GfxInfo.y1 + UI.GATE_Height / 2.0) / UI.GRID_SIZE;
 	if (xbegin -1 <= 2 || xend + 1 > 73 || ybegin < 3 || yend + 1 > 43)
 	{
@@ -65,9 +65,9 @@ bool Utils::CheckPoint(GraphicsInfo r_GfxInfo, CellType usedPixels[44][74], bool
 	{
 		for (int j = xbegin - 1; j <= xend + 1; j++)
 		{
-			if (usedPixels[i][j] == GATE || (usedPixels[i][j] == HORIZONTAL || usedPixels[i][j] == VERTICAL)) {
-				if ((i == yend + 1 || i == ybegin) && (usedPixels[i][j] == HORIZONTAL || usedPixels[i][j] == END_CONNECTION)) {}
-				else if (isMoving && (i == ybegin || i == yend + 1 || j == xbegin - 1 || j == xend+1) && usedPixels[i][j] != GATE) {}
+			if (pOut->getUsedPixel(i,j) == GATE || (pOut->getUsedPixel(i,j) == HORIZONTAL || pOut->getUsedPixel(i,j) == VERTICAL)) {
+				if ((i == yend + 1 || i == ybegin) && (pOut->getUsedPixel(i,j) == HORIZONTAL || pOut->getUsedPixel(i,j) == END_CONNECTION)) {}
+				else if (isMoving && (i == ybegin || i == yend + 1 || j == xbegin - 1 || j == xend+1) && pOut->getUsedPixel(i,j) != GATE) {}
 				else {
 					return 0;
 				}
@@ -83,13 +83,13 @@ bool Utils::CheckPoint(GraphicsInfo r_GfxInfo, CellType usedPixels[44][74], bool
 			{
 				if (xbegin == j || xend == j)
 				{
-					if (usedPixels[i][j] != INTERSECTION)
+					if (pOut->getUsedPixel(i,j) != INTERSECTION)
 					{
-						usedPixels[i][j] = PIN;
+						pOut->setUsedPixel(i,j, PIN);
 					}
 					continue;
 				}
-				usedPixels[i][j] = GATE;
+				pOut->setUsedPixel(i, j, GATE);
 			}
 		}
 	}
