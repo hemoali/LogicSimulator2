@@ -32,10 +32,25 @@ void CreateTruthTable::Execute()
 	{
 		Component* comp = pManager->getComponent(i);
 		if ((dynamic_cast<SWITCH*>(comp)))
+		{
 			NumOfInputs++;
+			if (comp->getLabel() == "")
+				file << "Input " << NumOfInputs << "  ";
+			else
+			{
+				file << comp->getLabel() << "  ";
+			}
+		}
 		else if ((dynamic_cast<LED*>(comp)))
+		{
 			NumOfOutputs++;
+			if (comp->getLabel() == "")
+				file << "Output " << NumOfOutputs << "  ";
+			else
+				file << comp->getLabel() << "  ";
+		}
 	}
+	file << endl;
 
 	//genrating all Compination of the inputs
 	vector<vector<int>>AllCompination(1<<NumOfInputs);
@@ -66,17 +81,30 @@ void CreateTruthTable::Execute()
 		}
 		Action* pAct = new Simulate(pManager);
 		pAct->Execute();
-		Sleep(250);
+		Sleep(50);
 		delete pAct;
-		for (int j = 0; j < NumOfInputs; j++)
+		k = 0;
+		for (size_t j = 0; j < pManager->allComponentsCorners.size(); j++)
 		{
-			if (NumOfInputs <= 5)
+			Component* comp = pManager->getComponent(j);
+			if ((dynamic_cast<SWITCH*>(comp)))
 			{
-				cout << AllCompination[i][j] << "  ";
-			}
-			else
-			{
-				file << AllCompination[i][j] << "  ";
+				if (comp->getLabel() == "")
+					file << AllCompination[i][k] << "        ";
+				else
+				{
+					for (int K = 0; K < comp->getLabel().size() / 2; K++)
+					{
+						file << " ";
+					}
+					file << AllCompination[i][k] << "  ";
+					int siz = (comp->getLabel().size() % 2 != 0) ? (comp->getLabel().size() / 2) : (comp->getLabel().size() / 2 - 1);
+					for (int K = 0; K < siz; K++)
+					{
+						file << " ";
+					}
+				}
+				k++;
 			}
 		}
 		for (size_t j = 0; j < pManager->allComponentsCorners.size(); j++)
@@ -84,24 +112,24 @@ void CreateTruthTable::Execute()
 			Component* comp = pManager->getComponent(j);
 			if ((dynamic_cast<LED*>(comp)))
 			{
-				if (NumOfInputs <= 5)
-				{
-					cout << comp->GetInputPinStatus(0) << "  ";
-				}
+				if(comp->getLabel()=="")
+			      file << comp->GetInputPinStatus(0) <<"         ";
 				else
 				{
+					for (int K = 0; K < comp->getLabel().size() / 2; K++)
+					{
+						file << " ";
+					}
 					file << comp->GetInputPinStatus(0) << "  ";
+					int siz = (comp->getLabel().size() % 2 != 0) ? (comp->getLabel().size() / 2) : (comp->getLabel().size() / 2 - 1);
+					for (int K = 0; K < siz; K++)
+					{
+						file << " ";
+					}
 				}
 			}
 		}
-		if (NumOfInputs <= 5)
-		{
-			cout << endl;
-		}
-		else
-		{
-			file << endl;
-		}
+		file << endl;
 	}
 	pOut->PrintStatusBox("The truth table has been created sucessfully");
 	file.close();
