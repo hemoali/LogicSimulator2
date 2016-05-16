@@ -252,7 +252,6 @@ void Load::Execute()
 		//pManager->GetOutput()->PrintMsg("Design loaded successfully");
 		pOut->PrintStatusBox("Design loaded successfully");
 		file.close();
-
 		// clear undo/redo stacks
 		while (!Utils::undoActions.empty()) Utils::undoActions.pop();
 		while (!Utils::redoActions.empty()) Utils::redoActions.pop(); 

@@ -133,6 +133,7 @@ void CreateTruthTable::Execute()
 	}
 	pOut->PrintStatusBox("The truth table has been created sucessfully");
 	file.close();
+	pOut->PrintTruthTable();
 }
 
 void CreateTruthTable::Undo()

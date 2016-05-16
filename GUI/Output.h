@@ -69,6 +69,8 @@ public:
 
 	int printPopUpMessage(string s, char type = 'V');
 
+	void PrintTruthTable();
+
 	void storeImage(image* img, int x1, int y1, int x2, int y2);
 
 	bfs_node* bfs(bfs_node* bf, int requX, int requY, vector<bfs_node*> allNodes) const;

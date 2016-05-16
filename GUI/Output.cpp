@@ -773,6 +773,11 @@ int Output::printPopUpMessage(string s, char type)
 	return (pWind->printMessageBox(msg, type));
 }
 
+void Output::PrintTruthTable()
+{
+	pWind->OpenTruthTable();
+}
+
 void Output::storeImage(image * img, int x1, int y1, int x2, int y2)
 {
 	pWind->StoreImage(img, x1, y1, x2, y2);
