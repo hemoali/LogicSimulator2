@@ -55,6 +55,8 @@ public:
 
 	//Loading Function
 	void componentLoading(ifstream& out, Component *C);
+	//Exitting Indicator
+	void setExitChoice(int x);
 	//destructor
 	~ApplicationManager();
 };

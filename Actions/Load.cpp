@@ -72,7 +72,7 @@ bool Load::ReadActionParameters(image *I)
 }
 void Load::Execute()
 {
-	New* newAction = new New(pManager);
+	Clear* newAction = new Clear(pManager);
 	Output *pOut = pManager->GetOutput();
 
 	if (ReadActionParameters()) {

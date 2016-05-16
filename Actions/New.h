@@ -4,13 +4,13 @@
 
 #include"Action.h"
 #include<fstream>
-class New : public Action
+class Clear : public Action
 {
 	bool Loading;
 protected:
 	ofstream file;
 public:
-	New(ApplicationManager*pApp);
+	Clear(ApplicationManager*pApp);
 
 	//Reads parameters required for action to execute
 	virtual bool ReadActionParameters(image * = NULL);
@@ -25,7 +25,7 @@ public:
 	//To redo this action (code depends on action type)
 	virtual void Redo();
 	void setLoading(bool T);
-	~New();
+	~Clear();
 };
 
 #endif
