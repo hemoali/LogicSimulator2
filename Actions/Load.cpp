@@ -80,7 +80,6 @@ void Load::Execute()
 		newAction->setLoading(true);
 		newAction->Execute();
 		file.open(path);
-		vector<Component*>listOfGates;
 		int compCount, src, dest, pnum, connectionCount = 0;
 		string compName, compLabel;
 		GraphicsInfo point;
@@ -91,16 +90,16 @@ void Load::Execute()
 		file >> compCount;
 		for (int i = 0; i < compCount; i++)
 		{
-			file >> compName >> point.x1 >> point.y1 >> compLabel;
-			if (compLabel.size() <= 1) {
-				//Means that the label is empty as we have put an extra L 
-				//char at the begining of te saved label to know whetherit has a name or not
-				// in order to avoid misreading the input file
-				compLabel = "";
-			}
-			else {
-				compLabel = compLabel.substr(1, compLabel.size());
-			}
+			file >> compName >> point.x1 >> point.y1;// >> compLabel;
+			//if (compLabel.size() <= 1) {
+			//	//Means that the label is empty as we have put an extra L 
+			//	//char at the begining of te saved label to know whetherit has a name or not
+			//	// in order to avoid misreading the input file
+			//	compLabel = "";
+			//}
+			//else {
+			//	compLabel = compLabel.substr(1, compLabel.size());
+			//}
 			//Completing the Component Corners
 			point.x2 = point.x1 + UI.GATE_Width;
 			point.y2 = point.y1 + UI.GATE_Height;
@@ -108,92 +107,79 @@ void Load::Execute()
 			{
 				AND2*ptr = new AND2(point, 3);
 				pA = ptr;
-				listOfGates.push_back(ptr);
-				ptr->load(compLabel, pManager);
+				pManager->componentLoading(file, ptr);
 			}
 			else if (compName == "AND3")
 			{
 				AND3*ptr = new AND3(point, 3);
 				pA = ptr;
-				listOfGates.push_back(ptr);
-				ptr->load(compLabel, pManager);
+				pManager->componentLoading(file, ptr);
 			}
 			else if (compName == "BUFFER")
 			{
 				BUFFER*ptr = new BUFFER(point, 3);
 				pA = ptr;
-				listOfGates.push_back(ptr);
-				ptr->load(compLabel, pManager);
+				pManager->componentLoading(file, ptr);
 			}
 			else if (compName == "LED")
 			{
 				LED*ptr = new LED(point, 3);
 				pA = ptr;
-				listOfGates.push_back(ptr);
-				ptr->load(compLabel, pManager);
+				pManager->componentLoading(file, ptr);
 			}
 			else if (compName == "NAND2")
 			{
 				NAND2*ptr = new NAND2(point, 3);
 				pA = ptr;
-				listOfGates.push_back(ptr);
-				ptr->load(compLabel, pManager);
+				pManager->componentLoading(file, ptr);
 			}
 			else if (compName == "NOR2")
 			{
 				NOR2*ptr = new NOR2(point, 3);
 				pA = ptr;
-				listOfGates.push_back(ptr);
-				ptr->load(compLabel, pManager);
+				pManager->componentLoading(file, ptr);
 			}
 			else if (compName == "NOR3")
 			{
 				NOR3*ptr = new NOR3(point, 3);
 				pA = ptr;
-				listOfGates.push_back(ptr);
-				ptr->load(compLabel, pManager);
+				pManager->componentLoading(file, ptr);
 			}
 			else if (compName == "NOT")
 			{
 				NOT*ptr = new NOT(point, 3);
 				pA = ptr;
-				listOfGates.push_back(ptr);
-				ptr->load(compLabel, pManager);
+				pManager->componentLoading(file, ptr);
 			}
 			else if (compName == "OR2")
 			{
 				OR2*ptr = new OR2(point, 3);
 				pA = ptr;
-				listOfGates.push_back(ptr);
-				ptr->load(compLabel, pManager);
+				pManager->componentLoading(file, ptr);
 			}
 			else if (compName == "SWITCH")
 			{
 				SWITCH*ptr = new SWITCH(point, 3);
 				pA = ptr;
-				listOfGates.push_back(ptr);
-				ptr->load(compLabel, pManager);
+				pManager->componentLoading(file, ptr);
 			}
 			else if (compName == "XNOR2")
 			{
 				XNOR2*ptr = new XNOR2(point, 3);
 				pA = ptr;
-				listOfGates.push_back(ptr);
-				ptr->load(compLabel, pManager);
+				pManager->componentLoading(file, ptr);
 			}
 			else if (compName == "XOR2")
 			{
 				XOR2*ptr = new XOR2(point, 3);
 				pA = ptr;
-				listOfGates.push_back(ptr);
-				ptr->load(compLabel, pManager);
+				pManager->componentLoading(file, ptr);
 			}
 			else if (compName == "XOR3")
 			{
 				XOR3*ptr = new XOR3(point, 3);
 				pA = ptr;
-				listOfGates.push_back(ptr);
-				ptr->load(compLabel, pManager);
+				pManager->componentLoading(file, ptr);
 			}
 			//Filling the needed arrays
 			GraphicsInfo GInfotmp = point;

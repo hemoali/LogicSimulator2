@@ -15,7 +15,7 @@ public:
 	virtual int GetInputPinStatus(int n);	//returns status of Inputpin # n if SWITCH, return -1
 
 	virtual void save(int, ofstream &);
-	virtual void load(string s, ApplicationManager*);
+	virtual void load(ApplicationManager* pM, ifstream& in);
 
 	virtual void setInputPinStatus(int n, STATUS s); virtual void selectYourSelf(Output* pOut, color Color);
 	virtual ActionType getComponentActionType();

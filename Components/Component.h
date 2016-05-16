@@ -63,7 +63,7 @@ public:
 
 	//Save and Load
 	virtual void save(int, ofstream &)=0;
-	virtual void load(string s, ApplicationManager*)=0;
+	virtual void load(ApplicationManager*,ifstream& )=0;
 
 	//Destructor must be virtual
 	virtual ~Component();

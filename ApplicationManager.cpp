@@ -257,6 +257,10 @@ Component * ApplicationManager::getComponent(int idx)
 {
 	return CompList[idx];
 }
+void ApplicationManager::componentLoading(ifstream & in, Component * C)
+{
+	C->load(this, in);
+}
 ApplicationManager::~ApplicationManager()
 {
 	for (int i = 0; i < CompCount; i++)
