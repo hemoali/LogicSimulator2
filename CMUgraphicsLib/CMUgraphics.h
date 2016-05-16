@@ -141,7 +141,8 @@ private:
 	//the String from Menu
 	static string theWindowEditString;
 	static string theComponenetString;
-
+	static string theFileSavePath;
+	static string theFileLoadPath;
 public:
 
 	//static string theWindowEditString;
@@ -333,6 +334,11 @@ public:
 	HWND DrawStringStatusBox(string s,int x, int y); 
 	string getStringBox(string s = "");
 	void setActive();
+
+	bool saveAs();
+	bool loadAs();
+	string getSaveFilePath();
+	string getLoadFilePath();
 
 	int printMessageBox(char s[], char type = 'V');
 

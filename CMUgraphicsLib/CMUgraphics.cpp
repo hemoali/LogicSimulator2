@@ -1510,13 +1510,13 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg,
 		LPCWSTR result = stemp.c_str();
 		hwndEdit = CreateWindowW(L"Edit", result,
 			WS_CHILD | WS_VISIBLE | WS_BORDER,
-			50, 50, 150, 20, hwnd, (HMENU)3,
+			65, 50, 150, 20, hwnd, (HMENU)3,
 			NULL, NULL);
 
 		hwndButton = CreateWindowW(L"button", L"OK",
-			WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 50, 100, 80, 25,
+			WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 100, 100, 80, 25,
 			hwnd, (HMENU)4, NULL, NULL);
-
+		SetFocus(hwndEdit);
 		break;
 	}
 	case WM_COMMAND:
@@ -1621,6 +1621,94 @@ void window::setActive()
 	SetActiveWindow(hwndWindow);
 }
 
+string window::theFileSavePath = "";
+bool window::saveAs()
+{
+	OPENFILENAME ofn;
+	char szFile[360];	// buffer for file name
+	HWND hwnd = hwndWindow;	// owner window
+	HANDLE hf;
+	ZeroMemory(&ofn, sizeof(ofn));
+
+	ofn.lStructSize = sizeof(ofn);
+	ofn.hwndOwner = hwnd;
+	ofn.lpstrFile = szFile;
+	ofn.lpstrFile[0] = '\0';
+	ofn.nMaxFile = sizeof(szFile);
+	ofn.lpstrFilter = "All\0*.*\0Text\0*.TXT\0";
+	ofn.nFilterIndex = 1;
+	ofn.lpstrFileTitle = "save.txt";
+	ofn.nMaxFileTitle = 0;
+	ofn.lpstrInitialDir = NULL;
+	ofn.lpstrTitle = "Save";
+	ofn.Flags = OFN_CREATEPROMPT | OFN_NOCHANGEDIR | OFN_OVERWRITEPROMPT | OFN_PATHMUSTEXIST;
+
+	// Display the Save dialog box. 
+	if (GetSaveFileName(&ofn) == TRUE) {
+		hf = CreateFile(ofn.lpstrFile,
+			GENERIC_READ,
+			FILE_SHARE_WRITE,
+			(LPSECURITY_ATTRIBUTES)NULL,
+			CREATE_ALWAYS,
+			FILE_ATTRIBUTE_NORMAL,
+			(HANDLE)NULL);
+		theFileSavePath = ofn.lpstrFile;
+		//Closing the Handle is very important inorder no to keep the file open and used by unwanted functions 
+		//that prevent loading action from openeing the file
+		CloseHandle(hf);
+		return true;
+	}
+	return false;
+}
+
+string window::theFileLoadPath = "";
+bool window::loadAs()
+{
+	OPENFILENAME ofn;       // common dialog box structure
+	char szFile[260];       // buffer for file name
+	HWND hwnd = hwndWindow;              // owner window
+	HANDLE hf;              // file handle
+	ZeroMemory(&ofn, sizeof(ofn));
+
+	ofn.lStructSize = sizeof(ofn);
+	ofn.hwndOwner = hwnd;
+	ofn.lpstrFile = szFile;
+	ofn.lpstrFile[0] = '\0';
+	ofn.nMaxFile = sizeof(szFile);
+	ofn.lpstrFilter = "All\0*.*\0Text\0*.TXT\0";
+	ofn.nFilterIndex = 1;
+	ofn.lpstrFileTitle = "save.txt";
+	ofn.nMaxFileTitle = 0;
+	ofn.lpstrInitialDir = NULL;
+	ofn.lpstrTitle = "Load";
+	ofn.Flags = OFN_NOCHANGEDIR | OFN_PATHMUSTEXIST;
+
+	if (GetOpenFileName(&ofn) == TRUE) {
+		hf = CreateFile(ofn.lpstrFile,
+			GENERIC_READ,
+			0,
+			(LPSECURITY_ATTRIBUTES)NULL,
+			OPEN_EXISTING,
+			FILE_ATTRIBUTE_NORMAL,
+			(HANDLE)NULL);
+		theFileLoadPath = ofn.lpstrFile;
+		//Closing the Handle is very important inorder no to keep the file open and used by unwanted functions 
+		//that prevent loading action from openeing the file
+		CloseHandle(hf);
+		return true;
+	}
+	return false;
+}
+string window::getSaveFilePath()
+{
+	return theFileSavePath;
+}
+
+string window::getLoadFilePath()
+{
+	return theFileLoadPath;
+}
+
 int window::printMessageBox(char s[], char type)
 {
 	int ret = -1;
@@ -1629,7 +1717,7 @@ int window::printMessageBox(char s[], char type)
 		ret = MessageBox(hwndWindow, "Do you want to load? All unsaved progress will be lost.", "Programming Technique", MB_OKCANCEL | MB_ICONINFORMATION | MB_RIGHT);
 		break;
 	case 'Q':
-		ret = MessageBox(hwndWindow, ("Do you want to exit? All unsaved progress will be lost."), ("Programming Techniques Project"), MB_YESNOCANCEL | MB_ICONSTOP | MB_RIGHT);
+		ret = MessageBox(hwndWindow, ("Do you want to save before exiting? Press cancel to dismiss."), ("Programming Techniques Project"), MB_YESNOCANCEL | MB_ICONSTOP | MB_RIGHT);
 		break;
 	case 'N':
 		ret = MessageBox(hwndWindow, "Do you want to make a new design? All unsaved progress will be lost.", "Programming Technique", MB_OKCANCEL | MB_ICONINFORMATION | MB_RIGHT);

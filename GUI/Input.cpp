@@ -527,6 +527,14 @@ string Input::getStringBox(string s)
 {
 	return pWind->getStringBox(s);
 }
+string Input::getSavePath()
+{
+	return pWind->getSaveFilePath();
+}
+string Input::getLoadPath()
+{
+	return pWind->getLoadFilePath();
+}
 buttonstate Input::GetButtonStatus(const button btMouse, int &iX, int &iY) const {
 	return pWind->GetButtonState(btMouse, iX, iY);
 }

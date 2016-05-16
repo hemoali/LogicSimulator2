@@ -23,6 +23,7 @@ using namespace std;
 
 Load::Load(ApplicationManager*pApp) : Action(pApp)
 {
+	path = "";
 }
 bool Load::ReadActionParameters(image *I)
 {
@@ -60,6 +61,13 @@ bool Load::ReadActionParameters(image *I)
 	if (draw) return true;
 	return false;
 	*/
+	int selected = pOut->printPopUpMessage("Do you want to load? All unsaved progress will be lost.", 'L');
+	if (selected == 1) {
+		bool loadSuccess = false;
+		loadSuccess = pOut->loadFile();
+		path = pIn->getLoadPath();
+		return true;
+	}
 	return false;
 }
 void Load::Execute()
@@ -67,11 +75,11 @@ void Load::Execute()
 	New* newAction = new New(pManager);
 	Output *pOut = pManager->GetOutput();
 
-	if (newAction->ReadActionParameters(NULL)) {
+	if (ReadActionParameters()) {
 		// To clear the screen
+		newAction->setLoading(true);
 		newAction->Execute();
-		//Why don't you take a screenshot and save only the arrays in another file //To serach that later
-		file.open("save");
+		file.open(path);
 		vector<Component*>listOfGates;
 		int compCount, src, dest, pnum, connectionCount = 0;
 		string compName, compLabel;

@@ -6,13 +6,15 @@
 #include<fstream>
 class Save : public Action
 {
+	string path;
+	bool ok;
 protected:
 	ofstream file;
 public:
 	Save(ApplicationManager*pApp);
 
 	//Reads parameters required for action to execute
-	virtual bool ReadActionParameters(image *);
+	virtual bool ReadActionParameters(image * = NULL);
 
 
 	//Execute action (code depends on action type)
@@ -23,6 +25,7 @@ public:
 
 	//To redo this action (code depends on action type)
 	virtual void Redo();
+	bool isSuccessful();
 	~Save();
 };
 

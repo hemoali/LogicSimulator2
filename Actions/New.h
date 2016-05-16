@@ -6,13 +6,14 @@
 #include<fstream>
 class New : public Action
 {
+	bool Loading;
 protected:
 	ofstream file;
 public:
 	New(ApplicationManager*pApp);
 
 	//Reads parameters required for action to execute
-	virtual bool ReadActionParameters(image *);
+	virtual bool ReadActionParameters(image * = NULL);
 
 
 	//Execute action (code depends on action type)
@@ -23,6 +24,7 @@ public:
 
 	//To redo this action (code depends on action type)
 	virtual void Redo();
+	void setLoading(bool T);
 	~New();
 };
 
