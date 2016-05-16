@@ -1,3 +1,10 @@
-0
+4
+AND2    360  264 Lscascsd
+SWITCH   248  216 L
+SWITCH   248  280 Lcascascascas
+LED    456  264 Lfffggggg
 Connections
-0
+3
+  281  240  374  275 Lcascascasc
+  281  304  374  301 Lffffffffffffffffffff
+  393  288  470  288 Lyyyy
