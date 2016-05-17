@@ -111,6 +111,8 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 								return MULTI_MOVE;
 							}
 						}
+						// Check for nbon selected selection
+
 					}
 					//Always Clear hover Bar if found
 					pManager->GetOutput()->clearHoveringImage(imgh, J, K, widthh);
