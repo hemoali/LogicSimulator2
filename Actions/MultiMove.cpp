@@ -40,20 +40,20 @@ void MultiMove::Execute()
 	{
 		Component* comp = NULL;
 
-		for (int i = 0; i < pIn->getSelectedComponents().size(); i++)
+		for (int i = 0; i < pIn->getSelectedComponents()->size(); i++)
 		{
-			Component* c = pIn->getSelectedComponents()[i].second;
+			Component* c = pIn->getSelectedComponents()->at(i).second;
 			if (dynamic_cast<Connection*>(c))
 				continue;
 			if (x >= c->getCornersLocation().x1&&x <= c->getCornersLocation().x2&& y >= c->getCornersLocation().y1&&y <= c->getCornersLocation().y2)
 			{
-				comp = pIn->getSelectedComponents()[i].second;
+				comp = pIn->getSelectedComponents()->at(i).second;
 			}
 			//Store old data before moving
 			selectedComponents.push_back(c);
 			oldSmallCleanImage.push_back(c->getSmallCleanImageBeforeAddingComp());
 			oldGraphicsInfo.push_back({ c->getCenterLocation().x1 ,  c->getCenterLocation().y1 });
-			compIdx.push_back(pIn->getSelectedComponents()[i].first);
+			compIdx.push_back(pIn->getSelectedComponents()->at(i).first);
 
 			//start moving process
 			c->setDelete(true);
@@ -70,36 +70,36 @@ void MultiMove::Execute()
 			}
 		}
 		vector < pair<int, Component*> > selectedGates;
-		for (size_t i = 0; i < pIn->getSelectedComponents().size(); i++)
+		for (size_t i = 0; i < pIn->getSelectedComponents()->size(); i++)
 		{
-			if (dynamic_cast<Connection*> (pIn->getSelectedComponents()[i].second))
+			if (dynamic_cast<Connection*> (pIn->getSelectedComponents()->at(i).second))
 			{
 				continue;
 			}
-			selectedGates.push_back(pIn->getSelectedComponents()[i]);
+			selectedGates.push_back(pIn->getSelectedComponents()->at(i));
 		}
 		if (pOut->SetMultiDragImage(x, y, comp, selectedGates)) {
-			for (int i = 0; i < pIn->getSelectedComponents().size(); i++)
+			for (int i = 0; i < pIn->getSelectedComponents()->size(); i++)
 			{
-				newCoor.push_back({ pIn->getSelectedComponents()[i].second->getCenterLocation().x1,pIn->getSelectedComponents()[i].second->getCenterLocation().y1 });
-				newSmallImageForGate.push_back(pIn->getSelectedComponents()[i].second->getSmallCleanImageBeforeAddingComp());
+				newCoor.push_back({ pIn->getSelectedComponents()->at(i).second->getCenterLocation().x1,pIn->getSelectedComponents()->at(i).second->getCenterLocation().y1 });
+				newSmallImageForGate.push_back(pIn->getSelectedComponents()->at(i).second->getSmallCleanImageBeforeAddingComp());
 
-				pManager->allComponentsCorners[pIn->getSelectedComponents()[i].first].x1 = pIn->getSelectedComponents()[i].second->getCornersLocation().x1;
-				pManager->allComponentsCorners[pIn->getSelectedComponents()[i].first].y1 = pIn->getSelectedComponents()[i].second->getCornersLocation().y1;
-				pManager->allComponentsCorners[pIn->getSelectedComponents()[i].first].x2 = pIn->getSelectedComponents()[i].second->getCornersLocation().x2;
-				pManager->allComponentsCorners[pIn->getSelectedComponents()[i].first].y2 = pIn->getSelectedComponents()[i].second->getCornersLocation().y2;
-				if (dynamic_cast<Connection*> (pIn->getSelectedComponents()[i].second))
+				pManager->allComponentsCorners[pIn->getSelectedComponents()->at(i).first].x1 = pIn->getSelectedComponents()->at(i).second->getCornersLocation().x1;
+				pManager->allComponentsCorners[pIn->getSelectedComponents()->at(i).first].y1 = pIn->getSelectedComponents()->at(i).second->getCornersLocation().y1;
+				pManager->allComponentsCorners[pIn->getSelectedComponents()->at(i).first].x2 = pIn->getSelectedComponents()->at(i).second->getCornersLocation().x2;
+				pManager->allComponentsCorners[pIn->getSelectedComponents()->at(i).first].y2 = pIn->getSelectedComponents()->at(i).second->getCornersLocation().y2;
+				if (dynamic_cast<Connection*> (pIn->getSelectedComponents()->at(i).second))
 				{
-					((Connection*)pIn->getSelectedComponents()[i].second)->selectYourSelf(pManager->GetOutput(), UI.DrawColor);
+					((Connection*)pIn->getSelectedComponents()->at(i).second)->selectYourSelf(pManager->GetOutput(), UI.DrawColor);
 
 				}
 			}
 			Utils::undoActions.push(this);
 		}
 		else {
-			for (int i = 0; i < pIn->getSelectedComponents().size(); i++)
+			for (int i = 0; i < pIn->getSelectedComponents()->size(); i++)
 			{
-				int xbegin = (pIn->getSelectedComponents()[i].second->getCenterLocation().x1 - UI.GATE_Width / 2.0) / UI.GRID_SIZE, xend = (pIn->getSelectedComponents()[i].second->getCenterLocation().x1 + UI.GATE_Width / 2.0) / UI.GRID_SIZE, ybegin = (pIn->getSelectedComponents()[i].second->getCenterLocation().y1 - UI.GATE_Height / 2.0) / UI.GRID_SIZE, yend = (pIn->getSelectedComponents()[i].second->getCenterLocation().y1 + UI.GATE_Height / 2.0) / UI.GRID_SIZE;
+				int xbegin = (pIn->getSelectedComponents()->at(i).second->getCenterLocation().x1 - UI.GATE_Width / 2.0) / UI.GRID_SIZE, xend = (pIn->getSelectedComponents()->at(i).second->getCenterLocation().x1 + UI.GATE_Width / 2.0) / UI.GRID_SIZE, ybegin = (pIn->getSelectedComponents()->at(i).second->getCenterLocation().y1 - UI.GATE_Height / 2.0) / UI.GRID_SIZE, yend = (pIn->getSelectedComponents()->at(i).second->getCenterLocation().y1 + UI.GATE_Height / 2.0) / UI.GRID_SIZE;
 				for (int i = ybegin + 1; i <= yend; i++)
 				{
 					for (int j = xbegin; j <= xend; j++)
@@ -109,7 +109,7 @@ void MultiMove::Execute()
 							pOut->setUsedPixel(i, j, PIN);
 							continue;
 						}
-						pOut->setArrayOfComponents(i, j, pIn->getSelectedComponents()[i].second);
+						pOut->setArrayOfComponents(i, j, pIn->getSelectedComponents()->at(i).second);
 						pOut->setUsedPixel(i, j, GATE);
 					}
 				}
@@ -118,9 +118,7 @@ void MultiMove::Execute()
 
 	}
 	pIn->setSelectMode(false);
-	pIn->getSelectedComponents().clear();
-
-
+	pIn->getSelectedComponents()->clear();
 }
 
 void MultiMove::Undo()
