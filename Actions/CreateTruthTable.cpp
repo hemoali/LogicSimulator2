@@ -41,7 +41,11 @@ void CreateTruthTable::Execute()
 				file << comp->getLabel() << "  ";
 			}
 		}
-		else if ((dynamic_cast<LED*>(comp)))
+	}
+	for (size_t i = 0; i < pManager->allComponentsCorners.size(); i++)
+	{
+		Component* comp = pManager->getComponent(i);
+		if ((dynamic_cast<LED*>(comp)))
 		{
 			NumOfOutputs++;
 			if (comp->getLabel() == "")
@@ -49,8 +53,10 @@ void CreateTruthTable::Execute()
 			else
 				file << comp->getLabel() << "  ";
 		}
+
 	}
 	file << endl;
+	
 
 	//genrating all Compination of the inputs
 	vector<vector<int>>AllCompination(1<<NumOfInputs);
@@ -81,16 +87,30 @@ void CreateTruthTable::Execute()
 		}
 		Action* pAct = new Simulate(pManager, false);
 		pAct->Execute();
-		Sleep(50);
+		//Sleep(50);
 		delete pAct;
 		k = 0;
+		NumOfInputs = 0;
+		NumOfOutputs = 0;
 		for (size_t j = 0; j < pManager->allComponentsCorners.size(); j++)
 		{
 			Component* comp = pManager->getComponent(j);
 			if ((dynamic_cast<SWITCH*>(comp)))
 			{
+				NumOfInputs++;
 				if (comp->getLabel() == "")
-					file << AllCompination[i][k] << "        ";
+				{
+					for (int K = 0; K < (6 + to_string(NumOfInputs).size())/2; K++)
+					{
+						file << " ";
+					}
+					file << AllCompination[i][k] << "  ";
+					int siz = ((6 + to_string(NumOfInputs).size()) % 2 != 0) ? ((6 + to_string(NumOfInputs).size()) / 2) : ((6 + to_string(NumOfInputs).size()) / 2 - 1);
+					for (int K = 0; K < siz; K++)
+					{
+						file << " ";
+					}
+				}
 				else
 				{
 					for (int K = 0; K < comp->getLabel().size() / 2; K++)
@@ -112,8 +132,20 @@ void CreateTruthTable::Execute()
 			Component* comp = pManager->getComponent(j);
 			if ((dynamic_cast<LED*>(comp)))
 			{
-				if(comp->getLabel()=="")
-			      file << comp->GetInputPinStatus(0) <<"         ";
+				NumOfOutputs++;
+				if (comp->getLabel() == "")
+				{
+					for (int K = 0; K < (7 + to_string(NumOfOutputs).size())/2; K++)
+					{
+						file << " ";
+					}
+					file << comp->GetInputPinStatus(0) << "  ";
+					int siz = ((7 + to_string(NumOfOutputs).size()) % 2 != 0) ? ((7 + to_string(NumOfOutputs).size()) / 2) : ((7 + to_string(NumOfOutputs).size()) / 2 - 1);
+					for (int K = 0; K < siz; K++)
+					{
+						file << " ";
+					}
+				}
 				else
 				{
 					for (int K = 0; K < comp->getLabel().size() / 2; K++)
