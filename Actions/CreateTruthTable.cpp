@@ -33,6 +33,8 @@ void CreateTruthTable::Execute()
 		Component* comp = pManager->getComponent(i);
 		if ((dynamic_cast<SWITCH*>(comp)))
 		{
+			if (comp->getDelete())
+				continue;
 			NumOfInputs++;
 			if (comp->getLabel() == "")
 				file << "Input " << NumOfInputs << "  ";
@@ -47,6 +49,8 @@ void CreateTruthTable::Execute()
 		Component* comp = pManager->getComponent(i);
 		if ((dynamic_cast<LED*>(comp)))
 		{
+			if (comp->getDelete())
+				continue;
 			NumOfOutputs++;
 			if (comp->getLabel() == "")
 				file << "Output " << NumOfOutputs << "  ";
@@ -80,6 +84,8 @@ void CreateTruthTable::Execute()
 			Component* comp = pManager->getComponent(j);
 			if ((dynamic_cast<SWITCH*>(comp)))
 			{
+				if (comp->getDelete())
+					continue;
 				comp->getOutputPin()->setStatus((STATUS)AllCompination[i][k]);
 				comp->Draw(pOut,(STATUS)AllCompination[i][k]);
 				k++;
@@ -97,6 +103,8 @@ void CreateTruthTable::Execute()
 			Component* comp = pManager->getComponent(j);
 			if ((dynamic_cast<SWITCH*>(comp)))
 			{
+				if (comp->getDelete())
+					continue;
 				NumOfInputs++;
 				if (comp->getLabel() == "")
 				{
@@ -132,6 +140,8 @@ void CreateTruthTable::Execute()
 			Component* comp = pManager->getComponent(j);
 			if ((dynamic_cast<LED*>(comp)))
 			{
+				if (comp->getDelete())
+					continue;
 				NumOfOutputs++;
 				if (comp->getLabel() == "")
 				{
