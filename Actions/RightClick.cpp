@@ -151,10 +151,10 @@ bool RightClick::ReadActionParameters(image* img) {
 		{	
 			vector<pair<int, Component*>> V = pIn->getSelectedComponents();
 			for (int i = 0; i < V.size(); i++) {
-				((Connection*)(V[i].second))->selectYourSelf(pOut, UI.SelectColor);
+				pOut->changeConnectionColor((Connection*)(V[i].second));
 			}
 		}
-		else D->selectYourSelf(pOut,UI.SelectColor);
+		else pOut->changeConnectionColor(D);
 		//Draw the Menu
 		if (pIn->getSelectMode())
 			pOut->DrawRClickMenu_CorrectPoints(x, y, 5);
@@ -197,10 +197,10 @@ bool RightClick::ReadActionParameters(image* img) {
 		{
 			vector<pair<int, Component*>> V = pIn->getSelectedComponents();
 			for (int i = 0; i < V.size(); i++) {
-				((Connection*)(V[i].second))->selectYourSelf(pOut, UI.ConnColor);
+				pOut->changeConnectionColor(((Connection*)(V[i].second)), UI.ConnColor); 
 			}
 		}
-		else D->selectYourSelf(pOut, UI.ConnColor);
+		else pOut->changeConnectionColor(D, UI.ConnColor);
 		//Delete the DrawMenu
 		if (img != NULL) {
 			if (pIn->getSelectMode()) {

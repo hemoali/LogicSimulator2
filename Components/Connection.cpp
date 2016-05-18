@@ -8,7 +8,6 @@ Connection::Connection(const GraphicsInfo &r_GfxInfo, OutputPin *pSrcPin, InputP
 	SrcPin = pSrcPin;
 	DstPin = pDstPin;
 	isDrawn = false;
-	currentColor = UI.DrawColor;
 
 }
 void Connection::setSourcePin(OutputPin *pSrcPin)
@@ -91,11 +90,7 @@ vector<Cell>& Connection::getCellsBeforeAddingConnection()
 	return cellsBeforeAddingConnection;
 }
 void Connection::selectYourSelf(Output* pOut, color Color) {
-	if (Color != currentColor)
-	{
-		pOut->changeConnectionColor(this, Color);
-		currentColor = Color;
-	}
+	pOut->changeConnectionColor(this, Color);
 }
 
 void Connection::save(int id, ofstream & file)
@@ -124,10 +119,10 @@ void Connection::save(int id, ofstream & file)
 	}
 	c1 = theOutputPinComponent->getCenterLocation().x1 + 9;
 	c2 = theOutputPinComponent->getCenterLocation().y1;
-	file << "  " << c1 << "  " << c2 << "  " << c3 << "  " << c4 << " L" << this->getLabel() << endl;
+	file << "  " << c1 << "  " << c2 << "  " << c3 << "  " << c4 << " L" << this->getLabel() <<  endl;
 }
 
-void Connection::load(ApplicationManager*pM, ifstream& in)
+void Connection::load(ApplicationManager*pM,ifstream& in)
 {
 	string compLabel;
 	in >> compLabel;
