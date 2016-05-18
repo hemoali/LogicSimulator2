@@ -2,9 +2,11 @@
 #include "Output.h"
 #include "..\Utils.h"
 #include <iostream>
+#include <algorithm>
 #include "..\Components\SWITCH.h"
 #include "..\Components\LED.h"
 #include "..\Actions\ChangeSwitch.h"
+using namespace std;
 Input::Input(window* pW)
 {
 	pWind = pW; //point to the passed window
@@ -38,7 +40,9 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 
 	clicktype s = LEFT_CLICK;
 	Component* preComp = NULL;
+	bool preCtrl = false;
 	while (true) {
+
 		// Check for keyboard hotkeys
 		char c1;
 		keytype key = pWind->GetKeyPress(c1);
@@ -65,13 +69,16 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 			pManager->GetOutput()->clearHoveringImage(imgh, J, K, widthh);
 			return SAVE;
 		}
-		// Working with mouse
-
-		bool drawConnection = false;
-		if (pWind->GetButtonState(LEFT_BUTTON, xT, yT) == BUTTON_DOWN && yT >= UI.ToolBarHeight + 20 && xT >= UI.LeftToolBarWidth && yT < UI.height - UI.StatusBarHeight) {
-			if (UI.AppMode == DESIGN)
+		while ((int)c1 == 13 && UI.AppMode == DESIGN && isSelectMode)
+		{
+			if (preCtrl)
 			{
+				Sleep(200);
+				preCtrl = false;
+			}
+			if (pWind->GetButtonState(LEFT_BUTTON, xT, yT) == BUTTON_DOWN && yT >= UI.ToolBarHeight + 20 && xT >= UI.LeftToolBarWidth && yT < UI.height - UI.StatusBarHeight) {
 				Component* comp = NULL;
+				int iVal;
 				for (int i = 0; i < pManager->allComponentsCorners.size(); i++)
 				{
 					if (dynamic_cast<Connection*>(pManager->getComponent(i)) || pManager->getComponent(i)->getDelete())
@@ -79,6 +86,98 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 					if (xT >= pManager->allComponentsCorners[i].x1&&xT <= pManager->allComponentsCorners[i].x2&& yT >= pManager->allComponentsCorners[i].y1&&yT <= pManager->allComponentsCorners[i].y2)
 					{
 						comp = pManager->getComponent(i);
+						iVal = i;
+					}
+				}
+
+				if (comp != NULL) {
+					bool gateRemoved = false;
+					for (size_t i = 0; i < selectedComponents->size(); i++)
+					{
+						// Check if one of selected components
+						if (!dynamic_cast<Connection*>(selectedComponents->at(i).second) && selectedComponents->at(i).second == comp) {
+							//Always Clear hover Bar if found //CHECKTHISSAMRA
+
+							gateRemoved = true;
+							preCtrl = true;
+							comp->Draw(pManager->GetOutput(), false);
+
+							vector<Connection*> allInConnections, allOutConnections;
+							comp->getAllInputConnections(allInConnections);
+							comp->getAllOutputConnections(allOutConnections);
+							for (size_t i = 0; i < allInConnections.size(); i++)
+							{
+								bool connFound = false;
+								for (size_t i = 0; i < selectedComponents->size(); i++)
+								{
+									if (selectedComponents->at(i).second == allInConnections[i]) {
+										connFound = true;
+										break;
+									}
+								}
+								if (!connFound)
+								{
+									allInConnections[i]->selectYourSelf(pManager->GetOutput(), UI.DrawColor);
+								}
+							}
+							for (size_t i = 0; i < allOutConnections.size(); i++)
+							{
+								bool connFound = false;
+								for (size_t i = 0; i < selectedComponents->size(); i++)
+								{
+									if (selectedComponents->at(i).second == allOutConnections[i]) {
+										connFound = true;
+										break;
+									}
+								}
+								if (!connFound)
+								{
+									allOutConnections[i]->selectYourSelf(pManager->GetOutput(), UI.DrawColor);
+								}
+							}
+							selectedComponents->erase(selectedComponents->begin() + i);
+						}
+
+					}
+
+					if (!gateRemoved)
+					{
+						preCtrl = true;
+						comp->Draw(pManager->GetOutput(), true);
+
+						vector<Connection*> allInConnections, allOutConnections;
+						comp->getAllInputConnections(allInConnections);
+						comp->getAllOutputConnections(allOutConnections);
+						for (size_t i = 0; i < allInConnections.size(); i++)
+						{
+							allInConnections[i]->selectYourSelf(pManager->GetOutput(), UI.SelectColor);
+						}
+						for (size_t i = 0; i < allOutConnections.size(); i++)
+						{
+							allOutConnections[i]->selectYourSelf(pManager->GetOutput(), UI.SelectColor);
+						}
+						selectedComponents->push_back(make_pair(iVal, comp));
+					}
+				}
+			}
+			pWind->GetKeyPress(c1);
+		}
+		// Working with mouse
+
+		bool drawConnection = false;
+		if (pWind->GetButtonState(LEFT_BUTTON, xT, yT) == BUTTON_DOWN && yT >= UI.ToolBarHeight + 20 && xT >= UI.LeftToolBarWidth && yT < UI.height - UI.StatusBarHeight) {
+			if (UI.AppMode == DESIGN)
+			{
+				Component* comp = NULL;
+				int iVal;
+				for (int i = 0; i < pManager->allComponentsCorners.size(); i++)
+				{
+					if (dynamic_cast<Connection*>(pManager->getComponent(i)) || pManager->getComponent(i)->getDelete())
+						continue;
+					if (xT >= pManager->allComponentsCorners[i].x1&&xT <= pManager->allComponentsCorners[i].x2&& yT >= pManager->allComponentsCorners[i].y1&&yT <= pManager->allComponentsCorners[i].y2)
+					{
+						comp = pManager->getComponent(i);
+						iVal = i;
 						if (xT >= pManager->allComponentsCorners[i].x2 - UI.GATE_Width / 2 + 8 && yT > (pManager->allComponentsCorners[i].y1 + UI.GATE_Height / 2) - 6 && yT < (pManager->allComponentsCorners[i].y1 + UI.GATE_Height / 2) + 6)
 						{
 							if (!dynamic_cast<LED*> (comp))
@@ -103,33 +202,36 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 				if (comp != NULL) {
 					if (isSelectMode)
 					{
-						
+						bool gateRemoved = false;
 						for (size_t i = 0; i < selectedComponents->size(); i++)
 						{
+							// Check if one of selected components
 							if (!dynamic_cast<Connection*>(selectedComponents->at(i).second) && selectedComponents->at(i).second == comp) {
 								//Always Clear hover Bar if found //CHECKTHISSAMRA
 								pManager->GetOutput()->clearHoveringImage(imgh, J, K, widthh);
 								return MULTI_MOVE;
+
 							}
 						}
-						// Check for nbon selected selection
-
 					}
-					//Always Clear hover Bar if found
-					pManager->GetOutput()->clearHoveringImage(imgh, J, K, widthh);
-					return MOVE;
+					else {
+						//Always Clear hover Bar if found
+						pManager->GetOutput()->clearHoveringImage(imgh, J, K, widthh);
+						return MOVE;
+					}
+
 				}
 				else {
 					bool found = false;
 					vector <Connection*> allConnections;
 					pManager->getAllConnections(allConnections);
 
-					for (size_t i = 0; i < allConnections.size(); i++)
-					{
-						allConnections[i]->selectYourSelf(pManager->GetOutput(), UI.ConnColor);
-					}
 					if (isSelectMode)
 					{
+						for (size_t i = 0; i < allConnections.size(); i++)
+						{
+							allConnections[i]->selectYourSelf(pManager->GetOutput(), UI.ConnColor);
+						}
 						for (size_t i = 0; i < selectedComponents->size(); i++)
 						{
 							selectedComponents->at(i).second->Draw(pManager->GetOutput(), false);
@@ -507,7 +609,7 @@ void Input::switchMode(MODE appMode, ApplicationManager* pManager) {
 				}
 				comp->Draw(pManager->GetOutput(), false);
 			}
-			else if(dynamic_cast<SWITCH*>(comp)) {
+			else if (dynamic_cast<SWITCH*>(comp)) {
 				((SWITCH*)comp)->setOutputPinStatus(LOW);
 				comp->Draw(pManager->GetOutput(), false);
 			}
