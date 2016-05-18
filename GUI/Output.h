@@ -45,7 +45,7 @@ public:
 	void DrawLed(GraphicsInfo, bool = false, bool = false, bool = false) const;
 	void DrawSwtich(GraphicsInfo, bool = false, bool = false, bool = false) const;
 	void DrawCleanImage(image*, int x, int y);
-	bool DrawConnection(GraphicsInfo r_GfxInfo, int inputPin, GraphicsInfo compCenterLocationbool, vector<Cell>&, bool selected = false) const;
+	bool DrawConnection(GraphicsInfo r_GfxInfo, int inputPin, GraphicsInfo compCenterLocationbool, vector<Cell>&, bool selected = false, color Color = UI.DrawColor) const;
 
 
 	void storeDrawingAreaImage(image*& img);

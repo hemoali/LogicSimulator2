@@ -246,7 +246,7 @@ bfs_node* Output::bfs(bfs_node* bf, int requX, int requY, vector<bfs_node*> allN
 	return NULL;
 }
 
-bool Output::DrawConnection(GraphicsInfo GfxInfo, int inputPin, GraphicsInfo compCenterLocation, vector<Cell>& cellsBeforeAddingConnection, bool selected) const
+bool Output::DrawConnection(GraphicsInfo GfxInfo, int inputPin, GraphicsInfo compCenterLocation, vector<Cell>& cellsBeforeAddingConnection, bool selected, color Color) const
 {
 	cellsBeforeAddingConnection.clear();
 	vector<bfs_node*> allNodes;
@@ -286,7 +286,8 @@ bool Output::DrawConnection(GraphicsInfo GfxInfo, int inputPin, GraphicsInfo com
 
 		return false;
 	}
-	if (!selected)pWind->SetPen(UI.ConnColor, 2);	else pWind->SetPen(UI.SelectColor, 2);
+	if (selected) Color = UI.SelectColor;
+	pWind->SetPen(Color, 2);
 
 	if (inputPin == 0)
 	{
@@ -330,9 +331,10 @@ bool Output::DrawConnection(GraphicsInfo GfxInfo, int inputPin, GraphicsInfo com
 					else {
 						pWind->DrawLine(target->x * UI.GRID_SIZE, target->y*UI.GRID_SIZE - 6, target->x * UI.GRID_SIZE, target->y*UI.GRID_SIZE - 10);
 					}
-					if (!selected)pWind->SetPen(UI.HumpColor, 2);	else pWind->SetPen(UI.SelectedHumpColor, 2);
+					if (Color == UI.SelectColor) pWind->SetPen(UI.SelectedHumpColor, 2); else if (Color == UI.ConnColor) pWind->SetPen(UI.HumpColor, 2);
+					if (Color == UI.OneValueConnection) { pWind->SetPen(UI.OneValueHumpColor, 2); }
 					pWind->DrawBezier(target->x * UI.GRID_SIZE, target->y*UI.GRID_SIZE - 10, target->x * UI.GRID_SIZE + 6, target->y*UI.GRID_SIZE - 14, target->x * UI.GRID_SIZE + 8, target->y*UI.GRID_SIZE - 18, target->x * UI.GRID_SIZE, target->y*UI.GRID_SIZE - 22);
-					if (!selected)pWind->SetPen(UI.ConnColor, 2);	else pWind->SetPen(BLUE, 2);
+					pWind->SetPen(Color, 2);
 					if (parent->parent != NULL && arrayOfIntersections[parent->parent->y][parent->parent->x] != 1)
 						pWind->DrawLine(target->x * UI.GRID_SIZE, target->y*UI.GRID_SIZE - 22, target->x * UI.GRID_SIZE, target->y*UI.GRID_SIZE - 32);
 				}
@@ -343,9 +345,10 @@ bool Output::DrawConnection(GraphicsInfo GfxInfo, int inputPin, GraphicsInfo com
 					else {
 						pWind->DrawLine(target->x * UI.GRID_SIZE, target->y*UI.GRID_SIZE + 6, target->x * UI.GRID_SIZE, target->y*UI.GRID_SIZE + 10);
 					}
-					if (!selected)pWind->SetPen(UI.HumpColor, 2);	else pWind->SetPen(UI.SelectedHumpColor, 2);
+					if (Color == UI.SelectColor) pWind->SetPen(UI.SelectedHumpColor, 2); else if (Color == UI.ConnColor) pWind->SetPen(UI.HumpColor, 2);
+					if (Color == UI.OneValueConnection) { pWind->SetPen(UI.OneValueHumpColor, 2); }
 					pWind->DrawBezier(target->x * UI.GRID_SIZE, target->y*UI.GRID_SIZE + 10, target->x * UI.GRID_SIZE + 6, target->y*UI.GRID_SIZE + 14, target->x * UI.GRID_SIZE + 8, target->y*UI.GRID_SIZE + 18, target->x * UI.GRID_SIZE, target->y*UI.GRID_SIZE + 22);
-					if (!selected)pWind->SetPen(UI.ConnColor, 2);	else pWind->SetPen(BLUE, 2);
+					pWind->SetPen(Color, 2);
 					if (parent->parent != NULL && arrayOfIntersections[parent->parent->y][parent->parent->x] != 1)
 						pWind->DrawLine(target->x * UI.GRID_SIZE, target->y*UI.GRID_SIZE + 22, target->x * UI.GRID_SIZE, target->y*UI.GRID_SIZE + 32);
 				}
@@ -366,9 +369,10 @@ bool Output::DrawConnection(GraphicsInfo GfxInfo, int inputPin, GraphicsInfo com
 						else {
 							pWind->DrawLine(target->x * UI.GRID_SIZE - 6, target->y*UI.GRID_SIZE, target->x * UI.GRID_SIZE - 10, target->y*UI.GRID_SIZE);
 						}
-						if (!selected)pWind->SetPen(UI.HumpColor, 2);	else pWind->SetPen(UI.SelectedHumpColor, 2);
+						if (Color == UI.SelectColor) pWind->SetPen(UI.SelectedHumpColor, 2); else if (Color == UI.ConnColor) pWind->SetPen(UI.HumpColor, 2);
+						if (Color == UI.OneValueConnection) { pWind->SetPen(UI.OneValueHumpColor, 2); }
 						pWind->DrawBezier(target->x * UI.GRID_SIZE - 10, target->y*UI.GRID_SIZE, target->x * UI.GRID_SIZE - 14, target->y*UI.GRID_SIZE - 6, target->x * UI.GRID_SIZE - 18, target->y*UI.GRID_SIZE - 8, target->x * UI.GRID_SIZE - 22, target->y*UI.GRID_SIZE);
-						if (!selected)pWind->SetPen(UI.ConnColor, 2);	else pWind->SetPen(BLUE, 2);
+						pWind->SetPen(Color, 2);
 						if (parent->parent != NULL && arrayOfIntersections[parent->parent->y][parent->parent->x] != 0)
 							pWind->DrawLine(target->x * UI.GRID_SIZE - 22, target->y*UI.GRID_SIZE, target->x * UI.GRID_SIZE - 32, target->y*UI.GRID_SIZE);
 					}
@@ -378,9 +382,10 @@ bool Output::DrawConnection(GraphicsInfo GfxInfo, int inputPin, GraphicsInfo com
 						else {
 							pWind->DrawLine(target->x * UI.GRID_SIZE + 6, target->y*UI.GRID_SIZE, target->x * UI.GRID_SIZE + 10, target->y*UI.GRID_SIZE);
 						}
-						if (!selected)pWind->SetPen(UI.HumpColor, 2);	else pWind->SetPen(UI.SelectedHumpColor, 2);
+						if (Color == UI.SelectColor) pWind->SetPen(UI.SelectedHumpColor, 2); else if (Color == UI.ConnColor) pWind->SetPen(UI.HumpColor, 2);
+						if (Color == UI.OneValueConnection) { pWind->SetPen(UI.OneValueHumpColor, 2); }
 						pWind->DrawBezier(target->x * UI.GRID_SIZE + 10, target->y*UI.GRID_SIZE, target->x * UI.GRID_SIZE + 14, target->y*UI.GRID_SIZE - 6, target->x * UI.GRID_SIZE + 18, target->y*UI.GRID_SIZE - 8, target->x * UI.GRID_SIZE + 22, target->y*UI.GRID_SIZE);
-						if (!selected)pWind->SetPen(UI.ConnColor, 2);	else pWind->SetPen(BLUE, 2);
+						pWind->SetPen(Color, 2);
 						if (parent->parent != NULL && arrayOfIntersections[parent->parent->y][parent->parent->x] != 0)
 							pWind->DrawLine(target->x * UI.GRID_SIZE + 22, target->y*UI.GRID_SIZE, target->x * UI.GRID_SIZE + 32, target->y*UI.GRID_SIZE);
 					}
@@ -785,215 +790,243 @@ void Output::storeImage(image * img, int x1, int y1, int x2, int y2)
 
 
 
-void Output::changeConnectionColor(Connection * connection, color Color) {
-	bool b1 = false, b2 = false, PreviousIsIntersection = false, PreviousIsIntersection2 = false, isCell2XGreaterThanCellX = false, isCell2YGreaterThanCellY = false;
-	int i = 0;
-	int Vertical0Horizontal1Nothing2 = 2;
+void Output::changeConnectionColor(Connection * conn, color Color) {
+	vector<Connection*> connection; connection.push_back(conn);
+	clearConnections(connection, -1, -1, false, false);
+	
+	Component* outputComponent = conn->getSourcePin()->getComponent();
+	Component* inputComponent = conn->getDestPin()->getComponent();
 
-	for (size_t j = 0; j < connection->getCellsBeforeAddingConnection().size(); j++)
+	GraphicsInfo GInfo;
+	GInfo.x1 = outputComponent->getCenterLocation().x1 + UI.GATE_Width / 2 - 2;
+	GInfo.y1 = outputComponent->getCenterLocation().y1;
+	GInfo.x2 = inputComponent->getCenterLocation().x1 - UI.GATE_Width / 2 - 2;
+	int numOfInputs = conn->getDestPin()->getPosition();
+	if (numOfInputs == 0)
 	{
-		Cell cell = connection->getCellsBeforeAddingConnection()[j];
-
-		if (j < connection->getCellsBeforeAddingConnection().size() - 1)
-		{
-			Cell cell2 = connection->getCellsBeforeAddingConnection()[j + 1];
-			pWind->SetPen(Color, 2);
-			pWind->SetBrush(Color);
-
-			// Draw small pins connections
-			int originalY = connection->getDestPin()->getComponent()->getCenterLocation().y1;
-			int	originalX = connection->getDestPin()->getComponent()->getCenterLocation().x1;
-			if (connection->getDestPin()->getPosition() == 0 && cell.cellType == PIN && j != connection->getCellsBeforeAddingConnection().size() - 2)
-			{
-				pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y* UI.GRID_SIZE, originalX - UI.GATE_Width / 2 + 3, originalY - 13);
-			}
-			else if (connection->getDestPin()->getPosition() == 1 && cell.cellType == PIN && j != connection->getCellsBeforeAddingConnection().size() - 2) {
-				pWind->DrawLine(cell.x * UI.GRID_SIZE - 3, originalY, originalX - UI.GATE_Width / 2 + 3, originalY);
-			}
-			else if (connection->getDestPin()->getPosition() == 2 && cell.cellType == PIN&& j != connection->getCellsBeforeAddingConnection().size() - 2) {
-				pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y* UI.GRID_SIZE, originalX - UI.GATE_Width / 2 + 3, originalY + 13);
-			}
-			// if above another connection: color the hump
-			if (usedPixels[cell2.y][cell2.x] == INTERSECTION && cell2.cellType == VERTICAL) {
-				if (cell2.x < cell.x) {
-					b1 = true;
-					if (!PreviousIsIntersection)
-					{
-						pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE, cell.x * UI.GRID_SIZE - 10, cell.y*UI.GRID_SIZE);
-					}
-					else {
-						PreviousIsIntersection = false;
-						pWind->DrawLine(cell.x * UI.GRID_SIZE - 6, cell.y*UI.GRID_SIZE, cell.x * UI.GRID_SIZE - 10, cell.y*UI.GRID_SIZE);
-					}
-					if (Color == UI.SelectColor) pWind->SetPen(UI.SelectedHumpColor, 2); else if (Color == UI.ConnColor) pWind->SetPen(UI.HumpColor, 2);
-					if (Color == UI.OneValueConnection) { pWind->SetPen(UI.OneValueHumpColor, 2); }
-					pWind->DrawBezier(cell.x * UI.GRID_SIZE - 10, cell.y*UI.GRID_SIZE, cell.x * UI.GRID_SIZE - 14, cell.y*UI.GRID_SIZE - 6, cell.x * UI.GRID_SIZE - 18, cell.y*UI.GRID_SIZE - 8, cell.x * UI.GRID_SIZE - 22, cell.y*UI.GRID_SIZE);
-					pWind->SetPen(Color, 2);
-					if (j + 2 < connection->getCellsBeforeAddingConnection().size() && arrayOfIntersections[connection->getCellsBeforeAddingConnection()[j + 2].y][connection->getCellsBeforeAddingConnection()[j + 2].x] != 0)
-					{
-						pWind->DrawLine(cell.x * UI.GRID_SIZE - 22, cell.y*UI.GRID_SIZE, cell.x * UI.GRID_SIZE - 32, cell.y*UI.GRID_SIZE);
-					}
-				}
-				else {
-					b1 = false;
-					if (!PreviousIsIntersection)
-					{
-						pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE, cell.x * UI.GRID_SIZE + 10, cell.y*UI.GRID_SIZE);
-					}
-					else {
-						PreviousIsIntersection = false;
-						pWind->DrawLine(cell.x * UI.GRID_SIZE + 6, cell.y*UI.GRID_SIZE, cell.x * UI.GRID_SIZE + 10, cell.y*UI.GRID_SIZE);
-					}
-					if (Color == UI.SelectColor) pWind->SetPen(UI.SelectedHumpColor, 2); else if (Color == UI.ConnColor) pWind->SetPen(UI.HumpColor, 2);
-					if (Color == UI.OneValueConnection) { pWind->SetPen(UI.OneValueHumpColor, 2); }
-					pWind->DrawBezier(cell.x * UI.GRID_SIZE + 10, cell.y*UI.GRID_SIZE, cell.x * UI.GRID_SIZE + 14, cell.y*UI.GRID_SIZE - 6, cell.x * UI.GRID_SIZE + 18, cell.y*UI.GRID_SIZE - 8, cell.x * UI.GRID_SIZE + 22, cell.y*UI.GRID_SIZE);
-					pWind->SetPen(Color, 2);
-					if (j + 2 < connection->getCellsBeforeAddingConnection().size() && arrayOfIntersections[connection->getCellsBeforeAddingConnection()[j + 2].y][connection->getCellsBeforeAddingConnection()[j + 2].x] != 0)
-					{
-						pWind->DrawLine(cell.x * UI.GRID_SIZE + 22, cell.y*UI.GRID_SIZE, cell.x * UI.GRID_SIZE + 32, cell.y*UI.GRID_SIZE);
-					}
-				}
-				PreviousIsIntersection = true;
-				Vertical0Horizontal1Nothing2 = -1;
-			}
-			else if (usedPixels[cell2.y][cell2.x] == INTERSECTION && cell2.cellType == HORIZONTAL) {
-				if (cell2.y < cell.y) {
-					b2 = true;
-					if (!PreviousIsIntersection2) {
-						if (arrayOfIntersections[cell.y][cell.x] != 0)
-						{
-							pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE, cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE - 10);
-						}
-						else {
-							pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE - 6, cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE - 10);
-						}
-					}
-					else {
-						PreviousIsIntersection2 = false;
-						pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE - 6, cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE - 10);
-					}
-					if (Color == UI.SelectColor) pWind->SetPen(UI.SelectedHumpColor, 2); else if (Color == UI.ConnColor) pWind->SetPen(UI.HumpColor, 2);
-					if (Color == UI.OneValueConnection) { pWind->SetPen(UI.OneValueHumpColor, 2); }
-					pWind->DrawBezier(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE - 10, cell.x * UI.GRID_SIZE + 6, cell.y*UI.GRID_SIZE - 14, cell.x * UI.GRID_SIZE + 8, cell.y*UI.GRID_SIZE - 18, cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE - 22);
-					pWind->SetPen(Color, 2);
-					if (j + 2 < connection->getCellsBeforeAddingConnection().size() && arrayOfIntersections[connection->getCellsBeforeAddingConnection()[j + 2].y][connection->getCellsBeforeAddingConnection()[j + 2].x] != 1)
-					{
-						pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE - 22, cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE - 32);
-					}
-				}
-				else {
-					b2 = false;
-					if (!PreviousIsIntersection2)
-					{
-						if (arrayOfIntersections[cell.y][cell.x] != 0)
-						{
-							pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE, cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE + 10);
-						}
-						else {
-							pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE + 6, cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE + 10);
-						}
-					}
-					else {
-						PreviousIsIntersection2 = false;
-						pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE + 6, cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE + 10);
-					}
-					if (Color == UI.SelectColor) pWind->SetPen(UI.SelectedHumpColor, 2); else if (Color == UI.ConnColor) pWind->SetPen(UI.HumpColor, 2);
-					if (Color == UI.OneValueConnection) { pWind->SetPen(UI.OneValueHumpColor, 2); }
-					pWind->DrawBezier(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE + 10, cell.x * UI.GRID_SIZE + 6, cell.y*UI.GRID_SIZE + 14, cell.x * UI.GRID_SIZE + 8, cell.y*UI.GRID_SIZE + 18, cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE + 22);
-					pWind->SetPen(Color, 2);
-					if (j + 2 < connection->getCellsBeforeAddingConnection().size() && arrayOfIntersections[connection->getCellsBeforeAddingConnection()[j + 2].y][connection->getCellsBeforeAddingConnection()[j + 2].x] != 1)
-					{
-						pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE + 22, cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE + 32);
-					}
-				}
-				PreviousIsIntersection2 = true;
-				Vertical0Horizontal1Nothing2 = -1;
-
-			}
-			else if (usedPixels[cell2.y][cell2.x] == INTERSECTION && cell2.cellType == EMPTY && arrayOfCorners[cell2.y][cell2.x] == 0) {
-				if (cell2.y == cell.y)
-				{
-					Vertical0Horizontal1Nothing2 = 1;
-				}
-				else {
-					Vertical0Horizontal1Nothing2 = 0;
-				}
-
-				if (Vertical0Horizontal1Nothing2 == 1)
-				{
-					if (cell2.x > cell.x) {
-						isCell2XGreaterThanCellX = true;
-						if (!PreviousIsIntersection)
-						{
-							pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE, cell2.x * UI.GRID_SIZE + 4, cell2.y*UI.GRID_SIZE);
-						}
-						else {
-							pWind->DrawLine(cell.x * UI.GRID_SIZE + 6, cell.y*UI.GRID_SIZE, cell2.x * UI.GRID_SIZE + 4, cell2.y*UI.GRID_SIZE);
-						}
-					}
-					else {
-						isCell2XGreaterThanCellX = false;
-						if (!PreviousIsIntersection)
-						{
-							pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE, cell2.x * UI.GRID_SIZE + 6, cell2.y*UI.GRID_SIZE);
-						}
-						else {
-							pWind->DrawLine(cell.x * UI.GRID_SIZE - 6, cell.y*UI.GRID_SIZE, cell2.x * UI.GRID_SIZE + 6, cell2.y*UI.GRID_SIZE);
-						}
-					}
-				}
-				else if (Vertical0Horizontal1Nothing2 == 0) {
-					if (cell2.y < cell.y) {
-						isCell2YGreaterThanCellY = false;
-						pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE, cell2.x * UI.GRID_SIZE, cell2.y*UI.GRID_SIZE - 3);
-					}
-					else {
-						isCell2YGreaterThanCellY = true;
-						pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE, cell2.x * UI.GRID_SIZE, cell2.y*UI.GRID_SIZE - 6);
-
-					}
-				}
-			}
-			else {
-				if (Vertical0Horizontal1Nothing2 == 2)
-				{
-					if (PreviousIsIntersection) {
-						pWind->DrawLine(cell.x * UI.GRID_SIZE - ((b1) ? 6 : -6), cell.y*UI.GRID_SIZE - ((PreviousIsIntersection2) ? 6 : 0), cell2.x * UI.GRID_SIZE, cell2.y*UI.GRID_SIZE);
-
-					}
-					else if (PreviousIsIntersection2) {
-						pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE - ((b2) ? 6 : -6), cell2.x * UI.GRID_SIZE, cell2.y*UI.GRID_SIZE);
-
-					}
-					else {
-						pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE, cell2.x * UI.GRID_SIZE, cell2.y*UI.GRID_SIZE);
-
-					}
-				}
-				else if (Vertical0Horizontal1Nothing2 == 1) {
-					if (isCell2XGreaterThanCellX) {
-						pWind->DrawLine(cell.x * UI.GRID_SIZE + 6, cell.y*UI.GRID_SIZE, cell2.x * UI.GRID_SIZE, cell2.y*UI.GRID_SIZE);
-					}
-					else {
-						pWind->DrawLine(cell.x * UI.GRID_SIZE + 4, cell.y*UI.GRID_SIZE, cell2.x * UI.GRID_SIZE, cell2.y*UI.GRID_SIZE);
-					}
-				}
-				else if (Vertical0Horizontal1Nothing2 == 0) {
-					if (!isCell2YGreaterThanCellY) {
-						pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE - 6, cell2.x * UI.GRID_SIZE, cell2.y*UI.GRID_SIZE);
-					}
-					else {
-						pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE - 3, cell2.x * UI.GRID_SIZE, cell2.y*UI.GRID_SIZE);
-					}
-				}
-
-
-				PreviousIsIntersection = PreviousIsIntersection2 = false;
-				Vertical0Horizontal1Nothing2 = 2;
-			}
-
-		}
+		GInfo.y2 = inputComponent->getCenterLocation().y1 - UI.GATE_Height / 2 + 13;
 	}
+	else if (numOfInputs == 1) {
+		GInfo.y2 = inputComponent->getCenterLocation().y1;
+	}
+	else {
+		GInfo.y2 = inputComponent->getCenterLocation().y1 + UI.GATE_Height / 2 - 2;
+	}
+
+	pManager->GetOutput()->DrawConnection(GInfo, numOfInputs, inputComponent->getCenterLocation(), conn->getCellsBeforeAddingConnection(), false, Color);
+
+	for (size_t i = 0; i < conn->getCellsBeforeAddingConnection().size(); i++)
+	{
+		pManager->GetOutput()->setArrayOfComponents(conn->getCellsBeforeAddingConnection()[i].y, conn->getCellsBeforeAddingConnection()[i].x, conn);
+	}
+	//bool b1 = false, b2 = false, PreviousIsIntersection = false, PreviousIsIntersection2 = false, isCell2XGreaterThanCellX = false, isCell2YGreaterThanCellY = false;
+	//int i = 0;
+	//int Vertical0Horizontal1Nothing2 = 2;
+
+	//for (size_t j = 0; j < connection->getCellsBeforeAddingConnection().size(); j++)
+	//{
+	//	Cell cell = connection->getCellsBeforeAddingConnection()[j];
+
+	//	if (j < connection->getCellsBeforeAddingConnection().size() - 1)
+	//	{
+	//		Cell cell2 = connection->getCellsBeforeAddingConnection()[j + 1];
+	//		pWind->SetPen(Color, 2);
+	//		pWind->SetBrush(Color);
+
+	//		// Draw small pins connections
+	//		int originalY = connection->getDestPin()->getComponent()->getCenterLocation().y1;
+	//		int	originalX = connection->getDestPin()->getComponent()->getCenterLocation().x1;
+	//		if (connection->getDestPin()->getPosition() == 0 && cell.cellType == PIN && j != connection->getCellsBeforeAddingConnection().size() - 2)
+	//		{
+	//			pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y* UI.GRID_SIZE, originalX - UI.GATE_Width / 2 + 3, originalY - 13);
+	//		}
+	//		else if (connection->getDestPin()->getPosition() == 1 && cell.cellType == PIN && j != connection->getCellsBeforeAddingConnection().size() - 2) {
+	//			pWind->DrawLine(cell.x * UI.GRID_SIZE - 3, originalY, originalX - UI.GATE_Width / 2 + 3, originalY);
+	//		}
+	//		else if (connection->getDestPin()->getPosition() == 2 && cell.cellType == PIN&& j != connection->getCellsBeforeAddingConnection().size() - 2) {
+	//			pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y* UI.GRID_SIZE, originalX - UI.GATE_Width / 2 + 3, originalY + 13);
+	//		}
+	//		// if above another connection: color the hump
+	//		if (usedPixels[cell2.y][cell2.x] == INTERSECTION && cell2.cellType == VERTICAL) {
+	//			if (cell2.x < cell.x) {
+	//				b1 = true;
+	//				if (!PreviousIsIntersection)
+	//				{
+	//					pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE, cell.x * UI.GRID_SIZE - 10, cell.y*UI.GRID_SIZE);
+	//				}
+	//				else {
+	//					PreviousIsIntersection = false;
+	//					pWind->DrawLine(cell.x * UI.GRID_SIZE - 6, cell.y*UI.GRID_SIZE, cell.x * UI.GRID_SIZE - 10, cell.y*UI.GRID_SIZE);
+	//				}
+	//				if (Color == UI.SelectColor) pWind->SetPen(UI.SelectedHumpColor, 2); else if (Color == UI.ConnColor) pWind->SetPen(UI.HumpColor, 2);
+	//				if (Color == UI.OneValueConnection) { pWind->SetPen(UI.OneValueHumpColor, 2); }
+	//				pWind->DrawBezier(cell.x * UI.GRID_SIZE - 10, cell.y*UI.GRID_SIZE, cell.x * UI.GRID_SIZE - 14, cell.y*UI.GRID_SIZE - 6, cell.x * UI.GRID_SIZE - 18, cell.y*UI.GRID_SIZE - 8, cell.x * UI.GRID_SIZE - 22, cell.y*UI.GRID_SIZE);
+	//				pWind->SetPen(Color, 2);
+	//				if (j + 2 < connection->getCellsBeforeAddingConnection().size() && arrayOfIntersections[connection->getCellsBeforeAddingConnection()[j + 2].y][connection->getCellsBeforeAddingConnection()[j + 2].x] != 0)
+	//				{
+	//					pWind->DrawLine(cell.x * UI.GRID_SIZE - 22, cell.y*UI.GRID_SIZE, cell.x * UI.GRID_SIZE - 32, cell.y*UI.GRID_SIZE);
+	//				}
+	//			}
+	//			else {
+	//				b1 = false;
+	//				if (!PreviousIsIntersection)
+	//				{
+	//					pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE, cell.x * UI.GRID_SIZE + 10, cell.y*UI.GRID_SIZE);
+	//				}
+	//				else {
+	//					PreviousIsIntersection = false;
+	//					pWind->DrawLine(cell.x * UI.GRID_SIZE + 6, cell.y*UI.GRID_SIZE, cell.x * UI.GRID_SIZE + 10, cell.y*UI.GRID_SIZE);
+	//				}
+	//				if (Color == UI.SelectColor) pWind->SetPen(UI.SelectedHumpColor, 2); else if (Color == UI.ConnColor) pWind->SetPen(UI.HumpColor, 2);
+	//				if (Color == UI.OneValueConnection) { pWind->SetPen(UI.OneValueHumpColor, 2); }
+	//				pWind->DrawBezier(cell.x * UI.GRID_SIZE + 10, cell.y*UI.GRID_SIZE, cell.x * UI.GRID_SIZE + 14, cell.y*UI.GRID_SIZE - 6, cell.x * UI.GRID_SIZE + 18, cell.y*UI.GRID_SIZE - 8, cell.x * UI.GRID_SIZE + 22, cell.y*UI.GRID_SIZE);
+	//				pWind->SetPen(Color, 2);
+	//				if (j + 2 < connection->getCellsBeforeAddingConnection().size() && arrayOfIntersections[connection->getCellsBeforeAddingConnection()[j + 2].y][connection->getCellsBeforeAddingConnection()[j + 2].x] != 0)
+	//				{
+	//					pWind->DrawLine(cell.x * UI.GRID_SIZE + 22, cell.y*UI.GRID_SIZE, cell.x * UI.GRID_SIZE + 32, cell.y*UI.GRID_SIZE);
+	//				}
+	//			}
+	//			PreviousIsIntersection = true;
+	//			Vertical0Horizontal1Nothing2 = -1;
+	//		}
+	//		else if (usedPixels[cell2.y][cell2.x] == INTERSECTION && cell2.cellType == HORIZONTAL) {
+	//			if (cell2.y < cell.y) {
+	//				b2 = true;
+	//				if (!PreviousIsIntersection2) {
+	//					if (arrayOfIntersections[cell.y][cell.x] != 0)
+	//					{
+	//						pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE, cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE - 10);
+	//					}
+	//					else {
+	//						pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE - 6, cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE - 10);
+	//					}
+	//				}
+	//				else {
+	//					PreviousIsIntersection2 = false;
+	//					pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE - 6, cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE - 10);
+	//				}
+	//				if (Color == UI.SelectColor) pWind->SetPen(UI.SelectedHumpColor, 2); else if (Color == UI.ConnColor) pWind->SetPen(UI.HumpColor, 2);
+	//				if (Color == UI.OneValueConnection) { pWind->SetPen(UI.OneValueHumpColor, 2); }
+	//				pWind->DrawBezier(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE - 10, cell.x * UI.GRID_SIZE + 6, cell.y*UI.GRID_SIZE - 14, cell.x * UI.GRID_SIZE + 8, cell.y*UI.GRID_SIZE - 18, cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE - 22);
+	//				pWind->SetPen(Color, 2);
+	//				if (j + 2 < connection->getCellsBeforeAddingConnection().size() && arrayOfIntersections[connection->getCellsBeforeAddingConnection()[j + 2].y][connection->getCellsBeforeAddingConnection()[j + 2].x] != 1)
+	//				{
+	//					pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE - 22, cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE - 32);
+	//				}
+	//			}
+	//			else {
+	//				b2 = false;
+	//				if (!PreviousIsIntersection2)
+	//				{
+	//					if (arrayOfIntersections[cell.y][cell.x] != 0)
+	//					{
+	//						pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE, cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE + 10);
+	//					}
+	//					else {
+	//						pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE + 6, cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE + 10);
+	//					}
+	//				}
+	//				else {
+	//					PreviousIsIntersection2 = false;
+	//					pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE + 6, cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE + 10);
+	//				}
+	//				if (Color == UI.SelectColor) pWind->SetPen(UI.SelectedHumpColor, 2); else if (Color == UI.ConnColor) pWind->SetPen(UI.HumpColor, 2);
+	//				if (Color == UI.OneValueConnection) { pWind->SetPen(UI.OneValueHumpColor, 2); }
+	//				pWind->DrawBezier(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE + 10, cell.x * UI.GRID_SIZE + 6, cell.y*UI.GRID_SIZE + 14, cell.x * UI.GRID_SIZE + 8, cell.y*UI.GRID_SIZE + 18, cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE + 22);
+	//				pWind->SetPen(Color, 2);
+	//				if (j + 2 < connection->getCellsBeforeAddingConnection().size() && arrayOfIntersections[connection->getCellsBeforeAddingConnection()[j + 2].y][connection->getCellsBeforeAddingConnection()[j + 2].x] != 1)
+	//				{
+	//					pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE + 22, cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE + 32);
+	//				}
+	//			}
+	//			PreviousIsIntersection2 = true;
+	//			Vertical0Horizontal1Nothing2 = -1;
+
+	//		}
+	//		else if (usedPixels[cell2.y][cell2.x] == INTERSECTION && cell2.cellType == EMPTY && arrayOfCorners[cell2.y][cell2.x] == 0) {
+	//			if (cell2.y == cell.y)
+	//			{
+	//				Vertical0Horizontal1Nothing2 = 1;
+	//			}
+	//			else {
+	//				Vertical0Horizontal1Nothing2 = 0;
+	//			}
+
+	//			if (Vertical0Horizontal1Nothing2 == 1)
+	//			{
+	//				if (cell2.x > cell.x) {
+	//					isCell2XGreaterThanCellX = true;
+	//					if (!PreviousIsIntersection)
+	//					{
+	//						pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE, cell2.x * UI.GRID_SIZE + 4, cell2.y*UI.GRID_SIZE);
+	//					}
+	//					else {
+	//						pWind->DrawLine(cell.x * UI.GRID_SIZE + 6, cell.y*UI.GRID_SIZE, cell2.x * UI.GRID_SIZE + 4, cell2.y*UI.GRID_SIZE);
+	//					}
+	//				}
+	//				else {
+	//					isCell2XGreaterThanCellX = false;
+	//					if (!PreviousIsIntersection)
+	//					{
+	//						pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE, cell2.x * UI.GRID_SIZE + 6, cell2.y*UI.GRID_SIZE);
+	//					}
+	//					else {
+	//						pWind->DrawLine(cell.x * UI.GRID_SIZE - 6, cell.y*UI.GRID_SIZE, cell2.x * UI.GRID_SIZE + 6, cell2.y*UI.GRID_SIZE);
+	//					}
+	//				}
+	//			}
+	//			else if (Vertical0Horizontal1Nothing2 == 0) {
+	//				if (cell2.y < cell.y) {
+	//					isCell2YGreaterThanCellY = false;
+	//					pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE, cell2.x * UI.GRID_SIZE, cell2.y*UI.GRID_SIZE - 3);
+	//				}
+	//				else {
+	//					isCell2YGreaterThanCellY = true;
+	//					pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE, cell2.x * UI.GRID_SIZE, cell2.y*UI.GRID_SIZE - 6);
+
+	//				}
+	//			}
+	//		}
+	//		else {
+	//			if (Vertical0Horizontal1Nothing2 == 2)
+	//			{
+	//				if (PreviousIsIntersection) {
+	//					pWind->DrawLine(cell.x * UI.GRID_SIZE - ((b1) ? 6 : -6), cell.y*UI.GRID_SIZE - ((PreviousIsIntersection2) ? 6 : 0), cell2.x * UI.GRID_SIZE, cell2.y*UI.GRID_SIZE);
+
+	//				}
+	//				else if (PreviousIsIntersection2) {
+	//					pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE - ((b2) ? 6 : -6), cell2.x * UI.GRID_SIZE, cell2.y*UI.GRID_SIZE);
+
+	//				}
+	//				else {
+	//					pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE, cell2.x * UI.GRID_SIZE, cell2.y*UI.GRID_SIZE);
+
+	//				}
+	//			}
+	//			else if (Vertical0Horizontal1Nothing2 == 1) {
+	//				if (isCell2XGreaterThanCellX) {
+	//					pWind->DrawLine(cell.x * UI.GRID_SIZE + 6, cell.y*UI.GRID_SIZE, cell2.x * UI.GRID_SIZE, cell2.y*UI.GRID_SIZE);
+	//				}
+	//				else {
+	//					pWind->DrawLine(cell.x * UI.GRID_SIZE + 4, cell.y*UI.GRID_SIZE, cell2.x * UI.GRID_SIZE, cell2.y*UI.GRID_SIZE);
+	//				}
+	//			}
+	//			else if (Vertical0Horizontal1Nothing2 == 0) {
+	//				if (!isCell2YGreaterThanCellY) {
+	//					pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE - 6, cell2.x * UI.GRID_SIZE, cell2.y*UI.GRID_SIZE);
+	//				}
+	//				else {
+	//					pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE - 3, cell2.x * UI.GRID_SIZE, cell2.y*UI.GRID_SIZE);
+	//				}
+	//			}
+
+
+	//			PreviousIsIntersection = PreviousIsIntersection2 = false;
+	//			Vertical0Horizontal1Nothing2 = 2;
+	//		}
+
+	//	}
+	//}
 
 }
 void Output::clearConnections(vector<Connection*>& allConnections, int originalX, int originalY, bool isInput, bool setDeleted) {
@@ -1466,6 +1499,7 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 						currentGfx.y2 = currentGfx.y2 + (Gfx.y1 - originalY);
 						allInputConnections[i]->setCornersLocation({ currentGfx.x1 ,currentGfx.y1,currentGfx.x2 ,currentGfx.y2 });
 						if (DrawConnection(currentGfx, allInputConnections[i]->getDestPin()->getPosition(), { Gfx.x1, Gfx.y1,0,0 }, allInputConnections[i]->getCellsBeforeAddingConnection(), moving))drawnConnectionsCount++;
+						allInputConnections[i]->setCurrentColor(UI.SelectColor);
 					}
 					for (size_t i = 0; i < allOutputConnections.size(); i++)
 					{
@@ -1475,6 +1509,7 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 						allOutputConnections[i]->setCornersLocation({ currentGfx.x1 ,currentGfx.y1,currentGfx.x2 ,currentGfx.y2 });
 						Component* dstComp = allOutputConnections[i]->getDestPin()->getComponent();
 						if (DrawConnection(currentGfx, allOutputConnections[i]->getDestPin()->getPosition(), { dstComp->getCenterLocation().x1, dstComp->getCenterLocation().y1,0,0 }, allOutputConnections[i]->getCellsBeforeAddingConnection(), moving))drawnConnectionsCount++;
+						allOutputConnections[i]->setCurrentColor(UI.SelectColor);
 					}
 
 					originalX = Gfx.x1;
@@ -1836,6 +1871,7 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 					if (DrawConnection(allInputConnections[i]->getCornersLocation(), allInputConnections[i]->getDestPin()->getPosition(), { Gfx.x1, Gfx.y1,0,0 }, allInputConnections[i]->getCellsBeforeAddingConnection(), true)) {
 						drawnConnectionsCount++;
 						allDrawnConnections.push_back(allInputConnections[i]);
+						allInputConnections[i]->setCurrentColor(UI.SelectColor);
 					}
 				}
 				for (size_t i = 0; i < allOutputConnections.size(); i++)
@@ -1855,6 +1891,8 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 							{
 								drawnConnectionsCount++;
 								allDrawnConnections.push_back(allOutputConnections[i]);
+								allOutputConnections[i]->setCurrentColor(UI.SelectColor);
+
 							}
 							drawn = true;
 							break;
@@ -1866,6 +1904,7 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 						{
 							drawnConnectionsCount++;
 							allDrawnConnections.push_back(allOutputConnections[i]);
+							allOutputConnections[i]->setCurrentColor(UI.SelectColor);
 						}
 					}
 				}
@@ -1936,7 +1975,7 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 							{
 								pManager->GetOutput()->setArrayOfComponents(allInputConnections[i]->getCellsBeforeAddingConnection()[j].y, allInputConnections[i]->getCellsBeforeAddingConnection()[j].x, allInputConnections[i]);
 							}
-							allInputConnections[i]->selectYourSelf(pManager->GetOutput(), UI.DrawColor);
+							allInputConnections[i]->selectYourSelf(this, UI.DrawColor);
 						}
 						for (size_t i = 0; i < allOutputConnections.size(); i++)
 						{
@@ -1944,7 +1983,7 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 							{
 								pManager->GetOutput()->setArrayOfComponents(allOutputConnections[i]->getCellsBeforeAddingConnection()[j].y, allOutputConnections[i]->getCellsBeforeAddingConnection()[j].x, allOutputConnections[i]);
 							}
-							allOutputConnections[i]->selectYourSelf(pManager->GetOutput(), UI.DrawColor);
+							allOutputConnections[i]->selectYourSelf(this, UI.DrawColor);
 						}
 					}
 					isMovingSucceded = true;

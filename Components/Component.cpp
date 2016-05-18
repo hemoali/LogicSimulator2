@@ -19,19 +19,19 @@ Component::Component(const GraphicsInfo & r_GfxInfo) :m_OutputPin(0), ID(++lastI
 	m_GfxInfo.x2 = r_GfxInfo.x2;
 	m_GfxInfo.y1 = r_GfxInfo.y1;
 	m_GfxInfo.y2 = r_GfxInfo.y2;
-	deleted = false;
+	deleted =false;
 }
-void Component::setLabel(string s){
+void Component::setLabel(string s) {
 	m_Label = s;
 }
-string Component::getLabel(){ return m_Label; }
+string Component::getLabel() { return m_Label; }
 
 
 
-void Component::setDelete(bool d){
+void Component::setDelete(bool d) {
 	deleted = d;
 }
-bool Component::getDelete(){ return deleted; }
+bool Component::getDelete() { return deleted; }
 
 void Component::setID(int id)
 {
@@ -42,13 +42,13 @@ int Component::getID()
 {
 	return this->ID;
 }
-void Component::setSmallCleanImageBeforeAddingComp(image* i){
+void Component::setSmallCleanImageBeforeAddingComp(image* i) {
 	smallCleanImageBeforeAddingComp = i;
 }
-image* Component::getSmallCleanImageBeforeAddingComp(){
+image* Component::getSmallCleanImageBeforeAddingComp() {
 	return smallCleanImageBeforeAddingComp;
 }
-void Component::setNewCenterLocation(GraphicsInfo GfxInfo){
+void Component::setNewCenterLocation(GraphicsInfo GfxInfo) {
 	m_CenterInfo.x1 = GfxInfo.x1;
 	m_CenterInfo.y1 = GfxInfo.y1;
 
@@ -57,7 +57,7 @@ void Component::setNewCenterLocation(GraphicsInfo GfxInfo){
 	m_GfxInfo.y1 = m_CenterInfo.y1 - UI.GATE_Height / 2;
 	m_GfxInfo.y2 = m_CenterInfo.y1 + UI.GATE_Height / 2;
 }
-GraphicsInfo Component::getCenterLocation(){
+GraphicsInfo Component::getCenterLocation() {
 	return m_CenterInfo;
 }
 GraphicsInfo Component::getCornersLocation() {
@@ -94,7 +94,7 @@ void Component::getAllInputConnections(vector<Connection*> &allInputConnections)
 	}
 	for (size_t i = 0; i < m_Inputs; i++)
 	{
-		if (m_InputPins[i].getConnection()!=NULL && !((Component*)m_InputPins[i].getConnection())->getDelete())
+		if (m_InputPins[i].getConnection() != NULL && !((Component*)m_InputPins[i].getConnection())->getDelete())
 		{
 			allInputConnections.push_back(m_InputPins[i].getConnection());
 		}
@@ -109,7 +109,7 @@ void Component::getAllOutputConnections(vector<Connection*>& allOutputConnection
 	}
 	for (size_t i = 0; i < m_OutputPin.connectedConnectionsCount(); i++)
 	{
-		if (((Component*) m_OutputPin.getConnection(i))->getDelete() || m_OutputPin.getConnection(i) == NULL)
+		if (((Component*)m_OutputPin.getConnection(i))->getDelete() || m_OutputPin.getConnection(i) == NULL)
 		{
 			continue;
 		}
