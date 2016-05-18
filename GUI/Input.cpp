@@ -103,10 +103,9 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 				if (comp != NULL) {
 					if (isSelectMode)
 					{
-						
-						for (size_t i = 0; i < selectedComponents->size(); i++)
+						for (size_t i = 0; i < selectedComponents.size(); i++)
 						{
-							if (!dynamic_cast<Connection*>(selectedComponents->at(i).second) && selectedComponents->at(i).second == comp) {
+							if (!dynamic_cast<Connection*>(selectedComponents[i].second) && selectedComponents[i].second == comp) {
 								//Always Clear hover Bar if found //CHECKTHISSAMRA
 								pManager->GetOutput()->clearHoveringImage(imgh, J, K, widthh);
 								return MULTI_MOVE;
@@ -130,9 +129,9 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 					}
 					if (isSelectMode)
 					{
-						for (size_t i = 0; i < selectedComponents->size(); i++)
+						for (size_t i = 0; i < selectedComponents.size(); i++)
 						{
-							selectedComponents->at(i).second->Draw(pManager->GetOutput(), false);
+							selectedComponents[i].second->Draw(pManager->GetOutput(), false);
 						}
 						//Always Clear hover Bar if found
 						pManager->GetOutput()->clearHoveringImage(imgh, J, K, widthh);
@@ -588,12 +587,12 @@ bool Input::getSelectMode()
 	return isSelectMode;
 }
 
-void Input::setSelectedComponents(vector<pair<int, Component*> > * comp)
+void Input::setSelectedComponents(vector<pair<int, Component*> > comp)
 {
 	selectedComponents = comp;
 }
 
-vector<pair<int, Component*> >* Input::getSelectedComponents()
+vector<pair<int, Component*> >& Input::getSelectedComponents()
 {
 	return selectedComponents;
 }
@@ -619,7 +618,7 @@ void Input::getExactConnectionLocation(int & x, int & y)
 
 void Input::clearSelectedComponents()
 {
-	selectedComponents->clear();
+	selectedComponents.clear();
 }
 
 

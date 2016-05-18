@@ -2,7 +2,7 @@
 #include "..\Utils.h"
 #include<iostream>
 MultiSelect::MultiSelect(ApplicationManager* pManager) :Action(pManager) {
-	
+
 }
 bool MultiSelect::ReadActionParameters(image * smallImageBeforeAddingComponent)
 {
@@ -15,7 +15,6 @@ void MultiSelect::Execute()
 	Output* pOut = pManager->GetOutput();
 	Input* pIn = pManager->GetInput();
 
-	pIn->setSelectedComponents(&allSelectedComponents);
 	int x, y, initX, initY;
 	pIn->getMouseCoordinates(initX, initY);
 	if (Utils::CheckPointInBorders(initX, initY))
@@ -107,6 +106,7 @@ void MultiSelect::Execute()
 			}
 
 			pIn->setSelectMode(true);
+			pIn->setSelectedComponents(allSelectedComponents);
 			Utils::undoActions.push(this);
 		}
 	}
@@ -176,6 +176,7 @@ void MultiSelect::Redo()
 		}
 
 		pIn->setSelectMode(true);
+		pIn->setSelectedComponents(allSelectedComponents);
 	}
 }
 MultiSelect::~MultiSelect()

@@ -21,8 +21,9 @@ bool RightClick::ReadActionParameters(image* img) {
 	int atLeastOneGateinMS = 0;
 	bool allAreOnlyConnections = false;
 	if (pIn->getSelectMode()) {
-		for (int i = 0; i <  pIn->getSelectedComponents()->size(); i++) {
-			if (pIn->getSelectedComponents()->at(i).second->getComponentActionType() != ADD_CONNECTION)
+		vector<pair<int, Component*>> V = pIn->getSelectedComponents();
+		for (int i = 0; i < V.size(); i++) {
+			if (V[i].second->getComponentActionType() != ADD_CONNECTION)
 				atLeastOneGateinMS++;
 		}
 	}
@@ -93,7 +94,7 @@ bool RightClick::ReadActionParameters(image* img) {
 		if(! pIn->getSelectMode())
 			C->Draw(pOut, false);
 		else {
-			vector<pair<int, Component*>> V = *(pIn->getSelectedComponents());
+			vector<pair<int, Component*>> V = pIn->getSelectedComponents();
 			for (int i = 0; i < V.size(); i++) {
 				V[i].second->Draw(pOut, false);
 			}
@@ -115,7 +116,7 @@ bool RightClick::ReadActionParameters(image* img) {
 	C =  pOut->getArrayOfComponents(y / UI.GRID_SIZE, x / UI.GRID_SIZE);
 	if (C != NULL && dynamic_cast<Connection*> (C)) {
 		if (pIn->getSelectMode() && atLeastOneGateinMS != 0 ) {
-			vector<pair<int, Component*>> V = *(pIn->getSelectedComponents());
+			vector<pair<int, Component*>> V = pIn->getSelectedComponents();
 			for (int i = 0; i < V.size(); i++) {
 				V[i].second->Draw(pOut, false);
 			}
@@ -148,7 +149,7 @@ bool RightClick::ReadActionParameters(image* img) {
 		//Make the Connection Highlited 
 		if (pIn->getSelectMode())
 		{	
-			vector<pair<int, Component*>> V = *(pIn->getSelectedComponents());
+			vector<pair<int, Component*>> V = pIn->getSelectedComponents();
 			for (int i = 0; i < V.size(); i++) {
 				pOut->changeConnectionColor((Connection*)(V[i].second));
 			}
@@ -194,7 +195,7 @@ bool RightClick::ReadActionParameters(image* img) {
 		//Make the Connection look Normal 
 		if (pIn->getSelectMode())
 		{
-			vector<pair<int, Component*>> V = *(pIn->getSelectedComponents());
+			vector<pair<int, Component*>> V = pIn->getSelectedComponents();
 			for (int i = 0; i < V.size(); i++) {
 				pOut->changeConnectionColor(((Connection*)(V[i].second)), UI.ConnColor); 
 			}
@@ -209,7 +210,7 @@ bool RightClick::ReadActionParameters(image* img) {
 		}
 		pOut->ClearStatusBar();
 		if (pIn->getSelectMode()) {
-			vector<pair<int, Component*>> V = *(pIn->getSelectedComponents());
+			vector<pair<int, Component*>> V = pIn->getSelectedComponents();
 			for (int i = 0; i < V.size(); i++) {
 				V[i].second->Draw(pOut, false);
 			}
@@ -228,7 +229,7 @@ bool RightClick::ReadActionParameters(image* img) {
 		pManager->pastepoint.x1 = x; pManager->pastepoint.y1 = y;
 		//User Right Clicked on a free space
 		if (pIn->getSelectMode()) {
-			vector<pair<int, Component*>> V = *(pIn->getSelectedComponents());
+			vector<pair<int, Component*>> V = pIn->getSelectedComponents();
 			for (int i = 0; i < V.size(); i++) {
 				V[i].second->Draw(pOut, false);
 			}
@@ -306,7 +307,7 @@ void RightClick::Execute() {
 		case Multi_Del: {
 			Input *pIn = pManager->GetInput();
 			pOut->PrintStatusBox("Mult Delete is Selected");
-			theAction = new MultiDelete(pManager,*(pIn->getSelectedComponents()));
+			theAction = new MultiDelete(pManager,pIn->getSelectedComponents());
 			break;
 		}
 		default:

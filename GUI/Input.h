@@ -12,7 +12,7 @@ class Input		//The application manager should have a pointer to this class
 private:
 	window *pWind;	//Pointer to the Graphics Window
 	bool isSelectMode, isSelectionContainConnections;
-	vector<pair<int, Component*> > * selectedComponents;
+	vector<pair<int, Component*> > selectedComponents;
 	int startXPointForConnections, startYPointForConnections;
 public:
 	Input(window*);
@@ -26,11 +26,11 @@ public:
 	
 	void setSelectMode(bool b);
 	bool getSelectMode();
-	void setisSelectionContainConnections(bool b);
-	bool getisSelectionContainConnections();
+	void Input::setisSelectionContainConnections(bool b);
+	bool Input::getisSelectionContainConnections();
 
-	void setSelectedComponents(vector<pair<int, Component*> > *);
-	vector<pair<int,Component*> > *getSelectedComponents();
+	void setSelectedComponents(vector<pair<int, Component*> >);
+	vector<pair<int,Component*> >& getSelectedComponents();
 
 	void getConnectionStartPoint(int&x, int&y) {
 		x = startXPointForConnections;
