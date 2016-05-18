@@ -117,9 +117,9 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 					return MOVE;
 				}
 				else {
-					bool found = false;
 					vector <Connection*> allConnections;
 					pManager->getAllConnections(allConnections);
+					pManager->GetOutput()->clearHoveringImage(imgh, J, K, widthh);
 
 					for (size_t i = 0; i < allConnections.size(); i++)
 					{
@@ -132,16 +132,11 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 							selectedComponents[i].second->Draw(pManager->GetOutput(), false);
 						}
 						//Always Clear hover Bar if found
-						pManager->GetOutput()->clearHoveringImage(imgh, J, K, widthh);
 						setSelectMode(false);
 						isSelectionContainConnections = false;
 						clearSelectedComponents();
 					}
-					if (!found) {
-						//Always Clear hover Bar if found
-						pManager->GetOutput()->clearHoveringImage(imgh, J, K, widthh);
-						return MULTI_SELECT;
-					}
+					return MULTI_SELECT;
 				}
 			}
 		}
@@ -504,7 +499,7 @@ void Input::switchMode(MODE appMode, ApplicationManager* pManager) {
 				}
 				comp->Draw(pManager->GetOutput(), false);
 			}
-			else if(dynamic_cast<SWITCH*>(comp)) {
+			else if (dynamic_cast<SWITCH*>(comp)) {
 				((SWITCH*)comp)->setOutputPinStatus(LOW);
 				comp->Draw(pManager->GetOutput(), false);
 			}
@@ -538,30 +533,6 @@ string Input::getLoadPath()
 buttonstate Input::GetButtonStatus(const button btMouse, int &iX, int &iY) const {
 	return pWind->GetButtonState(btMouse, iX, iY);
 }
-string Input::GetSrting(Output *pOut, string sOriginal = "", bool EditingLabel)
-{
-	string s = "";
-	char ch;
-	keytype k;
-	if (EditingLabel) pOut->PrintMsg(sOriginal);
-	while ((k = pWind->WaitKeyPress(ch)) != '\n' && (int)ch != 13) {
-		if (k == ESCAPE) {
-			s = "";
-			pOut->PrintMsg(sOriginal);
-		}
-		else if (k == ASCII && (int)ch == 8) {
-			s = s.substr(0, s.size() - 1);
-		}
-		else if (k == ASCII && (int)ch != 27) {
-			s += ch;
-		}
-		pOut->PrintMsg(sOriginal + " " + s);
-	}
-	//pOut->PrintStatusBox(");
-	pWind->FlushMouseQueue();
-	return s;
-}
-
 void Input::WaitSelectionPoint(int &X, int &Y)
 {
 	pWind->WaitMouseClick(X, Y);
@@ -598,15 +569,6 @@ vector<pair<int, Component*> >& Input::getSelectedComponents()
 void Input::CorrectPointClickedSilent(int& x, int& y, bool drawImage, bool drawConnection)
 {
 	Utils::correctPointClicked(x, y, drawImage, drawConnection);
-}
-
-string Input::EditComponenetLabel(Output *pOut)
-{
-	//To be Modified Later with Menus 
-	pWind->FlushKeyQueue();
-	string msg = "Type the new name";
-	string ret = this->GetSrting(pOut, msg, true);
-	return ret;
 }
 
 void Input::getExactConnectionLocation(int & x, int & y)
