@@ -1597,7 +1597,7 @@ string window::getStringBox(string s)
 	wc.hbrBackground = GetSysColorBrush(COLOR_3DFACE);
 	wc.lpfnWndProc = WndProc;
 	wc.hCursor = LoadCursor(0, IDC_ARROW);
-	
+
 	RegisterClassW(&wc);
 	
 	CreateWindowW(wc.lpszClassName, L"Type the component name",
