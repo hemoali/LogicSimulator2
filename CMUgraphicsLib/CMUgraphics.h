@@ -333,6 +333,7 @@ public:
 	//
 	HWND DrawStringStatusBox(string s,int x, int y); 
 	string getStringBox(string s = "");
+	void OpenTruthTable();
 	void setActive();
 
 	bool saveAs();

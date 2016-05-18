@@ -279,6 +279,7 @@
     <ClCompile Include="Actions\Validate.cpp">
       <Filter>Actions</Filter>
     </ClCompile>
+    <ClCompile Include="Actions\Exit.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Defs.H" />
@@ -514,6 +515,7 @@
     <ClInclude Include="Actions\Validate.h">
       <Filter>Actions</Filter>
     </ClInclude>
+    <ClInclude Include="Actions\Exit.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

@@ -25,6 +25,7 @@
 #include"Actions\CreateTruthTable.h"
 #include"Actions\New.h"
 #include "Utils.h"
+#include "Actions\Exit.h"
 
 #define YESSIR 1
 #define NOSIR  0
@@ -180,29 +181,12 @@ void ApplicationManager::ExecuteAction(ActionType ActType)
 		break;
 	}
 	case NEW:
-		pAct = new New(this);
+		pAct = new Clear(this);
 		break;
 	case EXIT: 
 	{
 		// Exit action here
-		int choice = -1;
-		choice = GetOutput()->printPopUpMessage("", 'Q');
-		if (choice == IDNO)
-			Exitchoice = YESSIR;
-		else if (choice == IDYES)
-		{
-			pAct = new Save(this);
-			pAct->Execute();
-			if (((Save*)pAct)->isSuccessful())
-				Exitchoice = YESSIR;
-			else
-				Exitchoice = NOSIR;
-			delete pAct;
-			pAct = NULL;
-		}
-		else
-			Exitchoice = NOSIR;
-
+		pAct = new Exit(this);
 		break;
 	}
 	}
@@ -256,6 +240,14 @@ void ApplicationManager::setCompCount(int n)
 Component * ApplicationManager::getComponent(int idx)
 {
 	return CompList[idx];
+}
+void ApplicationManager::componentLoading(ifstream & in, Component * C)
+{
+	C->load(this, in);
+}
+void ApplicationManager::setExitChoice(int x)
+{
+	Exitchoice = x;
 }
 ApplicationManager::~ApplicationManager()
 {

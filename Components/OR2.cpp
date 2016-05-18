@@ -56,10 +56,21 @@ void OR2::save(int id, ofstream & file)
 	file << "OR2  "<<"  "<< m_GfxInfo.x1 << "  " << m_GfxInfo.y1 << " L" << this->getLabel() << endl;
 }
 
-void OR2::load(string s, ApplicationManager*pM)
+void OR2::load(ApplicationManager* pM, ifstream& in)
 {
+	string compLabel;
+	in >> compLabel;
+	if (compLabel.size() <= 1) {
+		//Means that the label is empty as we have put an extra L 
+		//char at the begining of te saved label to know whetherit has a name or not
+		// in order to avoid misreading the input file
+		compLabel = "";
+	}
+	else {
+		compLabel = compLabel.substr(1, compLabel.size());
+	}
 	pM->AddComponent(this);
-	this->setLabel(s);
+	this->setLabel(compLabel);
 }
 ActionType OR2::getComponentActionType() {
 	return ADD_OR_GATE_2;

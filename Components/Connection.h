@@ -41,6 +41,6 @@ public:
 	vector<Cell>& getCellsBeforeAddingConnection();
 
 	virtual void save(int, ofstream &);
-	virtual void load(string s, ApplicationManager*);
+	virtual void load(ApplicationManager*,ifstream& in);
 };
 #endif

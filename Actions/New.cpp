@@ -5,18 +5,18 @@
 #include"..\Components\Connection.h"
 #include <iostream>
 using namespace std;
-New::New(ApplicationManager*pApp) : Action(pApp)
+Clear::Clear(ApplicationManager*pApp) : Action(pApp)
 {
 	Loading = false;
 }
-bool New::ReadActionParameters(image *I)
+bool Clear::ReadActionParameters(image *I)
 {
 	Output *pOut = pManager->GetOutput();
 	int selected = pOut->printPopUpMessage("",'N');
 	if (selected == 1) return true;
 	return false;
 }
-void New::Execute()
+void Clear::Execute()
 {
 	if (Loading || ReadActionParameters()) {
 		Output *pOut = pManager->GetOutput();
@@ -50,18 +50,18 @@ void New::Execute()
 			Loading = false;
 	}
 }
-void New::Undo()
+void Clear::Undo()
 {
 
 }
-void New::Redo()
+void Clear::Redo()
 {
 
 }
-void New::setLoading(bool T)
+void Clear::setLoading(bool T)
 {
 	Loading = T;
 }
-New::~New()
+Clear::~Clear()
 {
 }

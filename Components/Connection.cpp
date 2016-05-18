@@ -122,10 +122,21 @@ void Connection::save(int id, ofstream & file)
 	file << "  " << c1 << "  " << c2 << "  " << c3 << "  " << c4 << " L" << this->getLabel() <<  endl;
 }
 
-void Connection::load(string s, ApplicationManager*pM)
+void Connection::load(ApplicationManager*pM,ifstream& in)
 {
+	string compLabel;
+	in >> compLabel;
+	if (compLabel.size() <= 1) {
+		//Means that the label is empty as we have put an extra L 
+		//char at the begining of te saved label to know whetherit has a name or not
+		// in order to avoid misreading the input file
+		compLabel = "";
+	}
+	else {
+		compLabel = compLabel.substr(1, compLabel.size());
+	}
 	pM->AddComponent(this);
-	this->setLabel(s);
+	this->setLabel(compLabel);
 }
 ActionType Connection::getComponentActionType() {
 	return ADD_CONNECTION;

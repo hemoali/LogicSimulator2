@@ -53,6 +53,10 @@ public:
 	int getCompCount();
 	void setCompCount(int n);
 
+	//Loading Function
+	void componentLoading(ifstream& out, Component *C);
+	//Exitting Indicator
+	void setExitChoice(int x);
 	//destructor
 	~ApplicationManager();
 };

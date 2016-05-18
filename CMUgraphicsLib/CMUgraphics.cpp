@@ -1616,6 +1616,11 @@ string window::getStringBox(string s)
 	return getWindowEditString();
 }
 
+void window::OpenTruthTable()
+{
+	ShellExecute(hwndWindow, "open", "TruthTable.txt", NULL, NULL, SW_SHOWDEFAULT);
+}
+
 void window::setActive()
 {
 	SetActiveWindow(hwndWindow);
