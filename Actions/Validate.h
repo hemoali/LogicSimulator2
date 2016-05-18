@@ -5,7 +5,7 @@ class Validate :
 	public Action
 {
 	string msg;
-	bool isValid = true;
+	bool isValid = true, isValid2 = true;
 	int cnt = 0;
 public:
 	Validate(ApplicationManager*pApp);
@@ -16,7 +16,7 @@ public:
 	bool validateInputComponent(Component* comp);
 	//Execute action (code depends on action type)
 	virtual void Execute();
-	bool getValid() { return isValid; }
+	bool getValid() { return isValid&&isValid2; }
 	//To undo this action (code depends on action type)
 	virtual void Undo();
 

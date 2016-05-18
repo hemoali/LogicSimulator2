@@ -105,7 +105,7 @@ void Delete::Undo()
 {
 	Output* pOut = pManager->GetOutput();
 
-	if (theComponent != NULL && dynamic_cast<Gate*> (theComponent)) {
+	if (theComponent != NULL && (dynamic_cast<Gate*> (theComponent) || dynamic_cast<LED*>(theComponent) || dynamic_cast<SWITCH*> (theComponent))) {
 		Output *pOut = pManager->GetOutput();
 		string s = "Gate: " + (theComponent->getLabel()) + " has been deleted successfully";
 		pOut->PrintStatusBox(s);
@@ -164,7 +164,7 @@ void Delete::Redo()
 {
 	Output *pOut = pManager->GetOutput();
 
-	if (theComponent != NULL && dynamic_cast<Gate*> (theComponent)) {
+	if (theComponent != NULL && (dynamic_cast<Gate*> (theComponent) || dynamic_cast<LED*>(theComponent) || dynamic_cast<SWITCH*> (theComponent))) {
 		string s = "Gate: " + (theComponent->getLabel()) + " has been deleted successfully";
 		pOut->PrintStatusBox(s);
 		theComponent->setDelete(true);

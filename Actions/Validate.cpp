@@ -5,6 +5,8 @@
 #include"..\Components\LED.h"
 #include"..\Components\SWITCH.h"
 #include "Simulate.h"
+#include <string>
+using namespace std;
 Validate::Validate(ApplicationManager*pApp) : Action(pApp)
 {
 	msg = "";
@@ -22,7 +24,9 @@ bool Validate::validateOutputComponent(Component* comp) {
 		return true;
 	}
 	if (comp == NULL || comp->getOutputPin()->connectedConnectionsCount() == 0) {
-		msg = "Error: Floating pins";
+		if (msg.find("Floating") == string::npos) {
+			msg += ((msg.length() == 0) ? "" : "\n"); msg += " • Error: Floating pins";
+		}
 		return false;
 	}
 	bool t[3] = { true, true, true };
@@ -40,7 +44,9 @@ bool Validate::validateInputComponent(Component* comp) {
 	if (comp == NULL || ((comp->getNumOfInputs() == 3 && (comp->getInputPin(0)->getConnection() == NULL || comp->getInputPin(1)->getConnection() == NULL || comp->getInputPin(2)->getConnection() == NULL))
 		|| (comp->getNumOfInputs() == 2 && (comp->getInputPin(0)->getConnection() == NULL || comp->getInputPin(1)->getConnection() == NULL))
 		|| (comp->getNumOfInputs() == 1 && (comp->getInputPin(0)->getConnection() == NULL)))) {
-		msg = "Error: Floating pins";
+		if (msg.find("Floating") == string::npos) {
+			msg += ((msg.length() == 0) ? "" : "\n"); msg += " • Error: Floating pins";
+		}
 		return false;
 	}
 	bool t[3] = { true, true, true };
@@ -64,7 +70,7 @@ bool Validate::validateInputComponent(Component* comp) {
 void Validate::Execute()
 {
 
-	for (size_t i = 0; i < pManager->allComponentsCorners.size() && isValid; i++)
+	for (size_t i = 0; i < pManager->allComponentsCorners.size() && isValid && isValid2; i++)
 	{
 		Component* comp = pManager->getComponent(i);
 
@@ -75,29 +81,23 @@ void Validate::Execute()
 		if (!dynamic_cast<LED*> (comp))
 		{
 			isValid = validateOutputComponent(comp);
+			if (!isValid && msg.find("LEDs") == string::npos)
+			{
+				msg += ((msg.length() == 0) ? "" : "\n"); msg += " • Last level isn't all LEDs";
+			}
 		}
-		if (isValid)
+
+		if (!dynamic_cast<SWITCH*> (comp))
 		{
-			if (!dynamic_cast<SWITCH*> (comp))
-			{
-				isValid = validateInputComponent(comp);
-			}
-			if (!isValid)
-			{
-				if (msg == "")
-				{
-					msg = "First level isn't all switches";
-				}
-			}
+			isValid2 = validateInputComponent(comp);
 		}
-		else {
-			if (msg == "")
-			{
-				msg = "Last level isn't all LEDs";
-			}
+		if (!isValid2 && msg.find("switches") == string::npos)
+		{
+			msg += ((msg.length() == 0) ? "" : "\n"); msg += " • First level isn't all switches";
 		}
+
 	}
-	if (isValid && cnt >0)
+	if (isValid && isValid2 && cnt > 0)
 	{
 		pManager->GetInput()->switchMode(SIMULATION, pManager);
 	}
