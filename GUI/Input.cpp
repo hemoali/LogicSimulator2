@@ -137,6 +137,7 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 						clearSelectedComponents();
 					}
 					return MULTI_SELECT;
+
 				}
 			}
 		}
@@ -172,7 +173,7 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 					TopItemsRanges.push_back(make_pair(1035, 1091));
 					TopItemsRanges.push_back(make_pair(1121, 1166));
 
-					int HoveredItemOrder = -1;//TODO:Modify
+					int HoveredItemOrder = -1;
 
 					for (size_t i = 0; i < TopItemsRanges.size(); i++)
 					{
@@ -214,7 +215,7 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 					LeftItemsRanges.push_back(make_pair(382, 460));
 					LeftItemsRanges.push_back(make_pair(475, 550));
 
-					int HoveredLeftItemOrder = -1;//TODO:Modify
+					int HoveredLeftItemOrder = -1;
 
 					for (size_t i = 0; i < LeftItemsRanges.size(); i++)
 					{
@@ -244,7 +245,7 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 					LeftItemsRanges.push_back(make_pair(103, 180));
 					LeftItemsRanges.push_back(make_pair(197, 273));
 
-					int HoveredLeftItemOrder = -1;//TODO:Modify
+					int HoveredLeftItemOrder = -1;
 
 					for (size_t i = 0; i < LeftItemsRanges.size(); i++)
 					{
@@ -283,7 +284,7 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 						{
 							//Always Clear hover Bar if found at the transition between one component and the other
 							pManager->GetOutput()->clearHoveringImage(imgh, J, K, widthh);
-							if (comp->getLabel().size() > 0) { //The Gate Worth Drawing A hover Part
+							if ((UI.AppMode == DESIGN && comp->getLabel().size() > 0)  || (UI.AppMode == SIMULATION && ((dynamic_cast<Connection*>(comp))||(!(dynamic_cast<Connection*>(comp)) && comp->getLabel().size() > 0)))) { //The Gate Worth Drawing A hover Part
 								pWind->GetMouseCoord(J, K);
 								delete imgh;
 								imgh = NULL;
@@ -305,18 +306,16 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 			}
 		}
 	}
-
 	if (UI.AppMode == DESIGN)	//application is in design mode
 	{
 		//[1] If user clicks on the Toolbar
 		if (y >= 5 && y < UI.ToolBarHeight - 20 && x > UI.LeftToolBarWidth)
 		{
 			pWind->GetMouseClick(x, y);
-			//TODO
 			//Check whick Menu item was clicked
 			//==> This assumes that menu items are lined up horizontally <==
 
-			int ClickedItemOrder = -1;//TODO:Modify
+			int ClickedItemOrder = -1;
 			vector<pair<int, int> > TopItemsRanges;
 			TopItemsRanges.push_back(make_pair(107, 170));
 			TopItemsRanges.push_back(make_pair(190, 245));
@@ -374,7 +373,7 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 			LeftItemsRanges.push_back(make_pair(382, 460));
 			LeftItemsRanges.push_back(make_pair(475, 550));
 
-			int ClickedItemOrder = -1;//TODO:Modify
+			int ClickedItemOrder = -1;
 
 			for (size_t i = 0; i < LeftItemsRanges.size(); i++)
 			{
@@ -448,7 +447,7 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 			case SDESIGN: {switchMode(DESIGN, pManager); break; }
 			case STT: return Create_TruthTable;
 			case SEXIT: return EXIT;
-			default: return DSN_TOOL; //TODO:
+			default: return DSN_TOOL;
 			}
 		}
 		else if (y >= UI.TopToolBarHeight && y < UI.height && x >= UI.LeftToolBarWidth && x < UI.width) {

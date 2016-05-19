@@ -18,11 +18,8 @@ void DRAWAFTERMENUE(Output* pOut, HWND D) {
 	pOut->pWind->setActive();
 	CloseWindow(D);
 	SendMessage(D, WM_CLOSE, 0, 0);
-
 }
-
-
-Output::Output(ApplicationManager* pManager)
+Output::Output(vector<Connection*>* allConns)
 {
 	//Initialize user interface parameters
 
@@ -58,7 +55,7 @@ Output::Output(ApplicationManager* pManager)
 	memset(connectionsCountAtPixel, 0, sizeof connectionsCountAtPixel);
 	memset(arrayOfComponents, NULL, sizeof arrayOfComponents);
 
-	this->pManager = pManager;
+	this->allConnectionsPointer = allConns;
 }
 
 Input* Output::CreateInput() const
@@ -1078,8 +1075,7 @@ void Output::clearConnections(vector<Connection*>& allConnections, int originalX
 				//Clear other connections intersections
 				if (Vertical0Horizontal1Nothing2 == 0 || Vertical0Horizontal1Nothing2 == 1)
 				{
-					vector<Connection*> allConnections2;
-					pManager->getAllConnections(allConnections2);
+					vector<Connection*> allConnections2 = *allConnectionsPointer;
 
 					for (size_t k = 0; k < allConnections2.size(); k++)
 					{
@@ -1191,8 +1187,7 @@ void Output::clearConnectionsFromGrid(vector<Connection*> allOutputConnections, 
 				//Clear other connections intersections
 				if (Vertical0Horizontal1Nothing2 == 0 || Vertical0Horizontal1Nothing2 == 1)
 				{
-					vector<Connection*> allConnections;
-					pManager->getAllConnections(allConnections);
+					vector<Connection*> allConnections = *allConnectionsPointer;
 
 					for (size_t k = 0; k < allConnections.size(); k++)
 					{
@@ -1248,8 +1243,7 @@ void Output::clearConnectionsFromGrid(vector<Connection*> allOutputConnections, 
 				//Clear other connections intersections
 				if (Vertical0Horizontal1Nothing2 == 0 || Vertical0Horizontal1Nothing2 == 1)
 				{
-					vector<Connection*> allConnections;
-					pManager->getAllConnections(allConnections);
+					vector<Connection*> allConnections = *allConnectionsPointer;
 
 					for (size_t k = 0; k < allConnections.size(); k++)
 					{
@@ -1516,14 +1510,14 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 							{
 								for (size_t j = 0; j < allInputConnections[i]->getCellsBeforeAddingConnection().size(); j++)
 								{
-									pManager->GetOutput()->setArrayOfComponents(allInputConnections[i]->getCellsBeforeAddingConnection()[j].y, allInputConnections[i]->getCellsBeforeAddingConnection()[j].x, allInputConnections[i]);
+									setArrayOfComponents(allInputConnections[i]->getCellsBeforeAddingConnection()[j].y, allInputConnections[i]->getCellsBeforeAddingConnection()[j].x, allInputConnections[i]);
 								}
 							}
 							for (size_t i = 0; i < allOutputConnections.size(); i++)
 							{
 								for (size_t j = 0; j < allOutputConnections[i]->getCellsBeforeAddingConnection().size(); j++)
 								{
-									pManager->GetOutput()->setArrayOfComponents(allOutputConnections[i]->getCellsBeforeAddingConnection()[j].y, allOutputConnections[i]->getCellsBeforeAddingConnection()[j].x, allOutputConnections[i]);
+									setArrayOfComponents(allOutputConnections[i]->getCellsBeforeAddingConnection()[j].y, allOutputConnections[i]->getCellsBeforeAddingConnection()[j].x, allOutputConnections[i]);
 								}
 							}
 						}
@@ -1918,7 +1912,7 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 							allSelectedComponents[m].second->setDelete(false);
 							allSelectedComponents[m].second->setNewCenterLocation({ originalXY[m].first, originalXY[m].second });
 							allSelectedComponents[m].second->setSmallCleanImageBeforeAddingComp(allSmallCleanImages[m]);
-							allSelectedComponents[m].second->Draw(pManager->GetOutput(), false);
+							allSelectedComponents[m].second->Draw(this, false);
 						}
 					}
 
@@ -1934,17 +1928,17 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 						{
 							for (size_t j = 0; j < allInputConnections[i]->getCellsBeforeAddingConnection().size(); j++)
 							{
-								pManager->GetOutput()->setArrayOfComponents(allInputConnections[i]->getCellsBeforeAddingConnection()[j].y, allInputConnections[i]->getCellsBeforeAddingConnection()[j].x, allInputConnections[i]);
+								setArrayOfComponents(allInputConnections[i]->getCellsBeforeAddingConnection()[j].y, allInputConnections[i]->getCellsBeforeAddingConnection()[j].x, allInputConnections[i]);
 							}
-							allInputConnections[i]->selectYourSelf(pManager->GetOutput(), UI.DrawColor);
+							allInputConnections[i]->selectYourSelf(this, UI.DrawColor);
 						}
 						for (size_t i = 0; i < allOutputConnections.size(); i++)
 						{
 							for (size_t j = 0; j < allOutputConnections[i]->getCellsBeforeAddingConnection().size(); j++)
 							{
-								pManager->GetOutput()->setArrayOfComponents(allOutputConnections[i]->getCellsBeforeAddingConnection()[j].y, allOutputConnections[i]->getCellsBeforeAddingConnection()[j].x, allOutputConnections[i]);
+								setArrayOfComponents(allOutputConnections[i]->getCellsBeforeAddingConnection()[j].y, allOutputConnections[i]->getCellsBeforeAddingConnection()[j].x, allOutputConnections[i]);
 							}
-							allOutputConnections[i]->selectYourSelf(pManager->GetOutput(), UI.DrawColor);
+							allOutputConnections[i]->selectYourSelf(this, UI.DrawColor);
 						}
 					}
 					isMovingSucceded = true;

@@ -18,9 +18,10 @@ private:
 	static CellType usedPixels[44][74];
 	static Component* arrayOfComponents[44][74];
 	ApplicationManager* pManager;
+	vector<Connection*>* allConnectionsPointer;
 	friend void DRAWAFTERMENUE(Output *pOut, HWND D);
 public:
-	Output(ApplicationManager* pManager); // Performs the Window Initialization
+	Output(vector<Connection*>* allConns); // Performs the Window Initialization
 	Input* CreateInput() const; //creates a pointer to the Input object
 	void ChangeTitle(string Title) const;
 

@@ -22,6 +22,7 @@ private:
 
 	Output* OutputInterface; //pointer to the Output Clase Interface
 	Input* InputInterface; //pointer to the Input Clase Interface
+	vector<Connection*> allConnections;
 public:	
 	int Exitchoice;
 	Component*PastedComponent;

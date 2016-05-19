@@ -27,9 +27,6 @@
 #include "Utils.h"
 #include "Actions\Exit.h"
 
-#define YESSIR 1
-#define NOSIR  0
-
 ApplicationManager::ApplicationManager()
 {
 	CompCount = 0;
@@ -38,7 +35,13 @@ ApplicationManager::ApplicationManager()
 		CompList[i] = NULL;
 
 	//Creates the Input / Output Objects & Initialize the GUI
-	OutputInterface = new Output(this);
+	for (int i = 0; i < CompCount; i++) {
+		if (dynamic_cast<Connection*> (CompList[i]) && !CompList[i]->getDelete())
+		{
+			allConnections.push_back((Connection*)CompList[i]);
+		}
+	}
+	OutputInterface = new Output(&allConnections);
 	InputInterface = OutputInterface->CreateInput();
 }
 ////////////////////////////////////////////////////////////////////
@@ -50,21 +53,20 @@ void ApplicationManager::AddComponent(Component* pComp)
 
 ActionType ApplicationManager::GetUserAction()
 {
+	allConnections.clear();
+	for (int i = 0; i < CompCount; i++) {
+		if (dynamic_cast<Connection*> (CompList[i]) && !CompList[i]->getDelete())
+		{
+			allConnections.push_back((Connection*)CompList[i]);
+		}
+	}
 	//Call input to get what action is reuired from the user
 	return InputInterface->GetUserAction(this);
 }
 ////////////////////////////////////////////////////////////////////
-
 void ApplicationManager::ExecuteAction(ActionType ActType)
 {
-	bool drawGate = true, drawConnection = false;
-
 	Action* pAct = NULL;
-	string msg = "Press ESCAPE to stop";
-	string error_msg = "Please select point within workspace avoiding overlaping!";
-
-	GraphicsInfo Gfx_info;
-	Gfx_info.x1 = Gfx_info.y1 = -1;
 	switch (ActType)
 	{
 	case ADD_Buff:
@@ -185,7 +187,6 @@ void ApplicationManager::ExecuteAction(ActionType ActType)
 		break;
 	case EXIT: 
 	{
-		// Exit action here
 		pAct = new Exit(this);
 		break;
 	}
@@ -193,31 +194,25 @@ void ApplicationManager::ExecuteAction(ActionType ActType)
 	if (pAct)
 	{
 		pAct->Execute();
-		//delete pAct;
-		//pAct = NULL;
 	}
 }
 ////////////////////////////////////////////////////////////////////
-
 void ApplicationManager::UpdateInterface()
 {
 	for (int i = 0; i < CompCount; i++)
 		CompList[i]->Draw(OutputInterface);
 
 }
-
 ////////////////////////////////////////////////////////////////////
 Input* ApplicationManager::GetInput()
 {
 	return InputInterface;
 }
-
 ////////////////////////////////////////////////////////////////////
 Output* ApplicationManager::GetOutput()
 {
 	return OutputInterface;
 }
-
 void ApplicationManager::getAllConnections(vector<Connection*>& allConnections) {
 	allConnections.clear();
 	for (int i = 0; i < CompCount; i++) {
@@ -255,5 +250,4 @@ ApplicationManager::~ApplicationManager()
 		delete CompList[i];
 	delete OutputInterface;
 	delete InputInterface;
-
 }
