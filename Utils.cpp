@@ -1,10 +1,28 @@
 #include "Utils.h"
 #include "GUI\UI_Info.h"
 #include <iostream>
+Component* Utils::arrayOfComponents[44][74];
+int Utils::J = 0; int Utils::K = 0; int Utils::widthh = 0;
+image* Utils::imgh = NULL;
+stack <Action*> Utils::undoActions, Utils::redoActions, Utils::simulationUndoActions, Utils::simulationRedoActions;
+vector<GraphicsInfo> Utils::allComponentsCorners;
+vector<Connection*> Utils::allConnections;
+
 Utils::Utils()
 {
 }
-stack <Action*> Utils::undoActions, Utils::redoActions, Utils::simulationUndoActions, Utils::simulationRedoActions;
+void Utils::setArrayOfComponents(int i, int j, Component * c)
+{
+	Utils::arrayOfComponents[i][j] = c;
+}
+
+Component * Utils::getArrayOfComponents(int i, int j)
+{
+	if (i > 44 || j > 77) return NULL; //IBRAHIM IF I DIDN'T ADD THIS LINE THE PROGRAM WILL TERMINATE FOR NO KNOWN REASON 
+									   //Giving that the error is that j is always  4096 
+	return Utils::arrayOfComponents[i][j];
+}
+
 GraphicsInfo* Utils::getOutputDirections(GraphicsInfo GInfo, CellType usedPixels[44][74], int noOfOutputs) {
 	GraphicsInfo* arrayOfDirections = new GraphicsInfo[noOfOutputs];
 	GInfo.x1 += UI.GRID_SIZE - (GInfo.x1 % UI.GRID_SIZE);

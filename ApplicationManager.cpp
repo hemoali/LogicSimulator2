@@ -23,6 +23,7 @@
 #include "Actions\Validate.h"
 #include "Actions\Simulate.h"
 #include"Actions\CreateTruthTable.h"
+#include"Actions\ChangeSwitch.h"
 #include"Actions\New.h"
 #include "Utils.h"
 #include "Actions\Exit.h"
@@ -38,10 +39,10 @@ ApplicationManager::ApplicationManager()
 	for (int i = 0; i < CompCount; i++) {
 		if (dynamic_cast<Connection*> (CompList[i]) && !CompList[i]->getDelete())
 		{
-			allConnections.push_back((Connection*)CompList[i]);
+			Utils::allConnections.push_back((Connection*)CompList[i]);
 		}
 	}
-	OutputInterface = new Output(&allConnections);
+	OutputInterface = new Output(&Utils::allConnections);
 	InputInterface = OutputInterface->CreateInput();
 }
 ////////////////////////////////////////////////////////////////////
@@ -53,19 +54,20 @@ void ApplicationManager::AddComponent(Component* pComp)
 
 ActionType ApplicationManager::GetUserAction()
 {
-	allConnections.clear();
+	Utils::allConnections.clear();
 	for (int i = 0; i < CompCount; i++) {
 		if (dynamic_cast<Connection*> (CompList[i]) && !CompList[i]->getDelete())
 		{
-			allConnections.push_back((Connection*)CompList[i]);
+			Utils::allConnections.push_back((Connection*)CompList[i]);
 		}
 	}
 	//Call input to get what action is reuired from the user
-	return InputInterface->GetUserAction(this);
+	return InputInterface->GetUserAction();
 }
 ////////////////////////////////////////////////////////////////////
 void ApplicationManager::ExecuteAction(ActionType ActType)
 {
+	//GetOutput()->clearHoveringImage(Utils::imgh, Utils::J, Utils::K, Utils::widthh);
 	Action* pAct = NULL;
 	switch (ActType)
 	{
@@ -185,7 +187,41 @@ void ApplicationManager::ExecuteAction(ActionType ActType)
 	case NEW:
 		pAct = new Clear(this);
 		break;
-	case EXIT: 
+	case DSN_MODE:
+		for (size_t i = 0; i < Utils::allComponentsCorners.size(); i++)
+		{
+			Component* comp = getComponent(i);
+			if (comp->getDelete()) continue;
+			if (!(dynamic_cast<SWITCH*>(comp)) && !(dynamic_cast<Connection*>(comp)))
+			{
+				for (size_t i = 0; i < comp->getNumOfInputs(); i++)
+				{
+					comp->setInputPinStatus(i, UNDEFINED);
+				}
+				comp->Draw(GetOutput(), false);
+			}
+			else if (dynamic_cast<SWITCH*>(comp)) {
+				((SWITCH*)comp)->setOutputPinStatus(LOW);
+				comp->Draw(GetOutput(), false);
+			}
+			else if (dynamic_cast<Connection*>(comp)) {
+				((Connection*)comp)->selectYourSelf(GetOutput(), UI.DrawColor);
+			}
+		}
+		UI.AppMode = DESIGN;
+		GetOutput()->switchMode(DESIGN);
+		break;
+	case SIM_MODE:
+		GetOutput()->switchMode(SIMULATION);
+		UI.AppMode = SIMULATION;
+		break;
+	case Change_Switch: {
+		ChangeSwitch* act = new ChangeSwitch(this, GetInput()->toBeChangedSwitch);
+		act->Execute();
+		pAct = new Simulate(this, false);
+		break;
+	}
+	case EXIT:
 	{
 		pAct = new Exit(this);
 		break;
@@ -213,15 +249,7 @@ Output* ApplicationManager::GetOutput()
 {
 	return OutputInterface;
 }
-void ApplicationManager::getAllConnections(vector<Connection*>& allConnections) {
-	allConnections.clear();
-	for (int i = 0; i < CompCount; i++) {
-		if (dynamic_cast<Connection*> (CompList[i]) && !CompList[i]->getDelete())
-		{
-			allConnections.push_back((Connection*)CompList[i]);
-		}
-	}
-}
+
 ////////////////////////////////////////////////////////////////////
 int ApplicationManager::getCompCount()
 {

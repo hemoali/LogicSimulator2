@@ -28,7 +28,7 @@ void CreateTruthTable::Execute()
 	ofstream file;
 	file.open("TruthTable.txt");
 	int NumOfInputs = 0, NumOfOutputs = 0;
-	for (size_t i = 0; i < pManager->allComponentsCorners.size(); i++)
+	for (size_t i = 0; i < Utils::allComponentsCorners.size(); i++)
 	{
 		Component* comp = pManager->getComponent(i);
 		if ((dynamic_cast<SWITCH*>(comp)))
@@ -44,7 +44,7 @@ void CreateTruthTable::Execute()
 			}
 		}
 	}
-	for (size_t i = 0; i < pManager->allComponentsCorners.size(); i++)
+	for (size_t i = 0; i < Utils::allComponentsCorners.size(); i++)
 	{
 		Component* comp = pManager->getComponent(i);
 		if ((dynamic_cast<LED*>(comp)))
@@ -79,7 +79,7 @@ void CreateTruthTable::Execute()
 	for (size_t i = 0; i < AllCompination.size(); i++)
 	{
 		int k = 0;
-		for (size_t j = 0; j < pManager->allComponentsCorners.size(); j++)
+		for (size_t j = 0; j < Utils::allComponentsCorners.size(); j++)
 		{
 			Component* comp = pManager->getComponent(j);
 			if ((dynamic_cast<SWITCH*>(comp)))
@@ -98,7 +98,7 @@ void CreateTruthTable::Execute()
 		k = 0;
 		NumOfInputs = 0;
 		NumOfOutputs = 0;
-		for (size_t j = 0; j < pManager->allComponentsCorners.size(); j++)
+		for (size_t j = 0; j < Utils::allComponentsCorners.size(); j++)
 		{
 			Component* comp = pManager->getComponent(j);
 			if ((dynamic_cast<SWITCH*>(comp)))
@@ -135,7 +135,7 @@ void CreateTruthTable::Execute()
 				k++;
 			}
 		}
-		for (size_t j = 0; j < pManager->allComponentsCorners.size(); j++)
+		for (size_t j = 0; j < Utils::allComponentsCorners.size(); j++)
 		{
 			Component* comp = pManager->getComponent(j);
 			if ((dynamic_cast<LED*>(comp)))

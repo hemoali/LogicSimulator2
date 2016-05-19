@@ -185,14 +185,14 @@ void Load::Execute()
 			GraphicsInfo GInfotmp = point;
 			int Len = UI.GATE_Width;
 			int Wdth = UI.GATE_Height;
-			pManager->allComponentsCorners.push_back(point);
+			Utils::allComponentsCorners.push_back(point);
 
 			pOut->storeImage(img, pA->getCenterLocation().x1 - UI.GRID_SIZE - 5, pA->getCenterLocation().y1 - UI.GRID_SIZE - 5, 2 * UI.GRID_SIZE + 4, UI.GATE_Height + 3);
 
 			pA->setSmallCleanImageBeforeAddingComp(img);
 			for (int k = GInfotmp.y1 / UI.GRID_SIZE + 1; k <= GInfotmp.y2 / UI.GRID_SIZE; k++) {
 				for (int l = GInfotmp.x1 / UI.GRID_SIZE; l <= GInfotmp.x2 / UI.GRID_SIZE; l++) {
-					pManager->GetOutput()->setArrayOfComponents(k, l, pA);
+					Utils::setArrayOfComponents(k, l, pA);
 				}
 			}
 

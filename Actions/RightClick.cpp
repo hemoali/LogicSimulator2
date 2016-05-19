@@ -29,12 +29,12 @@ bool RightClick::ReadActionParameters(image* img) {
 	}
 
 	//Check Which Component is Selected and gets a pointer to that Component
-	for (int i = 0; i < pManager->allComponentsCorners.size(); i++) {
+	for (int i = 0; i < Utils::allComponentsCorners.size(); i++) {
 		//Checking For Coordinates of the Selected Gate 
-		if ((x >= pManager->allComponentsCorners[i].x1 && x <= pManager->allComponentsCorners[i].x2) && (
-			y >= pManager->allComponentsCorners[i].y1 &&  y <= pManager->allComponentsCorners[i].y2)) {
+		if ((x >= Utils::allComponentsCorners[i].x1 && x <= Utils::allComponentsCorners[i].x2) && (
+			y >= Utils::allComponentsCorners[i].y1 &&  y <= Utils::allComponentsCorners[i].y2)) {
 			C = pManager->getComponent(i);
-			i = pManager->allComponentsCorners.size(); //Breaks the Loop
+			i = Utils::allComponentsCorners.size(); //Breaks the Loop
 		}
 	}
 
@@ -98,8 +98,7 @@ bool RightClick::ReadActionParameters(image* img) {
 			for (int i = 0; i < V.size(); i++) {
 				V[i].second->Draw(pOut, false);
 			}
-			vector <Connection*> allConnections;
-			pManager->getAllConnections(allConnections);
+			vector <Connection*> allConnections = Utils::allConnections;
 
 			for (size_t i = 0; i < allConnections.size(); i++)
 			{
@@ -113,15 +112,14 @@ bool RightClick::ReadActionParameters(image* img) {
 
 	//Checking for Connectioon
 	pIn->getExactConnectionLocation(x, y);
-	C =  pOut->getArrayOfComponents(y / UI.GRID_SIZE, x / UI.GRID_SIZE);
+	C =  Utils::getArrayOfComponents(y / UI.GRID_SIZE, x / UI.GRID_SIZE);
 	if (C != NULL && dynamic_cast<Connection*> (C)) {
 		if (pIn->getSelectMode() && atLeastOneGateinMS != 0 ) {
 			vector<pair<int, Component*>> V = pIn->getSelectedComponents();
 			for (int i = 0; i < V.size(); i++) {
 				V[i].second->Draw(pOut, false);
 			}
-			vector <Connection*> allConnections;
-			pManager->getAllConnections(allConnections);
+			vector <Connection*> allConnections = Utils::allConnections;
 
 			for (size_t i = 0; i < allConnections.size(); i++)
 			{
@@ -214,8 +212,7 @@ bool RightClick::ReadActionParameters(image* img) {
 			for (int i = 0; i < V.size(); i++) {
 				V[i].second->Draw(pOut, false);
 			}
-			vector <Connection*> allConnections;
-			pManager->getAllConnections(allConnections);
+			vector <Connection*> allConnections = Utils::allConnections;
 
 			for (size_t i = 0; i < allConnections.size(); i++)
 			{
@@ -233,8 +230,7 @@ bool RightClick::ReadActionParameters(image* img) {
 			for (int i = 0; i < V.size(); i++) {
 				V[i].second->Draw(pOut, false);
 			}
-			vector <Connection*> allConnections;
-			pManager->getAllConnections(allConnections);
+			vector <Connection*> allConnections = Utils::allConnections;
 
 			for (size_t i = 0; i < allConnections.size(); i++)
 			{

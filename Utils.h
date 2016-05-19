@@ -18,7 +18,13 @@ public:
 	static bool CheckPointInBorders(int x, int y);
 	static GraphicsInfo* Utils::getOutputDirections(GraphicsInfo GInfo, CellType usedPixels[44][74], int noOfOutputs = 4);
 	static stack <Action*> undoActions, redoActions, simulationUndoActions, simulationRedoActions;
-
+	static Component* arrayOfComponents[44][74];
+	static image* imgh;
+	static int J, K, widthh ;
+	static void setArrayOfComponents(int i, int j, Component*);
+	static Component* getArrayOfComponents(int i, int j);
+	static vector<GraphicsInfo> allComponentsCorners;
+	static vector<Connection*> allConnections;
 	~Utils();
 };
 

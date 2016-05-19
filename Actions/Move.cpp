@@ -37,9 +37,9 @@ void Move::Execute()
 	int x, y;
 	Component* Comp = NULL;
 	while (pIn->GetButtonStatus(LEFT_BUTTON, x, y) == BUTTON_DOWN) {
-		for (int i = 0; i < pManager->allComponentsCorners.size(); i++)
+		for (int i = 0; i < Utils::allComponentsCorners.size(); i++)
 		{
-			if (x >= pManager->allComponentsCorners[i].x1 && x <= pManager->allComponentsCorners[i].x2 && y >= pManager->allComponentsCorners[i].y1&&y <= pManager->allComponentsCorners[i].y2 && !dynamic_cast<Connection*> (pManager->getComponent(i)))
+			if (x >= Utils::allComponentsCorners[i].x1 && x <= Utils::allComponentsCorners[i].x2 && y >= Utils::allComponentsCorners[i].y1&&y <= Utils::allComponentsCorners[i].y2 && !dynamic_cast<Connection*> (pManager->getComponent(i)))
 			{
 				compIdx = i;
 				Comp = pManager->getComponent(i);
@@ -61,7 +61,7 @@ void Move::Execute()
 				for (int j = xbegin; j <= xend; j++)
 				{
 					pOut->setUsedPixel(i, j, EMPTY);
-					pOut->setArrayOfComponents(i, j, NULL);
+					Utils::setArrayOfComponents(i, j, NULL);
 				}
 			}
 			// Free related connections
@@ -75,10 +75,10 @@ void Move::Execute()
 			if (pManager->GetOutput()->SetDragImage(ActType, newCoor, newSmallImageForGate, true, Comp)) {
 				Comp->setNewCenterLocation(newCoor);
 				Comp->setDelete(false);
-				pManager->allComponentsCorners[compIdx].x1 = newCoor.x1 - UI.GATE_Width / 2;
-				pManager->allComponentsCorners[compIdx].y1 = newCoor.y1 - UI.GATE_Height / 2;
-				pManager->allComponentsCorners[compIdx].x2 = newCoor.x1 + UI.GATE_Width / 2;
-				pManager->allComponentsCorners[compIdx].y2 = newCoor.y1 + UI.GATE_Height / 2;
+				Utils::allComponentsCorners[compIdx].x1 = newCoor.x1 - UI.GATE_Width / 2;
+				Utils::allComponentsCorners[compIdx].y1 = newCoor.y1 - UI.GATE_Height / 2;
+				Utils::allComponentsCorners[compIdx].x2 = newCoor.x1 + UI.GATE_Width / 2;
+				Utils::allComponentsCorners[compIdx].y2 = newCoor.y1 + UI.GATE_Height / 2;
 				Comp->setSmallCleanImageBeforeAddingComp(newSmallImageForGate);
 				Comp->Draw(pOut, false);
 				vector<Connection*> allInConnections, allOutConnections;
@@ -98,7 +98,7 @@ void Move::Execute()
 				{
 					for (int j = xbegin; j <= xend; j++)
 					{
-						pManager->GetOutput()->setArrayOfComponents(i, j, Comp);
+						Utils::setArrayOfComponents(i, j, Comp);
 					}
 				}
 				Utils::undoActions.push(this);
@@ -115,7 +115,7 @@ void Move::Execute()
 							pOut->setUsedPixel(i, j, PIN);
 							continue;
 						}
-						pOut->setArrayOfComponents(i, j, Comp);
+						Utils::setArrayOfComponents(i, j, Comp);
 						pOut->setUsedPixel(i, j, GATE);
 					}
 				}
@@ -143,7 +143,7 @@ void Move::Undo()
 		for (int j = xbegin; j <= xend; j++)
 		{
 			pOut->setUsedPixel(i, j, EMPTY);
-			pOut->setArrayOfComponents(i, j, NULL);
+			Utils::setArrayOfComponents(i, j, NULL);
 		}
 	}
 	//remove new Connections
@@ -157,10 +157,10 @@ void Move::Undo()
 	//redraw and reassign data
 
 	pA->setNewCenterLocation(oldGraphicsInfo);
-	pManager->allComponentsCorners[compIdx].x1 = oldGraphicsInfo.x1 - UI.GATE_Width / 2;
-	pManager->allComponentsCorners[compIdx].y1 = oldGraphicsInfo.y1 - UI.GATE_Height / 2;
-	pManager->allComponentsCorners[compIdx].x2 = oldGraphicsInfo.x1 + UI.GATE_Width / 2;
-	pManager->allComponentsCorners[compIdx].y2 = oldGraphicsInfo.y1 + UI.GATE_Height / 2;
+	Utils::allComponentsCorners[compIdx].x1 = oldGraphicsInfo.x1 - UI.GATE_Width / 2;
+	Utils::allComponentsCorners[compIdx].y1 = oldGraphicsInfo.y1 - UI.GATE_Height / 2;
+	Utils::allComponentsCorners[compIdx].x2 = oldGraphicsInfo.x1 + UI.GATE_Width / 2;
+	Utils::allComponentsCorners[compIdx].y2 = oldGraphicsInfo.y1 + UI.GATE_Height / 2;
 	pA->setSmallCleanImageBeforeAddingComp(oldSmallCleanImage);
 
 	pA->setDelete(false);
@@ -179,7 +179,7 @@ void Move::Undo()
 				pOut->setUsedPixel(i, j, PIN);
 				continue;
 			}
-			pOut->setArrayOfComponents(i, j, pA);
+			Utils::setArrayOfComponents(i, j, pA);
 			pOut->setUsedPixel(i, j, GATE);
 		}
 	}
@@ -194,7 +194,7 @@ void Move::Undo()
 
 		for (size_t j = 0; j < allInputConnections[i]->getCellsBeforeAddingConnection().size(); j++)
 		{
-			pManager->GetOutput()->setArrayOfComponents(allInputConnections[i]->getCellsBeforeAddingConnection()[j].y, allInputConnections[i]->getCellsBeforeAddingConnection()[j].x, allInputConnections[i]);
+			Utils::setArrayOfComponents(allInputConnections[i]->getCellsBeforeAddingConnection()[j].y, allInputConnections[i]->getCellsBeforeAddingConnection()[j].x, allInputConnections[i]);
 		}
 	}
 	for (size_t i = 0; i < allOutputConnections.size(); i++)
@@ -208,7 +208,7 @@ void Move::Undo()
 
 		for (size_t j = 0; j < allOutputConnections[i]->getCellsBeforeAddingConnection().size(); j++)
 		{
-			pManager->GetOutput()->setArrayOfComponents(allOutputConnections[i]->getCellsBeforeAddingConnection()[j].y, allOutputConnections[i]->getCellsBeforeAddingConnection()[j].x, allOutputConnections[i]);
+			Utils::setArrayOfComponents(allOutputConnections[i]->getCellsBeforeAddingConnection()[j].y, allOutputConnections[i]->getCellsBeforeAddingConnection()[j].x, allOutputConnections[i]);
 		}
 	}
 
@@ -226,7 +226,7 @@ void Move::Redo()
 		for (int j = xbegin; j <= xend; j++)
 		{
 			pOut->setUsedPixel(i, j, EMPTY);
-			pOut->setArrayOfComponents(i, j, NULL);
+			Utils::setArrayOfComponents(i, j, NULL);
 		}
 	}
 	//remove new Connections
@@ -240,10 +240,10 @@ void Move::Redo()
 	//redraw and reassign data
 
 	pA->setNewCenterLocation(newCoor);
-	pManager->allComponentsCorners[compIdx].x1 = newCoor.x1 - UI.GATE_Width / 2;
-	pManager->allComponentsCorners[compIdx].y1 = newCoor.y1 - UI.GATE_Height / 2;
-	pManager->allComponentsCorners[compIdx].x2 = newCoor.x1 + UI.GATE_Width / 2;
-	pManager->allComponentsCorners[compIdx].y2 = newCoor.y1 + UI.GATE_Height / 2;
+	Utils::allComponentsCorners[compIdx].x1 = newCoor.x1 - UI.GATE_Width / 2;
+	Utils::allComponentsCorners[compIdx].y1 = newCoor.y1 - UI.GATE_Height / 2;
+	Utils::allComponentsCorners[compIdx].x2 = newCoor.x1 + UI.GATE_Width / 2;
+	Utils::allComponentsCorners[compIdx].y2 = newCoor.y1 + UI.GATE_Height / 2;
 	pA->setSmallCleanImageBeforeAddingComp(newSmallImageForGate);
 
 	pA->setDelete(false);
@@ -262,7 +262,7 @@ void Move::Redo()
 				pOut->setUsedPixel(i, j, PIN);
 				continue;
 			}
-			pOut->setArrayOfComponents(i, j, pA);
+			Utils::setArrayOfComponents(i, j, pA);
 			pOut->setUsedPixel(i, j, GATE);
 		}
 	}
@@ -277,7 +277,7 @@ void Move::Redo()
 
 		for (size_t j = 0; j < allInputConnections[i]->getCellsBeforeAddingConnection().size(); j++)
 		{
-			pManager->GetOutput()->setArrayOfComponents(allInputConnections[i]->getCellsBeforeAddingConnection()[j].y, allInputConnections[i]->getCellsBeforeAddingConnection()[j].x, allInputConnections[i]);
+			Utils::setArrayOfComponents(allInputConnections[i]->getCellsBeforeAddingConnection()[j].y, allInputConnections[i]->getCellsBeforeAddingConnection()[j].x, allInputConnections[i]);
 		}
 	}
 	for (size_t i = 0; i < allOutputConnections.size(); i++)
@@ -291,7 +291,7 @@ void Move::Redo()
 
 		for (size_t j = 0; j < allOutputConnections[i]->getCellsBeforeAddingConnection().size(); j++)
 		{
-			pManager->GetOutput()->setArrayOfComponents(allOutputConnections[i]->getCellsBeforeAddingConnection()[j].y, allOutputConnections[i]->getCellsBeforeAddingConnection()[j].x, allOutputConnections[i]);
+			Utils::setArrayOfComponents(allOutputConnections[i]->getCellsBeforeAddingConnection()[j].y, allOutputConnections[i]->getCellsBeforeAddingConnection()[j].x, allOutputConnections[i]);
 		}
 	}
 }

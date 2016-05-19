@@ -7,7 +7,7 @@ void Action::Undo()
 	GraphicsInfo GInfotmp = pA->getCornersLocation();
 	for (int i = GInfotmp.y1 / UI.GRID_SIZE + 1; i <= GInfotmp.y2 / UI.GRID_SIZE; i++) {
 		for (int j = GInfotmp.x1 / UI.GRID_SIZE; j <= GInfotmp.x2 / UI.GRID_SIZE; j++) {
-			pManager->GetOutput()->setArrayOfComponents(i, j, NULL);
+			Utils::setArrayOfComponents(i, j, NULL);
 			pManager->GetOutput()->setUsedPixel(i, j, EMPTY);
 
 		}
@@ -21,7 +21,7 @@ void Action::Redo()
 	GraphicsInfo GInfotmp = pA->getCornersLocation();
 	for (int i = GInfotmp.y1 / UI.GRID_SIZE + 1; i <= GInfotmp.y2 / UI.GRID_SIZE; i++) {
 		for (int j = GInfotmp.x1 / UI.GRID_SIZE; j <= GInfotmp.x2 / UI.GRID_SIZE; j++) {
-			pManager->GetOutput()->setArrayOfComponents(i, j, pA);
+			Utils::setArrayOfComponents(i, j, pA);
 		}
 	}
 	int xbegin = (pA->getCenterLocation().x1 - UI.GATE_Width / 2.0) / UI.GRID_SIZE;

@@ -38,7 +38,7 @@ void Delete::Execute()
 				for (int j = xbegin; j <= xend; j++)
 				{
 					pOut->setUsedPixel(i, j, EMPTY);
-					pOut->setArrayOfComponents(i, j, NULL);
+					Utils::setArrayOfComponents(i, j, NULL);
 
 				}
 			}
@@ -98,7 +98,7 @@ void Delete::reconnectConenction(Connection* conn) {
 
 	for (size_t i = 0; i < conn->getCellsBeforeAddingConnection().size(); i++)
 	{
-		pManager->GetOutput()->setArrayOfComponents(conn->getCellsBeforeAddingConnection()[i].y, conn->getCellsBeforeAddingConnection()[i].x, conn);
+		Utils::setArrayOfComponents(conn->getCellsBeforeAddingConnection()[i].y, conn->getCellsBeforeAddingConnection()[i].x, conn);
 	}
 }
 void Delete::Undo()
@@ -180,7 +180,7 @@ void Delete::Redo()
 			for (int j = xbegin; j <= xend; j++)
 			{
 				pOut->setUsedPixel(i, j, EMPTY);
-				pOut->setArrayOfComponents(i, j, NULL);
+				Utils::setArrayOfComponents(i, j, NULL);
 
 			}
 		}

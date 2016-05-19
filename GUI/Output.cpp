@@ -11,7 +11,6 @@ CellType Output::usedPixels[44][74];
 int arrayOfIntersections[44][74];
 int arrayOfCorners[44][74];
 int connectionsCountAtPixel[44][74];
-Component* Output::arrayOfComponents[44][74];
 
 //the Timer doen't allow passing a memberfunction pointer to it unless it's a static memberFunction
 void DRAWAFTERMENUE(Output* pOut, HWND D) {
@@ -53,7 +52,7 @@ Output::Output(vector<Connection*>* allConns)
 	memset(arrayOfIntersections, -1, sizeof arrayOfIntersections);
 	memset(arrayOfCorners, 0, sizeof arrayOfCorners);
 	memset(connectionsCountAtPixel, 0, sizeof connectionsCountAtPixel);
-	memset(arrayOfComponents, NULL, sizeof arrayOfComponents);
+	memset(Utils::arrayOfComponents, NULL, sizeof Utils::arrayOfComponents);
 
 	this->allConnectionsPointer = allConns;
 }
@@ -507,7 +506,79 @@ void Output::DrawRClickMenu_CorrectPoints(int& x, int& y, int type, bool draw)
 }
 
 
-image * Output::StoreBeforeMenu(int x, int y, int type,int w)
+void Output::DrawCleanImage(image* img, int x, int y)
+{
+	pWind->DrawImage(img, x - UI.GRID_SIZE - 6, y - UI.GRID_SIZE - 5, 2 * UI.GRID_SIZE + 5, UI.GATE_Height + 3);
+	pWind->SetPen(WHITE);
+	pWind->SetBrush(WHITE);
+	pWind->DrawPixel(x - UI.GRID_SIZE - 7 + (2 * UI.GRID_SIZE + 5) + 1, y - UI.GRID_SIZE - 9 + (UI.GATE_Height + 3) / 2);
+	pWind->DrawPixel(x - UI.GRID_SIZE - 7 + (2 * UI.GRID_SIZE + 5) + 1, y - UI.GRID_SIZE - 10 + (UI.GATE_Height + 3) / 2);
+}
+void Output::storeDrawingAreaImage(image*& img) {
+	pWind->StoreImage(img, UI.LeftToolBarWidth, 0, pWind->GetWidth() - UI.LeftToolBarWidth, pWind->GetHeight() - UI.StatusBarHeight);
+}
+void Output::drawStoredDrawingAreaImage(image*& img) {
+	pWind->DrawImage(img, UI.LeftToolBarWidth, 0, pWind->GetWidth() - UI.LeftToolBarWidth, pWind->GetHeight() - UI.StatusBarHeight);
+}
+
+void Output::drawRectangle(int x1, int y1, int x2, int y2) {
+	pWind->DrawRectangle(x1, y1, x2, y2, FRAME);
+}
+
+
+void Output::switchMode(MODE appMode)
+{
+	if (appMode == DESIGN)
+	{
+		pWind->DrawImage("images\\Menu\\top_bar_normal.jpg", UI.LeftToolBarWidth, 0, UI.width - UI.LeftToolBarWidth - 14, UI.TopToolBarHeight);
+		pWind->DrawImage("images\\Menu\\left_bar_normal.jpg", 0, 0, UI.LeftToolBarWidth, UI.height);
+
+	}
+	else {
+		pWind->DrawImage("images\\Menu\\top_bar_simulate.jpg", UI.LeftToolBarWidth, 0, UI.width - UI.LeftToolBarWidth - 14, UI.TopToolBarHeight);
+		pWind->DrawImage("images\\Menu\\left_bar_simulation_normal.jpg", 0, 0, UI.LeftToolBarWidth, UI.height);
+
+	}
+}
+
+void Output::DrawWarningMenues(char type, int x, int y)
+{
+	int xbegin, xend, ybegin, yend;
+	xbegin = UI.width / 2 - UI.WarningMenuWidth / 2;
+	ybegin = UI.height / 2 - UI.WarningMenuHeight / 2;
+	string imageURL;
+	switch (type) {
+	case 'L':
+		imageURL = "images\\Menu\\LoadConfirmationMenu.jpg";
+		pWind->DrawImage(imageURL, xbegin, ybegin, UI.WarningMenuWidth, UI.WarningMenuHeight);
+		break;
+	case 'S':
+	{
+		imageURL = "images\\Menu\\statusBar.jpg";
+		pWind->DrawImage(imageURL, x, y, UI.StatusBoxWidth, UI.StatusBoxHeight);
+		break;
+	}
+	}
+}
+
+image* Output::StoreBeforeWarning()
+{
+	int xbegin, xend, ybegin, yend;
+	xbegin = UI.width / 2 - UI.WarningMenuWidth / 2;
+	ybegin = UI.height / 2 - UI.WarningMenuHeight / 2;
+	image * ptr = new image;
+	pWind->StoreImage(ptr, xbegin, ybegin, UI.WarningMenuWidth, UI.WarningMenuHeight);
+	return ptr;
+}
+
+void Output::DrawAfterWarning(image * theWarningImage)
+{
+	int xbegin = 0, ybegin = 0;
+	xbegin = UI.width / 2 - UI.WarningMenuWidth / 2;
+	ybegin = UI.height / 2 - UI.WarningMenuHeight / 2;
+	pWind->DrawImage(theWarningImage, xbegin, ybegin, UI.WarningMenuWidth, UI.WarningMenuHeight);
+}
+image * Output::StoreBeforeMenu(int x, int y, int type, int w)
 {
 	int Height;
 	switch (type)
@@ -541,8 +612,7 @@ image * Output::StoreBeforeMenu(int x, int y, int type,int w)
 	else pWind->StoreImage(ptr, x, y, UI.RightClickMenuLength, Height);
 	return ptr;
 }
-
-void Output::DrawAfterMenu(image * img, int x, int y, int type,int w)
+void Output::DrawAfterMenu(image * img, int x, int y, int type, int w)
 {
 	int Height;
 	switch (type)
@@ -580,188 +650,18 @@ void Output::DrawAfterMenu(image * img, int x, int y, int type,int w)
 	if (type != 7)
 		delete img;
 }
-
-void Output::DrawCleanImage(image* img, int x, int y)
-{
-	pWind->DrawImage(img, x - UI.GRID_SIZE - 6, y - UI.GRID_SIZE - 5, 2 * UI.GRID_SIZE + 5, UI.GATE_Height + 3);
-	pWind->SetPen(WHITE);
-	pWind->SetBrush(WHITE);
-	pWind->DrawPixel(x - UI.GRID_SIZE - 7 + (2 * UI.GRID_SIZE + 5) + 1, y - UI.GRID_SIZE - 9 + (UI.GATE_Height + 3) / 2);
-	pWind->DrawPixel(x - UI.GRID_SIZE - 7 + (2 * UI.GRID_SIZE + 5)+1, y - UI.GRID_SIZE - 10+ (UI.GATE_Height + 3)/2);
-}
-void Output::storeDrawingAreaImage(image*& img) {
-	pWind->StoreImage(img, UI.LeftToolBarWidth, 0, pWind->GetWidth() - UI.LeftToolBarWidth, pWind->GetHeight() - UI.StatusBarHeight);
-}
-void Output::drawStoredDrawingAreaImage(image*& img) {
-	pWind->DrawImage(img, UI.LeftToolBarWidth, 0, pWind->GetWidth() - UI.LeftToolBarWidth, pWind->GetHeight() - UI.StatusBarHeight);
-}
-
-void Output::drawRectangle(int x1, int y1, int x2, int y2) {
-	pWind->DrawRectangle(x1, y1, x2, y2, FRAME);
-}
-
-
-void Output::DrawWarningMenues(char type,int x, int y)
-{
-	int xbegin, xend, ybegin, yend;
-	xbegin = UI.width / 2 - UI.WarningMenuWidth / 2;
-	ybegin = UI.height / 2 - UI.WarningMenuHeight / 2;
-	string imageURL;
-	switch (type) {
-	case 'L':
-		imageURL = "images\\Menu\\LoadConfirmationMenu.jpg";
-		pWind->DrawImage(imageURL, xbegin, ybegin, UI.WarningMenuWidth, UI.WarningMenuHeight);
-		break;
-	case 'S': 
-	{
-		imageURL = "images\\Menu\\statusBar.jpg";
-		pWind->DrawImage(imageURL, x, y, UI.StatusBoxWidth, UI.StatusBoxHeight);
-		break;
-	}
-	}
-}
-
-image* Output::StoreBeforeWarning()
-{
-	int xbegin, xend, ybegin, yend;
-	xbegin = UI.width / 2 - UI.WarningMenuWidth / 2;
-	ybegin = UI.height / 2 - UI.WarningMenuHeight / 2;
-	image * ptr = new image;
-	pWind->StoreImage(ptr, xbegin, ybegin, UI.WarningMenuWidth, UI.WarningMenuHeight);
-	return ptr;
-}
-
-void Output::DrawAfterWarning(image * theWarningImage)
-{
-	int xbegin = 0, ybegin = 0;
-	xbegin = UI.width / 2 - UI.WarningMenuWidth / 2;
-	ybegin = UI.height / 2 - UI.WarningMenuHeight / 2;
-	pWind->DrawImage(theWarningImage, xbegin, ybegin, UI.WarningMenuWidth, UI.WarningMenuHeight);
-}
-
-image * Output::printHovering(int & x, int & y, string s, int & w, Component * C)
-{
-	image* img = NULL;
-	int width, height;
-	pWind->SetFont(20, BOLD | ITALICIZED, BY_NAME, "Arial");
-	//checking whether it's in the design Mode or 
-	if (UI.AppMode == DESIGN) {
-		int h;
-		pWind->getStringWidth(s,width, h);
-		//the Clearnace
-		width += 16;
-		height = UI.HoverHeight;
-		if (!dynamic_cast<Connection*>(C)) {
-			//if it's a connection for better appearnace
-			x = C->getCenterLocation().x1 + 10;
-			y = C->getCenterLocation().y1 + 5;
-		}
-		//Correct the Points
-		this->correctHoverStartpoint(x, y, width);
-		//Store Before Hovering
-		img = this->StoreBeforeMenu(x, y, 7, width);
-		//Drawing the Hover Bar
-		pWind->SetPen(BLACK, 2);
-		pWind->SetBrush(AZURE);
-		pWind->DrawRectangle(x, y, x + width, y + height, FILLED, 3, 4);
-		pWind->DrawString(x + 7, y + 2, s);
-		w = width;
-		return img;
-	}
-	else {
-		//Simulation Mode Hovering
-		Connection *ptr = NULL;
-		//Checking if it's a connection Hover or other componenets hover
-		if (ptr = dynamic_cast<Connection*> (C)) {
-			string hoverLabel = "";
-			width = 20;
-			height = UI.HoverHeight;
-			//Correct the Points
-			this->correctHoverStartpoint(x, y, width);
-			//Store Before Hovering
-			img = this->StoreBeforeMenu(x, y, 7, width);
-			if (ptr->GetOutPinStatus()) { //It's a logic 1 output -> green Colour
-				hoverLabel = "1";
-				pWind->SetPen(BLACK, 2);
-				pWind->SetBrush(GREEN);
-			}
-			else { //It's a logic 0 output -> grey Colour
-				hoverLabel = "0";
-				pWind->SetPen(BLACK, 2);
-				pWind->SetBrush(GREY);
-			}
-			pWind->DrawRectangle(x, y, x + width, y + height, FILLED, 4, 4);
-			pWind->DrawString(x + 5, y + 1, hoverLabel);
-			w = width;
-		}
-		else {
-			//Other Component Hover
-			int h;
-			height = UI.HoverHeight;
-			pWind->getStringWidth(s, width, h);
-			//the Clearnace
-			width += 16;
-			//Correct the Points
-			x = C->getCenterLocation().x1 + 10;
-			y = C->getCenterLocation().y1 + 5;
-			this->correctHoverStartpoint(x, y, width);
-			//Store Before Hovering
-			img = this->StoreBeforeMenu(x, y, 7, width);
-			//Drawing the Hover Bar
-			pWind->SetPen(BLACK, 2);
-			pWind->SetBrush(LIGHTBLUE);
-			pWind->DrawRectangle(x, y, x + width, y + height, FILLED, 4, 4);
-			pWind->DrawString(x + 7, y + 2, s);
-			w = width;
-		}
-	}
-	return img;
-}
-
-void Output::correctHoverStartpoint(int & x, int & y, int width)
-{
-	//If Point (x,y) in the Right or Middle of the Drawing Area
-	if (x + width < UI.width) {
-		if (y + UI.HoverHeight > UI.height) {
-			// y must be corrected
-			y = y - UI.HoverHeight;
-		}
-		else {
-			//The Point(x,y) is ready for drawing HoverBar 
-		}
-	}
-	//If Point (x,y) in the Right of the Drawing Area
-	if (x + width > UI.width) {
-		// x must be corrected
-		x = UI.width - width - 40;
-		if (y + UI.HoverHeight > UI.height - UI.StatusBarHeight) {
-			// y must be corrected
-			y = y - UI.HoverHeight;
-		}
-		else {
-			//The Point(x,y) is ready for drawing HoverBar 
-		}
-	}
-}
-
-void Output::clearHoveringImage(image * img,int J, int K,int widthh)
-{
-	if(img != NULL)
-		this->DrawAfterMenu(img, J, K, 7, widthh);
-}
-
-void Output::PrintStatusBox(string s,color Z)
+void Output::PrintStatusBox(string s, color Z)
 {
 	//Print a StatusBox with timer in the time stack
 	image * img;
 	//the upperleft coordinates of the StatusBox
 	int x, y;
-	x = UI.width  - UI.StatusBoxWidth ;
+	x = UI.width - UI.StatusBoxWidth;
 	y = UI.height - UI.StatusBoxHeight;
 	//Drawing the Text
 	HWND theWin = pWind->DrawStringStatusBox(s, x, y);
 	//Timer
-	later theTimer(2000, true, &DRAWAFTERMENUE,this,theWin);
+	later theTimer(2000, true, &DRAWAFTERMENUE, this, theWin);
 }
 
 int Output::printPopUpMessage(string s, char type)
@@ -998,9 +898,9 @@ void Output::clearConnections(vector<Connection*>& allConnections, int originalX
 	{
 		for (size_t j = 0; j < allConnections[i]->getCellsBeforeAddingConnection().size(); j++)
 		{
-			if (getArrayOfComponents(allConnections[i]->getCellsBeforeAddingConnection()[j].y, allConnections[i]->getCellsBeforeAddingConnection()[j].x) == allConnections[i])
+			if (Utils::getArrayOfComponents(allConnections[i]->getCellsBeforeAddingConnection()[j].y, allConnections[i]->getCellsBeforeAddingConnection()[j].x) == allConnections[i])
 			{
-				setArrayOfComponents(allConnections[i]->getCellsBeforeAddingConnection()[j].y, allConnections[i]->getCellsBeforeAddingConnection()[j].x, NULL);
+				Utils::setArrayOfComponents(allConnections[i]->getCellsBeforeAddingConnection()[j].y, allConnections[i]->getCellsBeforeAddingConnection()[j].x, NULL);
 			}
 
 			Cell& cell = allConnections[i]->getCellsBeforeAddingConnection()[j];
@@ -1510,14 +1410,14 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 							{
 								for (size_t j = 0; j < allInputConnections[i]->getCellsBeforeAddingConnection().size(); j++)
 								{
-									setArrayOfComponents(allInputConnections[i]->getCellsBeforeAddingConnection()[j].y, allInputConnections[i]->getCellsBeforeAddingConnection()[j].x, allInputConnections[i]);
+									Utils::setArrayOfComponents(allInputConnections[i]->getCellsBeforeAddingConnection()[j].y, allInputConnections[i]->getCellsBeforeAddingConnection()[j].x, allInputConnections[i]);
 								}
 							}
 							for (size_t i = 0; i < allOutputConnections.size(); i++)
 							{
 								for (size_t j = 0; j < allOutputConnections[i]->getCellsBeforeAddingConnection().size(); j++)
 								{
-									setArrayOfComponents(allOutputConnections[i]->getCellsBeforeAddingConnection()[j].y, allOutputConnections[i]->getCellsBeforeAddingConnection()[j].x, allOutputConnections[i]);
+									Utils::setArrayOfComponents(allOutputConnections[i]->getCellsBeforeAddingConnection()[j].y, allOutputConnections[i]->getCellsBeforeAddingConnection()[j].x, allOutputConnections[i]);
 								}
 							}
 						}
@@ -1928,7 +1828,7 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 						{
 							for (size_t j = 0; j < allInputConnections[i]->getCellsBeforeAddingConnection().size(); j++)
 							{
-								setArrayOfComponents(allInputConnections[i]->getCellsBeforeAddingConnection()[j].y, allInputConnections[i]->getCellsBeforeAddingConnection()[j].x, allInputConnections[i]);
+								Utils::setArrayOfComponents(allInputConnections[i]->getCellsBeforeAddingConnection()[j].y, allInputConnections[i]->getCellsBeforeAddingConnection()[j].x, allInputConnections[i]);
 							}
 							allInputConnections[i]->selectYourSelf(this, UI.DrawColor);
 						}
@@ -1936,7 +1836,7 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 						{
 							for (size_t j = 0; j < allOutputConnections[i]->getCellsBeforeAddingConnection().size(); j++)
 							{
-								setArrayOfComponents(allOutputConnections[i]->getCellsBeforeAddingConnection()[j].y, allOutputConnections[i]->getCellsBeforeAddingConnection()[j].x, allOutputConnections[i]);
+								Utils::setArrayOfComponents(allOutputConnections[i]->getCellsBeforeAddingConnection()[j].y, allOutputConnections[i]->getCellsBeforeAddingConnection()[j].x, allOutputConnections[i]);
 							}
 							allOutputConnections[i]->selectYourSelf(this, UI.DrawColor);
 						}
@@ -2040,8 +1940,8 @@ void Output::DrawAnd_Nand(GraphicsInfo g, int in, bool isNand, bool highlighted,
 		}
 		//Drawing Arc
 		//pWind->DrawBezier(p1x + 8, p1y, p1x + 8 + 5 , outy + 8, p1x + 8 + 8 , outy + 3, outx, outy, FRAME);
-		pWind->DrawBezier(p1x + 12, p1y, p1x + 14 + 3 + 4, p1y + 4-3, p1x + 10 + 9 + 4, p1y + 12, outx + 4, outy, FRAME);
-		pWind->DrawBezier(p2x + 12, p2y, p2x + 14 + 3 + 4, p2y - 4+3, p2x + 10 + 9 + 4, p2y - 12, outx + 4, outy, FRAME);
+		pWind->DrawBezier(p1x + 12, p1y, p1x + 14 + 3 + 4, p1y + 4 - 3, p1x + 10 + 9 + 4, p1y + 12, outx + 4, outy, FRAME);
+		pWind->DrawBezier(p2x + 12, p2y, p2x + 14 + 3 + 4, p2y - 4 + 3, p2x + 10 + 9 + 4, p2y - 12, outx + 4, outy, FRAME);
 		//pWind->DrawPixel(, );
 	}
 }
@@ -2278,25 +2178,13 @@ CellType Output::getUsedPixel(int i, int j)
 	return usedPixels[i][j];
 }
 
-void Output::setArrayOfComponents(int i, int j, Component * c)
-{
-	arrayOfComponents[i][j] = c;
-}
-
-Component * Output::getArrayOfComponents(int i, int j)
-{
-	if (i > 44 || j > 77) return NULL; //IBRAHIM IF I DIDN'T ADD THIS LINE THE PROGRAM WILL TERMINATE FOR NO KNOWN REASON 
-									   //Giving that the error is that j is always  4096 
-	return arrayOfComponents[i][j];
-}
-
 void Output::resetInterfaceArrays()
 {
 	memset(usedPixels, 0, sizeof usedPixels);
 	memset(arrayOfIntersections, -1, sizeof arrayOfIntersections);
 	memset(arrayOfCorners, 0, sizeof arrayOfCorners);
 	memset(connectionsCountAtPixel, 0, sizeof connectionsCountAtPixel);
-	memset(arrayOfComponents, NULL, sizeof arrayOfComponents);
+	memset(Utils::arrayOfComponents, NULL, sizeof Utils::arrayOfComponents);
 }
 
 Output::~Output()

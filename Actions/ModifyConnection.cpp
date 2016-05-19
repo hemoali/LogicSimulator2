@@ -64,20 +64,20 @@ void ModifyConnection::Execute()
 		int numOfInputs = 0;
 		int indxOfInputComponent;
 
-		for (int i = 0; i < pManager->allComponentsCorners.size(); i++)
+		for (int i = 0; i < Utils::allComponentsCorners.size(); i++)
 		{
 			if (dynamic_cast<Connection*>(pManager->getComponent(i)) || pManager->getComponent(i)->getDelete())
 				continue;
-			if (Cx1 >= pManager->allComponentsCorners[i].x1&&Cx1 <= pManager->allComponentsCorners[i].x2&& Cy1 >= pManager->allComponentsCorners[i].y1&&Cy1 <= pManager->allComponentsCorners[i].y2)
+			if (Cx1 >= Utils::allComponentsCorners[i].x1&&Cx1 <= Utils::allComponentsCorners[i].x2&& Cy1 >= Utils::allComponentsCorners[i].y1&&Cy1 <= Utils::allComponentsCorners[i].y2)
 			{
-				if (Cx1 > (pManager->allComponentsCorners[i].x1 + UI.GATE_Width / 2))
+				if (Cx1 > (Utils::allComponentsCorners[i].x1 + UI.GATE_Width / 2))
 				{
 					outputComponent = pManager->getComponent(i);
 				}
 			}
-			if (Cx2 >= pManager->allComponentsCorners[i].x1&&Cx2 <= pManager->allComponentsCorners[i].x2&& Cy2 >= pManager->allComponentsCorners[i].y1&&Cy2 <= pManager->allComponentsCorners[i].y2)
+			if (Cx2 >= Utils::allComponentsCorners[i].x1&&Cx2 <= Utils::allComponentsCorners[i].x2&& Cy2 >= Utils::allComponentsCorners[i].y1&&Cy2 <= Utils::allComponentsCorners[i].y2)
 			{
-				if (Cx2 < (pManager->allComponentsCorners[i].x1 + UI.GATE_Width / 2))
+				if (Cx2 < (Utils::allComponentsCorners[i].x1 + UI.GATE_Width / 2))
 				{
 					inputComponent = pManager->getComponent(i);
 					indxOfInputComponent = i;
@@ -110,14 +110,14 @@ void ModifyConnection::Execute()
 			numOfInputs = inputComponent->getNumOfInputs();
 			if (numOfInputs == 3)
 			{
-				if (Cy2 <= pManager->allComponentsCorners[indxOfInputComponent].y2 - UI.GATE_Height / 2 - 6)numOfInputs = inputPin = 0;
-				else if (Cy2 >= pManager->allComponentsCorners[indxOfInputComponent].y2 - UI.GATE_Height / 2 + 6)numOfInputs = inputPin = 2;
+				if (Cy2 <= Utils::allComponentsCorners[indxOfInputComponent].y2 - UI.GATE_Height / 2 - 6)numOfInputs = inputPin = 0;
+				else if (Cy2 >= Utils::allComponentsCorners[indxOfInputComponent].y2 - UI.GATE_Height / 2 + 6)numOfInputs = inputPin = 2;
 				else numOfInputs = inputPin = 1;
 			}
 			else if (numOfInputs == 2)
 			{
-				if (Cy2 <= pManager->allComponentsCorners[indxOfInputComponent].y2 - UI.GATE_Height / 2)numOfInputs = inputPin = 0;
-				else if (Cy2 >= pManager->allComponentsCorners[indxOfInputComponent].y2 - UI.GATE_Height / 2) {
+				if (Cy2 <= Utils::allComponentsCorners[indxOfInputComponent].y2 - UI.GATE_Height / 2)numOfInputs = inputPin = 0;
+				else if (Cy2 >= Utils::allComponentsCorners[indxOfInputComponent].y2 - UI.GATE_Height / 2) {
 					numOfInputs = 2; inputPin = 1;
 				}
 			}
@@ -161,13 +161,13 @@ void ModifyConnection::Execute()
 					theConnection->setSourcePin(newOutputPin = outputComponent->getOutputPin());
 					theConnection->setDestPin(newInputPin = inputComponent->getInputPin(inputPin));
 
-					for (size_t i = 0; i < pManager->allComponentsCorners.size(); i++)
+					for (size_t i = 0; i < Utils::allComponentsCorners.size(); i++)
 					{
 						if (dynamic_cast<Connection*>(pManager->getComponent(i)) && pManager->getComponent(i) == theConnection) {
-							pManager->allComponentsCorners[i].x1 = GInfo.x1;
-							pManager->allComponentsCorners[i].x2 = GInfo.x2;
-							pManager->allComponentsCorners[i].y1 = GInfo.y1;
-							pManager->allComponentsCorners[i].y2 = GInfo.y2;
+							Utils::allComponentsCorners[i].x1 = GInfo.x1;
+							Utils::allComponentsCorners[i].x2 = GInfo.x2;
+							Utils::allComponentsCorners[i].y1 = GInfo.y1;
+							Utils::allComponentsCorners[i].y2 = GInfo.y2;
 							break;
 						}
 					}
@@ -179,7 +179,7 @@ void ModifyConnection::Execute()
 					for (size_t i = 0; i < cellsBeforeAddingConnection.size(); i++)
 					{
 						newCells.push_back(cellsBeforeAddingConnection[i]);
-						pManager->GetOutput()->setArrayOfComponents(cellsBeforeAddingConnection[i].y, cellsBeforeAddingConnection[i].x, theConnection);
+						Utils::setArrayOfComponents(cellsBeforeAddingConnection[i].y, cellsBeforeAddingConnection[i].x, theConnection);
 					}
 					isCorrectNewConnection = true;
 					Utils::undoActions.push(this);
@@ -213,13 +213,13 @@ void ModifyConnection::Undo()
 	theConnection->setSourcePin(oldOutputPin);
 	theConnection->setDestPin(oldInputPin);
 
-	for (size_t i = 0; i < pManager->allComponentsCorners.size(); i++)
+	for (size_t i = 0; i < Utils::allComponentsCorners.size(); i++)
 	{
 		if (dynamic_cast<Connection*>(pManager->getComponent(i)) && pManager->getComponent(i) == theConnection) {
-			pManager->allComponentsCorners[i].x1 = oldGInfo.x1;
-			pManager->allComponentsCorners[i].x2 = oldGInfo.x2;
-			pManager->allComponentsCorners[i].y1 = oldGInfo.y1;
-			pManager->allComponentsCorners[i].y2 = oldGInfo.y2;
+			Utils::allComponentsCorners[i].x1 = oldGInfo.x1;
+			Utils::allComponentsCorners[i].x2 = oldGInfo.x2;
+			Utils::allComponentsCorners[i].y1 = oldGInfo.y1;
+			Utils::allComponentsCorners[i].y2 = oldGInfo.y2;
 		}
 	}
 	theConnection->setCellsBeforeAddingConnection(oldCells);
@@ -230,7 +230,7 @@ void ModifyConnection::Undo()
 	pManager->GetOutput()->DrawConnection(oldGInfo, oldInputPinPosition, oldInputComponent->getCenterLocation(), oldCells);
 	for (size_t i = 0; i < oldCells.size(); i++)
 	{
-		pManager->GetOutput()->setArrayOfComponents(oldCells[i].y, oldCells[i].x, theConnection);
+		Utils::setArrayOfComponents(oldCells[i].y, oldCells[i].x, theConnection);
 	}
 }
 void ModifyConnection::Redo()
@@ -247,13 +247,13 @@ void ModifyConnection::Redo()
 	theConnection->setSourcePin(newOutputPin);
 	theConnection->setDestPin(newInputPin);
 
-	for (size_t i = 0; i < pManager->allComponentsCorners.size(); i++)
+	for (size_t i = 0; i < Utils::allComponentsCorners.size(); i++)
 	{
 		if (dynamic_cast<Connection*>(pManager->getComponent(i)) && pManager->getComponent(i) == theConnection) {
-			pManager->allComponentsCorners[i].x1 = GInfo.x1;
-			pManager->allComponentsCorners[i].x2 = GInfo.x2;
-			pManager->allComponentsCorners[i].y1 = GInfo.y1;
-			pManager->allComponentsCorners[i].y2 = GInfo.y2;
+			Utils::allComponentsCorners[i].x1 = GInfo.x1;
+			Utils::allComponentsCorners[i].x2 = GInfo.x2;
+			Utils::allComponentsCorners[i].y1 = GInfo.y1;
+			Utils::allComponentsCorners[i].y2 = GInfo.y2;
 		}
 	}
 	theConnection->setCellsBeforeAddingConnection(newCells);
@@ -266,7 +266,7 @@ void ModifyConnection::Redo()
 
 	for (size_t i = 0; i < newCells.size(); i++)
 	{
-		pManager->GetOutput()->setArrayOfComponents(newCells[i].y, newCells[i].x, theConnection);
+		Utils::setArrayOfComponents(newCells[i].y, newCells[i].x, theConnection);
 	}
 }
 ModifyConnection::~ModifyConnection()

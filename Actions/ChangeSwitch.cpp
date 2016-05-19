@@ -25,12 +25,8 @@ void ChangeSwitch::Execute()
 		newStatus = !oldStatus;
 		theComponent->setOutputPinStatus(static_cast<STATUS>(newStatus));
 		theComponent->Draw(pOut, false);
-		Utils::simulationUndoActions.push(this);
-		
-	}
-	else {
-		pOut->PrintStatusBox("It's not deleted.. Error");
-	}
+		Utils::simulationUndoActions.push(this);		
+	}	
 }
 void ChangeSwitch::Undo()
 {

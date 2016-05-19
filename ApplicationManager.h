@@ -22,7 +22,6 @@ private:
 
 	Output* OutputInterface; //pointer to the Output Clase Interface
 	Input* InputInterface; //pointer to the Input Clase Interface
-	vector<Connection*> allConnections;
 public:	
 	int Exitchoice;
 	Component*PastedComponent;
@@ -45,9 +44,7 @@ public:
 
 	//Adds a new component to the list of components
 	void AddComponent(Component* pComp);
-	vector<GraphicsInfo>allComponentsCorners;
 
-	void getAllConnections(vector<Connection*>& allConnections);
 	Component* getComponent(int);
 
 	//Compcount Setter And Getter

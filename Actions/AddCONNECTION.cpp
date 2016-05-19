@@ -56,20 +56,20 @@ void AddConnection::Execute()
 
 	int indxOfInputComponent;
 
-	for (int i = 0; i < pManager->allComponentsCorners.size(); i++)
+	for (int i = 0; i < Utils::allComponentsCorners.size(); i++)
 	{
 		if (dynamic_cast<Connection*>(pManager->getComponent(i)) || pManager->getComponent(i)->getDelete())
 			continue;
-		if (Cx1 >= pManager->allComponentsCorners[i].x1&&Cx1 <= pManager->allComponentsCorners[i].x2&& Cy1 >= pManager->allComponentsCorners[i].y1&&Cy1 <= pManager->allComponentsCorners[i].y2)
+		if (Cx1 >= Utils::allComponentsCorners[i].x1&&Cx1 <= Utils::allComponentsCorners[i].x2&& Cy1 >= Utils::allComponentsCorners[i].y1&&Cy1 <= Utils::allComponentsCorners[i].y2)
 		{
-			if (Cx1 > (pManager->allComponentsCorners[i].x1 + UI.GATE_Width / 2) && !dynamic_cast<LED*>( pManager->getComponent(i)))
+			if (Cx1 > (Utils::allComponentsCorners[i].x1 + UI.GATE_Width / 2) && !dynamic_cast<LED*>( pManager->getComponent(i)))
 			{
 				outputComponent = pManager->getComponent(i);
 			}
 		}
-		if (Cx2 >= pManager->allComponentsCorners[i].x1&&Cx2 <= pManager->allComponentsCorners[i].x2&& Cy2 >= pManager->allComponentsCorners[i].y1&&Cy2 <= pManager->allComponentsCorners[i].y2)
+		if (Cx2 >= Utils::allComponentsCorners[i].x1&&Cx2 <= Utils::allComponentsCorners[i].x2&& Cy2 >= Utils::allComponentsCorners[i].y1&&Cy2 <= Utils::allComponentsCorners[i].y2)
 		{
-			if (Cx2 < (pManager->allComponentsCorners[i].x1 + UI.GATE_Width / 2) && !dynamic_cast<SWITCH*>(pManager->getComponent(i)))
+			if (Cx2 < (Utils::allComponentsCorners[i].x1 + UI.GATE_Width / 2) && !dynamic_cast<SWITCH*>(pManager->getComponent(i)))
 			{
 				inputComponent = pManager->getComponent(i);
 				indxOfInputComponent = i;
@@ -102,14 +102,14 @@ void AddConnection::Execute()
 		int inputPin;
 		if (numOfInputs == 3)
 		{
-			if (Cy2 <= pManager->allComponentsCorners[indxOfInputComponent].y2 - UI.GATE_Height / 2 - 6)numOfInputs = inputPin = 0;
-			else if (Cy2 >= pManager->allComponentsCorners[indxOfInputComponent].y2 - UI.GATE_Height / 2 + 6)numOfInputs = inputPin = 2;
+			if (Cy2 <= Utils::allComponentsCorners[indxOfInputComponent].y2 - UI.GATE_Height / 2 - 6)numOfInputs = inputPin = 0;
+			else if (Cy2 >= Utils::allComponentsCorners[indxOfInputComponent].y2 - UI.GATE_Height / 2 + 6)numOfInputs = inputPin = 2;
 			else numOfInputs = inputPin = 1;
 		}
 		else if (numOfInputs == 2)
 		{
-			if (Cy2 <= pManager->allComponentsCorners[indxOfInputComponent].y2 - UI.GATE_Height / 2)numOfInputs = inputPin = 0;
-			else if (Cy2 >= pManager->allComponentsCorners[indxOfInputComponent].y2 - UI.GATE_Height / 2) {
+			if (Cy2 <= Utils::allComponentsCorners[indxOfInputComponent].y2 - UI.GATE_Height / 2)numOfInputs = inputPin = 0;
+			else if (Cy2 >= Utils::allComponentsCorners[indxOfInputComponent].y2 - UI.GATE_Height / 2) {
 				numOfInputs = 2; inputPin = 1;
 			}
 		}
@@ -141,7 +141,7 @@ void AddConnection::Execute()
 			{
 				Connection *pA = new Connection(GInfo, outputComponent->getOutputPin(), inputComponent->getInputPin(inputPin));
 				pManager->AddComponent(pA);
-				pManager->allComponentsCorners.push_back(GInfo);
+				Utils::allComponentsCorners.push_back(GInfo);
 				pA->setCellsBeforeAddingConnection(cellsBeforeAddingConnection);
 				outputComponent->getOutputPin()->ConnectTo(pA);
 				inputComponent->getInputPin(inputPin)->setConnection(pA);
@@ -154,7 +154,7 @@ void AddConnection::Execute()
 
 				for (size_t i = 0; i < cellsBeforeAddingConnection.size(); i++)
 				{
-					pManager->GetOutput()->setArrayOfComponents(cellsBeforeAddingConnection[i].y, cellsBeforeAddingConnection[i].x, pA);
+					Utils::setArrayOfComponents(cellsBeforeAddingConnection[i].y, cellsBeforeAddingConnection[i].x, pA);
 				}
 				Utils::undoActions.push(this);
 				Action::pA = pA;
@@ -225,6 +225,6 @@ void AddConnection::Redo()
 
 	for (size_t i = 0; i < conn->getCellsBeforeAddingConnection().size(); i++)
 	{
-		pManager->GetOutput()->setArrayOfComponents(conn->getCellsBeforeAddingConnection()[i].y, conn->getCellsBeforeAddingConnection()[i].x, pA);
+		Utils::setArrayOfComponents(conn->getCellsBeforeAddingConnection()[i].y, conn->getCellsBeforeAddingConnection()[i].x, pA);
 	}
 }

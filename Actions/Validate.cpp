@@ -70,7 +70,7 @@ bool Validate::validateInputComponent(Component* comp) {
 void Validate::Execute()
 {
 
-	for (size_t i = 0; i < pManager->allComponentsCorners.size() && isValid && isValid2; i++)
+	for (size_t i = 0; i < Utils::allComponentsCorners.size() && isValid && isValid2; i++)
 	{
 		Component* comp = pManager->getComponent(i);
 
@@ -99,7 +99,8 @@ void Validate::Execute()
 	}
 	if (isValid && isValid2 && cnt > 0)
 	{
-		pManager->GetInput()->switchMode(SIMULATION, pManager);
+		pManager->GetOutput()->switchMode(SIMULATION);
+		UI.AppMode = SIMULATION;
 	}
 	pManager->GetOutput()->printPopUpMessage(msg);
 }
