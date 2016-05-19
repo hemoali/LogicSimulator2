@@ -17,7 +17,6 @@ private:
 	mutable vector < pair <int, int> >allComponentsCorners;
 	static CellType usedPixels[44][74];
 	static Component* arrayOfComponents[44][74];
-	ApplicationManager* pManager;
 	vector<Connection*>* allConnectionsPointer;
 	friend void DRAWAFTERMENUE(Output *pOut, HWND D);
 public:
