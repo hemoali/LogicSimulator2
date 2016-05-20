@@ -25,6 +25,7 @@ public:
 	static Component* getArrayOfComponents(int i, int j);
 	static vector<GraphicsInfo> allComponentsCorners;
 	static vector<Connection*> allConnections;
+	static vector<Action*> theActions;
 	~Utils();
 };
 

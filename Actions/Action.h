@@ -7,11 +7,17 @@ protected:
 	ApplicationManager *pManager;	//Actions needs AppMngr to do their job
 	string gateLabel;
 	GraphicsInfo GInfo;
+	//Debugging For the deleted
 
+	int theId;
 	//For undo/redo
 	Component* pA;
 public:
-	Action(ApplicationManager *pApp) { pManager = pApp; }	//constructor
+	static int ID;
+	static int IDD;
+	Action(ApplicationManager *pApp) { pManager = pApp;
+	theId = ID++;
+	}	//constructor
 	
 	//Reads parameters required for action to execute
 	virtual bool ReadActionParameters(image *)=0;
@@ -24,6 +30,10 @@ public:
 
 	//To redo this action (code depends on action type)
 	virtual void Redo();
+
+	virtual ~Action() {
+		IDD++;
+	}
 
 };
 

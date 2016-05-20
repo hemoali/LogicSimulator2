@@ -5,6 +5,7 @@ Component* Utils::arrayOfComponents[44][74];
 int Utils::J = 0; int Utils::K = 0; int Utils::widthh = 0;
 image* Utils::imgh = NULL;
 stack <Action*> Utils::undoActions, Utils::redoActions, Utils::simulationUndoActions, Utils::simulationRedoActions;
+vector<Action*> Utils::theActions ;
 vector<GraphicsInfo> Utils::allComponentsCorners;
 vector<Connection*> Utils::allConnections;
 

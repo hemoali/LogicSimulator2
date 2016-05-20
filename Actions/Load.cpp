@@ -72,13 +72,13 @@ bool Load::ReadActionParameters(image *I)
 }
 void Load::Execute()
 {
-	Clear* newAction = new Clear(pManager);
+	Clear newAction(pManager);
 	Output *pOut = pManager->GetOutput();
 
 	if (ReadActionParameters()) {
 		// To clear the screen
-		newAction->setLoading(true);
-		newAction->Execute();
+		newAction.setLoading(true);
+		newAction.Execute();
 		file.open(path);
 		int compCount, src, dest, pnum, connectionCount = 0;
 		string compName, compLabel;
@@ -237,7 +237,7 @@ void Load::Execute()
 			// (c3,c4) Point of The input pin (Dest pin)
 			file >> c1 >> c2 >> c3 >> c4 >> compLabel;
 			//Adding Connection Action Silently
-			AddConnection *theConnection = new AddConnection(pManager);
+			AddConnection theConnection(pManager);
 			if (compLabel.size() == 1) {
 				//Means that the label is empty as we have put an extra L 
 				//char at the begining of te saved label to know whetherit has a name or not
@@ -247,7 +247,7 @@ void Load::Execute()
 			else {
 				compLabel = compLabel.substr(1, compLabel.size());
 			}
-			theConnection->AddConnectionSilent(c1, c2, c3, c4, compLabel);
+			theConnection.AddConnectionSilent(c1, c2, c3, c4, compLabel);
 		}
 		//pManager->GetOutput()->PrintMsg("Design loaded successfully");
 		pOut->PrintStatusBox("Design loaded successfully");

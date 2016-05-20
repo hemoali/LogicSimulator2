@@ -119,32 +119,54 @@ void ApplicationManager::ExecuteAction(ActionType ActType)
 	case MULTI_MOVE:
 		pAct = new MultiMove(this);
 		break;
-	case RIGHT_CLICKSELECT: {
-		pAct = new RightClick(this);
-		pAct->Execute();
-		RightClick* tmp = (RightClick*)(pAct);
-		pAct = tmp->getAction();
-		delete tmp;
-		break;
-	}
-	case SAVE:
-		pAct = new Save(this);
-		break;
 	case MULTI_SELECT:
 		pAct = new MultiSelect(this);
 		break;
-	case LOAD:
-		pAct = new Load(this);
-		break;
-	case ValidateAction:
-		pAct = new Validate(this);
-		break;
-	case SimulateAction:
-		pAct = new Simulate(this, true);
-		break;
-	case SimulateActionWithoutValidation:
+	case Change_Switch: {
+		ChangeSwitch* act = new ChangeSwitch(this, GetInput()->toBeChangedSwitch);
+		act->Execute();
 		pAct = new Simulate(this, false);
 		break;
+	}
+	case Create_TruthTable:
+	{
+		OutputInterface->PrintStatusBox("Creating truth table ....");
+		CreateTruthTable CreateTruthTAction(this);
+		CreateTruthTAction.Execute();
+		break;
+	}
+	case RIGHT_CLICKSELECT: {
+		RightClick rightClickAction(this);
+		rightClickAction.Execute();
+		pAct = rightClickAction.getAction();
+		break;
+	}
+	case SAVE: {
+		Save saveAction(this);
+		saveAction.Execute();
+		break;
+	}
+	case LOAD: {
+		Load loadAction(this);
+		loadAction.Execute();
+		break;
+	}
+	case ValidateAction: {
+		Validate validateAction(this);
+		validateAction.Execute();
+		break;
+	}
+	case SimulateAction: {
+		Simulate simulateAction(this, true);
+		simulateAction.Execute();
+		break;
+	}
+	case SimulateActionWithoutValidation:
+	{
+		Simulate simulateAction(this, false);
+		simulateAction.Execute();
+		break;
+	}
 	case UNDOACTION:
 	{
 		if (UI.AppMode == DESIGN && Utils::undoActions.size() > 0)
@@ -178,15 +200,11 @@ void ApplicationManager::ExecuteAction(ActionType ActType)
 		}
 		break;
 	}
-	case Create_TruthTable:
-	{
-		OutputInterface->PrintStatusBox("Creating truth table ....");
-		pAct = new CreateTruthTable(this);
+	case NEW: {
+		Clear clearAction(this);
+		clearAction.Execute();
 		break;
 	}
-	case NEW:
-		pAct = new Clear(this);
-		break;
 	case DSN_MODE:
 		for (size_t i = 0; i < Utils::allComponentsCorners.size(); i++)
 		{
@@ -215,15 +233,11 @@ void ApplicationManager::ExecuteAction(ActionType ActType)
 		GetOutput()->switchMode(SIMULATION);
 		UI.AppMode = SIMULATION;
 		break;
-	case Change_Switch: {
-		ChangeSwitch* act = new ChangeSwitch(this, GetInput()->toBeChangedSwitch);
-		act->Execute();
-		pAct = new Simulate(this, false);
-		break;
-	}
 	case EXIT:
 	{
-		pAct = new Exit(this);
+		//Create a static Exit Actions it doesn't have to be automatic
+		Exit exitAction(this);
+		exitAction.Execute();
 		break;
 	}
 	}
@@ -276,6 +290,27 @@ ApplicationManager::~ApplicationManager()
 {
 	for (int i = 0; i < CompCount; i++)
 		delete CompList[i];
+
+	Output* pOut = GetOutput();
+	ofstream file;
+	Action *temp;
+	int i = 0;
+	while (i < Utils::undoActions.size() )  {
+		Utils::undoActions.pop();
+		delete temp;
+		i++;
+	}
+	i = 0;
+	while ( i < Utils::redoActions.size() ) {
+		Utils::redoActions.pop();
+		delete temp;
+		i++;
+	}
+	file.open("Check.txt");
+	file << "Actions constructed " << Action::ID << endl;
+	file << "Actions Destructed " << Action::IDD << endl;
+	file.close();
+	pOut->printCheck();
 	delete OutputInterface;
 	delete InputInterface;
 }
