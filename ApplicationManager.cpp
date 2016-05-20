@@ -318,24 +318,11 @@ ApplicationManager::~ApplicationManager()
 	Action *temp;
 	for (int i = 0; i < Utils::theActions.size(); i++)
 		delete Utils::theActions[i];
-	/*int i = 0;
-	while (i < Utils::undoActions.size() )  {
-		temp = Utils::undoActions.top();
-		Utils::undoActions.pop();
-		delete temp;
-		i++;
-	}
-	i = 0;
-	while ( i < Utils::redoActions.size() ) {
-		temp = Utils::redoActions.top();
-		Utils::redoActions.pop();
-		delete temp;
-		i++;
-	}*/
 	file.open("Check.txt");
-	file << "Using Check.txt file to debug deallocations or any furthur Checking.\nThis Function is Called in the Application Manager Destructor" << endl;
-	file << "Actions constructed " << Action::ID << endl;
-	file << "Actions Destructed " << Action::IDD << endl;
+	file << "Using Check.txt file to debug deallocations or any furthur Checking.\n" << "................................................................." <<
+		"\nThis Function is Called in the Application Manager Destructor\n" << "................................................................." << endl << endl ;
+	file << "Actions constructed  " << Action::ID << endl;
+	file << "Actions Destructed  " << Action::IDD << endl;
 	file.close();
 	pOut->printCheck();
 	delete OutputInterface;
