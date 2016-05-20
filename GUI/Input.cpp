@@ -609,13 +609,16 @@ ActionType Input::GetUserAction()
 		}
 		else if (y >= UI.TopToolBarHeight && y < UI.height && x >= UI.LeftToolBarWidth && x < UI.width) {
 			Component* comp = Utils::getArrayOfComponents(y / UI.GRID_SIZE, x / UI.GRID_SIZE);
-			GraphicsInfo compCorners = comp->getCornersLocation();
-			if (!((!dynamic_cast<SWITCH*>(comp) || comp->getDelete()) && x >= compCorners.x1&&x <= compCorners.x2&& y >= compCorners.y1&&y <= compCorners.y2)) {
-				toBeChangedSwitch =(SWITCH*) comp;
-				pWind->FlushMouseQueue();
-				clearHoveringImage(imgh, J, K, widthh);
-				return Change_Switch;
-				
+			if (comp != NULL)
+			{
+				GraphicsInfo compCorners = comp->getCornersLocation();
+				if (!((!dynamic_cast<SWITCH*>(comp) || comp->getDelete()) && x >= compCorners.x1&&x <= compCorners.x2&& y >= compCorners.y1&&y <= compCorners.y2)) {
+					toBeChangedSwitch = (SWITCH*)comp;
+					pWind->FlushMouseQueue();
+					clearHoveringImage(imgh, J, K, widthh);
+					return Change_Switch;
+
+				}
 			}
 		}
 		//Always Clear hover Bar if found
