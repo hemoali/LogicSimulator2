@@ -33,8 +33,8 @@ void ChangeSwitch::Undo()
 	Output* pOut = pManager->GetOutput();
 	theComponent->setOutputPinStatus(static_cast<STATUS>(oldStatus));
 	theComponent->Draw(pOut, false);
-	Action* pAct = new Simulate(pManager, false);
-	pAct->Execute();
+	Simulate simAction(pManager, false);
+	simAction.Execute();
 }
 
 void ChangeSwitch::Redo()
@@ -42,8 +42,8 @@ void ChangeSwitch::Redo()
 	Output *pOut = pManager->GetOutput();
 	theComponent->setOutputPinStatus(static_cast<STATUS>(newStatus));
 	theComponent->Draw(pOut, false);
-	Action* pAct = new Simulate(pManager, false);
-	pAct->Execute();
+	Simulate simAction(pManager, false);
+	simAction.Execute();
 }
 
 ChangeSwitch::~ChangeSwitch()

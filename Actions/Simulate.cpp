@@ -19,9 +19,9 @@ void Simulate::Execute()
 	bool isValid = false;
 	if (validateFirst)
 	{
-		Validate * vali = new Validate(pManager);
-		vali->Execute();
-		isValid = vali->getValid();
+		Validate validateAction(pManager);
+		validateAction.Execute();
+		isValid = validateAction.getValid();
 	}else{
 		isValid = true;
 	}

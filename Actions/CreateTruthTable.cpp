@@ -91,10 +91,9 @@ void CreateTruthTable::Execute()
 				k++;
 			}
 		}
-		Action* pAct = new Simulate(pManager, false);
-		pAct->Execute();
+		Simulate simAction(pManager, false);
+		simAction.Execute();
 		//Sleep(50);
-		delete pAct;
 		k = 0;
 		NumOfInputs = 0;
 		NumOfOutputs = 0;

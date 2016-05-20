@@ -71,61 +71,82 @@ void ApplicationManager::ExecuteAction(ActionType ActType)
 	Action* pAct = NULL;
 	switch (ActType)
 	{
-	case ADD_Buff:
+	case ADD_Buff: {
 		pAct = new AddBUFFER(this);
+		Utils::theActions.push_back(pAct);
 		break;
-	case ADD_INV:
+	}
+	case ADD_INV: {
 		pAct = new AddNOTgate(this);
+		Utils::theActions.push_back(pAct);
 		break;
-	case ADD_AND_GATE_2:
-		pAct = new AddANDgate2(this);
+	}
+	case ADD_AND_GATE_2: {
+		pAct = new AddANDgate2(this); Utils::theActions.push_back(pAct);
 		break;
-	case ADD_OR_GATE_2:
-		pAct = new AddORgate2(this);
+	}
+	case ADD_OR_GATE_2: {
+		pAct = new AddORgate2(this); Utils::theActions.push_back(pAct);
 		break;
-	case ADD_NAND_GATE_2:
-		pAct = new AddNANDgate2(this);
+	}
+	case ADD_NAND_GATE_2: {
+		pAct = new AddNANDgate2(this); Utils::theActions.push_back(pAct);
 		break;
-	case ADD_NOR_GATE_2:
-		pAct = new AddNORgate2(this);
+	}
+	case ADD_NOR_GATE_2: {
+		pAct = new AddNORgate2(this); Utils::theActions.push_back(pAct);
 		break;
-	case ADD_XOR_GATE_2:
-		pAct = new AddXORgate2(this);
+	}
+	case ADD_XOR_GATE_2: {
+		pAct = new AddXORgate2(this); Utils::theActions.push_back(pAct);
 		break;
-	case ADD_XNOR_GATE_2:
-		pAct = new AddXNORgate2(this);
+	}
+	case ADD_XNOR_GATE_2: {
+		pAct = new AddXNORgate2(this); Utils::theActions.push_back(pAct);
 		break;
-	case ADD_AND_GATE_3:
-		pAct = new AddANDgate3(this);
+	}
+	case ADD_AND_GATE_3: {
+		pAct = new AddANDgate3(this); Utils::theActions.push_back(pAct);
 		break;
-	case ADD_NOR_GATE_3:
-		pAct = new AddNORgate3(this);
+	}
+	case ADD_NOR_GATE_3: {
+		pAct = new AddNORgate3(this); Utils::theActions.push_back(pAct);
 		break;
-	case ADD_XOR_GATE_3:
-		pAct = new AddXORgate3(this);
+	}
+	case ADD_XOR_GATE_3: {
+		pAct = new AddXORgate3(this); Utils::theActions.push_back(pAct);
 		break;
-	case ADD_Switch:
-		pAct = new AddSWITCH(this);
+	}
+	case ADD_Switch: {
+		pAct = new AddSWITCH(this); Utils::theActions.push_back(pAct);
 		break;
-	case ADD_LED:
-		pAct = new AddLED(this);
+	}
+	case ADD_LED: {
+		pAct = new AddLED(this); Utils::theActions.push_back(pAct);
 		break;
-	case ADD_CONNECTION:
-		pAct = new AddConnection(this);
+	}
+	case ADD_CONNECTION: {
+		pAct = new AddConnection(this); Utils::theActions.push_back(pAct);
 		break;
-	case MOVE:
-		pAct = new Move(this);
+	}
+	case MOVE: {
+		pAct = new Move(this); Utils::theActions.push_back(pAct);
 		break;
-	case MULTI_MOVE:
-		pAct = new MultiMove(this);
+	}
+	case MULTI_MOVE: {
+		pAct = new MultiMove(this); Utils::theActions.push_back(pAct);
 		break;
-	case MULTI_SELECT:
-		pAct = new MultiSelect(this);
+	}
+	case MULTI_SELECT: {
+		pAct = new MultiSelect(this); Utils::theActions.push_back(pAct);
 		break;
+	}
+	//The Automatic Action
 	case Change_Switch: {
 		ChangeSwitch* act = new ChangeSwitch(this, GetInput()->toBeChangedSwitch);
 		act->Execute();
-		pAct = new Simulate(this, false);
+		Simulate simulateAction(this, false);
+		simulateAction.Execute();
 		break;
 	}
 	case Create_TruthTable:
@@ -139,6 +160,7 @@ void ApplicationManager::ExecuteAction(ActionType ActType)
 		RightClick rightClickAction(this);
 		rightClickAction.Execute();
 		pAct = rightClickAction.getAction();
+		Utils::theActions.push_back(pAct);
 		break;
 	}
 	case SAVE: {
@@ -294,19 +316,24 @@ ApplicationManager::~ApplicationManager()
 	Output* pOut = GetOutput();
 	ofstream file;
 	Action *temp;
-	int i = 0;
+	for (int i = 0; i < Utils::theActions.size(); i++)
+		delete Utils::theActions[i];
+	/*int i = 0;
 	while (i < Utils::undoActions.size() )  {
+		temp = Utils::undoActions.top();
 		Utils::undoActions.pop();
 		delete temp;
 		i++;
 	}
 	i = 0;
 	while ( i < Utils::redoActions.size() ) {
+		temp = Utils::redoActions.top();
 		Utils::redoActions.pop();
 		delete temp;
 		i++;
-	}
+	}*/
 	file.open("Check.txt");
+	file << "Using Check.txt file to debug deallocations or any furthur Checking.\nThis Function is Called in the Application Manager Destructor" << endl;
 	file << "Actions constructed " << Action::ID << endl;
 	file << "Actions Destructed " << Action::IDD << endl;
 	file.close();

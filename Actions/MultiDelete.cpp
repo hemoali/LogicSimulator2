@@ -14,6 +14,10 @@ MultiDelete::MultiDelete(ApplicationManager * pApp, vector<pair<int, Component*>
 
 MultiDelete::~MultiDelete()
 {
+	for (size_t i = 0; i < allDeleteActions.size(); i++)
+	{
+		delete allDeleteActions[i];
+	}
 }
 
 bool MultiDelete::ReadActionParameters(image *)

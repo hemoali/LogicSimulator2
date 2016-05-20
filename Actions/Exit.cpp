@@ -32,9 +32,9 @@ void Exit::Execute()
 		}
 		else if (choice == IDYES)
 		{
-			Action *pAct = new Save(pManager);
-			pAct->Execute();
-			if (((Save*)pAct)->isSuccessful()) {
+			Save saveAction(pManager);
+			saveAction.Execute();
+			if (saveAction.isSuccessful()) {
 				pManager->setExitChoice(1);
 				Clear clearAction(pManager);
 				clearAction.setLoading(true);
