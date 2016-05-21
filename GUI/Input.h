@@ -4,6 +4,7 @@
 #include "UI_Info.h"
 #include <vector>
 #include <utility>
+#include "..\Utils.h"
 class ApplicationManager;
 class Output;
 class Component;

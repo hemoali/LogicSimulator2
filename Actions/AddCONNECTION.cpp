@@ -10,7 +10,7 @@ AddConnection::~AddConnection(void)
 {
 }
 
-bool AddConnection::ReadActionParameters(image * smallImageBeforeAddingComponent)
+bool AddConnection::ReadActionParameters(image * smallImageBeforeAddingComponent, Component* c)
 {
 	//Get a Pointer to the Input / Output Interfaces
 	Output* pOut = pManager->GetOutput();
@@ -49,7 +49,7 @@ bool AddConnection::validateOutputComponent(Component* comp, Component* dstComp)
 void AddConnection::Execute()
 {
 	//Get Center point of the Gate
-	ReadActionParameters(NULL);
+	ReadActionParameters(NULL, NULL);
 
 	Component* outputComponent = NULL;
 	Component*inputComponent = NULL;
@@ -137,9 +137,9 @@ void AddConnection::Execute()
 				GInfo.y2 = inputComponent->getCenterLocation().y1 + UI.GATE_Height / 2 - 2;
 			}
 			vector<Cell> cellsBeforeAddingConnection;
-			if (pManager->GetOutput()->DrawConnection(GInfo, numOfInputs, inputComponent->getCenterLocation(), cellsBeforeAddingConnection) && !(outputComponent->getOutputPin()->connectedConnectionsCount() == FANOUT))
+			Connection *pA = new Connection(GInfo, outputComponent->getOutputPin(), inputComponent->getInputPin(inputPin));
+			if (pManager->GetOutput()->DrawConnection(GInfo, numOfInputs, inputComponent->getCenterLocation(), cellsBeforeAddingConnection, false, pA) && !(outputComponent->getOutputPin()->connectedConnectionsCount() == FANOUT))
 			{
-				Connection *pA = new Connection(GInfo, outputComponent->getOutputPin(), inputComponent->getInputPin(inputPin));
 				pManager->AddComponent(pA);
 				Utils::allComponentsCorners.push_back(GInfo);
 				pA->setCellsBeforeAddingConnection(cellsBeforeAddingConnection);
@@ -152,14 +152,12 @@ void AddConnection::Execute()
 				pA->setLabel(gateLabel);
 				pA->setIsDrawn(true);
 
-				for (size_t i = 0; i < cellsBeforeAddingConnection.size(); i++)
-				{
-					Utils::setArrayOfComponents(cellsBeforeAddingConnection[i].y, cellsBeforeAddingConnection[i].x, pA);
-				}
 				Utils::undoActions.push(this);
 				Action::pA = pA;
 			}
 			else {
+				delete pA;
+				pA = NULL;
 				pManager->GetOutput()->PrintStatusBox("No Available Connection");
 			}
 		}
@@ -221,10 +219,6 @@ void AddConnection::Redo()
 		GInfo.y2 = inputComponent->getCenterLocation().y1 + UI.GATE_Height / 2 - 2;
 	}
 
-	pManager->GetOutput()->DrawConnection(GInfo, numOfInputs, inputComponent->getCenterLocation(), conn->getCellsBeforeAddingConnection());
+	pManager->GetOutput()->DrawConnection(GInfo, numOfInputs, inputComponent->getCenterLocation(), conn->getCellsBeforeAddingConnection(), false, conn);
 
-	for (size_t i = 0; i < conn->getCellsBeforeAddingConnection().size(); i++)
-	{
-		Utils::setArrayOfComponents(conn->getCellsBeforeAddingConnection()[i].y, conn->getCellsBeforeAddingConnection()[i].x, pA);
-	}
 }

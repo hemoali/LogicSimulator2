@@ -24,7 +24,7 @@ public:
 
 	RightClick(ApplicationManager*);
 	//Reads parameters required for action to execute
-	virtual bool ReadActionParameters(image* img = NULL);
+	virtual bool ReadActionParameters(image* img = NULL, Component* c = NULL);
 	//Get the Selected Action
 	virtual ActionType getSelectedAction();//TO BE DEleted
 	//Execute action (code depends on action type)

@@ -10,7 +10,7 @@ class Validate :
 public:
 	Validate(ApplicationManager*pApp);
 	//Reads parameters required for action to execute
-	virtual bool ReadActionParameters(image *);
+	virtual bool ReadActionParameters(image *, Component* c);
 
 	bool validateOutputComponent(Component* comp);
 	bool validateInputComponent(Component* comp);

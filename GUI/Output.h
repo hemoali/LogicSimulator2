@@ -35,17 +35,18 @@ public:
 	bool DrawString(string s, GraphicsInfo Gfx_info) const;
 	void DrawGrid() const;
 	// Draw  
-	bool SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image*, bool moving = false, Component* comp = NULL);
+	bool SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image*, bool moving, Component* comp);
 	bool SetMultiDragImage(int x, int y, Component* mainMovingComponent, vector< pair<int, Component*> > allSelectedComponents);
-	void DrawNot_Buffer(GraphicsInfo, bool = false, bool = false, bool = false) const;
-	void DrawAnd_Nand(GraphicsInfo, int = 2, bool = false, bool = false, bool = false) const;
-	void DrawOr_Nor(GraphicsInfo, int = 2, bool = false, bool = false, bool = false) const;
-	void DrawXor_Xnor(GraphicsInfo, int = 2, bool = false, bool = false, bool = false) const;
-	void DrawLed(GraphicsInfo, bool = false, bool = false, bool = false) const;
-	void DrawSwtich(GraphicsInfo, bool = false, bool = false, bool = false) const;
+	void DrawNot_Buffer(GraphicsInfo, bool = false, bool = false, bool = false, Component* = NULL);
+	void DrawAnd_Nand(GraphicsInfo, int = 2, bool = false, bool = false, bool = false, Component* = NULL);
+	void DrawOr_Nor(GraphicsInfo, int = 2, bool = false, bool = false, bool = false, Component* = NULL);
+	void DrawXor_Xnor(GraphicsInfo, int = 2, bool = false, bool = false, bool = false, Component* = NULL);
+	void DrawLed(GraphicsInfo, bool = false, bool = false, bool = false, Component* = NULL);
+	void DrawSwtich(GraphicsInfo, bool = false, bool = false, bool = false, Component* = NULL);
 	void DrawCleanImage(image*, int x, int y);
-	bool DrawConnection(GraphicsInfo r_GfxInfo, int inputPin, GraphicsInfo compCenterLocationbool, vector<Cell>&, bool selected = false) const;
+	bool DrawConnection(GraphicsInfo r_GfxInfo, int inputPin, GraphicsInfo compCenterLocationbool, vector<Cell>&, bool selected , Component* c) const;
 
+	void fillArrays(Component* comp);
 
 	void storeDrawingAreaImage(image*& img);
 	void drawStoredDrawingAreaImage(image*& img);

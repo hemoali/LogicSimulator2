@@ -17,7 +17,7 @@ CreateTruthTable::CreateTruthTable(ApplicationManager*pApp) : Action(pApp)
 {
 }
 
-bool CreateTruthTable::ReadActionParameters(image *I)
+bool CreateTruthTable::ReadActionParameters(image *, Component* c)
 {
 	return false;
 }

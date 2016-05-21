@@ -9,7 +9,7 @@ Clear::Clear(ApplicationManager*pApp) : Action(pApp)
 {
 	Loading = false;
 }
-bool Clear::ReadActionParameters(image *I)
+bool Clear::ReadActionParameters(image * i, Component* c)
 {
 	Output *pOut = pManager->GetOutput();
 	int selected = pOut->printPopUpMessage("",'N');

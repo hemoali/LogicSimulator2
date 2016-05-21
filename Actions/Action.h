@@ -20,7 +20,7 @@ public:
 	}	//constructor
 	
 	//Reads parameters required for action to execute
-	virtual bool ReadActionParameters(image *)=0;
+	virtual bool ReadActionParameters(image *, Component*)=0;
 	
 	//Execute action (code depends on action type)
 	virtual void Execute()=0;

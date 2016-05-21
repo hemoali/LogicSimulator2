@@ -1,6 +1,9 @@
 #include "Utils.h"
 #include "GUI\UI_Info.h"
 #include <iostream>
+#include "Components\Component.h"
+#include "Components\Connection.h"
+
 Component* Utils::arrayOfComponents[44][74];
 int Utils::J = 0; int Utils::K = 0; int Utils::widthh = 0;
 image* Utils::imgh = NULL;
@@ -74,7 +77,7 @@ void  Utils::correctPointClicked(int &x, int &y, bool DrawGate, bool DrawConnect
 		}
 	}
 }
-bool Utils::CheckPoint(GraphicsInfo r_GfxInfo, Output* pOut, bool isMoving, bool fillArray) {
+bool Utils::CheckPoint(GraphicsInfo r_GfxInfo, Output* pOut, Component* comp,  bool isMoving, bool fillArray) {
 	int xbegin = (r_GfxInfo.x1 - UI.GATE_Width / 2.0) / UI.GRID_SIZE, xend = (r_GfxInfo.x1 + UI.GATE_Width / 2.0) / UI.GRID_SIZE, ybegin = (r_GfxInfo.y1 - UI.GATE_Height / 2.0) / UI.GRID_SIZE, yend = (r_GfxInfo.y1 + UI.GATE_Height / 2.0) / UI.GRID_SIZE;
 	if (xbegin -1 <= 2 || xend + 1 > 73 || ybegin < 3 || yend + 1 > 43)
 	{
@@ -109,6 +112,7 @@ bool Utils::CheckPoint(GraphicsInfo r_GfxInfo, Output* pOut, bool isMoving, bool
 					continue;
 				}
 				pOut->setUsedPixel(i, j, GATE);
+				setArrayOfComponents(i, j, comp);
 			}
 		}
 	}

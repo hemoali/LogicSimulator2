@@ -7,7 +7,7 @@ AddXORgate3::~AddXORgate3(void)
 {
 }
 
-bool AddXORgate3::ReadActionParameters(image * smallImageBeforeAddingComponent)
+bool AddXORgate3::ReadActionParameters(image * smallImageBeforeAddingComponent, Component* c)
 {
 	bool done = false;
 	//Get a Pointer to the Input / Output Interfaces
@@ -17,7 +17,7 @@ bool AddXORgate3::ReadActionParameters(image * smallImageBeforeAddingComponent)
 	//Print Action Message
 	pOut->PrintStatusBox("3-Input XOR Gate: Click to add the gate");
 
-	if (pOut->SetDragImage(ADD_XOR_GATE_3, GInfo, smallImageBeforeAddingComponent)) {
+	if (pOut->SetDragImage(ADD_XOR_GATE_3, GInfo, smallImageBeforeAddingComponent, false, c)) {
 
 		gateLabel =pIn->getStringBox();
 		done = true;
@@ -32,31 +32,28 @@ bool AddXORgate3::ReadActionParameters(image * smallImageBeforeAddingComponent)
 void AddXORgate3::Execute()
 {
 	//Get Center point of the Gate
-	image* smallImageBeforeAddingComponent = new image; if (ReadActionParameters(smallImageBeforeAddingComponent)) {
+	XOR3 *pA = new XOR3({0,0,0,0}, FANOUT);
+
+	image* smallImageBeforeAddingComponent = new image; if (ReadActionParameters(smallImageBeforeAddingComponent, pA)) {
 
 		//Calculate the rectangle Corners
 		int Len = UI.GATE_Width;
 		int Wdth = UI.GATE_Height;
-
-
 		GraphicsInfo GInfotmp;
-
 		GInfotmp.x1 = GInfo.x1 - Len / 2;
 		GInfotmp.x2 = GInfo.x1 + Len / 2;
 		GInfotmp.y1 = GInfo.y1 - Wdth / 2;
 		GInfotmp.y2 = GInfo.y1 + Wdth / 2;
-		XOR3 *pA = new XOR3(GInfotmp, FANOUT);
-		Utils::allComponentsCorners.push_back(GInfotmp);
-		pManager->AddComponent(pA); pA->setLabel(gateLabel);
-		for (int i = GInfotmp.y1 / UI.GRID_SIZE + 1; i <= GInfotmp.y2 / UI.GRID_SIZE; i++)
-		{
-			for (int j = GInfotmp.x1 / UI.GRID_SIZE; j <= GInfotmp.x2 / UI.GRID_SIZE; j++) {
-				Utils::setArrayOfComponents(i, j, pA);
-			}
-		}
+		pA->setCornersLocation(GInfotmp);
 		pA->setSmallCleanImageBeforeAddingComp(smallImageBeforeAddingComponent);
-		Action::pA = pA;
+		Utils::allComponentsCorners.push_back(GInfotmp);
+		pManager->AddComponent(pA);
+		pA->setLabel(gateLabel);
 		Utils::undoActions.push(this);
+		Action::pA = pA;
 	}
-	
+	else {
+		delete pA;
+		pA = NULL;
+	}
 }

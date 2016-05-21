@@ -7,7 +7,7 @@ RightClick::RightClick(ApplicationManager* pApp) :Action(pApp)
 	theAction = NULL;
 }
 
-bool RightClick::ReadActionParameters(image* img) {
+bool RightClick::ReadActionParameters(image* img, Component* c) {
 
 	int x, y; //Point Coordinates
 	GraphicsInfo MenuRectangle; //the Menu Region

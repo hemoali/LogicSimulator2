@@ -28,7 +28,7 @@ bool ModifyConnection::validateOutputComponent(Component* comp, Component* dstCo
 	}
 	return t[0] && t[1] && t[2];
 }
-bool ModifyConnection::ReadActionParameters(image *I)
+bool ModifyConnection::ReadActionParameters(image *, Component* c)
 {
 	Output* pOut = pManager->GetOutput();
 	Input* pIn = pManager->GetInput();
@@ -60,7 +60,7 @@ void ModifyConnection::Execute()
 	bool isCorrectNewConnection = false;
 	while (!isCorrectNewConnection) {
 
-		ReadActionParameters(NULL);
+		ReadActionParameters(NULL, NULL);
 		int numOfInputs = 0;
 		int indxOfInputComponent;
 
@@ -154,7 +154,7 @@ void ModifyConnection::Execute()
 				else {
 					GInfo.y2 = inputComponent->getCenterLocation().y1 + UI.GATE_Height / 2 - 2;
 				}
-				if (pManager->GetOutput()->DrawConnection(GInfo, numOfInputs, inputComponent->getCenterLocation(), cellsBeforeAddingConnection) && !(outputComponent->getOutputPin()->connectedConnectionsCount() == FANOUT))
+				if (pManager->GetOutput()->DrawConnection(GInfo, numOfInputs, inputComponent->getCenterLocation(), cellsBeforeAddingConnection, false, theConnection) && !(outputComponent->getOutputPin()->connectedConnectionsCount() == FANOUT))
 				{
 					theConnection->setCornersLocation(GInfo);
 
@@ -179,7 +179,6 @@ void ModifyConnection::Execute()
 					for (size_t i = 0; i < cellsBeforeAddingConnection.size(); i++)
 					{
 						newCells.push_back(cellsBeforeAddingConnection[i]);
-						Utils::setArrayOfComponents(cellsBeforeAddingConnection[i].y, cellsBeforeAddingConnection[i].x, theConnection);
 					}
 					isCorrectNewConnection = true;
 					Utils::undoActions.push(this);
@@ -227,11 +226,7 @@ void ModifyConnection::Undo()
 	oldInputComponent->getInputPin(oldInputPinPosition)->setConnection(theConnection);
 	oldInputComponent->getInputPin(oldInputPinPosition)->setPosition(oldInputPinPosition);
 	theConnection->setIsDrawn(true);
-	pManager->GetOutput()->DrawConnection(oldGInfo, oldInputPinPosition, oldInputComponent->getCenterLocation(), oldCells);
-	for (size_t i = 0; i < oldCells.size(); i++)
-	{
-		Utils::setArrayOfComponents(oldCells[i].y, oldCells[i].x, theConnection);
-	}
+	pManager->GetOutput()->DrawConnection(oldGInfo, oldInputPinPosition, oldInputComponent->getCenterLocation(), oldCells, false, theConnection);
 }
 void ModifyConnection::Redo()
 {
@@ -262,12 +257,8 @@ void ModifyConnection::Redo()
 	inputComponent->getInputPin(inputPin)->setPosition(inputPin);
 	theConnection->setIsDrawn(true);
 
-	pManager->GetOutput()->DrawConnection(GInfo, inputPin, inputComponent->getCenterLocation(), newCells);
+	pManager->GetOutput()->DrawConnection(GInfo, inputPin, inputComponent->getCenterLocation(), newCells, false, theConnection);
 
-	for (size_t i = 0; i < newCells.size(); i++)
-	{
-		Utils::setArrayOfComponents(newCells[i].y, newCells[i].x, theConnection);
-	}
 }
 ModifyConnection::~ModifyConnection()
 {

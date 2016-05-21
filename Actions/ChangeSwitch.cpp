@@ -10,7 +10,7 @@ ChangeSwitch::ChangeSwitch(ApplicationManager* pApp, SWITCH* C) : Action(pApp)
 	theComponent = C;
 }
 
-bool ChangeSwitch::ReadActionParameters(image *)
+bool ChangeSwitch::ReadActionParameters(image *, Component* c)
 {
 	if (theComponent == NULL)
 		return false;
@@ -20,7 +20,7 @@ bool ChangeSwitch::ReadActionParameters(image *)
 void ChangeSwitch::Execute()
 {
 	Output* pOut = pManager->GetOutput();
-	if (this->ReadActionParameters()) {
+	if (this->ReadActionParameters(NULL, NULL)) {
 		oldStatus = theComponent->GetOutPinStatus();
 		newStatus = !oldStatus;
 		theComponent->setOutputPinStatus(static_cast<STATUS>(newStatus));

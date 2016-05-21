@@ -42,7 +42,7 @@ void Connection::Draw(Output* pOut, bool highlight)
 {
 	if (!isDrawn)
 	{
-		pOut->DrawConnection(m_GfxInfo, DstPin->getPosition(), DstPin->getComponent()->getCenterLocation(), getCellsBeforeAddingConnection(), false);
+		pOut->DrawConnection(m_GfxInfo, DstPin->getPosition(), DstPin->getComponent()->getCenterLocation(), getCellsBeforeAddingConnection(), false, this);
 		isDrawn = true;
 	}
 }

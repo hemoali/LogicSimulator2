@@ -10,7 +10,7 @@ public:
 	virtual ~AddBUFFER(void);
 
 	//Reads parameters required for action to execute
-	virtual bool  ReadActionParameters(image * );
+	virtual bool ReadActionParameters(image * smallImageBeforeAddingComponent, Component* c);
 	//Execute action (code depends on action type)
 	virtual void Execute();
 };

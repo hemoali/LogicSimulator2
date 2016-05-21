@@ -1,10 +1,11 @@
 #include "MultiSelect.h"
 #include "..\Utils.h"
+#include "..\Components\\Connection.h"
 #include<iostream>
 MultiSelect::MultiSelect(ApplicationManager* pManager) :Action(pManager) {
 
 }
-bool MultiSelect::ReadActionParameters(image * smallImageBeforeAddingComponent)
+bool MultiSelect::ReadActionParameters(image * smallImageBeforeAddingComponent, Component* c)
 {
 	return true;
 }

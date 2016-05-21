@@ -13,9 +13,9 @@ Exit::~Exit()
 {
 }
 
-bool Exit::ReadActionParameters(image *)
-{
 
+bool Exit::ReadActionParameters(image *, Component * c)
+{
 	choice = pManager->GetOutput()->printPopUpMessage("", 'Q');
 	return true;
 }
@@ -23,7 +23,7 @@ bool Exit::ReadActionParameters(image *)
 void Exit::Execute()
 {
 	// Exit action here
-	if (ReadActionParameters()) {
+	if (ReadActionParameters(NULL, NULL)) {
 		if (choice == IDNO) {
 			pManager->setExitChoice(1);
 			Clear clearAction(pManager);

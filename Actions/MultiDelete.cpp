@@ -20,7 +20,7 @@ MultiDelete::~MultiDelete()
 	}
 }
 
-bool MultiDelete::ReadActionParameters(image *)
+bool MultiDelete::ReadActionParameters(image *, Component* c)
 {
 	if( theVector.size() == 0) 
 		return false;
@@ -30,7 +30,7 @@ bool MultiDelete::ReadActionParameters(image *)
 void MultiDelete::Execute()
 {
 	Output* pOut = pManager->GetOutput();
-	if (this->ReadActionParameters()) {
+	if (this->ReadActionParameters(NULL, NULL)) {
 		for (int i = 0; i < theVector.size(); i++) {
 			Action* act = new Delete(pManager, theVector[i].second, false);
 			allDeleteActions.push_back(act);

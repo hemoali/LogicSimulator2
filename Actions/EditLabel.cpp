@@ -13,7 +13,7 @@ EditLabel::EditLabel(ApplicationManager *pApp,Component* C) : Action(pApp)
 }
 
 
-bool EditLabel::ReadActionParameters(image *)
+bool EditLabel::ReadActionParameters(image *, Component* c)
 {
 	Output* pOut = pManager->GetOutput();
 	Input *pIn = pManager->GetInput();
@@ -27,7 +27,7 @@ void EditLabel::Execute()
 {
 	Output* pOut = pManager->GetOutput();
 	Input *pIn = pManager->GetInput();
-	if (this->ReadActionParameters()) {
+	if (this->ReadActionParameters(NULL, NULL)) {
 		theOriginalLabel = theComponenet->getLabel();
 		theComponenet->setLabel(theNewLabel);
 		if( theNewLabel!= theOriginalLabel)

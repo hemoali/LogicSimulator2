@@ -14,7 +14,7 @@ public:
 	Save(ApplicationManager*pApp);
 
 	//Reads parameters required for action to execute
-	virtual bool ReadActionParameters(image * = NULL);
+	virtual bool Save::ReadActionParameters(image *, Component* c);
 
 
 	//Execute action (code depends on action type)

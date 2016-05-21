@@ -9,7 +9,7 @@ Simulate::Simulate(ApplicationManager*pApp, bool v) : Action(pApp), validateFirs
 {
 }
 
-bool Simulate::ReadActionParameters(image *I)
+bool Simulate::ReadActionParameters(image *, Component* c)
 {
 	return false;
 }

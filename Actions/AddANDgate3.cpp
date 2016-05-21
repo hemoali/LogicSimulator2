@@ -7,7 +7,7 @@ AddANDgate3::~AddANDgate3(void)
 {
 }
 
-bool AddANDgate3::ReadActionParameters(image * smallImageBeforeAddingComponent)
+bool AddANDgate3::ReadActionParameters(image * smallImageBeforeAddingComponent, Component* c)
 {
 	bool done = false;
 	//Get a Pointer to the Input / Output Interfaces
@@ -17,7 +17,7 @@ bool AddANDgate3::ReadActionParameters(image * smallImageBeforeAddingComponent)
 	//Print Action Message
 	pOut->PrintStatusBox("3-Input AND Gate: Click to add the gate");
 
-	if (pOut->SetDragImage(ADD_AND_GATE_3, GInfo, smallImageBeforeAddingComponent)){
+	if (pOut->SetDragImage(ADD_AND_GATE_3, GInfo, smallImageBeforeAddingComponent, false, c)){
 		gateLabel =pIn->getStringBox();
 		done = true;
 
@@ -33,13 +33,12 @@ void AddANDgate3::Execute()
 {
 	//Get Center point of the Gate
 	image* smallImageBeforeAddingComponent = new image; 
-	
-	if (ReadActionParameters(smallImageBeforeAddingComponent)){
+	AND3 *pA = new AND3({0,0,0,0}, FANOUT);
+	if (ReadActionParameters(smallImageBeforeAddingComponent, pA)){
 
 		//Calculate the rectangle Corners
 		int Len = UI.GATE_Width;
 		int Wdth = UI.GATE_Height;
-
 		
 		GraphicsInfo GInfotmp;
 
@@ -47,13 +46,16 @@ void AddANDgate3::Execute()
 		GInfotmp.x2 = GInfo.x1 + Len / 2;
 		GInfotmp.y1 = GInfo.y1 - Wdth / 2;
 		GInfotmp.y2 = GInfo.y1 + Wdth / 2;
-		AND3 *pA = new AND3(GInfotmp, FANOUT);
+		pA->setCornersLocation(GInfotmp);
 		pA->setSmallCleanImageBeforeAddingComp(smallImageBeforeAddingComponent);
 		Utils::allComponentsCorners.push_back(GInfotmp);
-		pManager->AddComponent(pA);pA->setLabel(gateLabel);for (int i = GInfotmp.y1 / UI.GRID_SIZE + 1; i <= GInfotmp.y2 / UI.GRID_SIZE; i++)		{for (int j = GInfotmp.x1 / UI.GRID_SIZE; j <= GInfotmp.x2 / UI.GRID_SIZE; j++)	{	Utils::setArrayOfComponents(i,j,pA);}} 
+		pManager->AddComponent(pA);pA->setLabel(gateLabel);
 		Utils::undoActions.push(this);
 		Action::pA = pA;
 	}
-	
+	else {
+		delete pA;
+		pA = NULL;
+	}
 }
 

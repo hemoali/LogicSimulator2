@@ -18,7 +18,7 @@ void AND2::Operate()
 // Draws 2-input AND gate
 void AND2::Draw(Output* pOut, bool highlight)
 {
-	if (!getDelete()) pOut->DrawAnd_Nand(m_CenterInfo, 2, false, highlight);
+	if (!getDelete()) pOut->DrawAnd_Nand(m_CenterInfo, 2, false, highlight, this);
 	else {		
 		pOut->DrawCleanImage(getSmallCleanImageBeforeAddingComp(), m_CenterInfo.x1, m_CenterInfo.y1);
 	}

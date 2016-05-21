@@ -8,7 +8,7 @@ Save::Save(ApplicationManager*pApp) : Action(pApp)
 	path = "";
 	ok = false;
 }
-bool Save::ReadActionParameters(image *I)
+bool Save::ReadActionParameters(image * , Component* c)
 {
 	Output *pOut = pManager->GetOutput();
 	Input *pIn = pManager->GetInput();
@@ -21,7 +21,7 @@ bool Save::ReadActionParameters(image *I)
 }
 void Save::Execute()
 {
-	if (ReadActionParameters()) {
+	if (ReadActionParameters(NULL, NULL)) {
 		ok = true;
 		vector<pair <int, int >> thePoints;
 		Output *pOut = pManager->GetOutput();

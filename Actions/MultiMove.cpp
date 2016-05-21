@@ -21,7 +21,7 @@ MultiMove::MultiMove(ApplicationManager *pApp) :Action(pApp)
 {
 }
 
-bool MultiMove::ReadActionParameters(image * smallImageBeforeAddingComponent)
+bool MultiMove::ReadActionParameters(image * smallImageBeforeAddingComponent, Component* c)
 {
 	return true;
 }
@@ -58,16 +58,6 @@ void MultiMove::Execute()
 			//start moving process
 			c->setDelete(true);
 			c->Draw(pManager->GetOutput());
-
-			int xbegin = (c->getCenterLocation().x1 - UI.GATE_Width / 2.0) / UI.GRID_SIZE, xend = (c->getCenterLocation().x1 + UI.GATE_Width / 2.0) / UI.GRID_SIZE, ybegin = (c->getCenterLocation().y1 - UI.GATE_Height / 2.0) / UI.GRID_SIZE, yend = (c->getCenterLocation().y1 + UI.GATE_Height / 2.0) / UI.GRID_SIZE;
-			for (int i = ybegin + 1; i <= yend; i++)
-			{
-				for (int j = xbegin; j <= xend; j++)
-				{
-					pOut->setUsedPixel(i, j, EMPTY);
-					Utils::setArrayOfComponents(i, j, NULL);
-				}
-			}
 		}
 		vector < pair<int, Component*> > selectedGates;
 		for (size_t i = 0; i < pIn->getSelectedComponents().size(); i++)
@@ -99,20 +89,11 @@ void MultiMove::Execute()
 		else {
 			for (int i = 0; i < pIn->getSelectedComponents().size(); i++)
 			{
-				int xbegin = (pIn->getSelectedComponents()[i].second->getCenterLocation().x1 - UI.GATE_Width / 2.0) / UI.GRID_SIZE, xend = (pIn->getSelectedComponents()[i].second->getCenterLocation().x1 + UI.GATE_Width / 2.0) / UI.GRID_SIZE, ybegin = (pIn->getSelectedComponents()[i].second->getCenterLocation().y1 - UI.GATE_Height / 2.0) / UI.GRID_SIZE, yend = (pIn->getSelectedComponents()[i].second->getCenterLocation().y1 + UI.GATE_Height / 2.0) / UI.GRID_SIZE;
-				for (int i = ybegin + 1; i <= yend; i++)
+				if (!dynamic_cast<Connection*>(pIn->getSelectedComponents()[i].second))
 				{
-					for (int j = xbegin; j <= xend; j++)
-					{
-						if (xbegin == j || xend == j)
-						{
-							pOut->setUsedPixel(i, j, PIN);
-							continue;
-						}
-						Utils::setArrayOfComponents(i, j, pIn->getSelectedComponents()[i].second);
-						pOut->setUsedPixel(i, j, GATE);
-					}
-				}
+					pIn->getSelectedComponents()[i].second->setDelete(false);
+					pIn->getSelectedComponents()[i].second->Draw(pManager->GetOutput());
+				}			
 			}
 		}
 
@@ -132,16 +113,6 @@ void MultiMove::Undo()
 
 		pA->setDelete(true);
 		pA->Draw(pOut, false);
-		//free new location
-		int xbegin = (newCoor[i].x1 - UI.GATE_Width / 2.0) / UI.GRID_SIZE, xend = (newCoor[i].x1 + UI.GATE_Width / 2.0) / UI.GRID_SIZE, ybegin = (newCoor[i].y1 - UI.GATE_Height / 2.0) / UI.GRID_SIZE, yend = (newCoor[i].y1 + UI.GATE_Height / 2.0) / UI.GRID_SIZE;
-		for (int i = ybegin + 1; i <= yend; i++)
-		{
-			for (int j = xbegin; j <= xend; j++)
-			{
-				pOut->setUsedPixel(i, j, EMPTY);
-				Utils::setArrayOfComponents(i, j, NULL);
-			}
-		}
 		//remove new Connections
 		vector<Connection*> allInputConnections, allOutputConnections;
 		pA->getAllInputConnections(allInputConnections);
@@ -161,24 +132,6 @@ void MultiMove::Undo()
 
 		pA->setDelete(false);
 		pA->Draw(pOut, false);
-		//refill old location
-		xbegin = (oldGraphicsInfo[i].x1 - UI.GATE_Width / 2.0) / UI.GRID_SIZE;
-		xend = (oldGraphicsInfo[i].x1 + UI.GATE_Width / 2.0) / UI.GRID_SIZE;
-		ybegin = (oldGraphicsInfo[i].y1 - UI.GATE_Height / 2.0) / UI.GRID_SIZE;
-		yend = (oldGraphicsInfo[i].y1 + UI.GATE_Height / 2.0) / UI.GRID_SIZE;
-		for (int i = ybegin + 1; i <= yend; i++)
-		{
-			for (int j = xbegin; j <= xend; j++)
-			{
-				if (xbegin == j || xend == j)
-				{
-					pOut->setUsedPixel(i, j, PIN);
-					continue;
-				}
-				Utils::setArrayOfComponents(i, j, pA);
-				pOut->setUsedPixel(i, j, GATE);
-			}
-		}
 		//redraw old connections
 		for (size_t j = 0; j < allInputConnections.size(); j++)
 		{
@@ -186,12 +139,7 @@ void MultiMove::Undo()
 			currentGfx.x2 = currentGfx.x2 - (newCoor[i].x1 - oldGraphicsInfo[i].x1);
 			currentGfx.y2 = currentGfx.y2 - (newCoor[i].y1 - oldGraphicsInfo[i].y1);
 			allInputConnections[j]->setCornersLocation({ currentGfx.x1 ,currentGfx.y1,currentGfx.x2 ,currentGfx.y2 });
-			pOut->DrawConnection(currentGfx, allInputConnections[j]->getDestPin()->getPosition(), { oldGraphicsInfo[i].x1, oldGraphicsInfo[i].y1,0,0 }, allInputConnections[j]->getCellsBeforeAddingConnection(), false);
-
-			for (size_t k = 0; k < allInputConnections[j]->getCellsBeforeAddingConnection().size(); k++)
-			{
-				Utils::setArrayOfComponents(allInputConnections[j]->getCellsBeforeAddingConnection()[k].y, allInputConnections[j]->getCellsBeforeAddingConnection()[k].x, allInputConnections[j]);
-			}
+			pOut->DrawConnection(currentGfx, allInputConnections[j]->getDestPin()->getPosition(), { oldGraphicsInfo[i].x1, oldGraphicsInfo[i].y1,0,0 }, allInputConnections[j]->getCellsBeforeAddingConnection(), false, allInputConnections[j]);
 		}
 		for (size_t j = 0; j < allOutputConnections.size(); j++)
 		{
@@ -200,12 +148,7 @@ void MultiMove::Undo()
 			currentGfx.y1 = currentGfx.y1 - (newCoor[i].y1 - oldGraphicsInfo[i].y1);
 			allOutputConnections[j]->setCornersLocation({ currentGfx.x1 ,currentGfx.y1,currentGfx.x2 ,currentGfx.y2 });
 			Component* dstComp = allOutputConnections[j]->getDestPin()->getComponent();
-			pOut->DrawConnection(currentGfx, allOutputConnections[j]->getDestPin()->getPosition(), { dstComp->getCenterLocation().x1, dstComp->getCenterLocation().y1,0,0 }, allOutputConnections[j]->getCellsBeforeAddingConnection(), false);
-
-			for (size_t k = 0; k < allOutputConnections[j]->getCellsBeforeAddingConnection().size(); k++)
-			{
-				Utils::setArrayOfComponents(allOutputConnections[j]->getCellsBeforeAddingConnection()[k].y, allOutputConnections[j]->getCellsBeforeAddingConnection()[k].x, allOutputConnections[j]);
-			}
+			pOut->DrawConnection(currentGfx, allOutputConnections[j]->getDestPin()->getPosition(), { dstComp->getCenterLocation().x1, dstComp->getCenterLocation().y1,0,0 }, allOutputConnections[j]->getCellsBeforeAddingConnection(), false, allOutputConnections[j]);
 		}
 
 	}
@@ -219,16 +162,6 @@ void MultiMove::Redo()
 		pA = selectedComponents[i];
 		pA->setDelete(true);
 		pA->Draw(pOut, false);
-		//free new location
-		int xbegin = (oldGraphicsInfo[i].x1 - UI.GATE_Width / 2.0) / UI.GRID_SIZE, xend = (oldGraphicsInfo[i].x1 + UI.GATE_Width / 2.0) / UI.GRID_SIZE, ybegin = (oldGraphicsInfo[i].y1 - UI.GATE_Height / 2.0) / UI.GRID_SIZE, yend = (oldGraphicsInfo[i].y1 + UI.GATE_Height / 2.0) / UI.GRID_SIZE;
-		for (int i = ybegin + 1; i <= yend; i++)
-		{
-			for (int j = xbegin; j <= xend; j++)
-			{
-				pOut->setUsedPixel(i, j, EMPTY);
-				Utils::setArrayOfComponents(i, j, NULL);
-			}
-		}
 		//remove new Connections
 		vector<Connection*> allInputConnections, allOutputConnections;
 		pA->getAllInputConnections(allInputConnections);
@@ -248,24 +181,6 @@ void MultiMove::Redo()
 
 		pA->setDelete(false);
 		pA->Draw(pOut, false);
-		//refill old location
-		xbegin = (newCoor[i].x1 - UI.GATE_Width / 2.0) / UI.GRID_SIZE;
-		xend = (newCoor[i].x1 + UI.GATE_Width / 2.0) / UI.GRID_SIZE;
-		ybegin = (newCoor[i].y1 - UI.GATE_Height / 2.0) / UI.GRID_SIZE;
-		yend = (newCoor[i].y1 + UI.GATE_Height / 2.0) / UI.GRID_SIZE;
-		for (int i = ybegin + 1; i <= yend; i++)
-		{
-			for (int j = xbegin; j <= xend; j++)
-			{
-				if (xbegin == j || xend == j)
-				{
-					pOut->setUsedPixel(i, j, PIN);
-					continue;
-				}
-				Utils::setArrayOfComponents(i, j, pA);
-				pOut->setUsedPixel(i, j, GATE);
-			}
-		}
 		//redraw old connections
 		for (size_t j = 0; j < allInputConnections.size(); j++)
 		{
@@ -273,12 +188,7 @@ void MultiMove::Redo()
 			currentGfx.x2 = currentGfx.x2 + (newCoor[i].x1 - oldGraphicsInfo[i].x1);
 			currentGfx.y2 = currentGfx.y2 + (newCoor[i].y1 - oldGraphicsInfo[i].y1);
 			allInputConnections[j]->setCornersLocation({ currentGfx.x1 ,currentGfx.y1,currentGfx.x2 ,currentGfx.y2 });
-			pOut->DrawConnection(currentGfx, allInputConnections[j]->getDestPin()->getPosition(), { newCoor[i].x1, newCoor[i].y1,0,0 }, allInputConnections[j]->getCellsBeforeAddingConnection(), false);
-
-			for (size_t k = 0; k < allInputConnections[j]->getCellsBeforeAddingConnection().size(); k++)
-			{
-				Utils::setArrayOfComponents(allInputConnections[j]->getCellsBeforeAddingConnection()[k].y, allInputConnections[j]->getCellsBeforeAddingConnection()[k].x, allInputConnections[j]);
-			}
+			pOut->DrawConnection(currentGfx, allInputConnections[j]->getDestPin()->getPosition(), { newCoor[i].x1, newCoor[i].y1,0,0 }, allInputConnections[j]->getCellsBeforeAddingConnection(), false, allInputConnections[j]);
 		}
 		for (size_t j = 0; j < allOutputConnections.size(); j++)
 		{
@@ -287,12 +197,7 @@ void MultiMove::Redo()
 			currentGfx.y1 = currentGfx.y1 + (newCoor[i].y1 - oldGraphicsInfo[i].y1);
 			allOutputConnections[j]->setCornersLocation({ currentGfx.x1 ,currentGfx.y1,currentGfx.x2 ,currentGfx.y2 });
 			Component* dstComp = allOutputConnections[j]->getDestPin()->getComponent();
-			pOut->DrawConnection(currentGfx, allOutputConnections[j]->getDestPin()->getPosition(), { dstComp->getCenterLocation().x1, dstComp->getCenterLocation().y1,0,0 }, allOutputConnections[j]->getCellsBeforeAddingConnection(), false);
-
-			for (size_t k = 0; k < allOutputConnections[j]->getCellsBeforeAddingConnection().size(); k++)
-			{
-				Utils::setArrayOfComponents(allOutputConnections[j]->getCellsBeforeAddingConnection()[k].y, allOutputConnections[j]->getCellsBeforeAddingConnection()[k].x, allOutputConnections[j]);
-			}
+			pOut->DrawConnection(currentGfx, allOutputConnections[j]->getDestPin()->getPosition(), { dstComp->getCenterLocation().x1, dstComp->getCenterLocation().y1,0,0 }, allOutputConnections[j]->getCellsBeforeAddingConnection(), false, allOutputConnections[j]);
 		}
 	}
 }

@@ -25,7 +25,7 @@ Load::Load(ApplicationManager*pApp) : Action(pApp)
 {
 	path = "";
 }
-bool Load::ReadActionParameters(image *I)
+bool Load::ReadActionParameters(image *, Component* c)
 {
 	Output *pOut = pManager->GetOutput();
 	Input *pIn = pManager->GetInput();
@@ -75,7 +75,7 @@ void Load::Execute()
 	Clear newAction(pManager);
 	Output *pOut = pManager->GetOutput();
 
-	if (ReadActionParameters()) {
+	if (ReadActionParameters(NULL, NULL)) {
 		// To clear the screen
 		newAction.setLoading(true);
 		newAction.Execute();
@@ -186,39 +186,9 @@ void Load::Execute()
 			int Len = UI.GATE_Width;
 			int Wdth = UI.GATE_Height;
 			Utils::allComponentsCorners.push_back(point);
-
 			pOut->storeImage(img, pA->getCenterLocation().x1 - UI.GRID_SIZE - 5, pA->getCenterLocation().y1 - UI.GRID_SIZE - 5, 2 * UI.GRID_SIZE + 4, UI.GATE_Height + 3);
-
 			pA->setSmallCleanImageBeforeAddingComp(img);
-			for (int k = GInfotmp.y1 / UI.GRID_SIZE + 1; k <= GInfotmp.y2 / UI.GRID_SIZE; k++) {
-				for (int l = GInfotmp.x1 / UI.GRID_SIZE; l <= GInfotmp.x2 / UI.GRID_SIZE; l++) {
-					Utils::setArrayOfComponents(k, l, pA);
-				}
-			}
-
-			//Don't FILL Used Pixels Now
-			GraphicsInfo gfx = pA->getCornersLocation();
-			Component* C = pA;
-			int xbegin = (C->getCenterLocation().x1 - UI.GATE_Width / 2.0) / UI.GRID_SIZE;
-			int xend = (C->getCenterLocation().x1 + UI.GATE_Width / 2.0) / UI.GRID_SIZE;
-			int ybegin = (C->getCenterLocation().y1 - UI.GATE_Height / 2.0) / UI.GRID_SIZE;
-			int yend = (C->getCenterLocation().y1 + UI.GATE_Height / 2.0) / UI.GRID_SIZE;
-
-			for (int i = ybegin + 1; i <= yend; i++)
-			{
-				for (int j = xbegin; j <= xend; j++)
-				{
-					if (xbegin == j || xend == j)
-					{
-						if (pOut->getUsedPixel(i, j) != INTERSECTION)
-						{
-							pOut->setUsedPixel(i, j, PIN);
-						}
-						continue;
-					}
-					pOut->setUsedPixel(i, j, GATE);
-				}
-			}
+			
 			//Draw the Loaded Gate 
 			pA->Draw(pOut);
 		}

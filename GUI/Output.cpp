@@ -5,6 +5,7 @@
 #include <cstring>
 #include <iostream>
 #include <algorithm>
+#include "..\Components\Connection.h"
 #include "..\Components\Gate.h"
 using namespace std;
 CellType Output::usedPixels[44][74];
@@ -242,7 +243,7 @@ bfs_node* Output::bfs(bfs_node* bf, int requX, int requY, vector<bfs_node*> allN
 	return NULL;
 }
 
-bool Output::DrawConnection(GraphicsInfo GfxInfo, int inputPin, GraphicsInfo compCenterLocation, vector<Cell>& cellsBeforeAddingConnection, bool selected) const
+bool Output::DrawConnection(GraphicsInfo GfxInfo, int inputPin, GraphicsInfo compCenterLocation, vector<Cell>& cellsBeforeAddingConnection, bool selected, Component* pA) const
 {
 	cellsBeforeAddingConnection.clear();
 	vector<bfs_node*> allNodes;
@@ -419,6 +420,11 @@ bool Output::DrawConnection(GraphicsInfo GfxInfo, int inputPin, GraphicsInfo com
 				usedPixels[parent->y][parent->x] = INTERSECTION;
 				arrayOfCorners[parent->y][parent->x] = 1;
 			}
+			// Fill arras
+			for (size_t i = 0; i < cellsBeforeAddingConnection.size(); i++)
+			{
+				Utils::setArrayOfComponents(cellsBeforeAddingConnection[i].y, cellsBeforeAddingConnection[i].x, pA);
+			}
 			draw = true;
 			skip_next = false;
 		}
@@ -508,6 +514,17 @@ void Output::DrawRClickMenu_CorrectPoints(int& x, int& y, int type, bool draw)
 
 void Output::DrawCleanImage(image* img, int x, int y)
 {
+	GraphicsInfo GInfotmp;
+	GInfotmp.x1 = x - UI.GATE_Width / 2;
+	GInfotmp.x2 = x + UI.GATE_Width / 2;
+	GInfotmp.y1 = y - UI.GATE_Height / 2;
+	GInfotmp.y2 = y + UI.GATE_Height / 2;
+	for (int i = GInfotmp.y1 / UI.GRID_SIZE + 1; i <= GInfotmp.y2 / UI.GRID_SIZE; i++) {
+		for (int j = GInfotmp.x1 / UI.GRID_SIZE; j <= GInfotmp.x2 / UI.GRID_SIZE; j++) {
+			Utils::setArrayOfComponents(i, j, NULL);
+			setUsedPixel(i, j, EMPTY);
+		}
+	}
 
 	pWind->DrawImage(img, x - UI.GRID_SIZE - 6, y - UI.GRID_SIZE - 5, 2 * UI.GRID_SIZE + 5, UI.GATE_Height + 3);
 	pWind->SetPen(WHITE);
@@ -1235,7 +1252,7 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 			clearConnectionsFromGrid(allOutputConnections, allInputConnections);
 			drawnConnectionsCount = 0;
 		}
-		if (!Utils::CheckPoint({ x,y }, this, moving, false)) {
+		if (!Utils::CheckPoint({ x,y }, this, comp, moving, false)) {
 			wrong = true;
 		}
 		else {
@@ -1360,7 +1377,7 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 						currentGfx.x2 = currentGfx.x2 + (Gfx.x1 - originalX);
 						currentGfx.y2 = currentGfx.y2 + (Gfx.y1 - originalY);
 						allInputConnections[i]->setCornersLocation({ currentGfx.x1 ,currentGfx.y1,currentGfx.x2 ,currentGfx.y2 });
-						if (DrawConnection(currentGfx, allInputConnections[i]->getDestPin()->getPosition(), { Gfx.x1, Gfx.y1,0,0 }, allInputConnections[i]->getCellsBeforeAddingConnection(), moving))drawnConnectionsCount++;
+						if (DrawConnection(currentGfx, allInputConnections[i]->getDestPin()->getPosition(), { Gfx.x1, Gfx.y1,0,0 }, allInputConnections[i]->getCellsBeforeAddingConnection(), moving, allInputConnections[i]))drawnConnectionsCount++;
 					}
 					for (size_t i = 0; i < allOutputConnections.size(); i++)
 					{
@@ -1369,7 +1386,7 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 						currentGfx.y1 = currentGfx.y1 + (Gfx.y1 - originalY);
 						allOutputConnections[i]->setCornersLocation({ currentGfx.x1 ,currentGfx.y1,currentGfx.x2 ,currentGfx.y2 });
 						Component* dstComp = allOutputConnections[i]->getDestPin()->getComponent();
-						if (DrawConnection(currentGfx, allOutputConnections[i]->getDestPin()->getPosition(), { dstComp->getCenterLocation().x1, dstComp->getCenterLocation().y1,0,0 }, allOutputConnections[i]->getCellsBeforeAddingConnection(), moving))drawnConnectionsCount++;
+						if (DrawConnection(currentGfx, allOutputConnections[i]->getDestPin()->getPosition(), { dstComp->getCenterLocation().x1, dstComp->getCenterLocation().y1,0,0 }, allOutputConnections[i]->getCellsBeforeAddingConnection(), moving, allOutputConnections[i]))drawnConnectionsCount++;
 					}
 
 					originalX = Gfx.x1;
@@ -1396,15 +1413,15 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 			draw = false;
 			break;
 		}
-		else if (!wrong && Utils::CheckPoint({ x,y }, this, moving, false) && (pWind->GetMouseClick(tX, tY) == LEFT_CLICK) || ((pWind->GetButtonState(LEFT_BUTTON, tX, tY) == BUTTON_UP))) {
+		else if (!wrong && Utils::CheckPoint({ x,y }, this, comp, moving, false) && (pWind->GetMouseClick(tX, tY) == LEFT_CLICK) || ((pWind->GetButtonState(LEFT_BUTTON, tX, tY) == BUTTON_UP))) {
 			if ((moving && (noOfTotalConnections == drawnConnectionsCount)) || !moving)
 			{
 				Utils::correctPointClicked(x, y, true, false);
-				if (Utils::CheckPoint({ x,y }, this, moving, false))
+				if (Utils::CheckPoint({ x,y }, this, comp, moving, false))
 				{
 					GfxInfo.x1 = x;
 					GfxInfo.y1 = y;
-					if (Utils::CheckPoint(GfxInfo, this, moving)) {
+					if (Utils::CheckPoint(GfxInfo, this, comp, moving)) {
 						if (moving) // Reset connections on grid of pointers
 						{
 							for (size_t i = 0; i < allInputConnections.size(); i++)
@@ -1526,7 +1543,7 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 				noOfTotalConnections = allInputConnections.size() + allOutputConnections.size();
 
 				clearConnectionsFromGrid(allOutputConnections, allInputConnections);
-				if (!Utils::CheckPoint({ x,y }, this, true, false)) {
+				if (!Utils::CheckPoint({ x,y }, this, allSelectedComponents[m].second, true, false)) {
 					wrong = true;
 				}
 				else {
@@ -1628,7 +1645,7 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 					}
 
 				}
-				if (!wrong && Utils::CheckPoint({ x,y }, this, true, false)) {
+				if (!wrong && Utils::CheckPoint({ x,y }, this, allSelectedComponents[m].second, true, false)) {
 					isComponentDrawn[m] = true;
 				}
 				else {
@@ -1728,7 +1745,7 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 						drawnConnectionsCount++;
 						continue;
 					}
-					if (DrawConnection(allInputConnections[i]->getCornersLocation(), allInputConnections[i]->getDestPin()->getPosition(), { Gfx.x1, Gfx.y1,0,0 }, allInputConnections[i]->getCellsBeforeAddingConnection(), true)) {
+					if (DrawConnection(allInputConnections[i]->getCornersLocation(), allInputConnections[i]->getDestPin()->getPosition(), { Gfx.x1, Gfx.y1,0,0 }, allInputConnections[i]->getCellsBeforeAddingConnection(), true, allInputConnections[i])) {
 						drawnConnectionsCount++;
 						allDrawnConnections.push_back(allInputConnections[i]);
 					}
@@ -1746,7 +1763,7 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 					{
 						if (allSelectedComponents[z].second == dstComp)
 						{
-							if (DrawConnection(allOutputConnections[i]->getCornersLocation(), allOutputConnections[i]->getDestPin()->getPosition(), { (RectULXY[z].first + UI.GATE_Width / 2),(RectULXY[z].second + UI.GATE_Height / 2),0,0 }, allOutputConnections[i]->getCellsBeforeAddingConnection(), true))
+							if (DrawConnection(allOutputConnections[i]->getCornersLocation(), allOutputConnections[i]->getDestPin()->getPosition(), { (RectULXY[z].first + UI.GATE_Width / 2),(RectULXY[z].second + UI.GATE_Height / 2),0,0 }, allOutputConnections[i]->getCellsBeforeAddingConnection(), true, allOutputConnections[i]))
 							{
 								drawnConnectionsCount++;
 								allDrawnConnections.push_back(allOutputConnections[i]);
@@ -1757,7 +1774,7 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 					}
 					if (!drawn)
 					{
-						if (DrawConnection(allOutputConnections[i]->getCornersLocation(), allOutputConnections[i]->getDestPin()->getPosition(), { dstComp->getCenterLocation().x1, dstComp->getCenterLocation().y1,0,0 }, allOutputConnections[i]->getCellsBeforeAddingConnection(), true))
+						if (DrawConnection(allOutputConnections[i]->getCornersLocation(), allOutputConnections[i]->getDestPin()->getPosition(), { dstComp->getCenterLocation().x1, dstComp->getCenterLocation().y1,0,0 }, allOutputConnections[i]->getCellsBeforeAddingConnection(), true, allOutputConnections[i]))
 						{
 							drawnConnectionsCount++;
 							allDrawnConnections.push_back(allOutputConnections[i]);
@@ -1802,13 +1819,13 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 		}
 		if (toContinue) {
 			int tx, ty;
-			if (Utils::CheckPoint({ ox,oy }, this, true, false) && (pWind->GetMouseClick(tx, ty) == LEFT_CLICK || pWind->GetButtonState(LEFT_BUTTON, tx, ty) == BUTTON_UP)) {
+			if (Utils::CheckPoint({ ox,oy }, this, NULL, true, false) && (pWind->GetMouseClick(tx, ty) == LEFT_CLICK || pWind->GetButtonState(LEFT_BUTTON, tx, ty) == BUTTON_UP)) {
 				{
 
 					for (size_t m = 0; m < allSelectedComponents.size(); m++)
 					{
 						if (dynamic_cast<Connection*>(allSelectedComponents[m].second)) continue;
-						if (Utils::CheckPoint({ originalXY[m].first,originalXY[m].second }, this, true)) {
+						if (Utils::CheckPoint({ originalXY[m].first,originalXY[m].second }, this, allSelectedComponents[m].second, true)) {
 
 							allSelectedComponents[m].second->setDelete(false);
 							allSelectedComponents[m].second->setNewCenterLocation({ originalXY[m].first, originalXY[m].second });
@@ -1888,11 +1905,38 @@ void Output::printCheck()
 {
 	pWind->printChecking();
 }
+// Fill arrays
+void Output::fillArrays(Component* pA) {
+	if (pA == NULL || pA->getDelete() || dynamic_cast<Connection*>(pA))
+	{
+		return;
+	}
+	int xbegin = (pA->getCenterLocation().x1 - UI.GATE_Width / 2.0) / UI.GRID_SIZE;
+	int xend = (pA->getCenterLocation().x1 + UI.GATE_Width / 2.0) / UI.GRID_SIZE;
+	int ybegin = (pA->getCenterLocation().y1 - UI.GATE_Height / 2.0) / UI.GRID_SIZE;
+	int yend = (pA->getCenterLocation().y1 + UI.GATE_Height / 2.0) / UI.GRID_SIZE;
+	for (int i = ybegin + 1; i <= yend; i++)
+	{
+		for (int j = xbegin; j <= xend; j++)
+		{
+			Utils::setArrayOfComponents(i, j, pA);
+			if (xbegin == j || xend == j)
+			{
+				if (getUsedPixel(i, j) != INTERSECTION)
+				{
+					setUsedPixel(i, j, PIN);
+				}
+				continue;
+			}
+			setUsedPixel(i, j, GATE);
+		}
+	}
+}
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //You Send a Centre Point (cx,cy) ,this means when you call Draw image Function , x and y sent should be cx-24, cy-24
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-void Output::DrawAnd_Nand(GraphicsInfo g, int in, bool isNand, bool highlighted, bool notValid) const {
-
+void Output::DrawAnd_Nand(GraphicsInfo g, int in, bool isNand, bool highlighted, bool notValid, Component* pA) {
+	fillArrays(pA);
 	// Points
 	int cx = g.x1, cy = g.y1; //Centre Point
 	int in1x, in1y, in2x, in2y, outx, outy; // the 2 Inputs & Output
@@ -1951,7 +1995,8 @@ void Output::DrawAnd_Nand(GraphicsInfo g, int in, bool isNand, bool highlighted,
 	}
 }
 
-void Output::DrawNot_Buffer(GraphicsInfo g, bool isBuffer, bool highlighted, bool notValid) const {
+void Output::DrawNot_Buffer(GraphicsInfo g, bool isBuffer, bool highlighted, bool notValid, Component* pA) {
+	fillArrays(pA);
 	int cx = g.x1, cy = g.y1; //Centre Point
 	int p1x, p1y, p2x, p2y, inx, iny, outx, outy; //Vertices of Triangle and input/output Points
 
@@ -1986,7 +2031,8 @@ void Output::DrawNot_Buffer(GraphicsInfo g, bool isBuffer, bool highlighted, boo
 	}
 }
 
-void Output::DrawOr_Nor(GraphicsInfo g, int in, bool isNor, bool highlighted, bool notValid) const {
+void Output::DrawOr_Nor(GraphicsInfo g, int in, bool isNor, bool highlighted, bool notValid, Component* pA) {
+	fillArrays(pA);
 	int cx = g.x1, cy = g.y1; //Centre Point
 	int p1x, p1y, p2x, p2y, hx1, hx2, hy1, hy2, kx, ky, ky2; //Helping Points
 	int in1x, in1y, in2x, in2y, outx, outy; // the 2 Inputs & Output
@@ -2051,8 +2097,9 @@ void Output::DrawOr_Nor(GraphicsInfo g, int in, bool isNor, bool highlighted, bo
 
 }
 
-void Output::DrawXor_Xnor(GraphicsInfo g, int in, bool isXNor, bool highlighted, bool notValid) const
+void Output::DrawXor_Xnor(GraphicsInfo g, int in, bool isXNor, bool highlighted, bool notValid, Component* pA)
 {
+	fillArrays(pA);
 	int cx = g.x1, cy = g.y1; //Centre Points
 	int in1x, in1y, in2x, in2y, outx, outy; // the 2 Inputs And Output
 	int hx1, hx2, hy1, hy2, kx, ky, ky2, p1x, p1y, p2x, p2y; //Helping Points
@@ -2118,8 +2165,9 @@ void Output::DrawXor_Xnor(GraphicsInfo g, int in, bool isXNor, bool highlighted,
 
 }
 
-void Output::DrawLed(GraphicsInfo g, bool isON, bool highlighted, bool notValid) const
+void Output::DrawLed(GraphicsInfo g, bool isON, bool highlighted, bool notValid, Component* pA)
 {
+	fillArrays(pA);
 	pWind->SetPen(UI.DrawColor);
 	if (highlighted) pWind->SetPen(UI.SelectColor);
 	if (notValid) pWind->SetPen(UI.ErrorColor);
@@ -2151,8 +2199,9 @@ void Output::DrawLed(GraphicsInfo g, bool isON, bool highlighted, bool notValid)
 
 }
 
-void Output::DrawSwtich(GraphicsInfo g, bool isON, bool highlighted, bool notValid) const
+void Output::DrawSwtich(GraphicsInfo g, bool isON, bool highlighted, bool notValid, Component* pA)
 {
+	fillArrays(pA);
 	pWind->SetPen(UI.DrawColor);
 	if (highlighted) pWind->SetPen(UI.SelectColor);
 	if (notValid) pWind->SetPen(UI.ErrorColor);

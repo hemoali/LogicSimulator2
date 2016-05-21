@@ -14,7 +14,7 @@ Validate::Validate(ApplicationManager*pApp) : Action(pApp)
 	cnt = 0;
 }
 
-bool Validate::ReadActionParameters(image *I)
+bool Validate::ReadActionParameters(image *, Component* c)
 {
 	return false;
 }

@@ -12,7 +12,7 @@ public:
 	~MultiDelete();
 
 	//Reads parameters required for action to execute
-	virtual bool ReadActionParameters(image * = NULL) ;
+	virtual bool ReadActionParameters(image *, Component* c);
 
 	//Execute action (code depends on action type)
 	virtual void Execute();

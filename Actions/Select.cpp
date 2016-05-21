@@ -7,7 +7,7 @@ Select::Select(ApplicationManager *pApp) :Action(pApp)
 {
 }
 
-bool Select::ReadActionParameters(image * smallImageBeforeAddingComponent)
+bool Select::ReadActionParameters(image * smallImageBeforeAddingComponent, Component* c)
 {
 	//Get a Pointer to the Input / Output Interfaces
 	Output* pOut = pManager->GetOutput();

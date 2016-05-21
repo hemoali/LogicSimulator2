@@ -10,7 +10,7 @@ Delete::Delete(ApplicationManager* pApp, Component* C, bool pushToUndo) : Action
 	this->pushToUndo = pushToUndo;
 }
 
-bool Delete::ReadActionParameters(image *)
+bool Delete::ReadActionParameters(image *, Component* c)
 {
 	if (theComponent == NULL)
 		return false;
@@ -20,28 +20,13 @@ bool Delete::ReadActionParameters(image *)
 void Delete::Execute()
 {
 	Output* pOut = pManager->GetOutput();
-	if (this->ReadActionParameters()) {
+	if (this->ReadActionParameters(NULL, NULL)) {
 		if (theComponent != NULL && (dynamic_cast<Gate*> (theComponent) || dynamic_cast<LED*>(theComponent) || dynamic_cast<SWITCH*> (theComponent))){
 			Output *pOut = pManager->GetOutput();
 			string s = "Gate: " + (theComponent->getLabel()) + " has been deleted successfully";
 			pOut->PrintStatusBox(s);
 			theComponent->setDelete(true);
 			theComponent->Draw(pOut);
-			GraphicsInfo gfx = theComponent->getCornersLocation();
-			int xbegin = (theComponent->getCenterLocation().x1 - UI.GATE_Width / 2.0) / UI.GRID_SIZE;
-			int xend = (theComponent->getCenterLocation().x1 + UI.GATE_Width / 2.0) / UI.GRID_SIZE;
-			int ybegin = (theComponent->getCenterLocation().y1 - UI.GATE_Height / 2.0) / UI.GRID_SIZE;
-			int yend = (theComponent->getCenterLocation().y1 + UI.GATE_Height / 2.0) / UI.GRID_SIZE;
-			//Removeing Used Pixels and the Array of components reserved cells
-			for (int i = ybegin + 1; i <= yend; i++)
-			{
-				for (int j = xbegin; j <= xend; j++)
-				{
-					pOut->setUsedPixel(i, j, EMPTY);
-					Utils::setArrayOfComponents(i, j, NULL);
-
-				}
-			}
 
 			// Removing Connection
 			vector<Connection*> allInConnections, allOutConnections;
@@ -94,12 +79,8 @@ void Delete::reconnectConenction(Connection* conn) {
 		GInfo.y2 = inputComponent->getCenterLocation().y1 + UI.GATE_Height / 2 - 2;
 	}
 
-	pManager->GetOutput()->DrawConnection(GInfo, numOfInputs, inputComponent->getCenterLocation(), conn->getCellsBeforeAddingConnection());
+	pManager->GetOutput()->DrawConnection(GInfo, numOfInputs, inputComponent->getCenterLocation(), conn->getCellsBeforeAddingConnection(), false, conn);
 
-	for (size_t i = 0; i < conn->getCellsBeforeAddingConnection().size(); i++)
-	{
-		Utils::setArrayOfComponents(conn->getCellsBeforeAddingConnection()[i].y, conn->getCellsBeforeAddingConnection()[i].x, conn);
-	}
 }
 void Delete::Undo()
 {
@@ -111,27 +92,6 @@ void Delete::Undo()
 		pOut->PrintStatusBox(s);
 		theComponent->setDelete(false);
 		theComponent->Draw(pOut);
-		GraphicsInfo gfx = theComponent->getCornersLocation();
-		int xbegin = (theComponent->getCenterLocation().x1 - UI.GATE_Width / 2.0) / UI.GRID_SIZE;
-		int xend = (theComponent->getCenterLocation().x1 + UI.GATE_Width / 2.0) / UI.GRID_SIZE;
-		int ybegin = (theComponent->getCenterLocation().y1 - UI.GATE_Height / 2.0) / UI.GRID_SIZE;
-		int yend = (theComponent->getCenterLocation().y1 + UI.GATE_Height / 2.0) / UI.GRID_SIZE;
-		for (int i = ybegin + 1; i <= yend; i++)
-		{
-			for (int j = xbegin; j <= xend; j++)
-			{
-				if (xbegin == j || xend == j)
-				{
-					if (pOut->getUsedPixel(i, j) != INTERSECTION)
-					{
-						pOut->setUsedPixel(i, j, PIN);
-					}
-					continue;
-				}
-				pOut->setUsedPixel(i, j, GATE);
-			}
-		}
-
 		// reconnect Connection
 		for (size_t i = 0; i < allInputConnections.size(); i++)
 		{
@@ -169,21 +129,6 @@ void Delete::Redo()
 		pOut->PrintStatusBox(s);
 		theComponent->setDelete(true);
 		theComponent->Draw(pOut);
-		GraphicsInfo gfx = theComponent->getCornersLocation();
-		int xbegin = (theComponent->getCenterLocation().x1 - UI.GATE_Width / 2.0) / UI.GRID_SIZE;
-		int xend = (theComponent->getCenterLocation().x1 + UI.GATE_Width / 2.0) / UI.GRID_SIZE;
-		int ybegin = (theComponent->getCenterLocation().y1 - UI.GATE_Height / 2.0) / UI.GRID_SIZE;
-		int yend = (theComponent->getCenterLocation().y1 + UI.GATE_Height / 2.0) / UI.GRID_SIZE;
-		//Removeing Used Pixels and the Array of components reserved cells
-		for (int i = ybegin + 1; i <= yend; i++)
-		{
-			for (int j = xbegin; j <= xend; j++)
-			{
-				pOut->setUsedPixel(i, j, EMPTY);
-				Utils::setArrayOfComponents(i, j, NULL);
-
-			}
-		}
 
 		// Removing Connection
 		vector<Connection*> allInConnections, allOutConnections;

@@ -12,7 +12,7 @@ Copy::Copy(ApplicationManager* pApp, Component* C, bool pushToUndo) : Action(pAp
 	theComponent = C;
 }
 
-bool Copy::ReadActionParameters(image *)
+bool Copy::ReadActionParameters(image *, Component* c)
 {
 	if (theComponent == NULL)
 		return false;
