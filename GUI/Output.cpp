@@ -508,6 +508,7 @@ void Output::DrawRClickMenu_CorrectPoints(int& x, int& y, int type, bool draw)
 
 void Output::DrawCleanImage(image* img, int x, int y)
 {
+
 	pWind->DrawImage(img, x - UI.GRID_SIZE - 6, y - UI.GRID_SIZE - 5, 2 * UI.GRID_SIZE + 5, UI.GATE_Height + 3);
 	pWind->SetPen(WHITE);
 	pWind->SetBrush(WHITE);

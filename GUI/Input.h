@@ -37,6 +37,7 @@ public:
 		x = startXPointForConnections;
 		y = startYPointForConnections;
 	}
+	Component* getArrOfComponents(int y, int x) { return Utils::getArrayOfComponents(y, x); }
 	image * StoreBeforeMenu(int x, int y, int type, int w);
 	void CorrectPointClickedSilent(int&, int&, bool drawImage = false, bool drawConnection = false);
 

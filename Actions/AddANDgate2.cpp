@@ -31,11 +31,8 @@ void AddANDgate2::Execute()
 	//Get Center point of the Gate
 	image* smallImageBeforeAddingComponent = new image;
 
-	if (ReadActionParameters(smallImageBeforeAddingComponent)){
-
-		
+	if (ReadActionParameters(smallImageBeforeAddingComponent)){		
 		GraphicsInfo GInfotmp;
-
 		GInfotmp.x1 = GInfo.x1 - UI.GATE_Width / 2;
 		GInfotmp.x2 = GInfo.x1 + UI.GATE_Width / 2;
 		GInfotmp.y1 = GInfo.y1 - UI.GATE_Height / 2;

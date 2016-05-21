@@ -112,7 +112,7 @@ bool RightClick::ReadActionParameters(image* img) {
 
 	//Checking for Connectioon
 	pIn->getExactConnectionLocation(x, y);
-	C =  Utils::getArrayOfComponents(y / UI.GRID_SIZE, x / UI.GRID_SIZE);
+	C =  pIn->getArrOfComponents(y / UI.GRID_SIZE, x / UI.GRID_SIZE);
 	if (C != NULL && dynamic_cast<Connection*> (C)) {
 		if (pIn->getSelectMode() && atLeastOneGateinMS != 0 ) {
 			vector<pair<int, Component*>> V = pIn->getSelectedComponents();
