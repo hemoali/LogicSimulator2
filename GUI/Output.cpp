@@ -1883,6 +1883,10 @@ void Output::printMatrix(string msg) {
 		cout << endl;
 	}
 }
+void Output::printCheck()
+{
+	pWind->printChecking();
+}
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //You Send a Centre Point (cx,cy) ,this means when you call Draw image Function , x and y sent should be cx-24, cy-24
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

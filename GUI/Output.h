@@ -81,7 +81,7 @@ public:
 	bool loadFile();
 
 	void printMatrix(string msg);
-
+	void printCheck();
 	//Resetting Interface
 	void resetInterfaceArrays();
 
