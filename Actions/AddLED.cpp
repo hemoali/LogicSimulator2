@@ -47,7 +47,7 @@ void AddLED::Execute()
 		GInfotmp.x2 = GInfo.x1 + Len / 2;
 		GInfotmp.y1 = GInfo.y1 - Wdth / 2;
 		GInfotmp.y2 = GInfo.y1 + Wdth / 2;
-		pA->setCornersLocation(GInfotmp);
+		pA->setNewCenterLocation(GInfo);
 		Utils::allComponentsCorners.push_back(GInfotmp); 
 		pManager->AddComponent(pA);pA->setLabel(gateLabel);
 		pA->setSmallCleanImageBeforeAddingComp(smallImageBeforeAddingComponent);

@@ -23,7 +23,7 @@ void OR2::Draw(Output* pOut, bool highlight)
 	
 	if (!getDelete())pOut->DrawOr_Nor(m_CenterInfo, 2, false, highlight, false, this);
 	else {
-		pOut->DrawCleanImage(getSmallCleanImageBeforeAddingComp(), m_CenterInfo.x1, m_CenterInfo.y1);
+		pOut->DrawCleanImage(getSmallCleanImageBeforeAddingComp(), m_CenterInfo.x1, m_CenterInfo.y1, true);
 	}
 }
 

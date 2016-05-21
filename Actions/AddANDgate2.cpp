@@ -39,7 +39,7 @@ void AddANDgate2::Execute()
 		GInfotmp.y2 = GInfo.y1 + UI.GATE_Height / 2;
 		pA->setLabel(gateLabel);
 		pA->setSmallCleanImageBeforeAddingComp(smallImageBeforeAddingComponent);
-		pA->setCornersLocation(GInfotmp);
+		pA->setNewCenterLocation(GInfo);
 		pManager->AddComponent(pA);
 		Utils::allComponentsCorners.push_back(GInfotmp);
 		Utils::undoActions.push(this);

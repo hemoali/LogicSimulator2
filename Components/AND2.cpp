@@ -20,7 +20,7 @@ void AND2::Draw(Output* pOut, bool highlight)
 {
 	if (!getDelete()) pOut->DrawAnd_Nand(m_CenterInfo, 2, false, highlight, this);
 	else {		
-		pOut->DrawCleanImage(getSmallCleanImageBeforeAddingComp(), m_CenterInfo.x1, m_CenterInfo.y1);
+		pOut->DrawCleanImage(getSmallCleanImageBeforeAddingComp(), m_CenterInfo.x1, m_CenterInfo.y1, true);
 	}
 }
 

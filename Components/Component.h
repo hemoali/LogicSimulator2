@@ -31,7 +31,11 @@ public:
 	virtual void setInputPinStatus(int n, STATUS s) = 0;	//set status of Inputpin # n, to be used by connection class.
 	
 	virtual ActionType getComponentActionType() = 0;
-
+	void refresh(Output* pOut)
+	{
+		pOut->DrawCleanImage(getSmallCleanImageBeforeAddingComp(), m_CenterInfo.x1, m_CenterInfo.y1, false);
+		Draw(pOut, false);
+	}
 	void setLabel(string s);
 	string getLabel();
 

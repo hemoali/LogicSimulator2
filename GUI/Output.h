@@ -43,8 +43,8 @@ public:
 	void DrawXor_Xnor(GraphicsInfo, int = 2, bool = false, bool = false, bool = false, Component* = NULL);
 	void DrawLed(GraphicsInfo, bool = false, bool = false, bool = false, Component* = NULL);
 	void DrawSwtich(GraphicsInfo, bool = false, bool = false, bool = false, Component* = NULL);
-	void DrawCleanImage(image*, int x, int y);
-	bool DrawConnection(GraphicsInfo r_GfxInfo, int inputPin, GraphicsInfo compCenterLocationbool, vector<Cell>&, bool selected , Component* c) const;
+	void DrawCleanImage(image*, int x, int y, bool emptyArray);
+	bool DrawConnection(GraphicsInfo r_GfxInfo, int inputPin, GraphicsInfo compCenterLocationbool, vector<Cell>&, bool selected , Component* c);
 
 	void fillArrays(Component* comp);
 

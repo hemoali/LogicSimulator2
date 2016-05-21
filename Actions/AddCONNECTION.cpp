@@ -165,10 +165,7 @@ void AddConnection::Execute()
 end: if (outputComponent != NULL)
 {
 	// Remove red pin
-	outputComponent->setDelete(true);
-	outputComponent->Draw(pManager->GetOutput(), false);
-	outputComponent->setDelete(false);
-	outputComponent->Draw(pManager->GetOutput(), false);
+	outputComponent->refresh(pManager->GetOutput());
 }
 }
 

@@ -26,8 +26,6 @@ void Component::setLabel(string s){
 }
 string Component::getLabel(){ return m_Label; }
 
-
-
 void Component::setDelete(bool d){
 	deleted = d;
 }
@@ -68,6 +66,7 @@ void Component::setCornersLocation(GraphicsInfo GfxInfo) {
 	m_GfxInfo.y1 = GfxInfo.y1;
 	m_GfxInfo.x2 = GfxInfo.x2;
 	m_GfxInfo.y2 = GfxInfo.y2;
+
 }
 int Component::getNumOfInputs()const
 {

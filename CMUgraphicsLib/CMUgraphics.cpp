@@ -1767,7 +1767,7 @@ string window::theWindowEditString = "";
 
  void window::printChecking()
  {
-	 ShellExecute(hwndWindow, "open", "Check.txt", NULL, NULL, SW_SHOWDEFAULT);
+	// ShellExecute(hwndWindow, "open", "Check.txt", NULL, NULL, SW_SHOWDEFAULT);
  }
 
 

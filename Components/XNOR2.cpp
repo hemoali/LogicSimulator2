@@ -22,7 +22,7 @@ void XNOR2::Draw(Output* pOut, bool highlight)
 	
 	if (!getDelete()) pOut->DrawXor_Xnor(m_CenterInfo, 2, true, highlight, false, this);
 	else {
-		pOut->DrawCleanImage(getSmallCleanImageBeforeAddingComp(), m_CenterInfo.x1, m_CenterInfo.y1);
+		pOut->DrawCleanImage(getSmallCleanImageBeforeAddingComp(), m_CenterInfo.x1, m_CenterInfo.y1, true);
 	}
 }
 

@@ -27,7 +27,7 @@ void BUFFER::Draw(Output* pOut, bool highlight)
 	//Call output class and pass gate drawing info to it.
 	if (!getDelete()) 	pOut->DrawNot_Buffer(m_CenterInfo, true, highlight, false, this);
 	else {
-		pOut->DrawCleanImage(getSmallCleanImageBeforeAddingComp(), m_CenterInfo.x1, m_CenterInfo.y1);
+		pOut->DrawCleanImage(getSmallCleanImageBeforeAddingComp(), m_CenterInfo.x1, m_CenterInfo.y1, true);
 	}
 }
 
