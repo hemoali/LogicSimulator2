@@ -4,7 +4,7 @@
 #include "ApplicationManager.h"
 //Hiding the Console
 #pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
-
+using namespace std;
 int main()
 {
 	ActionType ActType;
@@ -21,8 +21,7 @@ int main()
 		//Update the drawing window
 		//AppManager.UpdateInterface();
 	
-
 	}while(exitChoice != 1);
-		
+
 	return 0;
 }
