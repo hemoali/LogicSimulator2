@@ -26,7 +26,7 @@ void XOR3::Draw(Output* pOut, bool highlight)
 {
 	//Call output class and pass gate drawing info to it.
 	
-	if (!getDelete()) pOut->DrawXor_Xnor(m_CenterInfo, 3, false, highlight);
+	if (!getDelete()) pOut->DrawXor_Xnor(m_CenterInfo, 3, false, highlight, false, this);
 	else {
 		pOut->DrawCleanImage(getSmallCleanImageBeforeAddingComp(), m_CenterInfo.x1, m_CenterInfo.y1);
 	}

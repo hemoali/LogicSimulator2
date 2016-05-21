@@ -18,7 +18,7 @@ void LED::Operate()
 void LED::Draw(Output* pOut, bool highlight)
 {
 	//Call output class and pass LED drawing info to it.
-	if (!getDelete()) pOut->DrawLed(m_CenterInfo, (getInputPin(0)->getStatus() == HIGH) ? true : false, highlight);
+	if (!getDelete()) pOut->DrawLed(m_CenterInfo, (getInputPin(0)->getStatus() == HIGH) ? true : false, highlight, false, this);
 
 	else {
 		pOut->DrawCleanImage(getSmallCleanImageBeforeAddingComp(), m_CenterInfo.x1, m_CenterInfo.y1);

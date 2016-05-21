@@ -21,7 +21,7 @@ void NOR2::Operate()
 void NOR2::Draw(Output* pOut, bool highlight)
 {
 	//Call output class and pass gate drawing info to it.
-	if (!getDelete())pOut->DrawOr_Nor(m_CenterInfo, 2, true, highlight);
+	if (!getDelete())pOut->DrawOr_Nor(m_CenterInfo, 2, true, highlight, false, this);
 	else {
 		pOut->DrawCleanImage(getSmallCleanImageBeforeAddingComp(), m_CenterInfo.x1, m_CenterInfo.y1);
 	}
