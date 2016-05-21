@@ -14,7 +14,20 @@ void MultiSelect::Execute()
 	//Get a Pointer to the Input / Output Interfaces
 	Output* pOut = pManager->GetOutput();
 	Input* pIn = pManager->GetInput();
-
+	//cler=ar first
+	for (size_t i = 0; i < Utils::allConnections.size(); i++)
+	{
+		Utils::allConnections[i]->selectYourSelf(pOut, UI.ConnColor);
+	}
+	for (size_t i = 0; i < pIn->getSelectedComponents().size(); i++)
+	{
+		pIn->getSelectedComponents()[i].second->Draw(pOut, false);
+	}
+	//Always Clear hover Bar if found
+	pIn->setSelectMode(false);
+	pIn->setisSelectionContainConnections(false);
+	pIn->clearSelectedComponents();
+	
 	int x, y, initX, initY;
 	pIn->getMouseCoordinates(initX, initY);
 	if (Utils::CheckPointInBorders(initX, initY))
@@ -32,10 +45,10 @@ void MultiSelect::Execute()
 				yOld = y;
 				//Get components
 				allSelectedComponents.clear();
-				for (size_t i = 0; i < pManager->allComponentsCorners.size(); i++)
+				for (size_t i = 0; i < Utils::allComponentsCorners.size(); i++)
 				{
-					int gateCenterX = pManager->allComponentsCorners[i].x1 + UI.GATE_Width / 2;
-					int gateCenterY = pManager->allComponentsCorners[i].y1 + UI.GATE_Height / 2;
+					int gateCenterX = Utils::allComponentsCorners[i].x1 + UI.GATE_Width / 2;
+					int gateCenterY = Utils::allComponentsCorners[i].y1 + UI.GATE_Height / 2;
 					if (
 						(x > initX && gateCenterX < x && gateCenterX > initX && initY < y && gateCenterY < y && gateCenterY > initY) ||
 						(x<initX && gateCenterX > x && gateCenterX < initX && initY < y && gateCenterY < y && gateCenterY > initY) ||
@@ -64,7 +77,7 @@ void MultiSelect::Execute()
 						Connection* conn = (Connection*)pManager->getComponent(i);
 						for (size_t j = 0; j < conn->getCellsBeforeAddingConnection().size(); j++)
 						{
-							Cell c =  conn->getCellsBeforeAddingConnection()[j];
+							Cell c = conn->getCellsBeforeAddingConnection()[j];
 							if (
 								(x > initX && c.x *UI.GRID_SIZE< x &&  c.x*UI.GRID_SIZE > initX && initY < y &&  c.y*UI.GRID_SIZE < y &&  c.y*UI.GRID_SIZE > initY) ||
 								(x<initX &&  c.x*UI.GRID_SIZE > x &&  c.x*UI.GRID_SIZE < initX && initY < y &&  c.y*UI.GRID_SIZE < y &&  c.y*UI.GRID_SIZE > initY) ||

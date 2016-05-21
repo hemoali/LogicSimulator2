@@ -23,12 +23,10 @@
 #include "Actions\Validate.h"
 #include "Actions\Simulate.h"
 #include"Actions\CreateTruthTable.h"
+#include"Actions\ChangeSwitch.h"
 #include"Actions\New.h"
 #include "Utils.h"
 #include "Actions\Exit.h"
-
-#define YESSIR 1
-#define NOSIR  0
 
 ApplicationManager::ApplicationManager()
 {
@@ -38,7 +36,13 @@ ApplicationManager::ApplicationManager()
 		CompList[i] = NULL;
 
 	//Creates the Input / Output Objects & Initialize the GUI
-	OutputInterface = new Output(this);
+	for (int i = 0; i < CompCount; i++) {
+		if (dynamic_cast<Connection*> (CompList[i]) && !CompList[i]->getDelete())
+		{
+			Utils::allConnections.push_back((Connection*)CompList[i]);
+		}
+	}
+	OutputInterface = new Output(&Utils::allConnections);
 	InputInterface = OutputInterface->CreateInput();
 }
 ////////////////////////////////////////////////////////////////////
@@ -50,97 +54,141 @@ void ApplicationManager::AddComponent(Component* pComp)
 
 ActionType ApplicationManager::GetUserAction()
 {
+	Utils::allConnections.clear();
+	for (int i = 0; i < CompCount; i++) {
+		if (dynamic_cast<Connection*> (CompList[i]) && !CompList[i]->getDelete())
+		{
+			Utils::allConnections.push_back((Connection*)CompList[i]);
+		}
+	}
 	//Call input to get what action is reuired from the user
-	return InputInterface->GetUserAction(this);
+	return InputInterface->GetUserAction();
 }
 ////////////////////////////////////////////////////////////////////
-
 void ApplicationManager::ExecuteAction(ActionType ActType)
 {
-	bool drawGate = true, drawConnection = false;
-
+	//GetOutput()->clearHoveringImage(Utils::imgh, Utils::J, Utils::K, Utils::widthh);
 	Action* pAct = NULL;
-	string msg = "Press ESCAPE to stop";
-	string error_msg = "Please select point within workspace avoiding overlaping!";
-
-	GraphicsInfo Gfx_info;
-	Gfx_info.x1 = Gfx_info.y1 = -1;
 	switch (ActType)
 	{
-	case ADD_Buff:
+	case ADD_Buff: {
 		pAct = new AddBUFFER(this);
-		break;
-	case ADD_INV:
-		pAct = new AddNOTgate(this);
-		break;
-	case ADD_AND_GATE_2:
-		pAct = new AddANDgate2(this);
-		break;
-	case ADD_OR_GATE_2:
-		pAct = new AddORgate2(this);
-		break;
-	case ADD_NAND_GATE_2:
-		pAct = new AddNANDgate2(this);
-		break;
-	case ADD_NOR_GATE_2:
-		pAct = new AddNORgate2(this);
-		break;
-	case ADD_XOR_GATE_2:
-		pAct = new AddXORgate2(this);
-		break;
-	case ADD_XNOR_GATE_2:
-		pAct = new AddXNORgate2(this);
-		break;
-	case ADD_AND_GATE_3:
-		pAct = new AddANDgate3(this);
-		break;
-	case ADD_NOR_GATE_3:
-		pAct = new AddNORgate3(this);
-		break;
-	case ADD_XOR_GATE_3:
-		pAct = new AddXORgate3(this);
-		break;
-	case ADD_Switch:
-		pAct = new AddSWITCH(this);
-		break;
-	case ADD_LED:
-		pAct = new AddLED(this);
-		break;
-	case ADD_CONNECTION:
-		pAct = new AddConnection(this);
-		break;
-	case MOVE:
-		pAct = new Move(this);
-		break;
-	case MULTI_MOVE:
-		pAct = new MultiMove(this);
-		break;
-	case RIGHT_CLICKSELECT: {
-		pAct = new RightClick(this);
-		pAct->Execute();
-		RightClick* tmp = (RightClick*)(pAct);
-		pAct = tmp->getAction();
-		delete tmp;
+		Utils::theActions.push_back(pAct);
 		break;
 	}
-	case SAVE:
-		pAct = new Save(this);
+	case ADD_INV: {
+		pAct = new AddNOTgate(this);
+		Utils::theActions.push_back(pAct);
 		break;
-	case MULTI_SELECT:
-		pAct = new MultiSelect(this);
+	}
+	case ADD_AND_GATE_2: {
+		pAct = new AddANDgate2(this); Utils::theActions.push_back(pAct);
 		break;
-	case LOAD:
-		pAct = new Load(this);
+	}
+	case ADD_OR_GATE_2: {
+		pAct = new AddORgate2(this); Utils::theActions.push_back(pAct);
 		break;
-	case ValidateAction:
-		pAct = new Validate(this);
+	}
+	case ADD_NAND_GATE_2: {
+		pAct = new AddNANDgate2(this); Utils::theActions.push_back(pAct);
 		break;
-	case SimulateAction:
-		pAct = new Simulate(this, true);
+	}
+	case ADD_NOR_GATE_2: {
+		pAct = new AddNORgate2(this); Utils::theActions.push_back(pAct);
 		break;
+	}
+	case ADD_XOR_GATE_2: {
+		pAct = new AddXORgate2(this); Utils::theActions.push_back(pAct);
+		break;
+	}
+	case ADD_XNOR_GATE_2: {
+		pAct = new AddXNORgate2(this); Utils::theActions.push_back(pAct);
+		break;
+	}
+	case ADD_AND_GATE_3: {
+		pAct = new AddANDgate3(this); Utils::theActions.push_back(pAct);
+		break;
+	}
+	case ADD_NOR_GATE_3: {
+		pAct = new AddNORgate3(this); Utils::theActions.push_back(pAct);
+		break;
+	}
+	case ADD_XOR_GATE_3: {
+		pAct = new AddXORgate3(this); Utils::theActions.push_back(pAct);
+		break;
+	}
+	case ADD_Switch: {
+		pAct = new AddSWITCH(this); Utils::theActions.push_back(pAct);
+		break;
+	}
+	case ADD_LED: {
+		pAct = new AddLED(this); Utils::theActions.push_back(pAct);
+		break;
+	}
+	case ADD_CONNECTION: {
+		pAct = new AddConnection(this); Utils::theActions.push_back(pAct);
+		break;
+	}
+	case MOVE: {
+		pAct = new Move(this); Utils::theActions.push_back(pAct);
+		break;
+	}
+	case MULTI_MOVE: {
+		pAct = new MultiMove(this); Utils::theActions.push_back(pAct);
+		break;
+	}
+	case MULTI_SELECT: {
+		pAct = new MultiSelect(this); Utils::theActions.push_back(pAct);
+		break;
+	}
+	//The Automatic Action
+	case Change_Switch: {
+		ChangeSwitch* act = new ChangeSwitch(this, GetInput()->toBeChangedSwitch);
+		act->Execute();
+		Simulate simulateAction(this, false);
+		simulateAction.Execute();
+		break;
+	}
+	case Create_TruthTable:
+	{
+		OutputInterface->PrintStatusBox("Creating truth table ....");
+		CreateTruthTable CreateTruthTAction(this);
+		CreateTruthTAction.Execute();
+		break;
+	}
+	case RIGHT_CLICKSELECT: {
+		RightClick rightClickAction(this);
+		rightClickAction.Execute();
+		pAct = rightClickAction.getAction();
+		Utils::theActions.push_back(pAct);
+		break;
+	}
+	case SAVE: {
+		Save saveAction(this);
+		saveAction.Execute();
+		break;
+	}
+	case LOAD: {
+		Load loadAction(this);
+		loadAction.Execute();
+		break;
+	}
+	case ValidateAction: {
+		Validate validateAction(this);
+		validateAction.Execute();
+		break;
+	}
+	case SimulateAction: {
+		Simulate simulateAction(this, true);
+		simulateAction.Execute();
+		break;
+	}
 	case SimulateActionWithoutValidation:
-		pAct = new Simulate(this, false);
+	{
+		Simulate simulateAction(this, false);
+		simulateAction.Execute();
 		break;
+	}
 	case UNDOACTION:
 	{
 		if (UI.AppMode == DESIGN && Utils::undoActions.size() > 0)
@@ -174,59 +222,70 @@ void ApplicationManager::ExecuteAction(ActionType ActType)
 		}
 		break;
 	}
-	case Create_TruthTable:
-	{
-		OutputInterface->PrintStatusBox("Creating truth table ....");
-		pAct = new CreateTruthTable(this);
+	case NEW: {
+		Clear clearAction(this);
+		clearAction.Execute();
 		break;
 	}
-	case NEW:
-		pAct = new Clear(this);
+	case DSN_MODE:
+		for (size_t i = 0; i < Utils::allComponentsCorners.size(); i++)
+		{
+			Component* comp = getComponent(i);
+			if (comp->getDelete()) continue;
+			if (!(dynamic_cast<SWITCH*>(comp)) && !(dynamic_cast<Connection*>(comp)))
+			{
+				for (size_t i = 0; i < comp->getNumOfInputs(); i++)
+				{
+					comp->setInputPinStatus(i, UNDEFINED);
+				}
+				comp->Draw(GetOutput(), false);
+			}
+			else if (dynamic_cast<SWITCH*>(comp)) {
+				((SWITCH*)comp)->setOutputPinStatus(LOW);
+				comp->Draw(GetOutput(), false);
+			}
+			else if (dynamic_cast<Connection*>(comp)) {
+				((Connection*)comp)->selectYourSelf(GetOutput(), UI.DrawColor);
+			}
+		}
+		UI.AppMode = DESIGN;
+		GetOutput()->switchMode(DESIGN);
 		break;
-	case EXIT: 
+	case SIM_MODE:
+		GetOutput()->switchMode(SIMULATION);
+		UI.AppMode = SIMULATION;
+		break;
+	case EXIT:
 	{
-		// Exit action here
-		pAct = new Exit(this);
+		//Create a static Exit Actions it doesn't have to be automatic
+		Exit exitAction(this);
+		exitAction.Execute();
 		break;
 	}
 	}
 	if (pAct)
 	{
 		pAct->Execute();
-		//delete pAct;
-		//pAct = NULL;
 	}
 }
 ////////////////////////////////////////////////////////////////////
-
 void ApplicationManager::UpdateInterface()
 {
 	for (int i = 0; i < CompCount; i++)
 		CompList[i]->Draw(OutputInterface);
 
 }
-
 ////////////////////////////////////////////////////////////////////
 Input* ApplicationManager::GetInput()
 {
 	return InputInterface;
 }
-
 ////////////////////////////////////////////////////////////////////
 Output* ApplicationManager::GetOutput()
 {
 	return OutputInterface;
 }
 
-void ApplicationManager::getAllConnections(vector<Connection*>& allConnections) {
-	allConnections.clear();
-	for (int i = 0; i < CompCount; i++) {
-		if (dynamic_cast<Connection*> (CompList[i]) && !CompList[i]->getDelete())
-		{
-			allConnections.push_back((Connection*)CompList[i]);
-		}
-	}
-}
 ////////////////////////////////////////////////////////////////////
 int ApplicationManager::getCompCount()
 {
@@ -253,7 +312,19 @@ ApplicationManager::~ApplicationManager()
 {
 	for (int i = 0; i < CompCount; i++)
 		delete CompList[i];
+
+	Output* pOut = GetOutput();
+	ofstream file;
+	Action *temp;
+	for (int i = 0; i < Utils::theActions.size(); i++)
+		delete Utils::theActions[i];
+	file.open("Check.txt");
+	file << "Using Check.txt file to debug deallocations or any furthur Checking.\n" << "................................................................." <<
+		"\nThis Function is Called in the Application Manager Destructor\n" << "................................................................." << endl << endl ;
+	file << "Actions constructed  " << Action::ID << endl;
+	file << "Actions Destructed  " << Action::IDD << endl;
+	file.close();
+	pOut->printCheck();
 	delete OutputInterface;
 	delete InputInterface;
-
 }

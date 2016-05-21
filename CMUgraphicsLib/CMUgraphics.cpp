@@ -1765,6 +1765,11 @@ string window::theWindowEditString = "";
 	 return theComponenetString;
  }
 
+ void window::printChecking()
+ {
+	 ShellExecute(hwndWindow, "open", "Check.txt", NULL, NULL, SW_SHOWDEFAULT);
+ }
+
 
 void window::Print() {
 

@@ -42,7 +42,7 @@ enum ActionType
 	SimulateActionWithoutValidation,
 	ValidateAction,
 
-	Change_Switch,		//Change Switch Status in Simulation Mode // ????? TODO:
+	Change_Switch,		//Change Switch Status in Simulation Mode
 
 	SELECT,		//Select a Component, a Connection
 	MULTI_SELECT,		//Select many Components, a Connection

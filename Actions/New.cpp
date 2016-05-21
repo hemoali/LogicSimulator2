@@ -20,7 +20,7 @@ void Clear::Execute()
 {
 	if (Loading || ReadActionParameters()) {
 		Output *pOut = pManager->GetOutput();
-		for (int i = 0; i < pManager->allComponentsCorners.size(); i++) {
+		for (int i = 0; i < Utils::allComponentsCorners.size(); i++) {
 			Component *C = pManager->getComponent(i);
 			if (dynamic_cast<Gate*> (C)) {
 				C->setDelete(true);
@@ -34,7 +34,7 @@ void Clear::Execute()
 			}
 		}
 		//Deleteion Completely
-		for (int i = 0; i < pManager->allComponentsCorners.size(); i++) {
+		for (int i = 0; i < Utils::allComponentsCorners.size(); i++) {
 			Component *C = pManager->getComponent(i);
 			delete C;
 		}
@@ -45,7 +45,7 @@ void Clear::Execute()
 		//Resetting Interface
 		pOut->resetInterfaceArrays();
 		pManager->setCompCount(0);
-		pManager->allComponentsCorners.resize(0);
+		Utils::allComponentsCorners.resize(0);
 		if (Loading)
 			Loading = false;
 	}

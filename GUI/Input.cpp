@@ -9,6 +9,7 @@ Input::Input(window* pW)
 {
 	pWind = pW; //point to the passed window
 	isSelectMode = isSelectionContainConnections = false;
+	toBeChangedSwitch = NULL;
 }
 
 void Input::GetPointClicked(int &x, int &y, bool DrawGate, bool DrawConnection)
@@ -26,8 +27,191 @@ void Input::getMouseCoordinates(int & x, int & y)
 	pWind->GetMouseCoord(x, y);
 	pWind->FlushMouseQueue();
 }
+
+void Input::DrawAfterMenu(image * img, int x, int y, int type, int w)
+{
+	int Height;
+	switch (type)
+	{
+	case 1:
+		Height = UI.RightClickMenuHeight;
+		break;
+	case 2:
+		Height = UI.RightClickCMenuH + UI.RightClickCMenuH / 2;
+		break;
+	case 3:
+		Height = UI.RightClickCMenuH / 2;
+		break;
+	case 5:
+		Height = UI.RightClickCMenuH / 2;
+		break;
+	case 7:
+		//HoveringBar
+		Height = UI.HoverHeight;
+		break;
+	case 9:
+		//It's the status Bar
+		Height = UI.StatusBarHeight;
+		break;
+	}
+	if (type == 7) {
+		//It's an hover part
+		pWind->DrawImage(img, x, y, w, Height);
+	}
+	else if (type == 9) {
+		//It's the status Bar
+		pWind->DrawImage(img, x, y, UI.StatusBoxWidth, UI.StatusBoxHeight);
+	}
+	else pWind->DrawImage(img, x, y, UI.RightClickMenuLength, Height);
+	if (type != 7)
+		delete img;
+}
+
+void Input::clearHoveringImage(image * img, int J, int K, int widthh)
+{
+	if (img != NULL)
+		this->DrawAfterMenu(img, J, K, 7, widthh);
+}
+void Input::correctHoverStartpoint(int & x, int & y, int width)
+{
+	//If Point (x,y) in the Right or Middle of the Drawing Area
+	if (x + width < UI.width) {
+		if (y + UI.HoverHeight > UI.height) {
+			// y must be corrected
+			y = y - UI.HoverHeight;
+		}
+		else {
+			//The Point(x,y) is ready for drawing HoverBar 
+		}
+	}
+	//If Point (x,y) in the Right of the Drawing Area
+	if (x + width > UI.width) {
+		// x must be corrected
+		x = UI.width - width - 40;
+		if (y + UI.HoverHeight > UI.height - UI.StatusBarHeight) {
+			// y must be corrected
+			y = y - UI.HoverHeight;
+		}
+		else {
+			//The Point(x,y) is ready for drawing HoverBar 
+		}
+	}
+}
+image * Input::StoreBeforeMenu(int x, int y, int type, int w)
+{
+	int Height;
+	switch (type)
+	{
+	case 1:
+		Height = UI.RightClickMenuHeight;
+		break;
+	case 2:
+		Height = UI.RightClickCMenuH + UI.RightClickCMenuH / 2;
+		break;
+	case 3:
+		Height = UI.RightClickCMenuH / 2;
+		break;
+	case 5:
+		Height = UI.RightClickCMenuH / 2;
+		break;
+	case 7:
+		//HoveringBar
+		Height = UI.HoverHeight;
+		break;
+	}
+	image * ptr = new image;
+	if (type == 7) {
+		//It's an hover part
+		pWind->StoreImage(ptr, x, y, w, Height);
+	}
+	else if (type == 9) {
+		//It's the status Bar
+		pWind->StoreImage(ptr, x, y, UI.StatusBoxWidth, UI.StatusBoxHeight);
+	}
+	else pWind->StoreImage(ptr, x, y, UI.RightClickMenuLength, Height);
+	return ptr;
+}
+
+image * Input::printHovering(int & x, int & y, string s, int & w, Component * C)
+{
+	image* img = NULL;
+	int width, height;
+	pWind->SetFont(20, BOLD | ITALICIZED, BY_NAME, "Arial");
+	//checking whether it's in the design Mode or 
+	if (UI.AppMode == DESIGN) {
+		int h;
+		pWind->getStringWidth(s, width, h);
+		//the Clearnace
+		width += 16;
+		height = UI.HoverHeight;
+		if (!dynamic_cast<Connection*>(C)) {
+			//if it's a connection for better appearnace
+			x = C->getCenterLocation().x1 + 10;
+			y = C->getCenterLocation().y1 + 5;
+		}
+		//Correct the Points
+		this->correctHoverStartpoint(x, y, width);
+		//Store Before Hovering
+		img = this->StoreBeforeMenu(x, y, 7, width);
+		//Drawing the Hover Bar
+		pWind->SetPen(BLACK, 2);
+		pWind->SetBrush(AZURE);
+		pWind->DrawRectangle(x, y, x + width, y + height, FILLED, 3, 4);
+		pWind->DrawString(x + 7, y + 2, s);
+		w = width;
+		return img;
+	}
+	else {
+		//Simulation Mode Hovering
+		Connection *ptr = NULL;
+		//Checking if it's a connection Hover or other componenets hover
+		if (ptr = dynamic_cast<Connection*> (C)) {
+			string hoverLabel = "";
+			width = 20;
+			height = UI.HoverHeight;
+			//Correct the Points
+			this->correctHoverStartpoint(x, y, width);
+			//Store Before Hovering
+			img = this->StoreBeforeMenu(x, y, 7, width);
+			if (ptr->GetOutPinStatus()) { //It's a logic 1 output -> green Colour
+				hoverLabel = "1";
+				pWind->SetPen(BLACK, 2);
+				pWind->SetBrush(GREEN);
+			}
+			else { //It's a logic 0 output -> grey Colour
+				hoverLabel = "0";
+				pWind->SetPen(BLACK, 2);
+				pWind->SetBrush(GREY);
+			}
+			pWind->DrawRectangle(x, y, x + width, y + height, FILLED, 4, 4);
+			pWind->DrawString(x + 5, y + 1, hoverLabel);
+			w = width;
+		}
+		else {
+			//Other Component Hover
+			int h;
+			height = UI.HoverHeight;
+			pWind->getStringWidth(s, width, h);
+			//the Clearnace
+			width += 16;
+			//Correct the Points
+			x = C->getCenterLocation().x1 + 10;
+			y = C->getCenterLocation().y1 + 5;
+			this->correctHoverStartpoint(x, y, width);
+			//Store Before Hovering
+			img = this->StoreBeforeMenu(x, y, 7, width);
+			//Drawing the Hover Bar
+			pWind->SetPen(BLACK, 2);
+			pWind->SetBrush(LIGHTBLUE);
+			pWind->DrawRectangle(x, y, x + width, y + height, FILLED, 4, 4);
+			pWind->DrawString(x + 7, y + 2, s);
+			w = width;
+		}
+	}
+	return img;
+}
 //This function reads the position where the user clicks to determine the desired action
-ActionType Input::GetUserAction(ApplicationManager *pManager)
+ActionType Input::GetUserAction()
 {
 	int x = 0, y = 0, xT, yT, hoverXOld = 0, hoverYOld = 0, oldTopHoveredItemOrder = -1, oldLeftHoverItem = -1;
 
@@ -44,25 +228,25 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 		keytype key = pWind->GetKeyPress(c1);
 		if ((int)c1 == 26) {
 			//Always Clear hover Bar if found
-			pManager->GetOutput()->clearHoveringImage(imgh, J, K, widthh);
+			clearHoveringImage(imgh, J, K, widthh);
 			return UNDOACTION;
 		}
 		else if ((int)c1 == 25) {
 			//Always Clear hover Bar if found
-			pManager->GetOutput()->clearHoveringImage(imgh, J, K, widthh);
+			clearHoveringImage(imgh, J, K, widthh);
 			return REDOACTION;
 		}
 		else if ((int)c1 == 4) {
-			switchMode(DESIGN, pManager);
+			return DSN_MODE;
 		}
 		else if ((int)c1 == 18) {
 			//Always Clear hover Bar if found
-			pManager->GetOutput()->clearHoveringImage(imgh, J, K, widthh);
+			clearHoveringImage(imgh, J, K, widthh);
 			return SimulateAction;
 		}
 		else if ((int)c1 == 19) {
 			//Always Clear hover Bar if found
-			pManager->GetOutput()->clearHoveringImage(imgh, J, K, widthh);
+			clearHoveringImage(imgh, J, K, widthh);
 			return SAVE;
 		}
 		// Working with mouse
@@ -71,31 +255,26 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 		if (pWind->GetButtonState(LEFT_BUTTON, xT, yT) == BUTTON_DOWN && yT >= UI.ToolBarHeight + 20 && xT >= UI.LeftToolBarWidth && yT < UI.height - UI.StatusBarHeight) {
 			if (UI.AppMode == DESIGN)
 			{
-				Component* comp = NULL;
-				for (int i = 0; i < pManager->allComponentsCorners.size(); i++)
+				Component* comp = Utils::getArrayOfComponents(yT / UI.GRID_SIZE, xT / UI.GRID_SIZE);
+				if (comp != NULL && !(dynamic_cast<Connection*>(comp) || comp->getDelete() || dynamic_cast<LED*>(comp)))
 				{
-					if (dynamic_cast<Connection*>(pManager->getComponent(i)) || pManager->getComponent(i)->getDelete())
-						continue;
-					if (xT >= pManager->allComponentsCorners[i].x1&&xT <= pManager->allComponentsCorners[i].x2&& yT >= pManager->allComponentsCorners[i].y1&&yT <= pManager->allComponentsCorners[i].y2)
+					GraphicsInfo compCorner = comp->getCornersLocation();
+					if (xT >= compCorner.x1&&xT <= compCorner.x2&& yT >= compCorner.y1&&yT <= compCorner.y2)
 					{
-						comp = pManager->getComponent(i);
-						if (xT >= pManager->allComponentsCorners[i].x2 - UI.GATE_Width / 2 + 8 && yT > (pManager->allComponentsCorners[i].y1 + UI.GATE_Height / 2) - 6 && yT < (pManager->allComponentsCorners[i].y1 + UI.GATE_Height / 2) + 6)
+						if (xT >= compCorner.x2 - UI.GATE_Width / 2 + 8 && yT > (compCorner.y1 + UI.GATE_Height / 2) - 6 && yT < (compCorner.y1 + UI.GATE_Height / 2) + 6)
 						{
-							if (!dynamic_cast<LED*> (comp))
-							{
-								pWind->SetPen(UI.ErrorColor, 5);
-								pWind->DrawLine(pManager->allComponentsCorners[i].x2 - UI.GATE_Width / 2 + 11, pManager->allComponentsCorners[i].y1 + UI.GATE_Height / 2, pManager->allComponentsCorners[i].x2 - UI.GATE_Width / 2 + 12, pManager->allComponentsCorners[i].y1 + UI.GATE_Height / 2, FRAME);
-								startXPointForConnections = xT;
-								startYPointForConnections = yT;
-								drawConnection = true;
-							}
+							pWind->SetPen(UI.ErrorColor, 5);
+							pWind->DrawLine(compCorner.x2 - UI.GATE_Width / 2 + 11, compCorner.y1 + UI.GATE_Height / 2, compCorner.x2 - UI.GATE_Width / 2 + 12, compCorner.y1 + UI.GATE_Height / 2, FRAME);
+							startXPointForConnections = xT;
+							startYPointForConnections = yT;
+							drawConnection = true;
 						}
 					}
 				}
 				if (drawConnection)
 				{
 					//Always Clear hover Bar if found
-					pManager->GetOutput()->clearHoveringImage(imgh, J, K, widthh);
+					clearHoveringImage(imgh, J, K, widthh);
 					return ADD_CONNECTION;
 				}
 				if (comp != NULL &&comp->getDelete()) comp = NULL;
@@ -107,41 +286,19 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 						{
 							if (!dynamic_cast<Connection*>(selectedComponents[i].second) && selectedComponents[i].second == comp) {
 								//Always Clear hover Bar if found //CHECKTHISSAMRA
-								pManager->GetOutput()->clearHoveringImage(imgh, J, K, widthh);
+								clearHoveringImage(imgh, J, K, widthh);
 								return MULTI_MOVE;
 							}
 						}
 					}
 					//Always Clear hover Bar if found
-					pManager->GetOutput()->clearHoveringImage(imgh, J, K, widthh);
+					clearHoveringImage(imgh, J, K, widthh);
 					return MOVE;
 				}
 				else {
-					bool found = false;
-					vector <Connection*> allConnections;
-					pManager->getAllConnections(allConnections);
+					clearHoveringImage(imgh, J, K, widthh);
+					return MULTI_SELECT;
 
-					for (size_t i = 0; i < allConnections.size(); i++)
-					{
-						allConnections[i]->selectYourSelf(pManager->GetOutput(), UI.ConnColor);
-					}
-					if (isSelectMode)
-					{
-						for (size_t i = 0; i < selectedComponents.size(); i++)
-						{
-							selectedComponents[i].second->Draw(pManager->GetOutput(), false);
-						}
-						//Always Clear hover Bar if found
-						pManager->GetOutput()->clearHoveringImage(imgh, J, K, widthh);
-						setSelectMode(false);
-						isSelectionContainConnections = false;
-						clearSelectedComponents();
-					}
-					if (!found) {
-						//Always Clear hover Bar if found
-						pManager->GetOutput()->clearHoveringImage(imgh, J, K, widthh);
-						return MULTI_SELECT;
-					}
 				}
 			}
 		}
@@ -161,7 +318,7 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 				if (hoverY >= 5 && hoverY < UI.ToolBarHeight - 20 && hoverX > UI.LeftToolBarWidth && UI.AppMode == DESIGN)
 				{
 					//Always Clear hover Bar if found
-					pManager->GetOutput()->clearHoveringImage(imgh, J, K, widthh);
+					clearHoveringImage(imgh, J, K, widthh);
 					vector<pair<int, int> > TopItemsRanges;
 					TopItemsRanges.push_back(make_pair(107, 170));
 					TopItemsRanges.push_back(make_pair(190, 245));
@@ -177,7 +334,7 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 					TopItemsRanges.push_back(make_pair(1035, 1091));
 					TopItemsRanges.push_back(make_pair(1121, 1166));
 
-					int HoveredItemOrder = -1;//TODO:Modify
+					int HoveredItemOrder = -1;
 
 					for (size_t i = 0; i < TopItemsRanges.size(); i++)
 					{
@@ -210,7 +367,7 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 				}
 				else if (hoverY >= 0 && hoverY < UI.height && UI.AppMode == DESIGN && hoverX <= UI.LeftToolBarWidth - 12 && hoverX >= 5) {
 					//Always Clear hover Bar if found
-					pManager->GetOutput()->clearHoveringImage(imgh, J, K, widthh);
+					clearHoveringImage(imgh, J, K, widthh);
 					vector<pair<int, int> > LeftItemsRanges;
 					LeftItemsRanges.push_back(make_pair(6, 85));
 					LeftItemsRanges.push_back(make_pair(103, 180));
@@ -219,7 +376,7 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 					LeftItemsRanges.push_back(make_pair(382, 460));
 					LeftItemsRanges.push_back(make_pair(475, 550));
 
-					int HoveredLeftItemOrder = -1;//TODO:Modify
+					int HoveredLeftItemOrder = -1;
 
 					for (size_t i = 0; i < LeftItemsRanges.size(); i++)
 					{
@@ -243,13 +400,13 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 				}
 				else if (hoverY >= 0 && hoverY < UI.height && UI.AppMode == SIMULATION && hoverX <= UI.LeftToolBarWidth - 12 && hoverX >= 5) {
 					//Always Clear hover Bar if found
-					pManager->GetOutput()->clearHoveringImage(imgh, J, K, widthh);
+					clearHoveringImage(imgh, J, K, widthh);
 					vector<pair<int, int> > LeftItemsRanges;
 					LeftItemsRanges.push_back(make_pair(6, 85));
 					LeftItemsRanges.push_back(make_pair(103, 180));
 					LeftItemsRanges.push_back(make_pair(197, 273));
 
-					int HoveredLeftItemOrder = -1;//TODO:Modify
+					int HoveredLeftItemOrder = -1;
 
 					for (size_t i = 0; i < LeftItemsRanges.size(); i++)
 					{
@@ -283,23 +440,21 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 
 					Utils::correctPointClicked(hoverX, hoverY, true, false);
 					if (Utils::CheckPointInBorders(hoverX, hoverY)) {
-						Component* comp = pManager->GetOutput()->getArrayOfComponents(hoverY / UI.GRID_SIZE, hoverX / UI.GRID_SIZE);
+						Component* comp = Utils::getArrayOfComponents(hoverY / UI.GRID_SIZE, hoverX / UI.GRID_SIZE);
 						if (comp != NULL && !comp->getDelete() && comp != preComp)
 						{
 							//Always Clear hover Bar if found at the transition between one component and the other
-							pManager->GetOutput()->clearHoveringImage(imgh, J, K, widthh);
-							if (comp->getLabel().size() > 0) { //The Gate Worth Drawing A hover Part
+							clearHoveringImage(imgh, J, K, widthh);
+							if ((UI.AppMode == DESIGN && comp->getLabel().size() > 0) || (UI.AppMode == SIMULATION && ((dynamic_cast<Connection*>(comp)) || (!(dynamic_cast<Connection*>(comp)) && comp->getLabel().size() > 0)))) { //The Gate Worth Drawing A hover Part
 								pWind->GetMouseCoord(J, K);
 								delete imgh;
 								imgh = NULL;
-								imgh = pManager->GetOutput()->printHovering(J, K, comp->getLabel(), widthh, comp);
+								imgh = printHovering(J, K, comp->getLabel(), widthh, comp);
 							}
-							//pManager->GetOutput()->PrintMsg(comp->getLabel());
 						}
 						else if (comp == NULL) {
 							//Always Clear hover Bar if found at the transition between one component and the other
-							pManager->GetOutput()->clearHoveringImage(imgh, J, K, widthh);
-							//pManager->GetOutput()->PrintStatusBox("");
+							clearHoveringImage(imgh, J, K, widthh);
 						}
 
 						preComp = comp;
@@ -310,18 +465,16 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 			}
 		}
 	}
-
 	if (UI.AppMode == DESIGN)	//application is in design mode
 	{
 		//[1] If user clicks on the Toolbar
 		if (y >= 5 && y < UI.ToolBarHeight - 20 && x > UI.LeftToolBarWidth)
 		{
 			pWind->GetMouseClick(x, y);
-			//TODO
 			//Check whick Menu item was clicked
 			//==> This assumes that menu items are lined up horizontally <==
 
-			int ClickedItemOrder = -1;//TODO:Modify
+			int ClickedItemOrder = -1;
 			vector<pair<int, int> > TopItemsRanges;
 			TopItemsRanges.push_back(make_pair(107, 170));
 			TopItemsRanges.push_back(make_pair(190, 245));
@@ -379,7 +532,7 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 			LeftItemsRanges.push_back(make_pair(382, 460));
 			LeftItemsRanges.push_back(make_pair(475, 550));
 
-			int ClickedItemOrder = -1;//TODO:Modify
+			int ClickedItemOrder = -1;
 
 			for (size_t i = 0; i < LeftItemsRanges.size(); i++)
 			{
@@ -391,18 +544,16 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 			{
 			case DSIMULATION: {
 				bool returnValidation = false;
-
-				for (size_t i = 0; i < pManager->allComponentsCorners.size(); i++)
+				for (size_t i = 0; i < 44; i++)
 				{
-					Component* comp = pManager->getComponent(i);
-					if (!comp->getDelete())
-					{
-						returnValidation = true;
-					}
-					else {
-						pManager->GetOutput()->PrintStatusBox("Please add components first!", UI.ErrorColor);
+					for (size_t j = 0; j < 77; j++) {
+						if (Utils::getArrayOfComponents(i, j) != NULL && !Utils::getArrayOfComponents(i, j)->getDelete())
+						{
+							returnValidation = true;
+						}
 					}
 				}
+
 				if (returnValidation) { return SimulateAction; };
 				break; }
 			case DNEW:return NEW; break;
@@ -418,12 +569,12 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 			//user want to select/unselect a statement i;
 			if (s == RIGHT_CLICK) {
 				//Always Clear hover Bar if found
-				pManager->GetOutput()->clearHoveringImage(imgh, J, K, widthh);
+				clearHoveringImage(imgh, J, K, widthh);
 				return RIGHT_CLICKSELECT;
 			}
 			else {
 				//Always Clear hover Bar if found
-				pManager->GetOutput()->clearHoveringImage(imgh, J, K, widthh);
+				clearHoveringImage(imgh, J, K, widthh);
 				pWind->GetMouseClick(x, y, true); //Remove the last Saved Click
 			}
 		}
@@ -450,79 +601,33 @@ ActionType Input::GetUserAction(ApplicationManager *pManager)
 				}
 			}
 			switch (ClickedItemOrder) {
-			case SDESIGN: {switchMode(DESIGN, pManager); break; }
+			case SDESIGN: {return DSN_MODE;; }
 			case STT: return Create_TruthTable;
 			case SEXIT: return EXIT;
-			default: return DSN_TOOL; //TODO:
+			default: return DSN_TOOL;
 			}
 		}
 		else if (y >= UI.TopToolBarHeight && y < UI.height && x >= UI.LeftToolBarWidth && x < UI.width) {
-
-			for (int i = 0; i < pManager->allComponentsCorners.size(); i++)
+			Component* comp = Utils::getArrayOfComponents(y / UI.GRID_SIZE, x / UI.GRID_SIZE);
+			if (comp != NULL)
 			{
-				if (!dynamic_cast<SWITCH*>(pManager->getComponent(i)) || pManager->getComponent(i)->getDelete())
-					continue;
-				if (x >= pManager->allComponentsCorners[i].x1&&x <= pManager->allComponentsCorners[i].x2&& y >= pManager->allComponentsCorners[i].y1&&y <= pManager->allComponentsCorners[i].y2)
-				{
-					ChangeSwitch* act = new ChangeSwitch(pManager, (SWITCH*)pManager->getComponent(i));
-					act->Execute();
+				GraphicsInfo compCorners = comp->getCornersLocation();
+				if (!((!dynamic_cast<SWITCH*>(comp) || comp->getDelete()) && x >= compCorners.x1&&x <= compCorners.x2&& y >= compCorners.y1&&y <= compCorners.y2)) {
+					toBeChangedSwitch = (SWITCH*)comp;
 					pWind->FlushMouseQueue();
-					//Always Clear hover Bar if found
-					pManager->GetOutput()->clearHoveringImage(imgh, J, K, widthh);
-					return SimulateActionWithoutValidation;
+					clearHoveringImage(imgh, J, K, widthh);
+					return Change_Switch;
+
 				}
 			}
 		}
 		//Always Clear hover Bar if found
-		pManager->GetOutput()->clearHoveringImage(imgh, J, K, widthh);
+		clearHoveringImage(imgh, J, K, widthh);
 		return SELECT_SIM;
-		//return SIM_MODE;	//This should be changed after creating the compelete simulation bar 
-		//[2] User clicks on the drawing area //TODO:
-		//if (y >= UI.ToolBarHeight && y < UI.height - UI.StatusBarHeight)
-		//{
-		//	return SELECT;	//user want to select/unselect a statement i;
-		//}
-
-		//[3] User clicks on the status bar
-		//return STATUS_BAR;
 	}
 	pWind->FlushMouseQueue();
 }
-void Input::switchMode(MODE appMode, ApplicationManager* pManager) {
 
-	if (appMode == DESIGN)
-	{
-		for (size_t i = 0; i < pManager->allComponentsCorners.size(); i++)
-		{
-			Component* comp = pManager->getComponent(i);
-			if (comp->getDelete()) continue;
-			if (!(dynamic_cast<SWITCH*>(comp)) && !(dynamic_cast<Connection*>(comp)))
-			{
-				for (size_t i = 0; i < comp->getNumOfInputs(); i++)
-				{
-					comp->setInputPinStatus(i, UNDEFINED);
-				}
-				comp->Draw(pManager->GetOutput(), false);
-			}
-			else if(dynamic_cast<SWITCH*>(comp)) {
-				((SWITCH*)comp)->setOutputPinStatus(LOW);
-				comp->Draw(pManager->GetOutput(), false);
-			}
-			else if (dynamic_cast<Connection*>(comp)) {
-				((Connection*)comp)->selectYourSelf(pManager->GetOutput(), UI.DrawColor);
-			}
-
-		}
-		UI.AppMode = DESIGN;
-		pWind->DrawImage("images\\Menu\\top_bar_normal.jpg", UI.LeftToolBarWidth, 0, UI.width - UI.LeftToolBarWidth - 14, UI.TopToolBarHeight);
-		pWind->DrawImage("images\\Menu\\left_bar_normal.jpg", 0, 0, UI.LeftToolBarWidth, UI.height);
-	}
-	else {
-		pWind->DrawImage("images\\Menu\\top_bar_simulate.jpg", UI.LeftToolBarWidth, 0, UI.width - UI.LeftToolBarWidth - 14, UI.TopToolBarHeight);
-		pWind->DrawImage("images\\Menu\\left_bar_simulation_normal.jpg", 0, 0, UI.LeftToolBarWidth, UI.height);
-		UI.AppMode = SIMULATION;
-	}
-}
 string Input::getStringBox(string s)
 {
 	return pWind->getStringBox(s);
@@ -538,30 +643,6 @@ string Input::getLoadPath()
 buttonstate Input::GetButtonStatus(const button btMouse, int &iX, int &iY) const {
 	return pWind->GetButtonState(btMouse, iX, iY);
 }
-string Input::GetSrting(Output *pOut, string sOriginal = "", bool EditingLabel)
-{
-	string s = "";
-	char ch;
-	keytype k;
-	if (EditingLabel) pOut->PrintMsg(sOriginal);
-	while ((k = pWind->WaitKeyPress(ch)) != '\n' && (int)ch != 13) {
-		if (k == ESCAPE) {
-			s = "";
-			pOut->PrintMsg(sOriginal);
-		}
-		else if (k == ASCII && (int)ch == 8) {
-			s = s.substr(0, s.size() - 1);
-		}
-		else if (k == ASCII && (int)ch != 27) {
-			s += ch;
-		}
-		pOut->PrintMsg(sOriginal + " " + s);
-	}
-	//pOut->PrintStatusBox(");
-	pWind->FlushMouseQueue();
-	return s;
-}
-
 void Input::WaitSelectionPoint(int &X, int &Y)
 {
 	pWind->WaitMouseClick(X, Y);
@@ -598,15 +679,6 @@ vector<pair<int, Component*> >& Input::getSelectedComponents()
 void Input::CorrectPointClickedSilent(int& x, int& y, bool drawImage, bool drawConnection)
 {
 	Utils::correctPointClicked(x, y, drawImage, drawConnection);
-}
-
-string Input::EditComponenetLabel(Output *pOut)
-{
-	//To be Modified Later with Menus 
-	pWind->FlushKeyQueue();
-	string msg = "Type the new name";
-	string ret = this->GetSrting(pOut, msg, true);
-	return ret;
 }
 
 void Input::getExactConnectionLocation(int & x, int & y)

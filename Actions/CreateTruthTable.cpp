@@ -28,7 +28,7 @@ void CreateTruthTable::Execute()
 	bool tooLarge = false;
 	int NumOfInputs = 0, NumOfOutputs = 0;
 	//Calculating the Number of Inputs (the number of Switches)
-	for (size_t i = 0; i < pManager->allComponentsCorners.size(); i++)
+	for (size_t i = 0; i < Utils::allComponentsCorners.size(); i++)
 	{
 		Component* comp = pManager->getComponent(i);
 		if ((dynamic_cast<SWITCH*>(comp)))
@@ -52,9 +52,8 @@ void CreateTruthTable::Execute()
 	NumOfInputs = NumOfOutputs = 0;
 	ofstream file;
 	if (tooLarge)
-		file.open("TruthTable.txt");
-	//printing Labeles  of all switches 
-	for (size_t i = 0; i < pManager->allComponentsCorners.size(); i++)
+	file.open("TruthTable.txt");
+	for (size_t i = 0; i < Utils::allComponentsCorners.size(); i++)
 	{
 		Component* comp = pManager->getComponent(i);
 		if ((dynamic_cast<SWITCH*>(comp)))
@@ -77,12 +76,12 @@ void CreateTruthTable::Execute()
 				else {
 					row += comp->getLabel();
 					row += "  ";
-				}
 			}
 		}
 	}
+	}
 	//printing Lables  of all LEDs
-	for (size_t i = 0; i < pManager->allComponentsCorners.size(); i++)
+	for (size_t i = 0; i < Utils::allComponentsCorners.size(); i++)
 	{
 		Component* comp = pManager->getComponent(i);
 		if ((dynamic_cast<LED*>(comp)))
@@ -111,7 +110,7 @@ void CreateTruthTable::Execute()
 
 	}
 	if (tooLarge)
-		file << endl;
+	file << endl;
 	else {
 		table[RowNum++] = row;
 		row = "";
@@ -135,7 +134,7 @@ void CreateTruthTable::Execute()
 	for (size_t i = 0; i < AllCompination.size(); i++)
 	{
 		int k = 0;
-		for (size_t j = 0; j < pManager->allComponentsCorners.size(); j++)
+		for (size_t j = 0; j < Utils::allComponentsCorners.size(); j++)
 		{
 			Component* comp = pManager->getComponent(j);
 			if ((dynamic_cast<SWITCH*>(comp)))
@@ -147,14 +146,14 @@ void CreateTruthTable::Execute()
 				k++;
 			}
 		}
-		Action* pAct = new Simulate(pManager, false);
-		pAct->Execute();
-		delete pAct;
+		Simulate simAction(pManager, false);
+		simAction.Execute();
+		//Sleep(50);
 		k = 0;
 		NumOfInputs = 0;
 		NumOfOutputs = 0;
 		//printing current compination input
-		for (size_t j = 0; j < pManager->allComponentsCorners.size(); j++)
+		for (size_t j = 0; j < Utils::allComponentsCorners.size(); j++)
 		{
 			Component* comp = pManager->getComponent(j);
 			if ((dynamic_cast<SWITCH*>(comp)))
@@ -167,12 +166,12 @@ void CreateTruthTable::Execute()
 					for (int K = 0; K < (6 + to_string(NumOfInputs).size()) / 2; K++)
 					{
 						if (tooLarge)
-							file << " ";
+						file << " ";
 						else
 							row += " ";
 					}
 					if (tooLarge)
-						file << AllCompination[i][k] << "  ";
+					file << AllCompination[i][k] << "  ";
 					else {
 						row += to_string(AllCompination[i][k]);
 						row += "  ";
@@ -185,8 +184,8 @@ void CreateTruthTable::Execute()
 							if (abs(K - siz) <= 2)
 								file << "|";
 							else
-								file << " ";
-						}
+						file << " ";
+					}
 						else
 							row += " ";
 					}
@@ -196,7 +195,7 @@ void CreateTruthTable::Execute()
 					for (int K = 0; K < comp->getLabel().size() / 2; K++)
 					{
 						if (tooLarge)
-							file << " ";
+						file << " ";
 						else
 							row += " ";
 					}
@@ -217,25 +216,25 @@ void CreateTruthTable::Execute()
 					}
 					else
 					{
-						for (int K = 0; K < siz; K++)
-						{
+					for (int K = 0; K < siz; K++)
+					{
 							if (tooLarge)
 							{
 								if (abs(K - siz) <= 2)
 									file << "|";
 								else
-									file << " ";
-							}
+						file << " ";
+					}
 							else
 								row += " ";
-						}
+				}
 					}
 				}
 				k++;
 			}
 		}
 		//printing outputs of the current compination
-		for (size_t j = 0; j < pManager->allComponentsCorners.size(); j++)
+		for (size_t j = 0; j < Utils::allComponentsCorners.size(); j++)
 		{
 			Component* comp = pManager->getComponent(j);
 			if ((dynamic_cast<LED*>(comp)))
@@ -248,12 +247,12 @@ void CreateTruthTable::Execute()
 					for (int K = 0; K < (7 + to_string(NumOfOutputs).size()) / 2; K++)
 					{
 						if (tooLarge)
-							file << " ";
+						file << " ";
 						else
 							row += " ";
 					}
 					if (tooLarge)
-						file << comp->GetInputPinStatus(0) << "  ";
+					file << comp->GetInputPinStatus(0) << "  ";
 					else {
 						row += to_string(comp->GetInputPinStatus(0));
 						row += "  ";
@@ -266,8 +265,8 @@ void CreateTruthTable::Execute()
 							if (abs(K - siz) <= 2)
 								file << "|";
 							else
-								file << " ";
-						}
+						file << " ";
+					}
 						else
 							row += " ";
 					}
@@ -277,7 +276,7 @@ void CreateTruthTable::Execute()
 					for (int K = 0; K < comp->getLabel().size() / 2; K++)
 					{
 						if (tooLarge)
-							file << " ";
+						file << " ";
 						else
 							row += " ";
 					}
@@ -297,34 +296,34 @@ void CreateTruthTable::Execute()
 					}
 					else
 					{
-						for (int K = 0; K < siz; K++)
-						{
+					for (int K = 0; K < siz; K++)
+					{
 							if (tooLarge)
 								if (abs(K - siz) <= 2)
 									file << "|";
 								else
-									file << " ";
+						file << " ";
 							else
 								row += " ";
-						}
 					}
 				}
 			}
 		}
+		}
 		if (tooLarge)
-			file << endl;
+		file << endl;
 		else
 		{
 			table[RowNum++] = row;
 			row = "";
-		}
+	}
 	}
 	if (tooLarge)
-		pOut->PrintStatusBox("The truth table has been created sucessfully");
+	pOut->PrintStatusBox("The truth table has been created sucessfully");
 	if (tooLarge)
-		file.close();
+	file.close();
 	if (tooLarge)
-		pOut->PrintTruthTable();
+	pOut->PrintTruthTable();
 	else {
 		int X, Y, w, h;
 		//The before saved Image

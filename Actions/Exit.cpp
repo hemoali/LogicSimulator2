@@ -26,24 +26,22 @@ void Exit::Execute()
 	if (ReadActionParameters()) {
 		if (choice == IDNO) {
 			pManager->setExitChoice(1);
-			Clear *pAct = new Clear(pManager);
-			pAct->setLoading(true);
-			pAct->Execute();
+			Clear clearAction(pManager);
+			clearAction.setLoading(true);
+			clearAction.Execute();
 		}
 		else if (choice == IDYES)
 		{
-			Action *pAct = new Save(pManager);
-			pAct->Execute();
-			if (((Save*)pAct)->isSuccessful()) {
+			Save saveAction(pManager);
+			saveAction.Execute();
+			if (saveAction.isSuccessful()) {
 				pManager->setExitChoice(1);
-				Clear *pAct = new Clear(pManager);
-				pAct->setLoading(true);
-				pAct->Execute();
+				Clear clearAction(pManager);
+				clearAction.setLoading(true);
+				clearAction.Execute();
 			}
 			else
 				pManager->setExitChoice(0);
-			delete pAct;
-			pAct = NULL;
 		}
 		else
 			pManager->setExitChoice(0);
@@ -53,8 +51,10 @@ void Exit::Execute()
 
 void Exit::Undo()
 {
+	//Nothing to do here
 }
 
 void Exit::Redo()
 {
+	//Nothing to do here
 }

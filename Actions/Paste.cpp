@@ -85,9 +85,9 @@ void Paste::Execute()
 	if (pastedcomponent != NULL && Utils::CheckPoint({ pManager->pastepoint.x1 ,  pManager->pastepoint.y1 }, pOut, false, true))
 	{
 		int xbegin = (Gffx.x1 - UI.GATE_Width / 2.0) / UI.GRID_SIZE, xend = (Gffx.x1 + UI.GATE_Width / 2.0) / UI.GRID_SIZE, ybegin = (Gffx.y1 - UI.GATE_Height / 2.0) / UI.GRID_SIZE, yend = (Gffx.y1 + UI.GATE_Height / 2.0) / UI.GRID_SIZE;
-		for (int i = Gffx.y1 / UI.GRID_SIZE + 1; i <= Gffx.y2 / UI.GRID_SIZE; i++) { for (int j = Gffx.x1 / UI.GRID_SIZE; j <= Gffx.x2 / UI.GRID_SIZE; j++) { pManager->GetOutput()->setArrayOfComponents(i, j, pastedcomponent); } }
+		for (int i = Gffx.y1 / UI.GRID_SIZE + 1; i <= Gffx.y2 / UI.GRID_SIZE; i++) { for (int j = Gffx.x1 / UI.GRID_SIZE; j <= Gffx.x2 / UI.GRID_SIZE; j++) { Utils::setArrayOfComponents(i, j, pastedcomponent); } }
 
-		pManager->allComponentsCorners.push_back(Gffx);
+		Utils::allComponentsCorners.push_back(Gffx);
 		pManager->AddComponent(pastedcomponent);
 		pastedcomponent->setLabel(pManager->PastedComponent->getLabel());
 		pastedcomponent->setSmallCleanImageBeforeAddingComp(smallImageBeforeAddingComponent);
@@ -107,7 +107,7 @@ void Paste::Redo()
 	GraphicsInfo GInfotmp = pA->getCornersLocation();
 	for (int i = GInfotmp.y1 / UI.GRID_SIZE + 1; i <= GInfotmp.y2 / UI.GRID_SIZE; i++) {
 		for (int j = GInfotmp.x1 / UI.GRID_SIZE; j <= GInfotmp.x2 / UI.GRID_SIZE; j++) {
-			pManager->GetOutput()->setArrayOfComponents(i, j, pA);
+			Utils::setArrayOfComponents(i, j, pA);
 		}
 	}
 	int xbegin = (pA->getCenterLocation().x1 - UI.GATE_Width / 2.0) / UI.GRID_SIZE;
@@ -137,7 +137,7 @@ void Paste::Undo()
 	GraphicsInfo GInfotmp = pA->getCornersLocation();
 	for (int i = GInfotmp.y1 / UI.GRID_SIZE + 1; i <= GInfotmp.y2 / UI.GRID_SIZE; i++) {
 		for (int j = GInfotmp.x1 / UI.GRID_SIZE; j <= GInfotmp.x2 / UI.GRID_SIZE; j++) {
-			pManager->GetOutput()->setArrayOfComponents(i, j, NULL);
+			Utils::setArrayOfComponents(i, j, NULL);
 			pManager->GetOutput()->setUsedPixel(i, j, EMPTY);
 
 		}

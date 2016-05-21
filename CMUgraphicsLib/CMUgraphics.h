@@ -348,6 +348,8 @@ public:
 	static void setWindowEditString(string s);
 	static string getWindowEditString();
 	static string getTheComponenetString();
+	void printChecking();
+
 
 	// Prints the contents of the window
 	void Print();

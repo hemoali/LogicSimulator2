@@ -49,9 +49,9 @@ void AddBUFFER::Execute()
 		GInfotmp.y2 = GInfo.y1 + Wdth / 2;
 		BUFFER *pA = new BUFFER(GInfotmp, FANOUT);
 		pA->setSmallCleanImageBeforeAddingComp(smallImageBeforeAddingComponent);
-		pManager->allComponentsCorners.push_back(GInfotmp);
+		Utils::allComponentsCorners.push_back(GInfotmp);
 		pManager->AddComponent(pA); pA->setLabel(gateLabel);
-		for (int i = GInfotmp.y1 / UI.GRID_SIZE + 1; i <= GInfotmp.y2 / UI.GRID_SIZE; i++) { for (int j = GInfotmp.x1 / UI.GRID_SIZE; j <= GInfotmp.x2 / UI.GRID_SIZE; j++) { pManager->GetOutput()->setArrayOfComponents(i, j, pA); } }
+		for (int i = GInfotmp.y1 / UI.GRID_SIZE + 1; i <= GInfotmp.y2 / UI.GRID_SIZE; i++) { for (int j = GInfotmp.x1 / UI.GRID_SIZE; j <= GInfotmp.x2 / UI.GRID_SIZE; j++) { Utils::setArrayOfComponents(i, j, pA); } }
 		
 		Utils::undoActions.push(this);
 		Action::pA = pA;

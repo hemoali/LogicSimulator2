@@ -16,11 +16,10 @@ private:
 	window* pWind;	//Pointer to the Graphics Window
 	mutable vector < pair <int, int> >allComponentsCorners;
 	static CellType usedPixels[44][74];
-	static Component* arrayOfComponents[44][74];
-	ApplicationManager* pManager;
+	vector<Connection*>* allConnectionsPointer;
 	friend void DRAWAFTERMENUE(Output *pOut, HWND D);
 public:
-	Output(ApplicationManager* pManager); // Performs the Window Initialization
+	Output(vector<Connection*>* allConns); // Performs the Window Initialization
 	Input* CreateInput() const; //creates a pointer to the Input object
 	void ChangeTitle(string Title) const;
 
@@ -56,15 +55,10 @@ public:
 	void DrawAfterMenu(image* img, int x, int y, int type,int w = 0);
 	void DrawRClickMenu_CorrectPoints(int& x, int& y, int type, bool = true);
 
-	
+	void switchMode(MODE appMode);
 	void DrawWarningMenues(char type,int x= 0, int y=0);
 	image* StoreBeforeWarning();
 	void DrawAfterWarning(image* theWarningImage);
-
-	image* printHovering(int& x, int& y, string s, int& w, Component* C);
-	void correctHoverStartpoint(int &x, int &y, int width);
-	void clearHoveringImage(image* img,int J, int K,int widthh);
-
 	void PrintStatusBox(string s,color = GREEN);
 
 	int printPopUpMessage(string s, char type = 'V'); 
@@ -83,16 +77,13 @@ public:
 	void setUsedPixel(int i, int j, CellType);
 	CellType getUsedPixel(int i, int j);
 
-	void setArrayOfComponents(int i, int j, Component*);
-	Component* getArrayOfComponents(int i, int j);
-
 	void clearConnectionsFromGrid(vector<Connection*> allOutputConnections, vector<Connection*> allInputConnections);
 
 	bool saveFile();
 	bool loadFile();
 
 	void printMatrix(string msg);
-
+	void printCheck();
 	//Resetting Interface
 	void resetInterfaceArrays();
 
