@@ -349,7 +349,7 @@ public:
 	static string getWindowEditString();
 	static string getTheComponenetString();
 	void printChecking();
-
+	void printScreenShot();
 
 	// Prints the contents of the window
 	void Print();

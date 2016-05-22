@@ -1783,7 +1783,10 @@ string window::theWindowEditString = "";
 	 ShellExecute(hwndWindow, "open", "Check.txt", NULL, NULL, SW_SHOWDEFAULT);
  }
 
-
+ void window::printScreenShot()
+ {
+	 ShellExecute(hwndWindow, "open", "ScreenShot.bmp", NULL, NULL, SW_SHOWDEFAULT);
+ }
 void window::Print() {
 
 	PRINTDLG  pdlgInfo;

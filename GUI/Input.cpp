@@ -234,6 +234,12 @@ ActionType Input::GetUserAction()
 			clearHoveringImage(imgh, J, K, widthh);
 			return REDOACTION;
 		}
+		else if ((int)c1 == 24) {
+			//Always Clear hover Bar if found
+			image* i = new image;
+			pWind->StoreImage(i, UI.LeftToolBarWidth, UI.TopToolBarHeight, UI.width - UI.LeftToolBarWidth-20, UI.height - UI.TopToolBarHeight-20);
+			i->SaveImage("ScreenShot.bmp", pWind);
+		}
 		else if ((int)c1 == 4) {
 			return DSN_MODE;
 		}
