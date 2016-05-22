@@ -62,23 +62,31 @@ void CreateTruthTable::Execute()
 				continue;
 			NumOfInputs++;
 			if (comp->getLabel() == "")
+			{
 				if (tooLarge)
+				{
 					file << "Input " << NumOfInputs << "||";
-				else {
+				}
+				else
+				{
 					row += "Input ";
 					row += to_string(NumOfInputs);
 					row += "  ";
 				}
+			}
 			else
 			{
 				if (tooLarge)
+				{
 					file << comp->getLabel() << "||";
-				else {
+				}
+				else 
+				{
 					row += comp->getLabel();
 					row += "  ";
+				}
 			}
 		}
-	}
 	}
 	//printing Lables  of all LEDs
 	for (size_t i = 0; i < Utils::allComponentsCorners.size(); i++)
@@ -90,18 +98,26 @@ void CreateTruthTable::Execute()
 				continue;
 			NumOfOutputs++;
 			if (comp->getLabel() == "")
+			{
 				if (tooLarge)
+				{
 					file << "Output " << NumOfOutputs << "||";
-				else {
+				}
+				else 
+				{
 					row += "Output ";
 					row += to_string(NumOfOutputs);
 					row += "  ";
 				}
+			}
 			else
 			{
 				if (tooLarge)
+				{
 					file << comp->getLabel() << "||";
-				else {
+				}
+				else 
+				{
 					row += comp->getLabel();
 					row += "  ";
 				}
@@ -110,8 +126,11 @@ void CreateTruthTable::Execute()
 
 	}
 	if (tooLarge)
-	file << endl;
-	else {
+	{
+		file << endl;
+	}
+	else 
+	{
 		table[RowNum++] = row;
 		row = "";
 	}
@@ -148,7 +167,6 @@ void CreateTruthTable::Execute()
 		}
 		Simulate simAction(pManager, false);
 		simAction.Execute();
-		//Sleep(50);
 		k = 0;
 		NumOfInputs = 0;
 		NumOfOutputs = 0;
@@ -338,6 +356,7 @@ void CreateTruthTable::Execute()
 		while (!terminate) {
 			if (x > X && x < w && y > Y && y < h) {
 				//The user still in the truth table rectangle
+				pIn->WaitSelectionPoint(x, y);
 			}
 			else {
 				//The user want to dismiss the truth table

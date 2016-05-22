@@ -699,6 +699,8 @@ image * Output::DrawTruthTable(string table[], int inputsNum, int outputsNum, in
 	//Drawing Each Combination
 	for (int i = 0; i < int(1 << inputsNum); i++) {
 		starty += stringHeight;
+		if(i== int(1 << inputsNum)-1)
+			pWind->SetFont(20, BOLD, BY_NAME, "Consolas");
 		pWind->DrawString(startx+10, starty, table[i]);
 	}
 	return img;
