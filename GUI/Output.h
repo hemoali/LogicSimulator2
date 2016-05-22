@@ -90,7 +90,7 @@ public:
 
 	void Output::storeimagefordeletegate(image* imageptr, GraphicsInfo Gfx)
 	{
-		pWind->StoreImage(imageptr, Gfx.x1 - UI.GRID_SIZE - 6, Gfx.y1 - UI.GRID_SIZE - 5, 2 * UI.GRID_SIZE + 5, UI.GATE_Height + 3);
+		pWind->StoreImage(imageptr, Gfx.x1 - UI.GRID_SIZE - 5, Gfx.y1 - UI.GRID_SIZE - 5, 2 * UI.GRID_SIZE + 4, UI.GATE_Height + 3);
 	}
 
 	~Output();

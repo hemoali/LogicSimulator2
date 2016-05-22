@@ -350,7 +350,7 @@ void CreateTruthTable::Execute()
 			Input *pIn = pManager->GetInput(); //Pointer to Input Class
 			int x, y;
 			bool terminate = false;
-			pOut->PrintStatusBox("to exit click at any point out of the rectangle");
+			pOut->PrintStatusBox("To exit, click at any point out of the rectangle");
 			//New member function to wait for Selection Point.
 			pIn->WaitSelectionPoint(x, y);
 			//Check if the new Point is in the Menu Bar or Not
