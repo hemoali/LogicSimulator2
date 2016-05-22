@@ -3,8 +3,8 @@
 #include <cmath>
 #include "ApplicationManager.h"
 //Hiding the Console
-//#pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
-
+#pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
+using namespace std;
 int main()
 {
 	ActionType ActType;

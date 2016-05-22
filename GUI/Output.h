@@ -62,8 +62,10 @@ public:
 	void DrawAfterWarning(image* theWarningImage);
 	void PrintStatusBox(string s,color = GREEN);
 
-	int printPopUpMessage(string s, char type = 'V');
+	int printPopUpMessage(string s, char type = 'V'); 
 
+	image* DrawTruthTable(string table[], int inputsNum, int outputsNum, int& X, int& Y, int& w, int& h);
+	void drawAfterTruthTable(image* img, int X, int Y, int w, int h);
 	void PrintTruthTable();
 
 	void storeImage(image* img, int x1, int y1, int x2, int y2);

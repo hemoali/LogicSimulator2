@@ -694,6 +694,50 @@ int Output::printPopUpMessage(string s, char type)
 	return (pWind->printMessageBox(msg, type));
 }
 
+image * Output::DrawTruthTable(string table[], int inputsNum, int outputsNum, int & X, int & Y, int & w, int & h)
+{
+	//Setting the font used and pen colour
+	pWind->SetFont(20, BOLD | UNDERLINED, BY_NAME, "Consolas");
+	pWind->SetPen(BLACK);
+	//the upper left point of the Table 
+	int startx, starty, width, height, stringHeight;
+	//Getting the width & the height of the row text according to the font size
+	pWind->getStringWidth(table[0], width, height);
+	//Be aware that the height or width now are dimensions of string with that font 
+	//NOT THE TABLE HEIGHT OR WIDTH, So we need to add a small space to the width
+	w = width += 20;
+	//And change the Height to be also the height of the table
+	stringHeight = height;
+	height += (int(1<<inputsNum)*stringHeight);
+	h = height += 10;
+	//Setting the upper left point
+	X = startx = UI.width / 2 - width / 2 +10; //10 is the half of the added space from the right and the left
+	Y = starty = 200 + (4 - inputsNum) * 10 + 5;
+	//Screen shot of the table area startx, starty, width, height
+	//Dont forget to deallocate it when finishing
+	image *img = new image;
+	pWind->StoreImage(img, startx, starty, width, height);
+	//Drawing the Background image Before Truth Table
+	string imageURL = "images\\Menu\\TruthTable.jpg";
+	pWind->DrawImage(imageURL, startx, starty, width, height);
+	//Drawing Each Combination
+	for (int i = 0; i < int(1 << inputsNum); i++) {
+		starty += stringHeight;
+		if(i== int(1 << inputsNum)-1)
+			pWind->SetFont(20, BOLD, BY_NAME, "Consolas");
+		pWind->DrawString(startx+10, starty, table[i]);
+	}
+	return img;
+}
+
+void Output::drawAfterTruthTable(image * img, int X, int Y, int w, int h)
+{
+	if (img != NULL) {
+		pWind->DrawImage(img, X, Y, w, h);
+		delete img;
+	}
+}
+
 void Output::PrintTruthTable()
 {
 	pWind->OpenTruthTable();
