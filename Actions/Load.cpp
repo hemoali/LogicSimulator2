@@ -29,38 +29,6 @@ bool Load::ReadActionParameters(image *, Component* c)
 {
 	Output *pOut = pManager->GetOutput();
 	Input *pIn = pManager->GetInput();
-	/*
-	image *img = pOut->StoreBeforeWarning();
-	int x, y;
-	pOut->DrawWarningMenues('L');
-	cout << '\a' << endl;
-	bool finished = false, draw = false;
-	while (!finished) {
-
-		pIn->WaitSelectionPoint(x, y);
-		int xbegin, xend, ybegin, yend;
-		xbegin = UI.width / 2 - UI.WarningMenuWidth / 2;
-		ybegin = UI.height / 2 - UI.WarningMenuHeight / 2;
-		x -= xbegin;
-		y -= ybegin;
-		if (x > 106 && x < 168 && y > 102 && y < 128) {
-			finished = true;
-			draw = true;
-		}
-		else if (x > 184 && x < 242 && y > 102 && y < 128) {
-			finished = true;
-		}
-		else if (x > 329 && x < 350 && y >= 5 && y <=26) {
-			finished = true;
-		}
-	}
-	if (finished) {
-		pOut->DrawAfterWarning(img);
-		delete img;
-	}
-	if (draw) return true;
-	return false;
-	*/
 	int selected = pOut->printPopUpMessage("Do you want to load? All unsaved progress will be lost.", 'L');
 	if (selected == 1) {
 		bool loadSuccess = false;

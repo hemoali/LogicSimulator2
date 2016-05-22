@@ -34,7 +34,7 @@ public:
 	virtual ActionType getComponentActionType() = 0;
 	void refresh(Output* pOut)
 	{
-		pOut->DrawCleanImage(getSmallCleanImageBeforeAddingComp(), m_CenterInfo.x1, m_CenterInfo.y1, false);
+		pOut->DrawCleanImage(getSmallCleanImageBeforeAddingComp(), m_CenterInfo.x1+1, m_CenterInfo.y1, false);
 		Draw(pOut, false);
 	}
 	void setLabel(string s);
