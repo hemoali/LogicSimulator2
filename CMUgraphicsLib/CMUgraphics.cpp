@@ -553,8 +553,19 @@ keytype window::GetKeyPress(char &cKey) {
 			{
 				return REDO;
 			}
+			if ((int)kqueTmp->cValue == 13 && (int)kqueTmp->kqueNext->cValue == 0)
+			{
+				return CTRL;
+			}
+			if ((int)kqueTmp->cValue == 0 && (int)kqueTmp->kqueNext->cValue == 13)
+			{
+				return CTRL;
+			}
 		}	
-
+		if ((int)cKey == 13)
+		{
+			return CTRL;
+		}
 		delete kqueTmp;
 		return ktTmp;
 

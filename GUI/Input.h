@@ -51,6 +51,9 @@ public:
 	string getSavePath();
 	string getLoadPath();
 	SWITCH* toBeChangedSwitch;
+	Component* toBeAddedToSelected;
+	Component* toBeRemovedFromSelected;
+
 	~Input();
 };
 #endif

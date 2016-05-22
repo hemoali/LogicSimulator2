@@ -10,6 +10,7 @@ Input::Input(window* pW)
 	pWind = pW; //point to the passed window
 	isSelectMode = isSelectionContainConnections = false;
 	toBeChangedSwitch = NULL;
+	toBeAddedToSelected = toBeRemovedFromSelected = NULL;
 }
 void Input::GetPointClicked(int &x, int &y, bool DrawGate, bool DrawConnection)
 {
@@ -246,6 +247,10 @@ ActionType Input::GetUserAction()
 			clearHoveringImage(imgh, J, K, widthh);
 			return SAVE;
 		}
+		if (key == 0)
+		{
+			key = pWind->GetKeyPress(c1);
+		}
 		// Working with mouse
 		bool drawConnection = false;
 		if (pWind->GetButtonState(LEFT_BUTTON, xT, yT) == BUTTON_DOWN && yT >= UI.ToolBarHeight + 20 && xT >= UI.LeftToolBarWidth && yT < UI.height - UI.StatusBarHeight) {
@@ -281,22 +286,39 @@ ActionType Input::GetUserAction()
 						for (size_t i = 0; i < selectedComponents.size(); i++)
 						{
 							if (!dynamic_cast<Connection*>(selectedComponents[i].second) && selectedComponents[i].second == comp) {
+								Sleep(100);
+								if (key == CTRL) // remove this component from selected ones
+								{
+									toBeRemovedFromSelected = comp;
+									clearHoveringImage(imgh, J, K, widthh);
+									return MULTI_SELECT;
+								}
+								else {
+									key = pWind->GetKeyPress(c1);
+									if (key == CTRL || (int)c1 == 13) {
+										toBeRemovedFromSelected = comp;
+										clearHoveringImage(imgh, J, K, widthh);
+										return MULTI_SELECT;
+									}
+								}
 								//Always Clear hover Bar if found //CHECKTHISSAMRA
 								clearHoveringImage(imgh, J, K, widthh);
 								return MULTI_MOVE;
 							}
 						}
 						// Ctrl
-						if ((int)c1 == 13)
+						if (key == CTRL) // add this component to selected ones
 						{
-							cout << "XX"<<endl;
-						}else if ((int)c1 != 0){
-							cout << c1<<endl;
+							toBeAddedToSelected = comp;
+							clearHoveringImage(imgh, J, K, widthh);
+							return MULTI_SELECT;
 						}
 					}
-					//Always Clear hover Bar if found
-					clearHoveringImage(imgh, J, K, widthh);
-					return MOVE;
+					else {
+						//Always Clear hover Bar if found
+						clearHoveringImage(imgh, J, K, widthh);
+						return MOVE;
+					}
 				}
 				else {
 					clearHoveringImage(imgh, J, K, widthh);
