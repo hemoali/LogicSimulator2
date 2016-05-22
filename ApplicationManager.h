@@ -50,7 +50,7 @@ public:
 	void setCompCount(int n);
 
 	//Loading Function
-	void componentLoading(ifstream& out, Component *C);
+	void componentLoading(ifstream& in, string compType, GraphicsInfo point);
 	//Exitting Indicator
 	void setExitChoice(int x);
 	//destructor

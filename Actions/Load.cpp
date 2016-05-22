@@ -80,109 +80,20 @@ void Load::Execute()
 		newAction.setLoading(true);
 		newAction.Execute();
 		file.open(path);
-		int compCount, src, dest, pnum, connectionCount = 0;
+		int compCount, connectionCount = 0;
 		string compName, compLabel;
 		GraphicsInfo point;
-		Component* pA = 0;
-		//New Image For creating Gate Object
-		image* img = new image;
 		//Loading Gates
 		file >> compCount;
 		for (int i = 0; i < compCount; i++)
 		{
-			file >> compName >> point.x1 >> point.y1;// >> compLabel;
-
+			file >> compName >> point.x1 >> point.y1;
 			//Completing the Component Corners
 			point.x2 = point.x1 + UI.GATE_Width;
 			point.y2 = point.y1 + UI.GATE_Height;
-			if (compName == "AND2")
-			{
-				AND2*ptr = new AND2(point, 3);
-				pA = ptr;
-				pManager->componentLoading(file, ptr);
-			}
-			else if (compName == "AND3")
-			{
-				AND3*ptr = new AND3(point, 3);
-				pA = ptr;
-				pManager->componentLoading(file, ptr);
-			}
-			else if (compName == "BUFFER")
-			{
-				BUFFER*ptr = new BUFFER(point, 3);
-				pA = ptr;
-				pManager->componentLoading(file, ptr);
-			}
-			else if (compName == "LED")
-			{
-				LED*ptr = new LED(point, 3);
-				pA = ptr;
-				pManager->componentLoading(file, ptr);
-			}
-			else if (compName == "NAND2")
-			{
-				NAND2*ptr = new NAND2(point, 3);
-				pA = ptr;
-				pManager->componentLoading(file, ptr);
-			}
-			else if (compName == "NOR2")
-			{
-				NOR2*ptr = new NOR2(point, 3);
-				pA = ptr;
-				pManager->componentLoading(file, ptr);
-			}
-			else if (compName == "NOR3")
-			{
-				NOR3*ptr = new NOR3(point, 3);
-				pA = ptr;
-				pManager->componentLoading(file, ptr);
-			}
-			else if (compName == "NOT")
-			{
-				NOT*ptr = new NOT(point, 3);
-				pA = ptr;
-				pManager->componentLoading(file, ptr);
-			}
-			else if (compName == "OR2")
-			{
-				OR2*ptr = new OR2(point, 3);
-				pA = ptr;
-				pManager->componentLoading(file, ptr);
-			}
-			else if (compName == "SWITCH")
-			{
-				SWITCH*ptr = new SWITCH(point, 3);
-				pA = ptr;
-				pManager->componentLoading(file, ptr);
-			}
-			else if (compName == "XNOR2")
-			{
-				XNOR2*ptr = new XNOR2(point, 3);
-				pA = ptr;
-				pManager->componentLoading(file, ptr);
-			}
-			else if (compName == "XOR2")
-			{
-				XOR2*ptr = new XOR2(point, 3);
-				pA = ptr;
-				pManager->componentLoading(file, ptr);
-			}
-			else if (compName == "XOR3")
-			{
-				XOR3*ptr = new XOR3(point, 3);
-				pA = ptr;
-				pManager->componentLoading(file, ptr);
-			}
-			//Filling the needed arrays
-			GraphicsInfo GInfotmp = point;
-			int Len = UI.GATE_Width;
-			int Wdth = UI.GATE_Height;
-			Utils::allComponentsCorners.push_back(point);
-			pOut->storeImage(img, pA->getCenterLocation().x1 - UI.GRID_SIZE - 5, pA->getCenterLocation().y1 - UI.GRID_SIZE - 5, 2 * UI.GRID_SIZE + 4, UI.GATE_Height + 3);
-			pA->setSmallCleanImageBeforeAddingComp(img);
-			
-			//Draw the Loaded Gate 
-			pA->Draw(pOut);
+			//Leaving the componenet instantaiting for the application manager
+			pManager->componentLoading(file, compName, point);
+
 		}
 
 		//Loading The Connection What've saved in connection 

@@ -294,9 +294,97 @@ Component * ApplicationManager::getComponent(int idx)
 {
 	return CompList[idx];
 }
-void ApplicationManager::componentLoading(ifstream & in, Component * C)
+void ApplicationManager::componentLoading(ifstream & in, string compType, GraphicsInfo point)
 {
-	C->load(this, in);
+	image* img = new image;
+	Component* pA;
+	if (compType == "AND2")
+	{
+		AND2*ptr = new AND2(point, 3);
+		ptr->load(this, in);
+		pA = ptr;
+	}
+	else if (compType == "AND3")
+	{
+		AND3*ptr = new AND3(point, 3);
+		ptr->load(this, in);
+		pA = ptr;
+	}
+	else if (compType == "BUFFER")
+	{
+		BUFFER*ptr = new BUFFER(point, 3);
+		ptr->load(this, in);
+		pA = ptr;
+	}
+	else if (compType == "LED")
+	{
+		LED*ptr = new LED(point, 3);
+		ptr->load(this, in);
+		pA = ptr;
+	}
+	else if (compType == "NAND2")
+	{
+		NAND2*ptr = new NAND2(point, 3);
+		ptr->load(this, in);
+		pA = ptr;
+	}
+	else if (compType == "NOR2")
+	{
+		NOR2*ptr = new NOR2(point, 3);
+		ptr->load(this, in);
+		pA = ptr;
+	}
+	else if (compType == "NOR3")
+	{
+		NOR3*ptr = new NOR3(point, 3);
+		ptr->load(this, in);
+		pA = ptr;
+	}
+	else if (compType == "NOT")
+	{
+		NOT*ptr = new NOT(point, 3);
+		ptr->load(this, in);
+		pA = ptr;
+	}
+	else if (compType == "OR2")
+	{
+		OR2*ptr = new OR2(point, 3);
+		ptr->load(this, in);
+		pA = ptr;
+	}
+	else if (compType == "SWITCH")
+	{
+		SWITCH*ptr = new SWITCH(point, 3);
+		ptr->load(this, in);
+		pA = ptr;
+	}
+	else if (compType == "XNOR2")
+	{
+		XNOR2*ptr = new XNOR2(point, 3);
+		ptr->load(this, in);
+		pA = ptr;
+	}
+	else if (compType == "XOR2")
+	{
+		XOR2*ptr = new XOR2(point, 3);
+		ptr->load(this, in);
+		pA = ptr;
+	}
+	else if (compType == "XOR3")
+	{
+		XOR3*ptr = new XOR3(point, 3);
+		ptr->load(this, in);
+		pA = ptr;
+	}
+	//Filling the needed arrays of the Grid
+	GraphicsInfo GInfotmp = point;
+	int Len = UI.GATE_Width;
+	int Wdth = UI.GATE_Height;
+	Utils::allComponentsCorners.push_back(point);
+	GetOutput()->storeImage(img, pA->getCenterLocation().x1 - UI.GRID_SIZE - 5, pA->getCenterLocation().y1 - UI.GRID_SIZE - 5, 2 * UI.GRID_SIZE + 4, UI.GATE_Height + 3);
+	pA->setSmallCleanImageBeforeAddingComp(img);
+	//Draw the Loaded Gate 
+	pA->Draw(GetOutput());
 }
 void ApplicationManager::setExitChoice(int x)
 {
