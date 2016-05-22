@@ -1229,7 +1229,7 @@ void Output::clearConnections(vector<Connection*>& allConnections, int originalX
 						pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE, cell2.x*UI.GRID_SIZE, cell2.y*UI.GRID_SIZE);
 						pWind->DrawRectangle(cell.x * UI.GRID_SIZE - 10, cell.y*UI.GRID_SIZE - 10, cell.x*UI.GRID_SIZE + 10, cell.y*UI.GRID_SIZE + 10, FILLED);
 						pWind->SetPen(UI.ConnColor, 2);
-						pWind->DrawLine(cell.x* UI.GRID_SIZE - 15, cell.y* UI.GRID_SIZE, cell.x* UI.GRID_SIZE + 10, cell.y* UI.GRID_SIZE);
+						pWind->DrawLine(cell.x* UI.GRID_SIZE -((arrayOfIntersections[cell.y][cell.x-1] != -1)?11:15), cell.y* UI.GRID_SIZE, cell.x* UI.GRID_SIZE + 10, cell.y* UI.GRID_SIZE);
 					}
 				}
 
