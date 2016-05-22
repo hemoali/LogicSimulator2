@@ -1740,6 +1740,9 @@ int window::printMessageBox(char s[], char type)
 	case 'N':
 		ret = MessageBox(hwndWindow, "Do you want to make a new design? All unsaved progress will be lost.", "Programming Technique", MB_OKCANCEL | MB_ICONINFORMATION | MB_RIGHT);
 		break;
+	case 'T':
+		ret = MessageBox(hwndWindow, "The table is too wide to be drawn. Do you want to open it outside the interface?", "Programming Technique", MB_OKCANCEL | MB_ICONINFORMATION | MB_RIGHT);
+		break;
 	default:
 		if (strlen(s) > 0)
 			ret = MessageBox(hwndWindow, (s), ("Programming Techniques Project"), MB_OK | MB_ICONERROR);

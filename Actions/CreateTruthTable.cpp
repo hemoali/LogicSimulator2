@@ -47,7 +47,7 @@ void CreateTruthTable::Execute()
 	//and later print their Names
 	if (NumOfInputs > 4) tooLarge = true;
 	string row = "";
-	string *table = new string[NumOfInputs*NumOfInputs + 1];
+	string *table = new string[NumOfInputs*NumOfInputs + (NumOfInputs == 1 ? 2:1)];
 	int RowNum = 0;
 	NumOfInputs = NumOfOutputs = 0;
 	ofstream file;
@@ -334,7 +334,7 @@ void CreateTruthTable::Execute()
 		{
 			table[RowNum++] = row;
 			row = "";
-	}
+		}
 	}
 	if (tooLarge)
 	pOut->PrintStatusBox("The truth table has been created sucessfully");
@@ -346,26 +346,40 @@ void CreateTruthTable::Execute()
 		int X, Y, w, h;
 		//The before saved Image
 		image *img = pOut->DrawTruthTable(table, NumOfInputs, NumOfOutputs, X, Y, w, h);
-		Input *pIn = pManager->GetInput(); //Pointer to Input Class
-		int x, y;
-		bool terminate = false;
-		pOut->PrintStatusBox("to exit click at any point out of the rectangle");
-		//New member function to wait for Selection Point.
-		pIn->WaitSelectionPoint(x, y);
-		//Check if the new Point is in the Menu Bar or Not
-		while (!terminate) {
-			if (x > X && x < w && y > Y && y < h) {
-				//The user still in the truth table rectangle
-				pIn->WaitSelectionPoint(x, y);
+		if (img != NULL) {
+			Input *pIn = pManager->GetInput(); //Pointer to Input Class
+			int x, y;
+			bool terminate = false;
+			pOut->PrintStatusBox("to exit click at any point out of the rectangle");
+			//New member function to wait for Selection Point.
+			pIn->WaitSelectionPoint(x, y);
+			//Check if the new Point is in the Menu Bar or Not
+			while (!terminate) {
+				if (x > X && x < w && y > Y && y < h) {
+					//The user still in the truth table rectangle
+					pIn->WaitSelectionPoint(x, y);
+				}
+				else {
+					//The user want to dismiss the truth table
+					terminate = true;
+					//So delete the image & restore previous state
+					pOut->drawAfterTruthTable(img, X, Y, w, h);
+				}
 			}
-			else {
-				//The user want to dismiss the truth table
-				terminate = true;
-				//So delete the image & restore previous state
-				pOut->drawAfterTruthTable(img, X, Y, w, h);
+		}
+		else {
+			int res = pOut->printPopUpMessage("",'T');
+			if (res = IDYES) {
+				file.open("TruthTable.txt");
+				for (int i = 0; i < pow(2, NumOfInputs) + 1; i++) {
+					file << table[i] << endl;
+				}
+				file.close();
+				pOut->PrintTruthTable();
 			}
 		}
 	}
+
 }
 
 void CreateTruthTable::Undo()

@@ -710,6 +710,10 @@ image * Output::DrawTruthTable(string table[], int inputsNum, int outputsNum, in
 	stringHeight = height;
 	height += (int(1<<inputsNum)*stringHeight);
 	h = height += 10;
+	if (height < 30) height = 30;
+	if (width < 30) width = 30;
+	if (width > UI.width - 40)
+		return NULL;
 	//Setting the upper left point
 	X = startx = UI.width / 2 - width / 2 +10; //10 is the half of the added space from the right and the left
 	Y = starty = 200 + (4 - inputsNum) * 10 + 5;
