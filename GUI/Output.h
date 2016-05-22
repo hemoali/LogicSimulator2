@@ -10,7 +10,7 @@ struct bfs_node
 	int y;
 	bfs_node* parent;
 };
-class Output	//The application manager should have a pointer to this class
+class Output
 {
 private:
 	window* pWind;	//Pointer to the Graphics Window
