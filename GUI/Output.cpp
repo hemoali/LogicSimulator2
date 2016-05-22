@@ -758,7 +758,7 @@ void Output::changeConnectionColor(Connection * connection, color Color) {
 	bool b1 = false, b2 = false, PreviousIsIntersection = false, PreviousIsIntersection2 = false, isCell2XGreaterThanCellX = false, isCell2YGreaterThanCellY = false;
 	int i = 0;
 	int Vertical0Horizontal1Nothing2 = 2;
-
+	
 	for (size_t j = 0; j < connection->getCellsBeforeAddingConnection().size(); j++)
 	{
 		Cell cell = connection->getCellsBeforeAddingConnection()[j];
@@ -904,7 +904,7 @@ void Output::changeConnectionColor(Connection * connection, color Color) {
 						isCell2XGreaterThanCellX = false;
 						if (!PreviousIsIntersection)
 						{
-							pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE, cell2.x * UI.GRID_SIZE + 6, cell2.y*UI.GRID_SIZE);
+							pWind->DrawLine(cell.x * UI.GRID_SIZE+((arrayOfCorners[cell.y][cell.x] == 0) ? 4 : 0), cell.y*UI.GRID_SIZE, cell2.x * UI.GRID_SIZE + 6, cell2.y*UI.GRID_SIZE);
 						}
 						else {
 							pWind->DrawLine(cell.x * UI.GRID_SIZE - 6, cell.y*UI.GRID_SIZE, cell2.x * UI.GRID_SIZE + 6, cell2.y*UI.GRID_SIZE);
@@ -914,11 +914,24 @@ void Output::changeConnectionColor(Connection * connection, color Color) {
 				else if (Vertical0Horizontal1Nothing2 == 0) {
 					if (cell2.y < cell.y) {
 						isCell2YGreaterThanCellY = false;
-						pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE, cell2.x * UI.GRID_SIZE, cell2.y*UI.GRID_SIZE - 3);
+						if (!PreviousIsIntersection2)
+						{
+							pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE, cell2.x * UI.GRID_SIZE, cell2.y*UI.GRID_SIZE - 3);
+						}
+						else {
+							pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE-6, cell2.x * UI.GRID_SIZE, cell2.y*UI.GRID_SIZE - 3);
+						}
 					}
 					else {
 						isCell2YGreaterThanCellY = true;
-						pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE, cell2.x * UI.GRID_SIZE, cell2.y*UI.GRID_SIZE - 6);
+						if (!PreviousIsIntersection2)
+						{
+							pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE, cell2.x * UI.GRID_SIZE, cell2.y*UI.GRID_SIZE - 6);
+
+						}
+						else {
+							pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE+6, cell2.x * UI.GRID_SIZE, cell2.y*UI.GRID_SIZE - 6);
+						}
 
 					}
 				}
