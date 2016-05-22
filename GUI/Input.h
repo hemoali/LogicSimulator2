@@ -5,6 +5,7 @@
 #include <vector>
 #include <utility>
 #include "..\Utils.h"
+class ApplicationManager;
 class Output;
 class Component;
 class SWITCH;
