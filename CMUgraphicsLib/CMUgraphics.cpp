@@ -11,6 +11,7 @@ This file was last modified on 05.16.1999
 #include "CMUgraphics.h"
 #include "error.h"
 #include "windowinput.h"
+using namespace std;
 
 // Keeps track of key and mouse input and redirects it to the
 // appropriate window object
@@ -541,6 +542,7 @@ keytype window::GetKeyPress(char &cKey) {
 	if (kqueTmp != NULL) {
 		cKey = kqueTmp->cValue;
 		ktTmp = kqueTmp->ktInfo;
+
 		if (kqueTmp->kqueNext != NULL)
 		{
 			if ((int)kqueTmp->cValue == 13 && (int)kqueTmp->kqueNext->cValue == 26)
@@ -1767,7 +1769,7 @@ string window::theWindowEditString = "";
 
  void window::printChecking()
  {
-	// ShellExecute(hwndWindow, "open", "Check.txt", NULL, NULL, SW_SHOWDEFAULT);
+	 ShellExecute(hwndWindow, "open", "Check.txt", NULL, NULL, SW_SHOWDEFAULT);
  }
 
 

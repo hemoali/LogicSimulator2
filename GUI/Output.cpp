@@ -704,8 +704,6 @@ void Output::storeImage(image * img, int x1, int y1, int x2, int y2)
 	pWind->StoreImage(img, x1, y1, x2, y2);
 }
 
-
-
 void Output::changeConnectionColor(Connection * connection, color Color) {
 	bool b1 = false, b2 = false, PreviousIsIntersection = false, PreviousIsIntersection2 = false, isCell2XGreaterThanCellX = false, isCell2YGreaterThanCellY = false;
 	int i = 0;
@@ -786,7 +784,7 @@ void Output::changeConnectionColor(Connection * connection, color Color) {
 							pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE, cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE - 10);
 						}
 						else {
-							pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE - 6, cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE - 10);
+							pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE, cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE - 10);
 						}
 					}
 					else {

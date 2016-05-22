@@ -18,11 +18,7 @@ int main()
 		//Exexute the action
 		AppManager.ExecuteAction(ActType);
 		exitChoice = AppManager.Exitchoice;
-		//Update the drawing window
-		//AppManager.UpdateInterface();
+	} while(exitChoice != 1);
 	
-
-	}while(exitChoice != 1);
-		
 	return 0;
 }

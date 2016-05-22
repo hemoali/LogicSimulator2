@@ -17,7 +17,8 @@ enum keytype {
 	FUNCTION,
 	ESCAPE,
 	UNDO,
-	REDO
+	REDO,
+	CTRL
 };
 
 

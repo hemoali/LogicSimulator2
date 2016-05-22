@@ -19,6 +19,7 @@ protected:
 	InputPin* m_InputPins;	//Array of input pins of the Gate
 	OutputPin m_OutputPin;	//The Gate output pin
 public:
+	static int CreatedComponents, DestructedComponents;
 	Component(const GraphicsInfo &r_GfxInfo, int r_FanOut);
 	Component(const GraphicsInfo &r_GfxInfo);
 

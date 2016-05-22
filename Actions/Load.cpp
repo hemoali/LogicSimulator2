@@ -91,15 +91,7 @@ void Load::Execute()
 		for (int i = 0; i < compCount; i++)
 		{
 			file >> compName >> point.x1 >> point.y1;// >> compLabel;
-			//if (compLabel.size() <= 1) {
-			//	//Means that the label is empty as we have put an extra L 
-			//	//char at the begining of te saved label to know whetherit has a name or not
-			//	// in order to avoid misreading the input file
-			//	compLabel = "";
-			//}
-			//else {
-			//	compLabel = compLabel.substr(1, compLabel.size());
-			//}
+
 			//Completing the Component Corners
 			point.x2 = point.x1 + UI.GATE_Width;
 			point.y2 = point.y1 + UI.GATE_Height;
@@ -219,7 +211,6 @@ void Load::Execute()
 			}
 			theConnection.AddConnectionSilent(c1, c2, c3, c4, compLabel);
 		}
-		//pManager->GetOutput()->PrintMsg("Design loaded successfully");
 		pOut->PrintStatusBox("Design loaded successfully");
 		file.close();
 		// clear undo/redo stacks

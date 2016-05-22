@@ -19,3 +19,6 @@ Gate::Gate(int r_Inputs, int r_FanOut, GraphicsInfo r_GfxInfo) :Component(r_GfxI
 
 	m_OutputPin.setComponent(this);
 }
+Gate::~Gate() {
+	delete[] m_InputPins;
+}

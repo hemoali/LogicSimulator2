@@ -11,7 +11,6 @@ Input::Input(window* pW)
 	isSelectMode = isSelectionContainConnections = false;
 	toBeChangedSwitch = NULL;
 }
-
 void Input::GetPointClicked(int &x, int &y, bool DrawGate, bool DrawConnection)
 {
 	pWind->WaitMouseClick(x, y);	//Wait for mouse click
@@ -27,7 +26,6 @@ void Input::getMouseCoordinates(int & x, int & y)
 	pWind->GetMouseCoord(x, y);
 	pWind->FlushMouseQueue();
 }
-
 void Input::DrawAfterMenu(image * img, int x, int y, int type, int w)
 {
 	int Height;
@@ -66,7 +64,6 @@ void Input::DrawAfterMenu(image * img, int x, int y, int type, int w)
 	if (type != 7)
 		delete img;
 }
-
 void Input::clearHoveringImage(image * img, int J, int K, int widthh)
 {
 	if (img != NULL)
@@ -250,7 +247,6 @@ ActionType Input::GetUserAction()
 			return SAVE;
 		}
 		// Working with mouse
-
 		bool drawConnection = false;
 		if (pWind->GetButtonState(LEFT_BUTTON, xT, yT) == BUTTON_DOWN && yT >= UI.ToolBarHeight + 20 && xT >= UI.LeftToolBarWidth && yT < UI.height - UI.StatusBarHeight) {
 			if (UI.AppMode == DESIGN)
@@ -289,6 +285,13 @@ ActionType Input::GetUserAction()
 								clearHoveringImage(imgh, J, K, widthh);
 								return MULTI_MOVE;
 							}
+						}
+						// Ctrl
+						if ((int)c1 == 13)
+						{
+							cout << "XX"<<endl;
+						}else if ((int)c1 != 0){
+							cout << c1<<endl;
 						}
 					}
 					//Always Clear hover Bar if found

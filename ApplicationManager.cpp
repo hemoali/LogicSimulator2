@@ -141,12 +141,12 @@ void ApplicationManager::ExecuteAction(ActionType ActType)
 		pAct = new MultiSelect(this); Utils::theActions.push_back(pAct);
 		break;
 	}
-	//The Automatic Action
 	case Change_Switch: {
 		ChangeSwitch* act = new ChangeSwitch(this, GetInput()->toBeChangedSwitch);
 		act->Execute();
 		Simulate simulateAction(this, false);
 		simulateAction.Execute();
+		 Utils::theActions.push_back(pAct);
 		break;
 	}
 	case Create_TruthTable:
@@ -154,6 +154,7 @@ void ApplicationManager::ExecuteAction(ActionType ActType)
 		OutputInterface->PrintStatusBox("Creating truth table ....");
 		CreateTruthTable CreateTruthTAction(this);
 		CreateTruthTAction.Execute();
+		Utils::theActions.push_back(pAct);
 		break;
 	}
 	case RIGHT_CLICKSELECT: {
@@ -310,9 +311,6 @@ void ApplicationManager::setExitChoice(int x)
 }
 ApplicationManager::~ApplicationManager()
 {
-	for (int i = 0; i < CompCount; i++)
-		delete CompList[i];
-
 	Output* pOut = GetOutput();
 	ofstream file;
 	Action *temp;
@@ -323,6 +321,9 @@ ApplicationManager::~ApplicationManager()
 		"\nThis Function is Called in the Application Manager Destructor\n" << "................................................................." << endl << endl ;
 	file << "Actions constructed  " << Action::ID << endl;
 	file << "Actions Destructed  " << Action::IDD << endl;
+	file << "\n\n"<< "................................................................." << endl << endl;
+	file << "Components constructed  " << Component::CreatedComponents << endl;
+	file << "Components Destructed  " << Component::DestructedComponents << endl;
 	file.close();
 	pOut->printCheck();
 	delete OutputInterface;

@@ -15,6 +15,7 @@ class Gate:public Component
 
 public:
 	Gate(int r_Inputs, int r_FanOut, GraphicsInfo r_GfxInfo);
+	~Gate();
 };
 
 #endif

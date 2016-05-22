@@ -27,25 +27,6 @@ Component * Utils::getArrayOfComponents(int i, int j)
 	return Utils::arrayOfComponents[i][j];
 }
 
-GraphicsInfo* Utils::getOutputDirections(GraphicsInfo GInfo, CellType usedPixels[44][74], int noOfOutputs) {
-	GraphicsInfo* arrayOfDirections = new GraphicsInfo[noOfOutputs];
-	GInfo.x1 += UI.GRID_SIZE - (GInfo.x1 % UI.GRID_SIZE);
-
-	GraphicsInfo GInfo1, GInfo2, GInfo3;
-	GInfo1.x1 = GInfo.x1;
-	GInfo1.y1 = GInfo.y1;
-
-	GInfo2.x1 = GInfo.x1;
-	GInfo2.y1 = GInfo.y1 - UI.GRID_SIZE;
-
-	GInfo3.x1 = GInfo.x1;
-	GInfo3.y1 = GInfo.y1 + UI.GRID_SIZE;
-
-	arrayOfDirections[1] = GInfo1;
-	arrayOfDirections[0] = GInfo2;
-	arrayOfDirections[2] = GInfo3;
-	return arrayOfDirections;
-}
 void  Utils::correctPointClicked(int &x, int &y, bool DrawGate, bool DrawConnection) {
 	if (DrawGate) {
 

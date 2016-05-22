@@ -42,7 +42,7 @@ void LED::setInputPinStatus(int n, STATUS s)
 	getInputPin(n = 0)->setStatus(s);
 }
 LED::~LED(){
-
+	delete[] m_InputPins;
 }
 void LED::selectYourSelf(Output* pOut, color Color) {
 
