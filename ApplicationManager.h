@@ -29,7 +29,7 @@ public:
 	ActionType cutorcopy;
 
 	ApplicationManager(); //constructor
-	void UpdateInterface();
+	void UpdateInterface() {};
 	//Reads the required action from the user and returns the corresponding action type
 	ActionType GetUserAction();
 	

@@ -54,6 +54,11 @@ void ApplicationManager::AddComponent(Component* pComp)
 
 ActionType ApplicationManager::GetUserAction()
 {
+	if (Exitchoice == 1)
+	{
+		return QUIT;
+	}
+
 	Utils::allConnections.clear();
 	for (int i = 0; i < CompCount; i++) {
 		if (dynamic_cast<Connection*> (CompList[i]) && !CompList[i]->getDelete())
