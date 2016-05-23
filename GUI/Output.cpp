@@ -2282,11 +2282,11 @@ void Output::DrawSwtich(GraphicsInfo g, bool isON, bool highlighted, bool notVal
 							  //the rectangle
 	if (isON)
 	{
-		pWind->DrawImage("images\\Menu\\SWITCH_ON.jpg", cx - 13, cy - 16, 32 - 4, 32);
+		pWind->DrawImage("images\\Menu\\SWITCH_ON.jpg", cx - 17, cy - 16, 32, 32);
 	}
 	else
 	{
-		pWind->DrawImage("images\\Menu\\SWITCH_OFF.jpg", cx - 13, cy - 16, 32 - 4, 32);
+		pWind->DrawImage("images\\Menu\\SWITCH_OFF.jpg", cx - 17, cy - 16, 32, 32);
 	}
 	//the output line
 	pWind->DrawLine(cx + 12, cy, cx + 21, cy);
