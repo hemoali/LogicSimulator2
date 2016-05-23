@@ -54,6 +54,11 @@ void ApplicationManager::AddComponent(Component* pComp)
 
 ActionType ApplicationManager::GetUserAction()
 {
+	if (Exitchoice == 1)
+	{
+		return QUIT;
+	}
+
 	Utils::allConnections.clear();
 	for (int i = 0; i < CompCount; i++) {
 		if (dynamic_cast<Connection*> (CompList[i]) && !CompList[i]->getDelete())
@@ -143,10 +148,11 @@ void ApplicationManager::ExecuteAction(ActionType ActType)
 	}
 	case Change_Switch: {
 		ChangeSwitch* act = new ChangeSwitch(this, GetInput()->toBeChangedSwitch);
+		Utils::theActions.push_back(act);
 		act->Execute();
 		Simulate simulateAction(this, false);
 		simulateAction.Execute();
-		 Utils::theActions.push_back(pAct);
+		
 		break;
 	}
 	case Create_TruthTable:

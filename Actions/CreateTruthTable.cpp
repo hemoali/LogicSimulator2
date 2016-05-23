@@ -251,7 +251,7 @@ void CreateTruthTable::Execute()
 				k++;
 			}
 		}
-		//printing outputs of the current compination
+		//printing outputs of the current combination
 		for (size_t j = 0; j < Utils::allComponentsCorners.size(); j++)
 		{
 			Component* comp = pManager->getComponent(j);
@@ -369,7 +369,7 @@ void CreateTruthTable::Execute()
 		}
 		else {
 			int res = pOut->printPopUpMessage("",'T');
-			if (res = IDYES) {
+			if (res == 1) {
 				file.open("TruthTable.txt");
 				for (int i = 0; i < (1<<NumOfInputs) + 1; i++) {
 					file << table[i] << endl;

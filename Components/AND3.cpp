@@ -35,13 +35,13 @@ int AND3::GetOutPinStatus()
 //returns status of Inputpin #n
 int AND3::GetInputPinStatus(int n)
 {
-	return m_InputPins[n - 1].getStatus();	//n starts from 1 but array index starts from 0.
+	return m_InputPins[n ].getStatus();	//n starts from 1 but array index starts from 0.
 }
 
 //Set status of an input pin to HIGH or LOW
 void AND3::setInputPinStatus(int n, STATUS s)
 {
-	m_InputPins[n - 1].setStatus(s);
+	m_InputPins[n ].setStatus(s);
 }
 void AND3::selectYourSelf(Output* pOut, color Color) {
 	

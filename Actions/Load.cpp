@@ -43,7 +43,7 @@ void Load::Execute()
 	Clear newAction(pManager);
 	Output *pOut = pManager->GetOutput();
 
-	if (ReadActionParameters(NULL, NULL)) {
+	if (ReadActionParameters(NULL, NULL) && path != "") {
 		// To clear the screen
 		newAction.setLoading(true);
 		newAction.Execute();

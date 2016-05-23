@@ -37,13 +37,13 @@ int NOT::GetOutPinStatus()
 //returns status of the Inputpin 
 int NOT::GetInputPinStatus(int n)
 {
-	return m_InputPins[n - 1].getStatus();
+	return m_InputPins[n ].getStatus();
 }
 
 //Set status of the input pin to HIGH or LOW
 void NOT::setInputPinStatus(int n, STATUS s)
 {
-	m_InputPins[n - 1].setStatus(s);
+	m_InputPins[n ].setStatus(s);
 }
 void NOT::selectYourSelf(Output* pOut, color Color) {
 

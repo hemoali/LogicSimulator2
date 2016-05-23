@@ -21,7 +21,7 @@ void Delete::Execute()
 {
 	Output* pOut = pManager->GetOutput();
 	if (this->ReadActionParameters(NULL, NULL)) {
-		if (theComponent != NULL && (dynamic_cast<Gate*> (theComponent) || dynamic_cast<LED*>(theComponent) || dynamic_cast<SWITCH*> (theComponent))){
+		if (theComponent != NULL && (dynamic_cast<Gate*> (theComponent) || dynamic_cast<LED*>(theComponent) || dynamic_cast<SWITCH*> (theComponent))) {
 			Output *pOut = pManager->GetOutput();
 			string s = "Gate: " + (theComponent->getLabel()) + " has been deleted successfully";
 			pOut->PrintStatusBox(s);
@@ -32,6 +32,7 @@ void Delete::Execute()
 			vector<Connection*> allInConnections, allOutConnections;
 			theComponent->getAllInputConnections(allInConnections);
 			theComponent->getAllOutputConnections(allOutConnections);
+
 			theComponent->getAllInputConnections(allInputConnections);
 			theComponent->getAllOutputConnections(allOutputConnections);
 
@@ -87,9 +88,6 @@ void Delete::Undo()
 	Output* pOut = pManager->GetOutput();
 
 	if (theComponent != NULL && (dynamic_cast<Gate*> (theComponent) || dynamic_cast<LED*>(theComponent) || dynamic_cast<SWITCH*> (theComponent))) {
-		Output *pOut = pManager->GetOutput();
-		string s = "Gate: " + (theComponent->getLabel()) + " has been deleted successfully";
-		pOut->PrintStatusBox(s);
 		theComponent->setDelete(false);
 		theComponent->Draw(pOut);
 		// reconnect Connection
@@ -119,14 +117,52 @@ void Delete::Undo()
 		}
 	}
 }
+void Delete::Undo(int c)
+{
+	Output* pOut = pManager->GetOutput();
+	if (c == 0) // re draw gates
+	{
+		if (theComponent != NULL && (dynamic_cast<Gate*> (theComponent) || dynamic_cast<LED*>(theComponent) || dynamic_cast<SWITCH*> (theComponent))) {
+			theComponent->setDelete(false);
+			theComponent->Draw(pOut);
+		}
+	}
+	// reconnect connections
+	if (c == 1) {
+		if (theComponent != NULL && (dynamic_cast<Gate*> (theComponent) || dynamic_cast<LED*>(theComponent) || dynamic_cast<SWITCH*> (theComponent))) {
+			// reconnect Connection
+			for (size_t i = 0; i < allInputConnections.size(); i++)
+			{
+				if (allInputConnections[i]->getIsDrawn())
+				{
+					continue;
+				}
+				reconnectConenction(allInputConnections[i]);
+			}
 
+			for (size_t i = 0; i < allOutputConnections.size(); i++)
+			{
+				if (allOutputConnections[i]->getIsDrawn())
+				{
+					continue;
+				}
+				reconnectConenction(allOutputConnections[i]);
+			}
+		}
+		else if (theComponent != NULL && dynamic_cast<Connection*> (theComponent))
+		{
+			if (!((Connection*)theComponent)->getIsDrawn())
+			{
+				reconnectConenction((Connection*)theComponent);
+			}
+		}
+	}
+}
 void Delete::Redo()
 {
 	Output *pOut = pManager->GetOutput();
 
 	if (theComponent != NULL && (dynamic_cast<Gate*> (theComponent) || dynamic_cast<LED*>(theComponent) || dynamic_cast<SWITCH*> (theComponent))) {
-		string s = "Gate: " + (theComponent->getLabel()) + " has been deleted successfully";
-		pOut->PrintStatusBox(s);
 		theComponent->setDelete(true);
 		theComponent->Draw(pOut);
 

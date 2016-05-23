@@ -2,11 +2,11 @@
 
 
 
-MultiDelete::MultiDelete(ApplicationManager* pApp):Delete(pApp)
+MultiDelete::MultiDelete(ApplicationManager* pApp) :Delete(pApp)
 {
 }
 
-MultiDelete::MultiDelete(ApplicationManager * pApp, vector<pair<int, Component*>> V):Delete(pApp)
+MultiDelete::MultiDelete(ApplicationManager * pApp, vector<pair<int, Component*>> V) : Delete(pApp)
 {
 	theVector = V;
 }
@@ -22,7 +22,7 @@ MultiDelete::~MultiDelete()
 
 bool MultiDelete::ReadActionParameters(image *, Component* c)
 {
-	if( theVector.size() == 0) 
+	if (theVector.size() == 0)
 		return false;
 	return true;
 }
@@ -47,7 +47,11 @@ void MultiDelete::Undo()
 {
 	for (size_t i = 0; i < allDeleteActions.size(); i++)
 	{
-		allDeleteActions[i]->Undo();
+		((Delete*)allDeleteActions[i])->Undo(0);
+	}
+	for (size_t i = 0; i < allDeleteActions.size(); i++)
+	{
+		((Delete*)allDeleteActions[i])->Undo(1);
 	}
 }
 
