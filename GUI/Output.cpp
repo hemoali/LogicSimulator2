@@ -710,7 +710,7 @@ image * Output::DrawTruthTable(string table[], int inputsNum, int outputsNum, in
 	w = width += 20;
 	//And change the Height to be also the height of the table
 	stringHeight = height;
-	height += (int(1<<inputsNum)*stringHeight);
+	height += (((1<<inputsNum)+1)*stringHeight);
 	h = height += 10;
 	if (height < 30) height = 30;
 	if (width < 30) width = 30;
@@ -727,10 +727,10 @@ image * Output::DrawTruthTable(string table[], int inputsNum, int outputsNum, in
 	string imageURL = "images\\Menu\\TruthTable.jpg";
 	pWind->DrawImage(imageURL, startx, starty, width, height);
 	//Drawing Each Combination
-	for (int i = 0; i < int(1 << inputsNum); i++) {
+	for (int i = 0; i <= int(1 << inputsNum); i++) {
 		starty += stringHeight;
-		if(i== int(1 << inputsNum)-1)
-			pWind->SetFont(20, BOLD, BY_NAME, "Consolas");
+		if(i== int(1 << inputsNum))
+		  pWind->SetFont(20, BOLD, BY_NAME, "Consolas");
 		pWind->DrawString(startx+10, starty, table[i]);
 	}
 	return img;

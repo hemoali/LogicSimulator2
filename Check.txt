@@ -3,11 +3,11 @@ Using Check.txt file to debug deallocations or any furthur Checking.
 This Function is Called in the Application Manager Destructor
 .................................................................
 
-Actions constructed  32
-Actions Destructed  32
+Actions constructed  51
+Actions Destructed  51
 
 
 .................................................................
 
-Components constructed  47
-Components Destructed  47
+Components constructed  31
+Components Destructed  31
