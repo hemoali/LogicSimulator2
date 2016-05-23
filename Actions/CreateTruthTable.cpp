@@ -369,7 +369,7 @@ void CreateTruthTable::Execute()
 		}
 		else {
 			int res = pOut->printPopUpMessage("",'T');
-			if (res = IDYES) {
+			if (res == IDYES) {
 				file.open("TruthTable.txt");
 				for (int i = 0; i < (1<<NumOfInputs) + 1; i++) {
 					file << table[i] << endl;
