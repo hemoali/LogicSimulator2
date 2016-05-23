@@ -90,6 +90,7 @@ vector<Cell>& Connection::getCellsBeforeAddingConnection()
 	return cellsBeforeAddingConnection;
 }
 void Connection::selectYourSelf(Output* pOut, color Color) {
+	if(!getDelete())
 	pOut->changeConnectionColor(this, Color);
 }
 

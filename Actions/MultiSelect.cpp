@@ -33,7 +33,10 @@ void MultiSelect::Execute()
 
 		for (size_t i = 0; i < Utils::allConnections.size(); i++)
 		{
-			Utils::allConnections[i]->selectYourSelf(pOut, UI.ConnColor);
+			if (!Utils::allConnections[i]->getDelete())
+			{
+				Utils::allConnections[i]->selectYourSelf(pOut, UI.ConnColor);
+			}
 		}
 		for (size_t i = 0; i < pIn->getSelectedComponents().size(); i++)
 		{
@@ -57,7 +60,10 @@ void MultiSelect::Execute()
 		}
 		for (size_t i = 0; i < pIn->getSelectedComponents().size(); i++)
 		{
-			pIn->getSelectedComponents()[i].second->Draw(pOut, false);
+			if (!pIn->getSelectedComponents()[i].second->getDelete())
+			{
+				pIn->getSelectedComponents()[i].second->Draw(pOut, false);
+			}
 		}
 		//Always Clear hover Bar if found
 		pIn->setSelectMode(false);

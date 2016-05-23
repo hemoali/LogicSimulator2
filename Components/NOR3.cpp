@@ -37,13 +37,13 @@ int NOR3::GetOutPinStatus()
 //returns status of Inputpin #n
 int NOR3::GetInputPinStatus(int n)
 {
-	return m_InputPins[n - 1].getStatus();	//n starts from 1 but array index starts from 0.
+	return m_InputPins[n ].getStatus();	//n starts from 1 but array index starts from 0.
 }
 
 //Set status of an input pin ot HIGH or LOW
 void NOR3::setInputPinStatus(int n, STATUS s)
 {
-	m_InputPins[n - 1].setStatus(s);
+	m_InputPins[n ].setStatus(s);
 }
 void NOR3::selectYourSelf(Output* pOut, color Color) {
 

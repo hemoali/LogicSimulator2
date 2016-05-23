@@ -251,7 +251,7 @@ void CreateTruthTable::Execute()
 				k++;
 			}
 		}
-		//printing outputs of the current compination
+		//printing outputs of the current combination
 		for (size_t j = 0; j < Utils::allComponentsCorners.size(); j++)
 		{
 			Component* comp = pManager->getComponent(j);
