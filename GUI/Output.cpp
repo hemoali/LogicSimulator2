@@ -710,7 +710,7 @@ image * Output::DrawTruthTable(string table[], int inputsNum, int outputsNum, in
 	w = width += 20;
 	//And change the Height to be also the height of the table
 	stringHeight = height;
-	height += (int(1<<inputsNum)*stringHeight);
+	height += (((1<<inputsNum)+1)*stringHeight);
 	h = height += 10;
 	if (height < 30) height = 30;
 	if (width < 30) width = 30;

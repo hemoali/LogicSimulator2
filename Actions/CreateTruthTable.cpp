@@ -47,7 +47,7 @@ void CreateTruthTable::Execute()
 	//and later print their Names
 	if (NumOfInputs > 4) tooLarge = true;
 	string row = "";
-	string *table = new string[NumOfInputs*NumOfInputs + (NumOfInputs == 1 ? 2:1)];
+	string *table = new string[(1<<NumOfInputs)+1];
 	int RowNum = 0;
 	NumOfInputs = NumOfOutputs = 0;
 	ofstream file;
@@ -234,18 +234,18 @@ void CreateTruthTable::Execute()
 					}
 					else
 					{
-					for (int K = 0; K < siz; K++)
-					{
-							if (tooLarge)
-							{
-								if (abs(K - siz) <= 2)
-									file << "|";
+						for (int K = 0; K < siz; K++)
+						{
+								if (tooLarge)
+								{
+									if (abs(K - siz) <= 2)
+										file << "|";
+									else
+							file << " ";
+								}
 								else
-						file << " ";
-					}
-							else
-								row += " ";
-				}
+									row += " ";
+						}
 					}
 				}
 				k++;
@@ -371,7 +371,7 @@ void CreateTruthTable::Execute()
 			int res = pOut->printPopUpMessage("",'T');
 			if (res = IDYES) {
 				file.open("TruthTable.txt");
-				for (int i = 0; i < pow(2, NumOfInputs) + 1; i++) {
+				for (int i = 0; i < (1<<NumOfInputs) + 1; i++) {
 					file << table[i] << endl;
 				}
 				file.close();
