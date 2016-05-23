@@ -4,6 +4,7 @@ class MultiDelete :
 	public Delete
 {
 	vector < pair<int, Component*> > theVector;
+	vector<Action*> allDeleteActions;
 public:
 	MultiDelete(ApplicationManager* pApp);
 	MultiDelete(ApplicationManager* pApp, vector<pair<int, Component*>> V);
