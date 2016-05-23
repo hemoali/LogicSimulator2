@@ -981,8 +981,13 @@ void Output::changeConnectionColor(Connection * connection, color Color) {
 
 }
 void Output::clearConnections(vector<Connection*>& allConnections, int originalX, int originalY, bool isInput, bool setDeleted) {
+	
 	for (size_t i = 0; i < allConnections.size(); i++)
 	{
+		if (allConnections[i]->getDelete())
+		{
+			continue;
+		}
 		for (size_t j = 0; j < allConnections[i]->getCellsBeforeAddingConnection().size(); j++)
 		{
 			if (Utils::getArrayOfComponents(allConnections[i]->getCellsBeforeAddingConnection()[j].y, allConnections[i]->getCellsBeforeAddingConnection()[j].x) == allConnections[i])

@@ -32,6 +32,7 @@ void Delete::Execute()
 			vector<Connection*> allInConnections, allOutConnections;
 			theComponent->getAllInputConnections(allInConnections);
 			theComponent->getAllOutputConnections(allOutConnections);
+			
 			theComponent->getAllInputConnections(allInputConnections);
 			theComponent->getAllOutputConnections(allOutputConnections);
 
@@ -87,9 +88,6 @@ void Delete::Undo()
 	Output* pOut = pManager->GetOutput();
 
 	if (theComponent != NULL && (dynamic_cast<Gate*> (theComponent) || dynamic_cast<LED*>(theComponent) || dynamic_cast<SWITCH*> (theComponent))) {
-		Output *pOut = pManager->GetOutput();
-		string s = "Gate: " + (theComponent->getLabel()) + " has been deleted successfully";
-		pOut->PrintStatusBox(s);
 		theComponent->setDelete(false);
 		theComponent->Draw(pOut);
 		// reconnect Connection
