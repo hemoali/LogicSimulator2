@@ -1751,6 +1751,7 @@ int window::printMessageBox(char s[], char type)
 	return ret;
 }
 
+
 void window::drawHovering(string s, int x, int y, int w, int h)
 {
 	HWND D = CreateWindow("STATIC", NULL, WS_VISIBLE | WS_DISABLED, x, y, 2, 2, hwndWindow, NULL, (HINSTANCE)GetWindowLong(hwndWindow, GWL_HINSTANCE), NULL);

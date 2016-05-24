@@ -24,8 +24,8 @@ bool AddSWITCH::ReadActionParameters(image * smallImageBeforeAddingComponent, Co
 		done = true;
 	}
 
-	//Clear Status Bar
-	pOut->ClearStatusBar();
+	
+	
 	return done;
 
 }

@@ -23,8 +23,8 @@ bool AddNOTgate::ReadActionParameters(image * smallImageBeforeAddingComponent, C
 		gateLabel =pIn->getStringBox();
 		done = true;
 	}
-	//Clear Status Bar
-	pOut->ClearStatusBar();
+	
+	
 	return done;
 
 }

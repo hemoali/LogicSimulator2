@@ -77,7 +77,7 @@ bool Utils::CheckPoint(GraphicsInfo r_GfxInfo, Output* pOut, Component* comp,  b
 			}
 		}
 	}
-	if ((r_GfxInfo.x1 - UI.GATE_Width / 2.0) <= UI.LeftToolBarWidth + 20 || (r_GfxInfo.y1 - UI.GATE_Height / 2.0) <=  UI.ToolBarHeight+8 || (r_GfxInfo.x1 + UI.GATE_Width / 2.0) >= UI.width - 16 || (r_GfxInfo.y1 + UI.GATE_Height / 2.0) >= UI.height - UI.StatusBarHeight)return 0;
+	if ((r_GfxInfo.x1 - UI.GATE_Width / 2.0) <= UI.LeftToolBarWidth + 20 || (r_GfxInfo.y1 - UI.GATE_Height / 2.0) <=  UI.ToolBarHeight+5 || (r_GfxInfo.x1 + UI.GATE_Width / 2.0) >= UI.width - 16 || (r_GfxInfo.y1 + UI.GATE_Height / 2.0) >= UI.height - UI.StatusBarHeight)return 0;
 
 	if (fillArray) {
 		for (int i = ybegin + 1; i <= yend; i++)
@@ -100,13 +100,13 @@ bool Utils::CheckPoint(GraphicsInfo r_GfxInfo, Output* pOut, Component* comp,  b
 	return 1;
 }
 bool Utils::CheckPoint(int x, int y, CellType usedPixels[44][74]) {
-	if ((x - UI.GATE_Width / 2.0) <= UI.LeftToolBarWidth + 20 || (y - UI.GATE_Height / 2.0) <= (UI.ToolBarHeight+20) || (x + UI.GATE_Width / 2.0) >= UI.width - 16 || (y + UI.GATE_Height / 2.0) >= (UI.height - UI.StatusBarHeight)) {
+	if ((x - UI.GATE_Width / 2.0) <= UI.LeftToolBarWidth + 20 || (y - UI.GATE_Height / 2.0) <= (UI.ToolBarHeight+5) || (x + UI.GATE_Width / 2.0) >= UI.width - 16 || (y + UI.GATE_Height / 2.0) >= (UI.height - UI.StatusBarHeight)) {
 		return 0;
 	}
 	return 1;
 }
 bool Utils::CheckPointInBorders(int x, int y) {
-	if (x< UI.LeftToolBarWidth + 20 || y <= (UI.ToolBarHeight + 20) || (x)>UI.width - 20 || (y) >= (UI.height - UI.StatusBarHeight - 20)) {
+	if (x< UI.LeftToolBarWidth + 20 || y <= (UI.ToolBarHeight + 5) || (x)>UI.width - 20 || (y) >= (UI.height - UI.StatusBarHeight - 20)) {
 		return 0;
 	}
 	return 1;

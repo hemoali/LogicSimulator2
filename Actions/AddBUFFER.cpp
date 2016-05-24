@@ -24,8 +24,8 @@ bool AddBUFFER::ReadActionParameters(image * smallImageBeforeAddingComponent, Co
 	}
 
 
-	//Clear Status Bar
-	pOut->ClearStatusBar();
+	
+	
 	return done;
 
 }

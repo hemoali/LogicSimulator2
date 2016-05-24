@@ -37,8 +37,8 @@ bool ModifyConnection::ReadActionParameters(image *, Component* c)
 	pIn->GetPointClicked(Cx1, Cy1);
 	pOut->PrintStatusBox("Connection : Click to select the Destination");
 	pIn->GetPointClicked(Cx2, Cy2);
-	//Clear Status Bar
-	pOut->ClearStatusBar();
+	
+	
 
 	return true;
 }

@@ -23,11 +23,9 @@ public:
 	Input* CreateInput() const; //creates a pointer to the Input object
 	void ChangeTitle(string Title) const;
 
-	void CreateStatusBar() const;	//Create Status bar
 	void CreateLeftToolBar() const;	//Tool bar of the design mode
 	void CreateTopToolBar() const;	//Tool bar of the design mode
 
-	void ClearStatusBar() const;		//Clears the status bar
 	void ClearDrawingArea() const;	//Clears the drawing area
 
 	window* CreateWind(int wd, int h, int x, int y) const; //Creates user interface window
@@ -73,7 +71,6 @@ public:
 	bfs_node* bfs(bfs_node* bf, int requX, int requY, vector<bfs_node*> allNodes) const;
 	void clearConnections(vector<Connection*> & allConnections, int originalX, int originalY, bool isInput, bool setDeleted = false);
 	void changeConnectionColor(Connection * connection, color Color = BLUE);
-	void PrintMsg(string msg, color Color = UI.MsgColor) const;	//Print a message on Status bar
 
 	void setUsedPixel(int i, int j, CellType);
 	CellType getUsedPixel(int i, int j);

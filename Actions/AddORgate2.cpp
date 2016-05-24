@@ -26,8 +26,8 @@ bool AddORgate2::ReadActionParameters(image * smallImageBeforeAddingComponent, C
 	}
 
 
-	//Clear Status Bar
-	pOut->ClearStatusBar();
+	
+	
 	return done;
 
 }

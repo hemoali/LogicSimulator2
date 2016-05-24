@@ -25,8 +25,8 @@ bool AddLED::ReadActionParameters(image * smallImageBeforeAddingComponent, Compo
 	}
 
 
-	//Clear Status Bar
-	pOut->ClearStatusBar();
+	
+	
 	return done;
 
 }
