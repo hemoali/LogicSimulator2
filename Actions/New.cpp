@@ -39,7 +39,7 @@ void Clear::Execute()
 			delete C;
 		}
 		// clear status bar
-		pOut->ClearStatusBar();
+		
 		//Clear Drawing Area
 		pOut->ClearDrawingArea();
 		//Resetting Interface

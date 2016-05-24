@@ -4,6 +4,7 @@
 #include "..\Components\SWITCH.h"
 #include "..\Components\Connection.h"
 #include "..\Components\Component.h"
+#include <algorithm>
 #include "Validate.h"
 Simulate::Simulate(ApplicationManager*pApp, bool v) : Action(pApp), validateFirst(v)
 {
@@ -39,7 +40,7 @@ void Simulate::Execute()
 		}
 	}
 	int totalComponentsCount = 0, operatedItemsCount = 0;
-	vector<Component*> toBeOperatedComponents;
+	vector<Component*> toBeOperatedComponents, operatedComponents;
 	// Send switches signals to all next components
 	for (size_t i = 0; i < Utils::allComponentsCorners.size(); i++)
 	{
@@ -60,6 +61,10 @@ void Simulate::Execute()
 		for (size_t i = 0; i < toBeOperatedComponents.size(); i++)
 		{
 			Component* comp = toBeOperatedComponents[i];
+			if (find(operatedComponents.begin(), operatedComponents.end(), comp) != operatedComponents.end())
+			{
+				continue;
+			}
 			bool isAllPinsHaveStatus = true;
 			for (size_t j = 0; j < comp->getNumOfInputs(); j++)
 			{
@@ -78,6 +83,7 @@ void Simulate::Execute()
 				{
 					comp->getOutputPin()->getConnection(k)->getDestPin()->setStatus(static_cast<STATUS>(comp->GetOutPinStatus()));
 				}
+				operatedComponents.push_back(comp);
 				operatedItemsCount++;
 			}
 		}

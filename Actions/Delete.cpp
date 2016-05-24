@@ -24,7 +24,7 @@ void Delete::Execute()
 		if (theComponent != NULL && (dynamic_cast<Gate*> (theComponent) || dynamic_cast<LED*>(theComponent) || dynamic_cast<SWITCH*> (theComponent))) {
 			Output *pOut = pManager->GetOutput();
 			string s = "Gate: " + (theComponent->getLabel()) + " has been deleted successfully";
-			pOut->PrintStatusBox(s);
+			if(pushToUndo)pOut->PrintStatusBox(s);
 			theComponent->setDelete(true);
 			theComponent->Draw(pOut);
 

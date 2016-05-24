@@ -42,11 +42,10 @@ void Load::Execute()
 {
 	Clear newAction(pManager);
 	Output *pOut = pManager->GetOutput();
-
+	bool cleared = false;
 	if (ReadActionParameters(NULL, NULL) && path != "") {
 		// To clear the screen
-		newAction.setLoading(true);
-		newAction.Execute();
+		
 		file.open(path);
 		int compCount, connectionCount = 0;
 		string compName, compLabel;
@@ -55,6 +54,12 @@ void Load::Execute()
 		file >> compCount;
 		for (int i = 0; i < compCount; i++)
 		{
+			if (!cleared)
+			{
+				newAction.setLoading(true);
+				newAction.Execute();
+				cleared = true;
+			}
 			file >> compName >> point.x1 >> point.y1;
 			//Completing the Component Corners
 			point.x2 = point.x1 + UI.GATE_Width;
@@ -90,7 +95,13 @@ void Load::Execute()
 			}
 			theConnection.AddConnectionSilent(c1, c2, c3, c4, compLabel);
 		}
-		pOut->PrintStatusBox("Design loaded successfully");
+		if (cleared)
+		{
+			pOut->PrintStatusBox("Design loaded successfully");
+		}
+		else {
+			pOut->PrintStatusBox("Error Loading Design");
+		}		
 		file.close();
 		// clear undo/redo stacks
 		while (!Utils::undoActions.empty()) Utils::undoActions.pop();

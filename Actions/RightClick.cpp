@@ -106,7 +106,7 @@ bool RightClick::ReadActionParameters(image* img, Component* c) {
 			}
 			pIn->setSelectMode(false);
 		}
-		pOut->ClearStatusBar();
+		
 		if (actionNum != -1) return true;
 	}
 
@@ -206,7 +206,7 @@ bool RightClick::ReadActionParameters(image* img, Component* c) {
 			}
 			else pOut->DrawAfterMenu(img, MenuRectangle.x1, MenuRectangle.y1, 2);
 		}
-		pOut->ClearStatusBar();
+		
 		if (pIn->getSelectMode()) {
 			vector<pair<int, Component*>> V = pIn->getSelectedComponents();
 			for (int i = 0; i < V.size(); i++) {
@@ -260,7 +260,7 @@ bool RightClick::ReadActionParameters(image* img, Component* c) {
 		//Delete the DrawMenu
 		if (img != NULL)
 			pOut->DrawAfterMenu(img, MenuRectangle.x1, MenuRectangle.y1, 3);
-		pOut->ClearStatusBar();
+		
 		
 		if (actionNum != -1) return true;
 	}

@@ -80,40 +80,7 @@ void Output::ChangeTitle(string Title) const
 	pWind->ChangeTitle(Title);
 }
 //////////////////////////////////////////////////////////////////////////////////
-void Output::CreateStatusBar() const
-{
 
-	pWind->SetPen(RED, 3);
-	pWind->DrawLine(0, UI.height - UI.StatusBarHeight, UI.width, UI.height - UI.StatusBarHeight);
-	pWind->SetPen(WHITE, 3);
-	pWind->DrawRectangle(0, UI.height - UI.StatusBarHeight + 2, UI.width, UI.height);
-
-}
-//////////////////////////////////////////////////////////////////////////////////
-void Output::PrintMsg(string msg, color Color) const
-{
-	ClearStatusBar();	//Clear Status bar to print message on it
-						// Set the Message offset from the Status Bar
-	int MsgX = 85 + 25;
-	int MsgY = UI.StatusBarHeight - 10;
-
-	// Print the Message
-	pWind->SetFont(20, BOLD | ITALICIZED, BY_NAME, "Arial");
-	pWind->SetPen(Color);
-	pWind->DrawString(MsgX, UI.height - MsgY, msg);
-}
-//////////////////////////////////////////////////////////////////////////////////
-void Output::ClearStatusBar()const
-{
-	// Set the Message offset from the Status Bar
-	int MsgX = 85 + 25;
-	int MsgY = UI.StatusBarHeight - 10;
-
-	//Overwrite using bachground color to erase the message
-	pWind->SetPen(UI.BkGrndColor);
-	pWind->SetBrush(UI.BkGrndColor);
-	pWind->DrawRectangle(MsgX, UI.height - MsgY, UI.width, UI.height);
-}
 void Output::DrawGrid()const {
 	pWind->SetPen(BLACK, 1);
 	for (size_t i = 0; i < UI.height; i += UI.GRID_SIZE) // Hori
@@ -135,8 +102,6 @@ void Output::ClearDrawingArea() const
 	DrawGrid();
 	CreateLeftToolBar();
 	CreateTopToolBar();
-	//CreateDesignToolBar();	//Create the desgin toolbar
-	//CreateStatusBar();
 
 }
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -861,7 +826,7 @@ void Output::changeConnectionColor(Connection * connection, color Color) {
 							pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE, cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE + 10);
 						}
 						else {
-							pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE, cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE + 10);
+							pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE-3, cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE + 10);
 						}
 					}
 					else {
@@ -1282,11 +1247,9 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 	int RectULY = iYOld - UI.GATE_Height / 2;
 	if (!moving)
 	{
-		//PrintMsg("Please select point within workspace and avoid overlaping!, press ESCAPE to stop");
 		PrintStatusBox("Please select point within workspace and avoid overlaping!, press ESCAPE to stop");
 	}
 	else {
-		//PrintMsg("Please select point within workspace and avoid overlaping!");
 		PrintStatusBox("Please select point within workspace and avoid overlaping!");
 	}
 
@@ -1318,8 +1281,7 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 		pWind->GetMouseCoord(x, y);
 		bool wrong = false;
 		Utils::correctPointClicked(x, y, true, false);
-
-
+		
 		if (moving && (x != iXOld || y != iYOld))
 		{
 			//Clear connections from grid
@@ -1487,7 +1449,7 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 			draw = false;
 			break;
 		}
-		else if (!wrong && Utils::CheckPoint({ x,y }, this, comp, moving, false) && (pWind->GetMouseClick(tX, tY) == LEFT_CLICK) || ((pWind->GetButtonState(LEFT_BUTTON, tX, tY) == BUTTON_UP))) {
+			else if (!wrong && Utils::CheckPoint({ x,y }, this, comp, moving, false) && (pWind->GetMouseClick(tX, tY) == LEFT_CLICK) || ((pWind->GetButtonState(LEFT_BUTTON, tX, tY) == BUTTON_UP))) {
 			if ((moving && (noOfTotalConnections == drawnConnectionsCount)) || !moving)
 			{
 				Utils::correctPointClicked(x, y, true, false);

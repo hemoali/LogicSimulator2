@@ -24,8 +24,8 @@ bool AddXORgate2::ReadActionParameters(image * smallImageBeforeAddingComponent, 
 		done = true;
 	}
 
-	//Clear Status Bar
-	pOut->ClearStatusBar();
+	
+	
 	return done;
 
 }

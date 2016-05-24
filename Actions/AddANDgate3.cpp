@@ -23,8 +23,8 @@ bool AddANDgate3::ReadActionParameters(image * smallImageBeforeAddingComponent, 
 
 	}
 
-	//Clear Status Bar
-	pOut->ClearStatusBar();
+	
+	
 	return done;
 
 }

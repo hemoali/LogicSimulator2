@@ -22,8 +22,8 @@ bool AddConnection::ReadActionParameters(image * smallImageBeforeAddingComponent
 		pIn->GetPointClicked(Cx2, Cy2);
 		pIn->GetPointClicked(Cx2, Cy2);
 
-		//Clear Status Bar
-		pOut->ClearStatusBar();
+		
+		
 	}
 	else {
 		pIn->CorrectPointClickedSilent(Cx1, Cy1);
