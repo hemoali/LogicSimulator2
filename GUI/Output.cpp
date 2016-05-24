@@ -1449,13 +1449,15 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 			draw = false;
 			break;
 		}
-		else if (!wrong && Utils::CheckPoint({ x,y }, this, comp, moving, false) && (pWind->GetMouseClick(tX, tY) == LEFT_CLICK) || ((pWind->GetButtonState(LEFT_BUTTON, tX, tY) == BUTTON_UP))) {
+			else if (!wrong && Utils::CheckPoint({ x,y }, this, comp, moving, false) && (pWind->GetMouseClick(tX, tY) == LEFT_CLICK) || ((pWind->GetButtonState(LEFT_BUTTON, tX, tY) == BUTTON_UP))) {
 			if ((moving && (noOfTotalConnections == drawnConnectionsCount)) || !moving)
 			{
 				Utils::correctPointClicked(x, y, true, false);
-				if (Utils::CheckPoint({x,y}, this, comp, moving, false))
+				if (Utils::CheckPoint({ x,y }, this, comp, moving, false))
 				{
-					if (Utils::CheckPoint({x,y}, this, comp, moving)) {
+					GfxInfo.x1 = x;
+					GfxInfo.y1 = y;
+					if (Utils::CheckPoint(GfxInfo, this, comp, moving)) {
 						if (moving) // Reset connections on grid of pointers
 						{
 							for (size_t i = 0; i < allInputConnections.size(); i++)
