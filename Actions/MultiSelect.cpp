@@ -56,11 +56,11 @@ void MultiSelect::Execute()
 			Utils::allConnections[i]->selectYourSelf(pOut, UI.ConnColor);
 		}
 
-		for (size_t i = 0; i < pIn->getSelectedComponents().size(); i++)
+		for (size_t i = 0; i < pManager->getCompCount(); i++)
 		{
-			if (!pIn->getSelectedComponents()[i].second->getDelete())
+			if (!pManager->getComponent(i)->getDelete())
 			{
-				pIn->getSelectedComponents()[i].second->Draw(pOut, false);
+				pManager->getComponent(i)->Draw(pOut, false);
 			}
 		}
 		pIn->setSelectMode(false);
