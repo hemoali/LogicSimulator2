@@ -41,7 +41,7 @@ void Move::Execute()
 	while (pIn->GetButtonStatus(LEFT_BUTTON, x, y) == BUTTON_DOWN) {
 		Comp = pManager->getComponentByCoordinates(x, y, false, true, compIdx);
 		if (Comp != NULL &&Comp->getDelete()) Comp = NULL;
-		if (Comp != NULL && compIdx != -1) {
+		if (Comp != NULL && !dynamic_cast<Connection*>(Comp) && compIdx != -1) {
 			// get old preimage for undo
 			oldSmallCleanImage = Comp->getSmallCleanImageBeforeAddingComp();
 			//Delete the component

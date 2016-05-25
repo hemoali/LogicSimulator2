@@ -14,6 +14,7 @@ Input::Input(window* pW)
 	toBeAddedToSelected = toBeRemovedFromSelected = NULL;
 	toBeSelectedConnection = NULL;
 }
+// Get point clicked and correct it 
 void Input::GetPointClicked(int &x, int &y, bool DrawGate, bool DrawConnection)
 {
 	pWind->WaitMouseClick(x, y);	//Wait for mouse click
@@ -168,7 +169,7 @@ image * Input::printHovering(int & x, int & y, string s, int & w, Component * C,
 		//Checking if it's a connection Hover or other componenets hover
 		if (!dynamic_cast<Connection*> (C))
 		{
-			//Check if hovering pin
+			//Check if hovering pin: Set the component to the meant connection of the hovered pin to enter the next if as connection and display hover box
 			//output pin
 			GraphicsInfo compCorner = C->getCornersLocation();
 			if (pin == 3)
@@ -271,19 +272,23 @@ ActionType Input::GetUserAction()
 			clearHoveringImage(imgh, J, K, widthh);
 			return SAVE;
 		}
+		// Double check that there is no pressed key
 		if (key == 0)
 		{
 			key = pWind->GetKeyPress(c1);
 		}
 		// Working with mouse
 		bool drawConnection = false;
+		//Check if button clicked and within the borders
 		if (pWind->GetButtonState(LEFT_BUTTON, xT, yT) == BUTTON_DOWN && yT >= UI.ToolBarHeight + 20 && xT >= UI.LeftToolBarWidth && yT < UI.height - UI.StatusBarHeight) {
 			if (UI.AppMode == DESIGN)
 			{
+				//Get the component
 				Component* comp = Utils::getArrayOfComponents(yT / UI.GRID_SIZE, xT / UI.GRID_SIZE);
 				if (comp != NULL && !(dynamic_cast<Connection*>(comp) || comp->getDelete() || dynamic_cast<LED*>(comp)))
 				{
 					GraphicsInfo compCorner = comp->getCornersLocation();
+					//Check if the user clicked the output pin
 					if (xT >= compCorner.x1&&xT <= compCorner.x2&& yT >= compCorner.y1&&yT <= compCorner.y2)
 					{
 						if (xT >= compCorner.x2 - UI.GATE_Width / 2 + 8 && yT > (compCorner.y1 + UI.GATE_Height / 2) - 6 && yT < (compCorner.y1 + UI.GATE_Height / 2) + 6)
@@ -303,31 +308,30 @@ ActionType Input::GetUserAction()
 					return ADD_CONNECTION;
 				}
 				if (comp != NULL &&comp->getDelete()) comp = NULL;
-
 				if (comp != NULL && !dynamic_cast<Connection*>(comp)) {
 					if (isSelectMode)
 					{
 						for (size_t i = 0; i < selectedComponents.size(); i++)
 						{
+							// check if user selects one of the selected components
 							if (!dynamic_cast<Connection*>(selectedComponents[i].second) && selectedComponents[i].second == comp) {
-								//Sleep(100);
 								if (key == CTRL) // remove this component from selected ones
 								{
 									toBeRemovedFromSelected = comp;
 									clearHoveringImage(imgh, J, K, widthh);
-									return MULTI_SELECT;
+									return MULTI_SELECT; // re-execute multi-select action in order to update the selection list
 								}
-								else {
+								else { // Double check if the user clicked CTRL key
 									key = pWind->GetKeyPress(c1);
 									if (key == CTRL || (int)c1 == 13) {
 										toBeRemovedFromSelected = comp;
 										clearHoveringImage(imgh, J, K, widthh);
-										return MULTI_SELECT;
+										return MULTI_SELECT;// re-execute multi-select action in order to update the selection list
 									}
 								}
 								//Always Clear hover Bar if found //CHECKTHISSAMRA
 								clearHoveringImage(imgh, J, K, widthh);
-								return MULTI_MOVE;
+								return MULTI_MOVE; // user clicked already selected components :: he wants to move them all
 							}
 						}
 						// Ctrl
@@ -339,21 +343,21 @@ ActionType Input::GetUserAction()
 						}
 					}
 					else {
-						Sleep(100);
+						Sleep(90); // Sleep to distinguish between select and move
 						int tmX, tmY;
 						if (pWind->GetButtonState(LEFT_BUTTON, tmX, tmY) == BUTTON_DOWN) {
 							//Always Clear hover Bar if found
 							clearHoveringImage(imgh, J, K, widthh);
 							return MOVE;
-						}else{
-							cout << "HH";
+						}
+						else {
 							clearHoveringImage(imgh, J, K, widthh);
 							return SELECT;
 						}
 					}
 				}
 				else {
-					if (!isSelectMode) {
+					if (!isSelectMode) {  // If user clicked on empty space the multiselect mode will start
 						int tmpX = xT, tmpY = yT;
 						Utils::correctPointClicked(tmpX, tmpY, true, false);
 						Component* c = Utils::getArrayOfComponents(tmpY / UI.GRID_SIZE, tmpX / UI.GRID_SIZE);
@@ -361,7 +365,7 @@ ActionType Input::GetUserAction()
 							clearHoveringImage(imgh, J, K, widthh);
 							return MULTI_SELECT;
 						}
-						else if (c != NULL && dynamic_cast<Connection*>(c)) {
+						else if (c != NULL && dynamic_cast<Connection*>(c)) { // if clicked on connection , this connection is going to be selected
 							pWind->DownButtons(false);
 							clearHoveringImage(imgh, J, K, widthh);
 							toBeSelectedConnection = (Connection*)c;
@@ -369,7 +373,7 @@ ActionType Input::GetUserAction()
 						}
 					}
 					clearHoveringImage(imgh, J, K, widthh);
-					return MULTI_SELECT;
+					return MULTI_SELECT; // Else start the multi select action
 				}
 			}
 		}
@@ -379,15 +383,14 @@ ActionType Input::GetUserAction()
 			//Otherwise we call that function agian with true to delete that click 
 			if ((s = pWind->GetMouseClick(x, y, false)) != NO_CLICK)
 			{
-				//pWind->GetMouseClick(x, y);
 				break;
 			}
-			else {
+			else { // This block covers the hovering part
 				int hoverX, hoverY;
 				pWind->GetMouseCoord(hoverX, hoverY);
 				//If top bar and design mode and top bar down
 				if (hoverY >= 5 && hoverY < UI.ToolBarHeight - 20 && hoverX > UI.LeftToolBarWidth && UI.AppMode == DESIGN)
-				{
+				{ // Hovering the top bar
 					//Always Clear hover Bar if found
 					clearHoveringImage(imgh, J, K, widthh);
 					vector<pair<int, int> > TopItemsRanges;
@@ -414,7 +417,7 @@ ActionType Input::GetUserAction()
 						}
 					}
 					if (HoveredItemOrder != oldTopHoveredItemOrder)
-					{
+					{ // Draw specific photo for each hovered icon
 
 						switch (HoveredItemOrder)
 						{
@@ -437,6 +440,7 @@ ActionType Input::GetUserAction()
 					oldTopHoveredItemOrder = HoveredItemOrder;
 				}
 				else if (hoverY >= 0 && hoverY < UI.height && UI.AppMode == DESIGN && hoverX <= UI.LeftToolBarWidth - 12 && hoverX >= 5) {
+					//Left toolbar hovering icons
 					//Always Clear hover Bar if found
 					clearHoveringImage(imgh, J, K, widthh);
 					vector<pair<int, int> > LeftItemsRanges;
@@ -456,7 +460,7 @@ ActionType Input::GetUserAction()
 						}
 					}
 					if (HoveredLeftItemOrder != oldLeftHoverItem)
-					{
+					{ // Draw specific icons for left hovered bar in design mode
 						switch (HoveredLeftItemOrder + 14)
 						{
 						case DSIMULATION: pWind->DrawImage("images\\Menu\\left_bar_simulate_hovered.jpg", 0, 0, UI.LeftToolBarWidth, UI.height); break;
@@ -470,6 +474,7 @@ ActionType Input::GetUserAction()
 					oldLeftHoverItem = HoveredLeftItemOrder;
 				}
 				else if (hoverY >= 0 && hoverY < UI.height && UI.AppMode == SIMULATION && hoverX <= UI.LeftToolBarWidth - 12 && hoverX >= 5) {
+					// Left bar hovering in simulation mode
 					//Always Clear hover Bar if found
 					clearHoveringImage(imgh, J, K, widthh);
 					vector<pair<int, int> > LeftItemsRanges;
@@ -500,6 +505,7 @@ ActionType Input::GetUserAction()
 				else {
 
 					oldTopHoveredItemOrder = oldLeftHoverItem = -1;
+					// if not hovering any toolbar redraw the normal toolbars
 					if (UI.AppMode == DESIGN)
 					{
 						pWind->DrawImage("images\\Menu\\top_bar_normal.jpg", UI.LeftToolBarWidth, 0, UI.width - UI.LeftToolBarWidth - 14, UI.TopToolBarHeight);
@@ -509,6 +515,7 @@ ActionType Input::GetUserAction()
 						pWind->DrawImage("images\\Menu\\left_bar_simulation_normal.jpg", 0, 0, UI.LeftToolBarWidth, UI.height);
 					}
 
+					//Check if hovering a component
 					Utils::correctPointClicked(hoverX, hoverY, true, false);
 					if (Utils::CheckPointInBorders(hoverX, hoverY)) {
 						Component* comp = Utils::getArrayOfComponents(hoverY / UI.GRID_SIZE, hoverX / UI.GRID_SIZE);
@@ -516,6 +523,7 @@ ActionType Input::GetUserAction()
 
 						if (comp != NULL && !comp->getDelete())
 						{
+							//if hovering pins, get pin number and sent to print hovering function
 							GraphicsInfo compCorner = comp->getCornersLocation();
 							if (hoverX >= compCorner.x2 - UI.GATE_Width / 4 && hoverY > (compCorner.y1 + UI.GATE_Height / 2) - 6 && hoverY < (compCorner.y1 + UI.GATE_Height / 2) + 6)
 							{
@@ -525,6 +533,7 @@ ActionType Input::GetUserAction()
 							else if (hoverX < (compCorner.x1 + UI.GATE_Width / 4) && hoverY >= compCorner.y2 - UI.GATE_Height / 2 + 6 && (comp->getNumOfInputs() == 2 || comp->getNumOfInputs() == 3)) { pin = 2; }
 							else if (hoverX < (compCorner.x1 + UI.GATE_Width / 4) && hoverY >= compCorner.y2 - UI.GATE_Height / 2 - 6 && hoverY <= compCorner.y2 - UI.GATE_Height / 2 + 6 && (comp->getNumOfInputs() == 1 || comp->getNumOfInputs() == 3)) { pin = 1; }
 
+							// check if on the same component or not on the same pin
 							if (comp != preComp || (UI.AppMode == SIMULATION && comp == preComp && pin != prePin))
 							{
 								//Always Clear hover Bar if found at the transition between one component and the other
@@ -550,6 +559,7 @@ ActionType Input::GetUserAction()
 			}
 		}
 	}
+	//Get user clicks
 	if (UI.AppMode == DESIGN)	//application is in design mode
 	{
 		//[1] If user clicks on the Toolbar
@@ -607,6 +617,7 @@ ActionType Input::GetUserAction()
 			}
 
 		}
+		//Clicking the left bar icons
 		else if (y >= 0 && y < UI.height && UI.AppMode == DESIGN && x <= UI.LeftToolBarWidth - 12 && x >= 5) {
 			pWind->GetMouseClick(x, y);
 			vector<pair<int, int> > LeftItemsRanges;
@@ -617,6 +628,7 @@ ActionType Input::GetUserAction()
 			LeftItemsRanges.push_back(make_pair(382, 460));
 			LeftItemsRanges.push_back(make_pair(475, 550));
 
+			// get item number depending on its order
 			int ClickedItemOrder = -1;
 
 			for (size_t i = 0; i < LeftItemsRanges.size(); i++)
@@ -625,9 +637,12 @@ ActionType Input::GetUserAction()
 					ClickedItemOrder = i;
 				}
 			}
+
+			//return actions
 			switch (ClickedItemOrder + 14)
 			{
 			case DSIMULATION: {
+				// Check if there exits a component in the grid and not deleted to start simulation
 				bool returnValidation = false;
 				for (size_t i = 0; i < 44; i++)
 				{
@@ -648,7 +663,7 @@ ActionType Input::GetUserAction()
 			default:  pWind->DrawImage("images\\Menu\\left_bar_normal.jpg", 0, 0, UI.LeftToolBarWidth, UI.height); break;
 			}
 		}
-		//[2] User clicks on the drawing area //TODO:
+		//[2] User clicks on the drawing area
 		if (y > UI.ToolBarHeight && y < UI.height - UI.StatusBarHeight)
 		{
 			//user want to select/unselect a statement i;
@@ -672,6 +687,7 @@ ActionType Input::GetUserAction()
 		pWind->GetMouseClick(x, y);
 
 		if (y >= 0 && y < UI.height && x <= UI.LeftToolBarWidth - 12 && x >= 5) {
+			//Get action depending on the number of the icon
 			vector<pair<int, int> > LeftItemsRanges;
 			LeftItemsRanges.push_back(make_pair(6, 85));
 			LeftItemsRanges.push_back(make_pair(103, 180));
@@ -693,6 +709,7 @@ ActionType Input::GetUserAction()
 			}
 		}
 		else if (y >= UI.TopToolBarHeight && y < UI.height && x >= UI.LeftToolBarWidth && x < UI.width) {
+			// if user clicks a switch in simulation mode we execute change switch action
 			Component* comp = Utils::getArrayOfComponents(y / UI.GRID_SIZE, x / UI.GRID_SIZE);
 			if (comp != NULL)
 			{
@@ -702,7 +719,6 @@ ActionType Input::GetUserAction()
 					pWind->FlushMouseQueue();
 					clearHoveringImage(imgh, J, K, widthh);
 					return Change_Switch;
-
 				}
 			}
 		}
@@ -735,7 +751,7 @@ void Input::setComponentToBeAddedToSelected(Component* C)
 }
 Component * Input::getComponentToBeAddedToSelected()
 {
-	return 	toBeAddedToSelected ;
+	return 	toBeAddedToSelected;
 }
 Component * Input::getComponentToBeRemovedFromSelected()
 {
@@ -795,8 +811,6 @@ void Input::clearSelectedComponents()
 {
 	selectedComponents.clear();
 }
-
-
 Input::~Input()
 {
 }

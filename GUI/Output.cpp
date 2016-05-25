@@ -9,9 +9,9 @@
 #include "..\Components\Gate.h"
 using namespace std;
 CellType Output::usedPixels[44][74];
-int arrayOfIntersections[44][74];
-int arrayOfCorners[44][74];
-int connectionsCountAtPixel[44][74];
+int arrayOfIntersections[44][74]; // array of connections intersections
+int arrayOfCorners[44][74]; // array of connections corners
+int connectionsCountAtPixel[44][74]; // array of connections count at every pixel (2 if there's intersection, 1 if there's not)
 
 //the Timer doen't allow passing a memberfunction pointer to it unless it's a static memberFunction
 void DRAWAFTERMENUE(Output* pOut, HWND D) {
@@ -25,7 +25,7 @@ Output::Output(vector<Connection*>* allConns)
 
 	UI.AppMode = DESIGN;	//Design Mode is the startup mode
 
-							//Initilaize interface colors
+	//Initilaize interface colors
 	UI.DrawColor = BROWN;
 	UI.SelectColor = BLUE;
 	UI.ConnColor = BROWN;
@@ -46,9 +46,8 @@ Output::Output(vector<Connection*>* allConns)
 	DrawGrid();
 	CreateLeftToolBar();
 	CreateTopToolBar();
-	//CreateDesignToolBar();	//Create the desgin toolbar
-	//CreateStatusBar();		//Create Status bar
 
+	//Reseting all arrays
 	memset(usedPixels, 0, sizeof usedPixels);
 	memset(arrayOfIntersections, -1, sizeof arrayOfIntersections);
 	memset(arrayOfCorners, 0, sizeof arrayOfCorners);
@@ -64,7 +63,6 @@ Input* Output::CreateInput() const
 	Input* pIn = new Input(pWind);
 	return pIn;
 }
-
 
 //======================================================================================//
 //								Interface Functions										//
@@ -102,7 +100,6 @@ void Output::ClearDrawingArea() const
 	DrawGrid();
 	CreateLeftToolBar();
 	CreateTopToolBar();
-
 }
 //////////////////////////////////////////////////////////////////////////////////////////
 //Draw the left bar
@@ -122,18 +119,13 @@ bool Output::DrawString(string s, GraphicsInfo Gfx_info) const {
 	return true;
 }
 
-//======================================================================================//
-//								Components Drawing Functions							//
-//======================================================================================//
-
-
 bfs_node* Output::bfs(bfs_node* bf, int requX, int requY, vector<bfs_node*> allNodes) const {
 	if (bf == NULL || bf->y>44 || bf->x > 74)
 	{
 		return NULL;
 	}
 	int vis[46][74];
-	memset(vis, -1, sizeof vis);
+	memset(vis, -1, sizeof vis); // reset the visited array
 	queue<bfs_node*> q;
 	bfs_node* tmp;
 	vis[bf->y][bf->x] = 0;
@@ -143,7 +135,7 @@ bfs_node* Output::bfs(bfs_node* bf, int requX, int requY, vector<bfs_node*> allN
 	{
 		tmp = q.front();
 		q.pop();
-		if (tmp->x == requX && tmp->y == requY) {
+		if (tmp->x == requX && tmp->y == requY) { // check if reached required
 			return tmp;
 		}
 		if (Utils::CheckPointInBorders((tmp->x + 1)* UI.GRID_SIZE, tmp->y * UI.GRID_SIZE) && tmp->x + 1 <= 74 && vis[tmp->y][tmp->x + 1] < 0 && Output::usedPixels[tmp->y][tmp->x + 1] != INTERSECTION && (Output::usedPixels[tmp->y][tmp->x + 1] == EMPTY || ((Output::usedPixels[tmp->y][tmp->x] == EMPTY || Output::usedPixels[tmp->y][tmp->x] == PIN || Output::usedPixels[tmp->y][tmp->x] == VERTICAL) && ((tmp->y == requY && tmp->x + 1 == requX - 1 && Output::usedPixels[tmp->y][tmp->x + 1] == VERTICAL && Output::usedPixels[tmp->y][tmp->x + 2] == PIN) || (tmp->y == requY && tmp->x + 1 == requX && Output::usedPixels[tmp->y][tmp->x + 1] == PIN))) || (Output::usedPixels[tmp->y][tmp->x + 1] == VERTICAL && Output::usedPixels[tmp->y][tmp->x + 1] != END_CONNECTION)))
@@ -210,10 +202,11 @@ bfs_node* Output::bfs(bfs_node* bf, int requX, int requY, vector<bfs_node*> allN
 
 bool Output::DrawConnection(GraphicsInfo GfxInfo, int inputPin, GraphicsInfo compCenterLocation, vector<Cell>& cellsBeforeAddingConnection, bool selected, Component* pA)
 {
-	cellsBeforeAddingConnection.clear();
-	vector<bfs_node*> allNodes;
+	cellsBeforeAddingConnection.clear(); // vector to hold status before adding the connection
+	vector<bfs_node*> allNodes; // store all nodes in order to deallocate them
 	bfs_node* current = new bfs_node;
 
+	//get start point
 	current->x = (GfxInfo.x1 - (GfxInfo.x1 % UI.GRID_SIZE)) / UI.GRID_SIZE;
 	current->y = GfxInfo.y1 / UI.GRID_SIZE;
 
@@ -221,6 +214,7 @@ bool Output::DrawConnection(GraphicsInfo GfxInfo, int inputPin, GraphicsInfo com
 
 	GfxInfo.x2 = compCenterLocation.x1 - UI.GATE_Width / 2 - 2;
 
+	//get destination points depending on inpit pin
 	int destX = GfxInfo.x2 / UI.GRID_SIZE + ((remindX2 > UI.GRID_SIZE / 2) ? 1 : 0);
 	int destY;
 
@@ -239,17 +233,20 @@ bool Output::DrawConnection(GraphicsInfo GfxInfo, int inputPin, GraphicsInfo com
 		pWind->FlushMouseQueue();
 		return false;
 	}
+	//Find the path
 	bfs_node* target = bfs(current, destX, destY, allNodes);
 
-	if (target == NULL)
+	if (target == NULL) // check if there exists path or not
 	{
 
 		pWind->FlushMouseQueue();
 
 		return false;
 	}
+	// set colors
 	if (!selected)pWind->SetPen(UI.ConnColor, 2);	else pWind->SetPen(UI.SelectColor, 2);
 
+	//Draw small lines which connects the end of the connection to the pin
 	if (inputPin == 0)
 	{
 		pWind->DrawLine(destX * UI.GRID_SIZE, destY* UI.GRID_SIZE, compCenterLocation.x1 - UI.GATE_Width / 2 + 3, compCenterLocation.y1 - 13);
@@ -262,9 +259,9 @@ bool Output::DrawConnection(GraphicsInfo GfxInfo, int inputPin, GraphicsInfo com
 	}
 
 	bfs_node* parent = target->parent;
-	bool draw = true, skip_next = false, PreviousIsIntersection = false;
+	bool draw = true, skip_next = false, PreviousIsIntersection = false; // boolean to check if previous point was intersection
 	int i = 0;
-	while (parent != NULL) {
+	while (parent != NULL) { // start drawing the path
 		// Fill cells vector
 		if (i == 0)
 		{
@@ -281,12 +278,13 @@ bool Output::DrawConnection(GraphicsInfo GfxInfo, int inputPin, GraphicsInfo com
 				cellsBeforeAddingConnection.push_back({ parent->x , parent->y, PIN });
 			}
 		}
-		connectionsCountAtPixel[target->y][target->x]++;
+		connectionsCountAtPixel[target->y][target->x]++; // increase connection count at this pixel
 		if (draw && !skip_next) {
-			if (target->x == parent->x && arrayOfIntersections[parent->y][parent->x] == 1)
+			if (target->x == parent->x && arrayOfIntersections[parent->y][parent->x] == 1) // draw vertical line - curve - vertical line (in case of vertical intersection)
 			{
 				usedPixels[parent->y][parent->x] = INTERSECTION;
 				if (parent->y < target->y) {
+					// Check if previous intersection or not to know where to start drawing 
 					if (!PreviousIsIntersection)
 						pWind->DrawLine(target->x * UI.GRID_SIZE, target->y*UI.GRID_SIZE, target->x * UI.GRID_SIZE, target->y*UI.GRID_SIZE - 10);
 					else {
@@ -298,7 +296,7 @@ bool Output::DrawConnection(GraphicsInfo GfxInfo, int inputPin, GraphicsInfo com
 					if (parent->parent != NULL && arrayOfIntersections[parent->parent->y][parent->parent->x] != 1)
 						pWind->DrawLine(target->x * UI.GRID_SIZE, target->y*UI.GRID_SIZE - 22, target->x * UI.GRID_SIZE, target->y*UI.GRID_SIZE - 32);
 				}
-				else {
+				else { // same as the previous case but when going in the opposite direction
 					if (!PreviousIsIntersection) {
 						pWind->DrawLine(target->x * UI.GRID_SIZE, target->y*UI.GRID_SIZE, target->x * UI.GRID_SIZE, target->y*UI.GRID_SIZE + 10);
 					}
@@ -320,7 +318,7 @@ bool Output::DrawConnection(GraphicsInfo GfxInfo, int inputPin, GraphicsInfo com
 				}
 			}
 			else
-				if (target->y == parent->y && arrayOfIntersections[parent->y][parent->x] == 0) {
+				if (target->y == parent->y && arrayOfIntersections[parent->y][parent->x] == 0) { // Horiz. line with intersection
 					usedPixels[parent->y][parent->x] = INTERSECTION;
 					if (parent->x < target->x) {
 						if (!PreviousIsIntersection)
@@ -334,7 +332,7 @@ bool Output::DrawConnection(GraphicsInfo GfxInfo, int inputPin, GraphicsInfo com
 						if (parent->parent != NULL && arrayOfIntersections[parent->parent->y][parent->parent->x] != 0)
 							pWind->DrawLine(target->x * UI.GRID_SIZE - 22, target->y*UI.GRID_SIZE, target->x * UI.GRID_SIZE - 32, target->y*UI.GRID_SIZE);
 					}
-					else {
+					else { // Same as above but in the opposite direction
 						if (!PreviousIsIntersection)
 							pWind->DrawLine(target->x * UI.GRID_SIZE, target->y*UI.GRID_SIZE, target->x * UI.GRID_SIZE + 10, target->y*UI.GRID_SIZE);
 						else {
@@ -360,7 +358,7 @@ bool Output::DrawConnection(GraphicsInfo GfxInfo, int inputPin, GraphicsInfo com
 					PreviousIsIntersection = false;
 
 				}
-				if (i != 0)
+				if (i != 0) // fill the array
 				{
 					if (target->x == parent->x)
 					{
@@ -373,6 +371,7 @@ bool Output::DrawConnection(GraphicsInfo GfxInfo, int inputPin, GraphicsInfo com
 							usedPixels[target->y][target->x] = HORIZONTAL;
 					}
 				}
+				//Fill array of corners
 				if (parent->parent != NULL && ((target->x == parent->x && parent->parent->x != parent->x) || (target->y == parent->y && parent->parent->y != parent->y)))
 				{
 					usedPixels[parent->y][parent->x] = INTERSECTION;
@@ -401,6 +400,7 @@ bool Output::DrawConnection(GraphicsInfo GfxInfo, int inputPin, GraphicsInfo com
 			Utils::setArrayOfComponents(cellsBeforeAddingConnection[i].y, cellsBeforeAddingConnection[i].x, pA);
 		}
 	}
+	// deallocate all nodes to free memory
 	for (size_t i = 0; i < allNodes.size(); i++)
 	{
 		bfs_node* tmp = allNodes[i];
@@ -411,7 +411,7 @@ bool Output::DrawConnection(GraphicsInfo GfxInfo, int inputPin, GraphicsInfo com
 
 	return true;
 }
-
+// Draw right click menu
 void Output::DrawRClickMenu_CorrectPoints(int& x, int& y, int type, bool draw)
 {
 	string imageURL;
@@ -480,7 +480,7 @@ void Output::DrawRClickMenu_CorrectPoints(int& x, int& y, int type, bool draw)
 	}
 }
 
-
+// Draw clean image in the place of a gate in order to delete it from the array and UI 
 void Output::DrawCleanImage(image* img, int x, int y, bool emptyArray)
 {
 	if (emptyArray)
@@ -516,7 +516,7 @@ void Output::drawRectangle(int x1, int y1, int x2, int y2) {
 	pWind->DrawRectangle(x1, y1, x2, y2, FRAME);
 }
 
-
+//Switch app mode
 void Output::switchMode(MODE appMode)
 {
 	if (appMode == DESIGN)
@@ -531,7 +531,7 @@ void Output::switchMode(MODE appMode)
 
 	}
 }
-
+//Draw menus
 void Output::DrawWarningMenues(char type, int x, int y)
 {
 	int xbegin, xend, ybegin, yend;
@@ -641,6 +641,7 @@ void Output::DrawAfterMenu(image * img, int x, int y, int type, int w)
 	if (type != 7)
 		delete img;
 }
+//Draw status box
 void Output::PrintStatusBox(string s, color Z)
 {
 	//Print a StatusBox with timer in the time stack
@@ -654,23 +655,23 @@ void Output::PrintStatusBox(string s, color Z)
 	//Timer
 	later theTimer(2000, true, &DRAWAFTERMENUE, this, theWin);
 }
-
+//Pop up error/confirmation msg box
 int Output::printPopUpMessage(string s, char type)
 {
 	char *msg = (char*)(s.c_str());
 	return (pWind->printMessageBox(msg, type));
 }
-
+//Draw truth table as pop up
 image * Output::DrawTruthTable(vector<vector<string> > table, int inputsNum, int outputsNum, int & X, int & Y, int & w, int & h)
 {
 	int startx, starty;
 	int maxInputOutputNameWidth, maxInputOutputNameHeight;
 	pWind->SetFont(10, PLAIN, SWISS);
 	pWind->getStringWidth("InputNumber1222222", maxInputOutputNameWidth, maxInputOutputNameHeight); // get max size
-	w = (inputsNum + outputsNum) * maxInputOutputNameWidth + (inputsNum + outputsNum + 1) * 20 + 4 + 20;
-	h = ((1 << inputsNum) + 1) * (maxInputOutputNameHeight + 15) + 50;
+	w = (inputsNum + outputsNum) * maxInputOutputNameWidth + (inputsNum + outputsNum + 1) * 20 + 4 + 20; // calc width
+	h = ((1 << inputsNum) + 1) * (maxInputOutputNameHeight + 15) + 50;//calc height
 
-	if (w > UI.width - 40)
+	if (w > UI.width - 40) // if wide return NULL to print in file
 		return NULL;
 
 	//Setting the upper left point
@@ -724,7 +725,7 @@ image * Output::DrawTruthTable(vector<vector<string> > table, int inputsNum, int
 	}
 	return img;
 }
-
+//Restore old state before drawing truth table
 void Output::drawAfterTruthTable(image * img, int X, int Y, int w, int h)
 {
 	if (img != NULL) {
@@ -742,7 +743,7 @@ void Output::storeImage(image * img, int x1, int y1, int x2, int y2)
 {
 	pWind->StoreImage(img, x1, y1, x2, y2);
 }
-
+// Change connection color
 void Output::changeConnectionColor(Connection * connection, color Color) {
 	bool b1 = false, b2 = false, PreviousIsIntersection = false, PreviousIsIntersection2 = false, isCell2XGreaterThanCellX = false, isCell2YGreaterThanCellY = false;
 	int i = 0;
@@ -814,6 +815,7 @@ void Output::changeConnectionColor(Connection * connection, color Color) {
 				PreviousIsIntersection = true;
 				Vertical0Horizontal1Nothing2 = -1;
 			}
+			// if this connection above another horiz one
 			else if (usedPixels[cell2.y][cell2.x] == INTERSECTION && cell2.cellType == HORIZONTAL) {
 				if (cell2.y < cell.y) {
 					b2 = true;
@@ -868,7 +870,9 @@ void Output::changeConnectionColor(Connection * connection, color Color) {
 				Vertical0Horizontal1Nothing2 = -1;
 
 			}
+			// if connection above this connection
 			else if (usedPixels[cell2.y][cell2.x] == INTERSECTION && cell2.cellType == EMPTY && arrayOfCorners[cell2.y][cell2.x] == 0) {
+				//check orientation and draw depending on it
 				if (cell2.y == cell.y)
 				{
 					Vertical0Horizontal1Nothing2 = 1;
@@ -925,7 +929,7 @@ void Output::changeConnectionColor(Connection * connection, color Color) {
 					}
 				}
 			}
-			else {
+			else { // normal erase
 				if (Vertical0Horizontal1Nothing2 == 2)
 				{
 					if (PreviousIsIntersection) {
@@ -967,21 +971,23 @@ void Output::changeConnectionColor(Connection * connection, color Color) {
 	}
 
 }
+// Clear the connections
 void Output::clearConnections(vector<Connection*>& allConnections, int originalX, int originalY, bool isInput, bool setDeleted) {
 
 	for (size_t i = 0; i < allConnections.size(); i++)
 	{
-		if (allConnections[i]->getDelete())
+		if (allConnections[i]->getDelete()) // if already deleted stop
 		{
 			continue;
 		}
 		for (size_t j = 0; j < allConnections[i]->getCellsBeforeAddingConnection().size(); j++)
 		{
+			// Clear from grid
 			if (Utils::getArrayOfComponents(allConnections[i]->getCellsBeforeAddingConnection()[j].y, allConnections[i]->getCellsBeforeAddingConnection()[j].x) == allConnections[i])
 			{
 				Utils::setArrayOfComponents(allConnections[i]->getCellsBeforeAddingConnection()[j].y, allConnections[i]->getCellsBeforeAddingConnection()[j].x, NULL);
 			}
-
+			//start clearing UI
 			Cell& cell = allConnections[i]->getCellsBeforeAddingConnection()[j];
 			int Vertical0Horizontal1Nothing2 = 2;
 
@@ -1254,7 +1260,7 @@ void Output::clearConnectionsFromGrid(vector<Connection*> allOutputConnections, 
 bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smallCleanImageBeforeAddingGate, bool moving, Component* comp) {
 	int originalX, originalY;
 	bool alreadyHighlighted = false;
-	if (moving)
+	if (moving) // if moving get component center
 	{
 		originalX = comp->getCenterLocation().x1;
 		originalY = comp->getCenterLocation().y1;
@@ -1262,8 +1268,9 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 	int iXOld = 0;
 	int iYOld = 0;
 
-	pWind->GetMouseCoord(iXOld, iYOld);
+	pWind->GetMouseCoord(iXOld, iYOld); // get current mouse coordinates
 
+	//get gate upper corner
 	char cKeyData;
 	int RectULX = iXOld - UI.GATE_Width / 2;
 	int RectULY = iYOld - UI.GATE_Height / 2;
@@ -1292,13 +1299,14 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 		clearConnections(allInputConnections, originalX, originalY, true);
 		clearConnections(allOutputConnections, originalX, originalY, false);
 	}
-
+	//Store screenshots without the gate and connection in order to display them while moving 
 	pWind->StoreImage(storedImg, 0, 0, pWind->GetWidth(), pWind->GetHeight());
 	pWind->StoreImage(storedDrawingImg, UI.LeftToolBarWidth, 0, pWind->GetWidth() - UI.LeftToolBarWidth, pWind->GetHeight() - UI.StatusBarHeight);
 
 	pWind->SetPen(BLUE, 2);
 	while (true)
 	{
+		//get and correct the mouse point
 		int x, y;
 		pWind->GetMouseCoord(x, y);
 		bool wrong = false;
@@ -1316,11 +1324,14 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 		else {
 			wrong = false;
 		}
+		// if correct points 
 		if (Utils::CheckPoint(x, y, usedPixels)) {
+			// if not the same old position
 			if ((x != iXOld || y != iYOld) || (!alreadyHighlighted && moving && x == iXOld && y == iYOld)) {
 				alreadyHighlighted = true;
 				pWind->DrawImage(storedDrawingImg, UI.LeftToolBarWidth, 0, pWind->GetWidth() - UI.LeftToolBarWidth, pWind->GetHeight() - UI.StatusBarHeight);
 
+				//update variables
 				if (x != iXOld) {
 					RectULX = RectULX + (x - iXOld);
 					iXOld = x;
@@ -1332,6 +1343,7 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 				GraphicsInfo Gfx;
 				Gfx.x1 = RectULX + UI.GATE_Width / 2;
 				Gfx.y1 = RectULY + UI.GATE_Height / 2;
+				//Store small image for the component before drawing the component in the new place 
 				pWind->StoreImage(smallCleanImageBeforeAddingGate, Gfx.x1 - UI.GRID_SIZE - 5, Gfx.y1 - UI.GRID_SIZE - 5, 2 * UI.GRID_SIZE + 3, UI.GATE_Height + 3);
 				switch (ActType) {
 				case ADD_Buff: {
@@ -1428,7 +1440,7 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 						}
 					}
 
-					//Reconnect
+					//Reconnect conenctions 
 					for (size_t i = 0; i < allInputConnections.size(); i++)
 					{
 						GraphicsInfo currentGfx = allInputConnections[i]->getCornersLocation();
@@ -1466,12 +1478,13 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 		}
 
 		int tX, tY;
-		if (!moving && pWind->GetKeyPress(cKeyData) == ESCAPE) {
+		if (!moving && pWind->GetKeyPress(cKeyData) == ESCAPE) { // if clicked escape stop
 			pWind->DrawImage(storedImg, 0, 0, pWind->GetWidth(), pWind->GetHeight());
 			draw = false;
 			break;
 		}
 		else if (!wrong && Utils::CheckPoint({ x,y }, this, comp, moving, false) && (pWind->GetMouseClick(tX, tY) == LEFT_CLICK) || ((pWind->GetButtonState(LEFT_BUTTON, tX, tY) == BUTTON_UP))) {
+			//if mouse clicked check and if coorect point fil the arrays and break
 			if ((moving && (noOfTotalConnections == drawnConnectionsCount)) || !moving)
 			{
 				Utils::correctPointClicked(x, y, true, false);
@@ -1506,7 +1519,7 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 				}
 			}
 		}
-		pWind->DownButtons(true);
+		pWind->DownButtons(true); // get buttons down
 		pWind->FlushMouseQueue();
 	}
 	pWind->FlushMouseQueue();
@@ -1515,7 +1528,7 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 	delete storedImg;
 	return draw;
 }
-
+//Same as what happenes in setDragImage, the only difference is looping throught all selected ones
 bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMovingComponent, vector< pair<int, Component*> > allSelectedComponents) {
 	if (mainMovingComponent == NULL)
 	{
@@ -1952,7 +1965,7 @@ bool Output::loadFile()
 }
 
 void Output::printMatrix(string msg) {
-	cout << msg << endl;
+	/*cout << msg << endl;
 	for (size_t i = 0; i < 44; i++)
 	{
 		for (size_t j = 0; j < 74; j++)
@@ -1960,11 +1973,11 @@ void Output::printMatrix(string msg) {
 			cout << usedPixels[i][j] << " ";
 		}
 		cout << endl;
-	}
+	}*/
 }
 void Output::printCheck()
 {
-	pWind->printChecking();
+	//pWind->printChecking();
 }
 // Fill arrays
 void Output::fillArrays(Component* pA) {
