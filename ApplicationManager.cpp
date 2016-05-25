@@ -143,6 +143,10 @@ void ApplicationManager::ExecuteAction(ActionType ActType)
 		pAct = new MultiMove(this); Utils::theActions.push_back(pAct);
 		break;
 	}
+	case SELECT: {
+		pAct = new Select(this); Utils::theActions.push_back(pAct);
+		break;
+	}
 	case MULTI_SELECT: {
 		pAct = new MultiSelect(this); Utils::theActions.push_back(pAct);
 		break;

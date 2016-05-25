@@ -128,7 +128,7 @@ bool Output::DrawString(string s, GraphicsInfo Gfx_info) const {
 
 
 bfs_node* Output::bfs(bfs_node* bf, int requX, int requY, vector<bfs_node*> allNodes) const {
-	if (bf == NULL)
+	if (bf == NULL || bf->y>44 || bf->x > 74)
 	{
 		return NULL;
 	}

@@ -34,7 +34,7 @@ void Move::Execute()
 	Output* pOut = pManager->GetOutput();
 	Input* pIn = pManager->GetInput();
 
-	Component* Comp;
+	Component* Comp = NULL;
 
 	int x, y;
 	// While the user is clicking

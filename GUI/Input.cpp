@@ -339,9 +339,17 @@ ActionType Input::GetUserAction()
 						}
 					}
 					else {
-						//Always Clear hover Bar if found
-						clearHoveringImage(imgh, J, K, widthh);
-						return MOVE;
+						Sleep(100);
+						int tmX, tmY;
+						if (pWind->GetButtonState(LEFT_BUTTON, tmX, tmY) == BUTTON_DOWN) {
+							//Always Clear hover Bar if found
+							clearHoveringImage(imgh, J, K, widthh);
+							return MOVE;
+						}else{
+							cout << "HH";
+							clearHoveringImage(imgh, J, K, widthh);
+							return SELECT;
+						}
 					}
 				}
 				else {

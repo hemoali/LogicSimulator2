@@ -4,6 +4,7 @@
 class Select :
 	public Action
 {
+	Component* theSelectedComponent;
 public:
 	Select(ApplicationManager *pApp);
 	virtual ~Select();
