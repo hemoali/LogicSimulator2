@@ -219,8 +219,19 @@ void CreateTruthTable::Execute()
 					}
 
 					if (tooLarge)
-						file << AllCompination[i][k] << ((comp->getLabel().size() == 4) ? " " : "  ");
-					else {
+					{
+						file << AllCompination[i][k];
+						if ((comp->getLabel().size() == 4))
+							file << " ";
+						else if ((comp->getLabel().size() == 3))
+							file << " |";
+						else if ((comp->getLabel().size() == 2)|| (comp->getLabel().size() == 1))
+							file << "||";
+						else
+							file << "  ";
+					}
+					else 
+					{
 						row += to_string(AllCompination[i][k]);
 						row += ((comp->getLabel().size() == 4) ? " " : "  ");
 					}
@@ -299,7 +310,17 @@ void CreateTruthTable::Execute()
 							row += " ";
 					}
 					if (tooLarge)
-						file << comp->GetInputPinStatus(0) << ((comp->getLabel().size() == 4) ? " " : "  ");
+					{
+						file << comp->GetInputPinStatus(0);
+						if ((comp->getLabel().size() == 4))
+							file << " ";
+						else if ((comp->getLabel().size() == 3))
+							file << " |";
+						else if ((comp->getLabel().size() == 2) || (comp->getLabel().size() == 1))
+							file << "||";
+						else
+							file << "  ";
+					}
 					else {
 						row += to_string(comp->GetInputPinStatus(0));
 						row += ((comp->getLabel().size() == 4) ? " " : "  ");

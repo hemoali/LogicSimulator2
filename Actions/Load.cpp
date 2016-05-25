@@ -47,7 +47,7 @@ void Load::Execute()
 		// To clear the screen
 		
 		file.open(path);
-		int compCount, connectionCount = 0;
+		int compCount, connectionCount = 0, id;
 		string compName, compLabel;
 		GraphicsInfo point;
 		//Loading Gates
@@ -60,7 +60,7 @@ void Load::Execute()
 				newAction.Execute();
 				cleared = true;
 			}
-			file >> compName >> point.x1 >> point.y1;
+			file >> compName >> id >> point.x1 >> point.y1;
 			//Completing the Component Corners
 			point.x2 = point.x1 + UI.GATE_Width;
 			point.y2 = point.y1 + UI.GATE_Height;

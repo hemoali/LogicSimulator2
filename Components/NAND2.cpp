@@ -52,7 +52,7 @@ void NAND2::selectYourSelf(Output* pOut, color Color) {
 void NAND2::save(int id, ofstream & file)
 {
 
-	file << "NAND2  "<<"  "<< m_GfxInfo.x1 << "  " << m_GfxInfo.y1 << " L" << this->getLabel() << endl;
+	file << "NAND2  "<<"  " << id <<"  "<< m_GfxInfo.x1 << "  " << m_GfxInfo.y1 << " L" << this->getLabel() << endl;
 }
 
 void NAND2::load(ApplicationManager* pM, ifstream& in)
