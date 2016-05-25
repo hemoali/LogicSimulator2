@@ -22,7 +22,7 @@ void Clear::Execute()
 		Output *pOut = pManager->GetOutput();
 		for (int i = 0; i < Utils::allComponentsCorners.size(); i++) {
 			Component *C = pManager->getComponent(i);
-			if (dynamic_cast<Gate*> (C)) {
+			if (!dynamic_cast<Connection*> (C)) {
 				C->setDelete(true);
 				C->Draw(pOut);
 				//Removing Connections

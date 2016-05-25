@@ -1,5 +1,6 @@
 #include "Component.h"
 #include "Connection.h"
+#include "Gate.h"
 int Component::lastID = 0;
 int Component::CreatedComponents = 0;
 int Component::DestructedComponents = 0;
@@ -24,6 +25,7 @@ Component::Component(const GraphicsInfo & r_GfxInfo) :m_OutputPin(0), ID(++lastI
 	m_GfxInfo.y2 = r_GfxInfo.y2;
 	CreatedComponents++;
 	deleted = false;
+	smallCleanImageBeforeAddingComp = NULL;
 }
 void Component::setLabel(string s){
 	m_Label = s;
@@ -125,6 +127,7 @@ void Component::setNumOfInputs(int n)
 }
 Component::~Component()
 {
+	if (smallCleanImageBeforeAddingComp != NULL)
+		delete smallCleanImageBeforeAddingComp;
 	DestructedComponents++;
 }
-
