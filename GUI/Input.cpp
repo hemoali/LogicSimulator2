@@ -671,6 +671,26 @@ string Input::getLoadPath()
 {
 	return pWind->getLoadFilePath();
 }
+SWITCH * Input::getToBeChangedSwitch()
+{
+	return toBeChangedSwitch;
+}
+void Input::setComponentToBeAddedToSelected(Component* C)
+{
+	toBeAddedToSelected = C;
+}
+Component * Input::getComponentToBeAddedToSelected()
+{
+	return 	toBeAddedToSelected ;
+}
+Component * Input::getComponentToBeRemovedFromSelected()
+{
+	return toBeRemovedFromSelected;
+}
+void Input::setComponentToBeRemovedFromSelected(Component * C)
+{
+	toBeRemovedFromSelected = C;
+}
 buttonstate Input::GetButtonStatus(const button btMouse, int &iX, int &iY) const {
 	return pWind->GetButtonState(btMouse, iX, iY);
 }

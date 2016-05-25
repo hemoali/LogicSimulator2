@@ -16,6 +16,9 @@ private:
 	bool isSelectMode, isSelectionContainConnections;
 	vector<pair<int, Component*> > selectedComponents;
 	int startXPointForConnections, startYPointForConnections;
+	SWITCH* toBeChangedSwitch;
+	Component* toBeAddedToSelected;
+	Component* toBeRemovedFromSelected;
 public:
 	Input(window*);
 	void GetPointClicked(int &, int &, bool drawImage = false, bool drawConnection = false);	//Get coordinate where user clicks
@@ -50,9 +53,14 @@ public:
 	//returns the Save/Load File Path 
 	string getSavePath();
 	string getLoadPath();
-	SWITCH* toBeChangedSwitch;
-	Component* toBeAddedToSelected;
-	Component* toBeRemovedFromSelected;
+	// get the selectedSwitch 
+	SWITCH* getToBeChangedSwitch();
+	//Get the Component to be Selected
+	void setComponentToBeAddedToSelected(Component* C);
+	Component* getComponentToBeAddedToSelected();
+	//Get the Component to be UnSelected
+	Component* getComponentToBeRemovedFromSelected();
+	void setComponentToBeRemovedFromSelected(Component* C);
 
 	~Input();
 };

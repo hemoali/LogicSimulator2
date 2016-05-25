@@ -147,7 +147,7 @@ void ApplicationManager::ExecuteAction(ActionType ActType)
 		break;
 	}
 	case Change_Switch: {
-		ChangeSwitch* act = new ChangeSwitch(this, GetInput()->toBeChangedSwitch);
+		ChangeSwitch* act = new ChangeSwitch(this, GetInput()->getToBeChangedSwitch());
 		Utils::theActions.push_back(act);
 		act->Execute();
 		Simulate simulateAction(this, false);
