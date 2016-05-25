@@ -10,7 +10,7 @@ using namespace std;
 Validate::Validate(ApplicationManager*pApp) : Action(pApp)
 {
 	msg = "";
-	isValid = true;
+	isValid = isValid2 = ifValid= true;
 	cnt = 0;
 }
 
@@ -70,7 +70,7 @@ bool Validate::validateInputComponent(Component* comp) { // check for floating p
 }
 void Validate::Execute()
 {
-	bool ifValid = true;
+	
 	for (size_t i = 0; i < pManager->getCompCount(); i++)
 	{
 		Component* comp = pManager->getComponent(i);
