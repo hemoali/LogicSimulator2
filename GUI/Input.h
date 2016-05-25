@@ -30,7 +30,7 @@ public:
 	void setisSelectionContainConnections(bool b);
 	bool getisSelectionContainConnections();
 	void DrawAfterMenu(image * img, int x, int y, int type, int w);
-	image* printHovering(int & x, int & y, string s, int & w, Component * C);
+	image* printHovering(int & x, int & y, string s, int & w, Component * C, int pin = -1);
 	void setSelectedComponents(vector<pair<int, Component*> >);
 	vector<pair<int,Component*> >& getSelectedComponents();
 	void correctHoverStartpoint(int & x, int & y, int width);

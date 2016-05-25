@@ -4,6 +4,7 @@
 #include <iostream>
 #include "..\Components\SWITCH.h"
 #include "..\Components\LED.h"
+#include "..\Components\Gate.h"
 #include "..\Actions\ChangeSwitch.h"
 Input::Input(window* pW)
 {
@@ -130,7 +131,7 @@ image * Input::StoreBeforeMenu(int x, int y, int type, int w)
 	return ptr;
 }
 
-image * Input::printHovering(int & x, int & y, string s, int & w, Component * C)
+image * Input::printHovering(int & x, int & y, string s, int & w, Component * C, int pin)
 {
 	image* img = NULL;
 	int width, height;
@@ -162,7 +163,41 @@ image * Input::printHovering(int & x, int & y, string s, int & w, Component * C)
 	else {
 		//Simulation Mode Hovering
 		Connection *ptr = NULL;
+
 		//Checking if it's a connection Hover or other componenets hover
+		if (!dynamic_cast<Connection*> (C))
+		{
+			//Check if hovering pin
+			//output pin
+			GraphicsInfo compCorner = C->getCornersLocation();
+			if (pin == 3)
+			{
+				C = C->getOutputPin()->getConnection(0);
+			}
+			else if (pin == 0) { C = C->getInputPin(0)->getConnection();  }
+			else if (pin == 2) { C = C->getInputPin((C->getNumOfInputs() == 2) ? 1 : 2)->getConnection(); }
+			else if (pin == 1) { C = C->getInputPin((C->getNumOfInputs() == 1) ? 0 : 1)->getConnection(); }
+			else if (pin == -1 && C->getLabel().size() > 0) {
+				//Other Component Hover
+				int h;
+				height = UI.HoverHeight;
+				pWind->getStringWidth(s, width, h);
+				//the Clearnace
+				width += 16;
+				//Correct the Points
+				x = C->getCenterLocation().x1 + 10;
+				y = C->getCenterLocation().y1 + 5;
+				this->correctHoverStartpoint(x, y, width);
+				//Store Before Hovering
+				img = this->StoreBeforeMenu(x, y, 7, width);
+				//Drawing the Hover Bar
+				pWind->SetPen(BLACK, 2);
+				pWind->SetBrush(LIGHTBLUE);
+				pWind->DrawRectangle(x, y, x + width, y + height, FILLED, 4, 4);
+				pWind->DrawString(x + 7, y + 2, s);
+				w = width;
+			}
+		}
 		if (ptr = dynamic_cast<Connection*> (C)) {
 			string hoverLabel = "";
 			width = 20;
@@ -185,26 +220,7 @@ image * Input::printHovering(int & x, int & y, string s, int & w, Component * C)
 			pWind->DrawString(x + 5, y + 1, hoverLabel);
 			w = width;
 		}
-		else {
-			//Other Component Hover
-			int h;
-			height = UI.HoverHeight;
-			pWind->getStringWidth(s, width, h);
-			//the Clearnace
-			width += 16;
-			//Correct the Points
-			x = C->getCenterLocation().x1 + 10;
-			y = C->getCenterLocation().y1 + 5;
-			this->correctHoverStartpoint(x, y, width);
-			//Store Before Hovering
-			img = this->StoreBeforeMenu(x, y, 7, width);
-			//Drawing the Hover Bar
-			pWind->SetPen(BLACK, 2);
-			pWind->SetBrush(LIGHTBLUE);
-			pWind->DrawRectangle(x, y, x + width, y + height, FILLED, 4, 4);
-			pWind->DrawString(x + 7, y + 2, s);
-			w = width;
-		}
+
 	}
 	return img;
 }
@@ -220,6 +236,7 @@ ActionType Input::GetUserAction()
 
 	clicktype s = LEFT_CLICK;
 	Component* preComp = NULL;
+	int prePin = -1;
 	while (true) {
 		// Check for keyboard hotkeys
 		char c1;
@@ -237,7 +254,7 @@ ActionType Input::GetUserAction()
 		else if ((int)c1 == 24) {
 			//Always Clear hover Bar if found
 			image* i = new image;
-			pWind->StoreImage(i, UI.LeftToolBarWidth, UI.TopToolBarHeight, UI.width - UI.LeftToolBarWidth-20, UI.height - UI.TopToolBarHeight-20);
+			pWind->StoreImage(i, UI.LeftToolBarWidth, UI.TopToolBarHeight, UI.width - UI.LeftToolBarWidth - 20, UI.height - UI.TopToolBarHeight - 20);
 			i->SaveImage("ScreenShot.bmp", pWind);
 		}
 		else if ((int)c1 == 4) {
@@ -472,23 +489,37 @@ ActionType Input::GetUserAction()
 					Utils::correctPointClicked(hoverX, hoverY, true, false);
 					if (Utils::CheckPointInBorders(hoverX, hoverY)) {
 						Component* comp = Utils::getArrayOfComponents(hoverY / UI.GRID_SIZE, hoverX / UI.GRID_SIZE);
-						if (comp != NULL && !comp->getDelete() && comp != preComp)
+						int pin = -1;
+
+						if (comp != NULL && !comp->getDelete())
 						{
-							//Always Clear hover Bar if found at the transition between one component and the other
-							clearHoveringImage(imgh, J, K, widthh);
-							if ((UI.AppMode == DESIGN && comp->getLabel().size() > 0) || (UI.AppMode == SIMULATION && ((dynamic_cast<Connection*>(comp)) || (!(dynamic_cast<Connection*>(comp)) && comp->getLabel().size() > 0)))) { //The Gate Worth Drawing A hover Part
-								pWind->GetMouseCoord(J, K);
-								delete imgh;
-								imgh = NULL;
-								imgh = printHovering(J, K, comp->getLabel(), widthh, comp);
+							GraphicsInfo compCorner = comp->getCornersLocation();
+							if (hoverX >= compCorner.x2 - UI.GATE_Width / 4 && hoverY > (compCorner.y1 + UI.GATE_Height / 2) - 6 && hoverY < (compCorner.y1 + UI.GATE_Height / 2) + 6)
+							{
+								pin = 3;//output pin 
+							}
+							else if (hoverX < (compCorner.x1 + UI.GATE_Width / 4) && hoverY <= compCorner.y2 - UI.GATE_Height / 2 - 6 && (comp->getNumOfInputs() == 2 || comp->getNumOfInputs() == 3)) { pin = 0; }
+							else if (hoverX < (compCorner.x1 + UI.GATE_Width / 4) && hoverY >= compCorner.y2 - UI.GATE_Height / 2 + 6 && (comp->getNumOfInputs() == 2 || comp->getNumOfInputs() == 3)) { pin = 2; }
+							else if (hoverX < (compCorner.x1 + UI.GATE_Width / 4) && hoverY >= compCorner.y2 - UI.GATE_Height / 2 - 6 && hoverY <= compCorner.y2 - UI.GATE_Height / 2 + 6 && (comp->getNumOfInputs() == 1 || comp->getNumOfInputs() == 3)) { pin = 1; }
+
+							if (comp != preComp || (UI.AppMode == SIMULATION && comp == preComp && pin != prePin))
+							{
+								//Always Clear hover Bar if found at the transition between one component and the other
+								clearHoveringImage(imgh, J, K, widthh);
+								if ((UI.AppMode == DESIGN && comp->getLabel().size() > 0) || (UI.AppMode == SIMULATION && ((dynamic_cast<Connection*>(comp)) || (!(dynamic_cast<Connection*>(comp)))))) { //The Gate Worth Drawing A hover Part
+									pWind->GetMouseCoord(J, K);
+									delete imgh;
+									imgh = NULL;
+									imgh = printHovering(J, K, comp->getLabel(), widthh, comp, pin);
+								}
 							}
 						}
 						else if (comp == NULL) {
 							//Always Clear hover Bar if found at the transition between one component and the other
 							clearHoveringImage(imgh, J, K, widthh);
 						}
-
 						preComp = comp;
+						prePin = pin;
 					}
 				}
 				hoverYOld = hoverY;

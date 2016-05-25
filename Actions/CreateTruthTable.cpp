@@ -227,7 +227,7 @@ void CreateTruthTable::Execute()
 
 					if (tooLarge)
 					{
-						file << AllCompination[i][k];
+						file << AllCombinations[i][k];
 						if ((comp->getLabel().size() == 4))
 							file << " ";
 						else if ((comp->getLabel().size() == 3))
@@ -239,7 +239,7 @@ void CreateTruthTable::Execute()
 					}
 					else 
 					{
-						row += to_string(AllCompination[i][k]);
+						row += to_string(AllCombinations[i][k]);
 						row += ((comp->getLabel().size() == 4) ? " " : "  ");
 						table2[RowNum].push_back(to_string(AllCombinations[i][k]));
 					}
