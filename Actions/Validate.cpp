@@ -71,7 +71,7 @@ bool Validate::validateInputComponent(Component* comp) { // check for floating p
 void Validate::Execute()
 {
 
-	for (size_t i = 0; i < Utils::allComponentsCorners.size() && isValid && isValid2; i++)
+	for (size_t i = 0; i < pManager->getCompCount() && isValid && isValid2; i++)
 	{
 		Component* comp = pManager->getComponent(i);
 

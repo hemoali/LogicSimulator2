@@ -47,6 +47,7 @@ enum ActionType
 	SELECT,		//Select a Component, a Connection
 	MULTI_SELECT,		//Select many Components, a Connection
 	RIGHT_CLICKSELECT,
+	SELECT_CONNECTION,
 			
 	MOVE,		//Move a Component, a Connection
 	MULTI_MOVE,

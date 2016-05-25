@@ -28,7 +28,7 @@ void CreateTruthTable::Execute()
 	bool tooLarge = false;
 	int NumOfInputs = 0, NumOfOutputs = 0;
 	//Calculating the Number of Inputs (the number of Switches)
-	for (size_t i = 0; i < Utils::allComponentsCorners.size(); i++)
+	for (size_t i = 0; i < pManager->getCompCount(); i++)
 	{
 		Component* comp = pManager->getComponent(i);
 		if ((dynamic_cast<SWITCH*>(comp)))
@@ -54,7 +54,7 @@ void CreateTruthTable::Execute()
 	ofstream file;
 	if (tooLarge)
 		file.open("TruthTable.txt");
-	for (size_t i = 0; i < Utils::allComponentsCorners.size(); i++)
+	for (size_t i = 0; i < pManager->getCompCount(); i++)
 	{
 		Component* comp = pManager->getComponent(i);
 		if ((dynamic_cast<SWITCH*>(comp)))
@@ -93,7 +93,7 @@ void CreateTruthTable::Execute()
 		}
 	}
 	//printing Lables  of all LEDs
-	for (size_t i = 0; i < Utils::allComponentsCorners.size(); i++)
+	for (size_t i = 0; i < pManager->getCompCount(); i++)
 	{
 		Component* comp = pManager->getComponent(i);
 		if ((dynamic_cast<LED*>(comp)))
@@ -159,7 +159,7 @@ void CreateTruthTable::Execute()
 	for (size_t i = 0; i < AllCombinations.size(); i++)
 	{
 		int k = 0;
-		for (size_t j = 0; j < Utils::allComponentsCorners.size(); j++)
+		for (size_t j = 0; j < pManager->getCompCount(); j++)
 		{
 			Component* comp = pManager->getComponent(j);
 			if ((dynamic_cast<SWITCH*>(comp)))
@@ -177,7 +177,7 @@ void CreateTruthTable::Execute()
 		NumOfInputs = 0;
 		NumOfOutputs = 0;
 		//printing current combination input
-		for (size_t j = 0; j < Utils::allComponentsCorners.size(); j++)
+		for (size_t j = 0; j < pManager->getCompCount(); j++)
 		{
 			Component* comp = pManager->getComponent(j);
 			if ((dynamic_cast<SWITCH*>(comp)))
@@ -271,7 +271,7 @@ void CreateTruthTable::Execute()
 			}
 		}
 		//printing outputs of the current combination
-		for (size_t j = 0; j < Utils::allComponentsCorners.size(); j++)
+		for (size_t j = 0; j < pManager->getCompCount(); j++)
 		{
 			Component* comp = pManager->getComponent(j);
 			if ((dynamic_cast<LED*>(comp)))

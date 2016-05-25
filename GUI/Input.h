@@ -53,6 +53,7 @@ public:
 	SWITCH* toBeChangedSwitch;
 	Component* toBeAddedToSelected;
 	Component* toBeRemovedFromSelected;
+	Connection* toBeSelectedConnection;
 
 	~Input();
 };

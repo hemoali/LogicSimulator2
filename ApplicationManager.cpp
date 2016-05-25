@@ -25,6 +25,7 @@
 #include"Actions\CreateTruthTable.h"
 #include"Actions\ChangeSwitch.h"
 #include"Actions\New.h"
+#include"Actions\SelectConnection.h"
 #include "Utils.h"
 #include "Actions\Exit.h"
 
@@ -146,6 +147,11 @@ void ApplicationManager::ExecuteAction(ActionType ActType)
 		pAct = new MultiSelect(this); Utils::theActions.push_back(pAct);
 		break;
 	}
+	case SELECT_CONNECTION: {
+		Select_Connection selectConnection(this);
+		selectConnection.Execute();
+		break;
+	}
 	case Change_Switch: {
 		ChangeSwitch* act = new ChangeSwitch(this, GetInput()->toBeChangedSwitch);
 		Utils::theActions.push_back(act);
@@ -235,7 +241,7 @@ void ApplicationManager::ExecuteAction(ActionType ActType)
 		break;
 	}
 	case DSN_MODE:
-		for (size_t i = 0; i < Utils::allComponentsCorners.size(); i++)
+		for (size_t i = 0; i < getCompCount(); i++)
 		{
 			Component* comp = getComponent(i);
 			if (comp->getDelete()) continue;
@@ -293,12 +299,44 @@ int ApplicationManager::getCompCount()
 }
 void ApplicationManager::setCompCount(int n)
 {
+	if (n == 0)
+	{
+		//Deleteion Completely
+		for (int i = 0; i < getCompCount(); i++) {
+			Component *C =CompList[i];
+			delete C;
+		}
+	}
 	CompCount = n;
 }
 ////////////////////////////////////////////////////////////////////
 Component * ApplicationManager::getComponent(int idx)
 {
 	return CompList[idx];
+}
+int ApplicationManager::getComponentIndex(Component* c) {
+	for (size_t i = 0; i < CompCount; i++)
+	{
+		if (CompList[i] == c)
+		{
+			return i;
+		}
+	}
+	return -1;
+}
+
+Component* ApplicationManager::getComponentByCoordinates(int xT, int yT, bool ignoreConnections, bool ignoreDelete, int&i) {
+	for (size_t i = 0; i < CompCount; i++)
+	{
+		if (ignoreDelete && CompList[i]->getDelete()) continue;
+		if (ignoreConnections && dynamic_cast<Connection*> (CompList[i])) continue;
+		GraphicsInfo compCorner = CompList[i]->getCornersLocation();
+		if (xT >= compCorner.x1&&xT <= compCorner.x2&& yT >= compCorner.y1&&yT <= compCorner.y2)
+		{
+			return CompList[i];
+		}
+	}	
+	return NULL;
 }
 void ApplicationManager::componentLoading(ifstream & in, string compType, GraphicsInfo point)
 {
@@ -384,7 +422,6 @@ void ApplicationManager::componentLoading(ifstream & in, string compType, Graphi
 	}
 	//Filling the needed arrays of the Grid
 	GraphicsInfo GInfotmp = point;
-	Utils::allComponentsCorners.push_back(point);
 	GetOutput()->storeImage(img, pA->getCenterLocation().x1 - UI.GRID_SIZE - 5, pA->getCenterLocation().y1 - UI.GRID_SIZE - 5, 2 * UI.GRID_SIZE + 3, UI.GATE_Height + 3);
 	pA->setSmallCleanImageBeforeAddingComp(img);
 	//Draw the Loaded Gate 

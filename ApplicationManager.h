@@ -22,7 +22,7 @@ private:
 
 	Output* OutputInterface; //pointer to the Output Clase Interface
 	Input* InputInterface; //pointer to the Input Clase Interface
-public:	
+public:
 	int Exitchoice;
 	Component*PastedComponent;
 	GraphicsInfo pastepoint;
@@ -32,10 +32,10 @@ public:
 	void UpdateInterface() {};
 	//Reads the required action from the user and returns the corresponding action type
 	ActionType GetUserAction();
-	
+
 	//Creates an action and executes it
 	void ExecuteAction(ActionType);
-	
+
 	//Gets a pointer to Input / Output Object
 	Output* GetOutput();
 	Input* GetInput();
@@ -44,7 +44,8 @@ public:
 	void AddComponent(Component* pComp);
 
 	Component* getComponent(int);
-
+	Component* getComponentByCoordinates(int x, int y, bool ignoreConnections, bool ignoreDelete, int&i);
+	int getComponentIndex(Component* c);
 	//Compcount Setter And Getter
 	int getCompCount();
 	void setCompCount(int n);

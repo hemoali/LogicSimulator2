@@ -21,6 +21,7 @@ void Cut::Execute()
 	if (this->ReadActionParameters(NULL, NULL))
 	{
 		pManager->cutorcopy = CUTAction;
+		pManager->PastedComponent = theComponent;
 		ptrfordeletegate = new Delete(pManager, pManager->PastedComponent, true);
 		ptrfordeletegate->Execute();
 	}

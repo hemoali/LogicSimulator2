@@ -34,20 +34,12 @@ void Move::Execute()
 	Output* pOut = pManager->GetOutput();
 	Input* pIn = pManager->GetInput();
 
+	Component* Comp;
+
 	int x, y;
-	Component* Comp = NULL;
 	// While the user is clicking
 	while (pIn->GetButtonStatus(LEFT_BUTTON, x, y) == BUTTON_DOWN) {
-		// Get the component to move
-		for (int i = 0; i < Utils::allComponentsCorners.size(); i++)
-		{
-			if (x >= Utils::allComponentsCorners[i].x1 && x <= Utils::allComponentsCorners[i].x2 && y >= Utils::allComponentsCorners[i].y1&&y <= Utils::allComponentsCorners[i].y2 && !dynamic_cast<Connection*> (pManager->getComponent(i)))
-			{
-				compIdx = i;
-				Comp = pManager->getComponent(i);
-			}
-		}
-	
+		Comp = pManager->getComponentByCoordinates(x, y, false, true, compIdx);
 		if (Comp != NULL &&Comp->getDelete()) Comp = NULL;
 		if (Comp != NULL && compIdx != -1) {
 			// get old preimage for undo
@@ -70,10 +62,6 @@ void Move::Execute()
 				Comp->setNewCenterLocation(newCoor);
 				// redraw and set the parameters
 				Comp->setDelete(false);
-				Utils::allComponentsCorners[compIdx].x1 = newCoor.x1 - UI.GATE_Width / 2;
-				Utils::allComponentsCorners[compIdx].y1 = newCoor.y1 - UI.GATE_Height / 2;
-				Utils::allComponentsCorners[compIdx].x2 = newCoor.x1 + UI.GATE_Width / 2;
-				Utils::allComponentsCorners[compIdx].y2 = newCoor.y1 + UI.GATE_Height / 2;
 				Comp->setSmallCleanImageBeforeAddingComp(newSmallImageForGate);
 				Comp->Draw(pOut, false);
 
@@ -124,10 +112,6 @@ void Move::Undo()
 	//redraw and reassign data
 
 	pA->setNewCenterLocation(oldGraphicsInfo);
-	Utils::allComponentsCorners[compIdx].x1 = oldGraphicsInfo.x1 - UI.GATE_Width / 2;
-	Utils::allComponentsCorners[compIdx].y1 = oldGraphicsInfo.y1 - UI.GATE_Height / 2;
-	Utils::allComponentsCorners[compIdx].x2 = oldGraphicsInfo.x1 + UI.GATE_Width / 2;
-	Utils::allComponentsCorners[compIdx].y2 = oldGraphicsInfo.y1 + UI.GATE_Height / 2;
 	pA->setSmallCleanImageBeforeAddingComp(oldSmallCleanImage);
 
 	// redraw after changing parameters
@@ -171,10 +155,6 @@ void Move::Redo()
 	//redraw and reassign data
 
 	pA->setNewCenterLocation(newCoor);
-	Utils::allComponentsCorners[compIdx].x1 = newCoor.x1 - UI.GATE_Width / 2;
-	Utils::allComponentsCorners[compIdx].y1 = newCoor.y1 - UI.GATE_Height / 2;
-	Utils::allComponentsCorners[compIdx].x2 = newCoor.x1 + UI.GATE_Width / 2;
-	Utils::allComponentsCorners[compIdx].y2 = newCoor.y1 + UI.GATE_Height / 2;
 	pA->setSmallCleanImageBeforeAddingComp(newSmallImageForGate);
 
 	pA->setDelete(false);

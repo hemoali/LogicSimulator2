@@ -31,7 +31,7 @@ void Simulate::Execute()
 		return;
 	}
 	// reset all input pins to avoid old pins state
-	for (size_t i = 0; i < Utils::allComponentsCorners.size(); i++)
+	for (size_t i = 0; i < pManager->getCompCount(); i++)
 	{
 		Component* comp = pManager->getComponent(i);
 		if ((dynamic_cast<SWITCH*>(comp)) || (dynamic_cast<Connection*>(comp) || comp->getDelete())) continue;
@@ -43,7 +43,7 @@ void Simulate::Execute()
 	int totalComponentsCount = 0, operatedItemsCount = 0;
 	vector<Component*> toBeOperatedComponents, operatedComponents;
 	// Send switches signals to all next components
-	for (size_t i = 0; i < Utils::allComponentsCorners.size(); i++)
+	for (size_t i = 0; i <pManager->getCompCount(); i++)
 	{
 		Component* comp = pManager->getComponent(i);
 		if ((dynamic_cast<Connection*>(comp) || comp->getDelete())) continue;
@@ -93,14 +93,14 @@ void Simulate::Execute()
 
 	}
 	//Light up leds
-	for (size_t i = 0; i < Utils::allComponentsCorners.size(); i++)
+	for (size_t i = 0; i <pManager->getCompCount(); i++)
 	{
 		Component* comp = pManager->getComponent(i);
 		if ((dynamic_cast<Connection*>(comp) || comp->getDelete())) continue;
 		if (dynamic_cast<LED*>(comp)) { comp->Draw(pManager->GetOutput(), false); }
 	}
 	//light up connections
-	for (size_t i = 0; i < Utils::allComponentsCorners.size(); i++)
+	for (size_t i = 0; i < pManager->getCompCount(); i++)
 	{
 		Component* comp = pManager->getComponent(i);
 		if (comp->getDelete()) continue;

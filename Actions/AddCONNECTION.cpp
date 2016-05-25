@@ -48,35 +48,11 @@ void AddConnection::Execute()
 	//Get Center point of the Gate
 	ReadActionParameters(NULL, NULL);
 
-	Component* outputComponent = NULL;
-	Component*inputComponent = NULL;
-
 	int indxOfInputComponent;
 
-	//Detect the output/input components
-	for (int i = 0; i < Utils::allComponentsCorners.size() && (outputComponent == NULL || inputComponent == NULL); i++)
-	{
-		if (dynamic_cast<Connection*>(pManager->getComponent(i)) || pManager->getComponent(i)->getDelete())
-			continue;
-		if (Cx1 >= Utils::allComponentsCorners[i].x1&&Cx1 <= Utils::allComponentsCorners[i].x2&& Cy1 >= Utils::allComponentsCorners[i].y1&&Cy1 <= Utils::allComponentsCorners[i].y2)
-		{
-			//Check if output pin clicked
-			if (Cx1 > (Utils::allComponentsCorners[i].x1 + UI.GATE_Width / 2) && !dynamic_cast<LED*>( pManager->getComponent(i)))
-			{
-				outputComponent = pManager->getComponent(i);
-			}
-		}
-		if (Cx2 >= Utils::allComponentsCorners[i].x1&&Cx2 <= Utils::allComponentsCorners[i].x2&& Cy2 >= Utils::allComponentsCorners[i].y1&&Cy2 <= Utils::allComponentsCorners[i].y2)
-		{
-			//Check if input pin clicked
-			if (Cx2 < (Utils::allComponentsCorners[i].x1 + UI.GATE_Width / 2) && !dynamic_cast<SWITCH*>(pManager->getComponent(i)))
-			{
-				inputComponent = pManager->getComponent(i);
-				indxOfInputComponent = i;
-			}
-		}
-	}
-
+	int ii;
+	Component* outputComponent = pManager->getComponentByCoordinates(Cx1, Cy1, true, true, ii);
+	Component* inputComponent  = pManager->getComponentByCoordinates(Cx2, Cy2, true, true, ii);
 	if (inputComponent == NULL || outputComponent == NULL || inputComponent == outputComponent || dynamic_cast<SWITCH*> (inputComponent) || dynamic_cast<LED*> (outputComponent))
 	{
 		pManager->GetOutput()->PrintStatusBox("Invalid Connection", UI.ErrorColor);
@@ -103,14 +79,14 @@ void AddConnection::Execute()
 		int inputPin;
 		if (numOfInputs == 3)
 		{
-			if (Cy2 <= Utils::allComponentsCorners[indxOfInputComponent].y2 - UI.GATE_Height / 2 - 6)numOfInputs = inputPin = 0;
-			else if (Cy2 >= Utils::allComponentsCorners[indxOfInputComponent].y2 - UI.GATE_Height / 2 + 6)numOfInputs = inputPin = 2;
+			if (Cy2 <= inputComponent->getCornersLocation().y2 - UI.GATE_Height / 2 - 6)numOfInputs = inputPin = 0;
+			else if (Cy2 >= inputComponent->getCornersLocation().y2 - UI.GATE_Height / 2 + 6)numOfInputs = inputPin = 2;
 			else numOfInputs = inputPin = 1;
 		}
 		else if (numOfInputs == 2)
 		{
-			if (Cy2 <= Utils::allComponentsCorners[indxOfInputComponent].y2 - UI.GATE_Height / 2)numOfInputs = inputPin = 0;
-			else if (Cy2 >= Utils::allComponentsCorners[indxOfInputComponent].y2 - UI.GATE_Height / 2) {
+			if (Cy2 <= inputComponent->getCornersLocation().y2 - UI.GATE_Height / 2)numOfInputs = inputPin = 0;
+			else if (Cy2 >= inputComponent->getCornersLocation().y2 - UI.GATE_Height / 2) {
 				numOfInputs = 2; inputPin = 1;
 			}
 		}
@@ -145,7 +121,6 @@ void AddConnection::Execute()
 			if (pManager->GetOutput()->DrawConnection(GInfo, numOfInputs, inputComponent->getCenterLocation(), cellsBeforeAddingConnection, false, pA) && !(outputComponent->getOutputPin()->connectedConnectionsCount() == FANOUT))
 			{
 				pManager->AddComponent(pA); // Add to complist
-				Utils::allComponentsCorners.push_back(GInfo); // Add to corners vector
 				// set parameters
 				pA->setCellsBeforeAddingConnection(cellsBeforeAddingConnection);
 				// connect the connection to the inout/outputn pins

@@ -86,7 +86,6 @@ void Paste::Execute()
 	if (pastedcomponent != NULL && Utils::CheckPoint({ pManager->pastepoint.x1 ,  pManager->pastepoint.y1 }, pOut, false, true))
 	{
 		//push to needed vectors
-		Utils::allComponentsCorners.push_back(Gffx);
 		pManager->AddComponent(pastedcomponent);
 		pastedcomponent->setLabel(pManager->PastedComponent->getLabel());
 		pastedcomponent->setSmallCleanImageBeforeAddingComp(smallImageBeforeAddingComponent);

@@ -29,15 +29,8 @@ bool RightClick::ReadActionParameters(image* img, Component* c) {
 	}
 
 	//Check Which Component is Selected and gets a pointer to that Component
-	for (int i = 0; i < Utils::allComponentsCorners.size(); i++) {
-		//Checking For Coordinates of the Selected Gate 
-		if ((x >= Utils::allComponentsCorners[i].x1 && x <= Utils::allComponentsCorners[i].x2) && (
-			y >= Utils::allComponentsCorners[i].y1 &&  y <= Utils::allComponentsCorners[i].y2)) {
-			C = pManager->getComponent(i);
-			i = Utils::allComponentsCorners.size(); //Breaks the Loop
-		}
-	}
-
+	int ii;
+	C = pManager->getComponentByCoordinates(x,y,false, true,ii);
 	//Checking if the selected a Gate / Switch /LED...
 	if (C != NULL && ((dynamic_cast<Gate*>(C) || dynamic_cast<LED*> (C) || dynamic_cast<SWITCH*>(C)) && !C->getDelete()))
 	{

@@ -39,7 +39,7 @@ void AddANDgate2::Execute()
 		pA->setSmallCleanImageBeforeAddingComp(smallImageBeforeAddingComponent);
 		pA->setNewCenterLocation(GInfo);
 		pManager->AddComponent(pA); // Add the component to application manager
-		Utils::allComponentsCorners.push_back(GInfotmp); // Add the component corners to the corners vector
+		
 		Utils::undoActions.push(this); // register this action for undo/redo process
 		Action::pA = pA;//set the component of the Action for undo/redo
 	}

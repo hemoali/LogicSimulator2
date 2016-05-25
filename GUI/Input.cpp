@@ -12,6 +12,7 @@ Input::Input(window* pW)
 	isSelectMode = isSelectionContainConnections = false;
 	toBeChangedSwitch = NULL;
 	toBeAddedToSelected = toBeRemovedFromSelected = NULL;
+	toBeSelectedConnection = NULL;
 }
 void Input::GetPointClicked(int &x, int &y, bool DrawGate, bool DrawConnection)
 {
@@ -174,7 +175,7 @@ image * Input::printHovering(int & x, int & y, string s, int & w, Component * C,
 			{
 				C = C->getOutputPin()->getConnection(0);
 			}
-			else if (pin == 0) { C = C->getInputPin(0)->getConnection();  }
+			else if (pin == 0) { C = C->getInputPin(0)->getConnection(); }
 			else if (pin == 2) { C = C->getInputPin((C->getNumOfInputs() == 2) ? 1 : 2)->getConnection(); }
 			else if (pin == 1) { C = C->getInputPin((C->getNumOfInputs() == 1) ? 0 : 1)->getConnection(); }
 			else if (pin == -1 && C->getLabel().size() > 0) {
@@ -303,13 +304,13 @@ ActionType Input::GetUserAction()
 				}
 				if (comp != NULL &&comp->getDelete()) comp = NULL;
 
-				if (comp != NULL) {
+				if (comp != NULL && !dynamic_cast<Connection*>(comp)) {
 					if (isSelectMode)
 					{
 						for (size_t i = 0; i < selectedComponents.size(); i++)
 						{
 							if (!dynamic_cast<Connection*>(selectedComponents[i].second) && selectedComponents[i].second == comp) {
-								Sleep(100);
+								//Sleep(100);
 								if (key == CTRL) // remove this component from selected ones
 								{
 									toBeRemovedFromSelected = comp;
@@ -344,9 +345,23 @@ ActionType Input::GetUserAction()
 					}
 				}
 				else {
+					if (!isSelectMode) {
+						int tmpX = xT, tmpY = yT;
+						Utils::correctPointClicked(tmpX, tmpY, true, false);
+						Component* c = Utils::getArrayOfComponents(tmpY / UI.GRID_SIZE, tmpX / UI.GRID_SIZE);
+						if (c == NULL || isSelectMode) {
+							clearHoveringImage(imgh, J, K, widthh);
+							return MULTI_SELECT;
+						}
+						else if (c != NULL && dynamic_cast<Connection*>(c)) {
+							pWind->DownButtons(false);
+							clearHoveringImage(imgh, J, K, widthh);
+							toBeSelectedConnection = (Connection*)c;
+							return SELECT_CONNECTION;
+						}
+					}
 					clearHoveringImage(imgh, J, K, widthh);
 					return MULTI_SELECT;
-
 				}
 			}
 		}
