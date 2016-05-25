@@ -19,8 +19,8 @@ void Select_Connection::Execute()
 	Input* pIn = pManager->GetInput();
 	Output* pOut = pManager->GetOutput();
 
-	pIn->toBeSelectedConnection->selectYourSelf(pOut, UI.SelectColor);
-	pIn->toBeSelectedConnection = NULL;
+	pIn->getToBeSelectedConnection()->selectYourSelf(pOut, UI.SelectColor);
+	pIn->setToBeSelectedConnection(NULL);
 }
 
 void Select_Connection::Undo()

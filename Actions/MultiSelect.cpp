@@ -19,9 +19,9 @@ void MultiSelect::Execute()
 	{
 		allSelectedComponents = pManager->GetInput()->getSelectedComponents();
 		
-		int idx = pManager->getComponentIndex(pManager->GetInput()->toBeAddedToSelected);
-		allSelectedComponents.push_back(make_pair(idx, pManager->GetInput()->toBeAddedToSelected));
-		pManager->GetInput()->toBeAddedToSelected = NULL;
+		int idx = pManager->getComponentIndex(pManager->GetInput()->getComponentToBeAddedToSelected());
+		allSelectedComponents.push_back(make_pair(idx, pManager->GetInput()->getComponentToBeAddedToSelected()));
+		pManager->GetInput()->setComponentToBeAddedToSelected(NULL);
 	}
 	else if (pManager->GetInput()->getComponentToBeRemovedFromSelected() != NULL) {  // check if comp to be removed from the selected components
 		allSelectedComponents = pManager->GetInput()->getSelectedComponents();
