@@ -208,7 +208,7 @@ bfs_node* Output::bfs(bfs_node* bf, int requX, int requY, vector<bfs_node*> allN
 	return NULL;
 }
 
-bool Output::DrawConnection(GraphicsInfo GfxInfo, int inputPin, GraphicsInfo compCenterLocation, vector<Cell>& cellsBeforeAddingConnection, bool selected, Component* pA) 
+bool Output::DrawConnection(GraphicsInfo GfxInfo, int inputPin, GraphicsInfo compCenterLocation, vector<Cell>& cellsBeforeAddingConnection, bool selected, Component* pA)
 {
 	cellsBeforeAddingConnection.clear();
 	vector<bfs_node*> allNodes;
@@ -661,44 +661,66 @@ int Output::printPopUpMessage(string s, char type)
 	return (pWind->printMessageBox(msg, type));
 }
 
-image * Output::DrawTruthTable(string table[], int inputsNum, int outputsNum, int & X, int & Y, int & w, int & h)
+image * Output::DrawTruthTable(vector<vector<string> > table, int inputsNum, int outputsNum, int & X, int & Y, int & w, int & h)
 {
-	//Setting the font used and pen colour
-	pWind->SetFont(20, BOLD | UNDERLINED, BY_NAME, "Consolas");
-	pWind->SetPen(BLACK);
-	//the upper left point of the Table 
-	int startx, starty, width, height, stringHeight;
-	//Getting the width & the height of the row text according to the font size
-	pWind->getStringWidth(table[0], width, height);
-	//Be aware that the height or width now are dimensions of string with that font 
-	//NOT THE TABLE HEIGHT OR WIDTH, So we need to add a small space to the width
-	w = width += 20;
-	//And change the Height to be also the height of the table
-	stringHeight = height;
-	height += ((1<<inputsNum)*stringHeight);
-	h = height += 10;
-	if (height < 30) height = 30;
-	if (width < 30) width = 30;
-	if (width > UI.width - 40)
+	int startx, starty;
+	int maxInputOutputNameWidth, maxInputOutputNameHeight;
+	pWind->SetFont(10, PLAIN, SWISS);
+	pWind->getStringWidth("InputNumber1222222", maxInputOutputNameWidth, maxInputOutputNameHeight); // get max size
+	w = (inputsNum + outputsNum) * maxInputOutputNameWidth + (inputsNum + outputsNum + 1) * 20 + 4 + 20;
+	h = ((1 << inputsNum) + 1) * (maxInputOutputNameHeight + 15) + 50;
+
+	if (w > UI.width - 40)
 		return NULL;
+
 	//Setting the upper left point
-	X = startx = UI.width / 2 - width / 2 +10; //10 is the half of the added space from the right and the left
-	Y = starty = 200 + (4 - inputsNum) * 10 + 5;
+	X = startx = UI.width / 2 - w / 2;
+	Y = starty = UI.height / 2 - h / 2;
+
 	//Screen shot of the table area startx, starty, width, height
 	//Dont forget to deallocate it when finishing
 	image *img = new image;
-	pWind->StoreImage(img, startx, starty, width, height);
-	//Drawing the Background image Before Truth Table
-	string imageURL = "images\\Menu\\TruthTable.jpg";
-	pWind->DrawImage(imageURL, startx, starty, width, height);
-	//Drawing Each Combination
-	pWind->DrawString(startx+10, starty, table[0]);
+	pWind->StoreImage(img, startx, starty, w, h);
 
-	for (int i = 1; i < int(1 << inputsNum)+1; i++) {
-		starty += stringHeight;
-		if(i== int(1 << inputsNum))
-			pWind->SetFont(20, BOLD, BY_NAME, "Consolas");
-		pWind->DrawString(startx+10, starty, table[i]);
+	//Draw Background with shadow
+	pWind->SetPen(color(176, 178, 181), 0);
+	pWind->SetBrush(color(176, 178, 181));
+	pWind->DrawRectangle(startx, starty, startx + w, starty + h, FILLED);
+	pWind->SetBrush(WHITE);
+	pWind->SetPen(WHITE, 0);
+	pWind->DrawRectangle(startx + 1, starty + 1, startx + 1 + w - 3, starty + 1 + h - 3, FILLED);
+
+	//Print header
+	pWind->SetFont(20, BOLD, BY_NAME, "Consolas");
+	pWind->SetPen(color(0, 72, 130));
+	for (size_t i = 0; i < table[0].size(); i++)
+	{
+		int x = startx + 10 + maxInputOutputNameWidth * i + maxInputOutputNameWidth * 0.5 + (i + 1) + 20 * (i + 1) - 5;
+		int sWidth, sHeight;
+		pWind->getStringWidth(table[0][i], sWidth, sHeight); // get header width to align in center of column
+
+		//Draw header 
+		pWind->DrawString(x - sWidth/2 + 2, starty + 20, table[0][i]);
+	}
+	// Draw combinations
+	pWind->SetFont(18, BOLD, BY_NAME, "Consolas");
+	pWind->SetPen(BLACK);
+	for (size_t i = 1; i < table.size(); i++)
+	{
+		if (i % 2 == 0) // Draw gray row
+		{
+			pWind->SetBrush(color(236, 236, 236));
+			pWind->SetPen(color(236, 236, 236), 0);
+			pWind->DrawRectangle(startx + 10, starty + 40 + maxInputOutputNameHeight * (i)+15 * (i)-3, startx + 10 + w - 22, starty + 40 + maxInputOutputNameHeight * (i)+15 * (i)+maxInputOutputNameHeight + 10, FILLED);
+		}
+		//Draw combination
+		pWind->SetFont(18, BOLD, BY_NAME, "Consolas");
+		pWind->SetPen(BLACK);
+		for (size_t j = 0; j < table[i].size(); j++)
+		{
+			int x = startx + 10 + maxInputOutputNameWidth * j + maxInputOutputNameWidth * 0.5 + (j + 1) + 20 * (j + 1) - 5;
+			pWind->DrawString(x, starty + 40 + maxInputOutputNameHeight * (i)+15 * (i), table[i][j]);
+		}
 	}
 	return img;
 }
@@ -725,7 +747,7 @@ void Output::changeConnectionColor(Connection * connection, color Color) {
 	bool b1 = false, b2 = false, PreviousIsIntersection = false, PreviousIsIntersection2 = false, isCell2XGreaterThanCellX = false, isCell2YGreaterThanCellY = false;
 	int i = 0;
 	int Vertical0Horizontal1Nothing2 = 2;
-	
+
 	for (size_t j = 0; j < connection->getCellsBeforeAddingConnection().size(); j++)
 	{
 		Cell cell = connection->getCellsBeforeAddingConnection()[j];
@@ -826,7 +848,7 @@ void Output::changeConnectionColor(Connection * connection, color Color) {
 							pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE, cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE + 10);
 						}
 						else {
-							pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE-3, cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE + 10);
+							pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE - 3, cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE + 10);
 						}
 					}
 					else {
@@ -871,7 +893,7 @@ void Output::changeConnectionColor(Connection * connection, color Color) {
 						isCell2XGreaterThanCellX = false;
 						if (!PreviousIsIntersection)
 						{
-							pWind->DrawLine(cell.x * UI.GRID_SIZE+((arrayOfCorners[cell.y][cell.x] == 0) ? 4 : 0), cell.y*UI.GRID_SIZE, cell2.x * UI.GRID_SIZE + 6, cell2.y*UI.GRID_SIZE);
+							pWind->DrawLine(cell.x * UI.GRID_SIZE + ((arrayOfCorners[cell.y][cell.x] == 0) ? 4 : 0), cell.y*UI.GRID_SIZE, cell2.x * UI.GRID_SIZE + 6, cell2.y*UI.GRID_SIZE);
 						}
 						else {
 							pWind->DrawLine(cell.x * UI.GRID_SIZE - 6, cell.y*UI.GRID_SIZE, cell2.x * UI.GRID_SIZE + 6, cell2.y*UI.GRID_SIZE);
@@ -886,7 +908,7 @@ void Output::changeConnectionColor(Connection * connection, color Color) {
 							pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE, cell2.x * UI.GRID_SIZE, cell2.y*UI.GRID_SIZE - 3);
 						}
 						else {
-							pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE-6, cell2.x * UI.GRID_SIZE, cell2.y*UI.GRID_SIZE - 3);
+							pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE - 6, cell2.x * UI.GRID_SIZE, cell2.y*UI.GRID_SIZE - 3);
 						}
 					}
 					else {
@@ -897,7 +919,7 @@ void Output::changeConnectionColor(Connection * connection, color Color) {
 
 						}
 						else {
-							pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE+6, cell2.x * UI.GRID_SIZE, cell2.y*UI.GRID_SIZE - 6);
+							pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE + 6, cell2.x * UI.GRID_SIZE, cell2.y*UI.GRID_SIZE - 6);
 						}
 
 					}
@@ -946,7 +968,7 @@ void Output::changeConnectionColor(Connection * connection, color Color) {
 
 }
 void Output::clearConnections(vector<Connection*>& allConnections, int originalX, int originalY, bool isInput, bool setDeleted) {
-	
+
 	for (size_t i = 0; i < allConnections.size(); i++)
 	{
 		if (allConnections[i]->getDelete())
@@ -993,7 +1015,7 @@ void Output::clearConnections(vector<Connection*>& allConnections, int originalX
 						pWind->DrawLine(cell.x * UI.GRID_SIZE, cell.y*UI.GRID_SIZE, cell2.x*UI.GRID_SIZE, cell2.y*UI.GRID_SIZE);
 						pWind->DrawRectangle(cell.x * UI.GRID_SIZE - 10, cell.y*UI.GRID_SIZE - 10, cell.x*UI.GRID_SIZE + 10, cell.y*UI.GRID_SIZE + 10, FILLED);
 						pWind->SetPen(UI.ConnColor, 2);
-						pWind->DrawLine(cell.x* UI.GRID_SIZE -((arrayOfIntersections[cell.y][cell.x-1] != -1)?11:15), cell.y* UI.GRID_SIZE, cell.x* UI.GRID_SIZE + 10, cell.y* UI.GRID_SIZE);
+						pWind->DrawLine(cell.x* UI.GRID_SIZE - ((arrayOfIntersections[cell.y][cell.x - 1] != -1) ? 11 : 15), cell.y* UI.GRID_SIZE, cell.x* UI.GRID_SIZE + 10, cell.y* UI.GRID_SIZE);
 					}
 				}
 
@@ -1281,7 +1303,7 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 		pWind->GetMouseCoord(x, y);
 		bool wrong = false;
 		Utils::correctPointClicked(x, y, true, false);
-		
+
 		if (moving && (x != iXOld || y != iYOld))
 		{
 			//Clear connections from grid
@@ -1449,7 +1471,7 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 			draw = false;
 			break;
 		}
-			else if (!wrong && Utils::CheckPoint({ x,y }, this, comp, moving, false) && (pWind->GetMouseClick(tX, tY) == LEFT_CLICK) || ((pWind->GetButtonState(LEFT_BUTTON, tX, tY) == BUTTON_UP))) {
+		else if (!wrong && Utils::CheckPoint({ x,y }, this, comp, moving, false) && (pWind->GetMouseClick(tX, tY) == LEFT_CLICK) || ((pWind->GetButtonState(LEFT_BUTTON, tX, tY) == BUTTON_UP))) {
 			if ((moving && (noOfTotalConnections == drawnConnectionsCount)) || !moving)
 			{
 				Utils::correctPointClicked(x, y, true, false);
@@ -2251,7 +2273,7 @@ void Output::DrawSwtich(GraphicsInfo g, bool isON, bool highlighted, bool notVal
 		pWind->DrawImage("images\\Menu\\SWITCH_OFF.jpg", cx - 13, cy - 16, 32, 32);
 	}
 	//the output line
-	pWind->DrawLine(cx + 12+4, cy, cx + 21, cy);
+	pWind->DrawLine(cx + 12 + 4, cy, cx + 21, cy);
 
 
 

@@ -20,9 +20,7 @@ bool AddANDgate2::ReadActionParameters(image * smallImageBeforeAddingComponent, 
 
 		done = true;
 	}
-
-	
-	
+		
 	return done;
 }
 

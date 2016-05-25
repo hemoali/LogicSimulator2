@@ -412,7 +412,7 @@ ApplicationManager::~ApplicationManager()
 	file << "Components constructed  " << Component::CreatedComponents << endl;
 	file << "Components Destructed  " << Component::DestructedComponents << endl;
 	file.close();
-	pOut->printCheck();
+	//pOut->printCheck();
 	delete OutputInterface;
 	delete InputInterface;
 }

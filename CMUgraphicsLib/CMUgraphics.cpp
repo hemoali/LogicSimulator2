@@ -1626,7 +1626,8 @@ string window::getStringBox(string s)
 	//Make sure the window is Shown And not minimized
 	SetActiveWindow(hwndWindow);
 	if (getWindowEditString().size() == 0) return "";
-	return getWindowEditString();
+	string s2 = getWindowEditString();
+	return (s2.length()>13) ? s2.substr(0, 13) : s2;
 }
 
 void window::OpenTruthTable()

@@ -62,7 +62,7 @@ public:
 
 	int printPopUpMessage(string s, char type = 'V'); 
 
-	image* DrawTruthTable(string table[], int inputsNum, int outputsNum, int& X, int& Y, int& w, int& h);
+	image* DrawTruthTable(vector<vector<string> > table, int inputsNum, int outputsNum, int& X, int& Y, int& w, int& h);
 	void drawAfterTruthTable(image* img, int X, int Y, int w, int h);
 	void PrintTruthTable();
 

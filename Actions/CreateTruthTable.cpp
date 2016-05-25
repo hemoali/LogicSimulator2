@@ -47,12 +47,13 @@ void CreateTruthTable::Execute()
 	//and later print their Names
 	if (NumOfInputs > 4) tooLarge = true;
 	string row = "";
-	string *table = new string[(1<<NumOfInputs)+1];
+	string *table = new string[(1 << NumOfInputs) + 1];
+	vector<vector<string> > table2((1 << NumOfInputs) + 1);
 	int RowNum = 0;
 	NumOfInputs = NumOfOutputs = 0;
 	ofstream file;
 	if (tooLarge)
-	file.open("TruthTable.txt");
+		file.open("TruthTable.txt");
 	for (size_t i = 0; i < Utils::allComponentsCorners.size(); i++)
 	{
 		Component* comp = pManager->getComponent(i);
@@ -72,6 +73,7 @@ void CreateTruthTable::Execute()
 					row += "Input ";
 					row += to_string(NumOfInputs);
 					row += "  ";
+					table2[RowNum].push_back("Input " + to_string(NumOfInputs));
 				}
 			}
 			else
@@ -80,10 +82,12 @@ void CreateTruthTable::Execute()
 				{
 					file << comp->getLabel() << "||";
 				}
-				else 
+				else
 				{
 					row += comp->getLabel();
 					row += "  ";
+					table2[RowNum].push_back(comp->getLabel());
+
 				}
 			}
 		}
@@ -103,11 +107,12 @@ void CreateTruthTable::Execute()
 				{
 					file << "Output " << NumOfOutputs << "||";
 				}
-				else 
+				else
 				{
 					row += "Output ";
 					row += to_string(NumOfOutputs);
 					row += "  ";
+					table2[RowNum].push_back("Output " + to_string(NumOfOutputs));
 				}
 			}
 			else
@@ -116,10 +121,11 @@ void CreateTruthTable::Execute()
 				{
 					file << comp->getLabel() << "||";
 				}
-				else 
+				else
 				{
 					row += comp->getLabel();
 					row += "  ";
+					table2[RowNum].push_back(comp->getLabel());
 				}
 			}
 		}
@@ -129,28 +135,28 @@ void CreateTruthTable::Execute()
 	{
 		file << endl;
 	}
-	else 
+	else
 	{
 		table[RowNum++] = row;
 		row = "";
 	}
 
-	//genrating all Compination of the inputs
-	vector<vector<int>>AllCompination(1 << NumOfInputs);
-	for (int i = 0; i < AllCompination.size(); i++)
+	//genrating all Combinations of the inputs
+	vector<vector<int>>AllCombinations(1 << NumOfInputs);
+	for (int i = 0; i < AllCombinations.size(); i++)
 	{
-		AllCompination[i].resize(NumOfInputs);
+		AllCombinations[i].resize(NumOfInputs);
 		int cur = i;
 		for (int j = NumOfInputs - 1; j >= 0; j--)
 		{
-			AllCompination[i][j] = cur % 2;
+			AllCombinations[i][j] = cur % 2;
 			cur /= 2;
 		}
 	}
 
-	//iterate All compination of inputs and Excute this inputs 
-	//printing all compination and its outputs
-	for (size_t i = 0; i < AllCompination.size(); i++)
+	//iterate All combinations of inputs and Excute these inputs 
+	//printing all combinations and their outputs
+	for (size_t i = 0; i < AllCombinations.size(); i++)
 	{
 		int k = 0;
 		for (size_t j = 0; j < Utils::allComponentsCorners.size(); j++)
@@ -160,8 +166,8 @@ void CreateTruthTable::Execute()
 			{
 				if (comp->getDelete())
 					continue;
-				comp->getOutputPin()->setStatus((STATUS)AllCompination[i][k]);
-				comp->Draw(pOut, (STATUS)AllCompination[i][k]);
+				comp->getOutputPin()->setStatus((STATUS)AllCombinations[i][k]);
+				comp->Draw(pOut, (STATUS)AllCombinations[i][k]);
 				k++;
 			}
 		}
@@ -170,7 +176,7 @@ void CreateTruthTable::Execute()
 		k = 0;
 		NumOfInputs = 0;
 		NumOfOutputs = 0;
-		//printing current compination input
+		//printing current combination input
 		for (size_t j = 0; j < Utils::allComponentsCorners.size(); j++)
 		{
 			Component* comp = pManager->getComponent(j);
@@ -184,15 +190,16 @@ void CreateTruthTable::Execute()
 					for (int K = 0; K < (6 + to_string(NumOfInputs).size()) / 2; K++)
 					{
 						if (tooLarge)
-						file << " ";
+							file << " ";
 						else
 							row += " ";
 					}
 					if (tooLarge)
-					file << AllCompination[i][k] << "  ";
+						file << AllCombinations[i][k] << "  ";
 					else {
-						row += to_string(AllCompination[i][k]);
+						row += to_string(AllCombinations[i][k]);
 						row += "  ";
+						table2[RowNum].push_back(to_string(AllCombinations[i][k]));
 					}
 					int siz = ((6 + to_string(NumOfInputs).size()) % 2 != 0) ? ((6 + to_string(NumOfInputs).size()) / 2) : ((6 + to_string(NumOfInputs).size()) / 2 - 1);
 					for (int K = 0; K < siz; K++)
@@ -202,8 +209,8 @@ void CreateTruthTable::Execute()
 							if (abs(K - siz) <= 2)
 								file << "|";
 							else
-						file << " ";
-					}
+								file << " ";
+						}
 						else
 							row += " ";
 					}
@@ -213,16 +220,17 @@ void CreateTruthTable::Execute()
 					for (int K = 0; K < comp->getLabel().size() / 2; K++)
 					{
 						if (tooLarge)
-						file << " ";
+							file << " ";
 						else
 							row += " ";
 					}
 
 					if (tooLarge)
-						file << AllCompination[i][k] << ((comp->getLabel().size() == 4) ? " " : "  ");
+						file << AllCombinations[i][k] << ((comp->getLabel().size() == 4) ? " " : "  ");
 					else {
-						row += to_string(AllCompination[i][k]);
+						row += to_string(AllCombinations[i][k]);
 						row += ((comp->getLabel().size() == 4) ? " " : "  ");
+						table2[RowNum].push_back(to_string(AllCombinations[i][k]));
 					}
 					int siz = (comp->getLabel().size() % 2 != 0) ? (comp->getLabel().size() / 2) : (comp->getLabel().size() / 2 - 1);
 					if (comp->getLabel().size() == 4)
@@ -236,15 +244,15 @@ void CreateTruthTable::Execute()
 					{
 						for (int K = 0; K < siz; K++)
 						{
-								if (tooLarge)
-								{
-									if (abs(K - siz) <= 2)
-										file << "|";
-									else
-							file << " ";
-								}
+							if (tooLarge)
+							{
+								if (abs(K - siz) <= 2)
+									file << "|";
 								else
-									row += " ";
+									file << " ";
+							}
+							else
+								row += " ";
 						}
 					}
 				}
@@ -265,15 +273,16 @@ void CreateTruthTable::Execute()
 					for (int K = 0; K < (7 + to_string(NumOfOutputs).size()) / 2; K++)
 					{
 						if (tooLarge)
-						file << " ";
+							file << " ";
 						else
 							row += " ";
 					}
 					if (tooLarge)
-					file << comp->GetInputPinStatus(0) << "  ";
+						file << comp->GetInputPinStatus(0) << "  ";
 					else {
 						row += to_string(comp->GetInputPinStatus(0));
 						row += "  ";
+						table2[RowNum].push_back(to_string(comp->GetInputPinStatus(0)));
 					}
 					int siz = ((7 + to_string(NumOfOutputs).size()) % 2 != 0) ? ((7 + to_string(NumOfOutputs).size()) / 2) : ((7 + to_string(NumOfOutputs).size()) / 2 - 1);
 					for (int K = 0; K < siz; K++)
@@ -283,8 +292,8 @@ void CreateTruthTable::Execute()
 							if (abs(K - siz) <= 2)
 								file << "|";
 							else
-						file << " ";
-					}
+								file << " ";
+						}
 						else
 							row += " ";
 					}
@@ -294,7 +303,7 @@ void CreateTruthTable::Execute()
 					for (int K = 0; K < comp->getLabel().size() / 2; K++)
 					{
 						if (tooLarge)
-						file << " ";
+							file << " ";
 						else
 							row += " ";
 					}
@@ -303,6 +312,7 @@ void CreateTruthTable::Execute()
 					else {
 						row += to_string(comp->GetInputPinStatus(0));
 						row += ((comp->getLabel().size() == 4) ? " " : "  ");
+						table2[RowNum].push_back(to_string(comp->GetInputPinStatus(0)));
 					}
 					int siz = (comp->getLabel().size() % 2 != 0) ? (comp->getLabel().size() / 2) : (comp->getLabel().size() / 2 - 1);
 					if (comp->getLabel().size() == 4)
@@ -314,22 +324,22 @@ void CreateTruthTable::Execute()
 					}
 					else
 					{
-					for (int K = 0; K < siz; K++)
-					{
+						for (int K = 0; K < siz; K++)
+						{
 							if (tooLarge)
 								if (abs(K - siz) <= 2)
 									file << "|";
 								else
-						file << " ";
+									file << " ";
 							else
 								row += " ";
+						}
 					}
 				}
 			}
 		}
-		}
 		if (tooLarge)
-		file << endl;
+			file << endl;
 		else
 		{
 			table[RowNum++] = row;
@@ -337,15 +347,15 @@ void CreateTruthTable::Execute()
 		}
 	}
 	if (tooLarge)
-	pOut->PrintStatusBox("The truth table has been created sucessfully");
+		pOut->PrintStatusBox("The truth table has been created sucessfully");
 	if (tooLarge)
-	file.close();
+		file.close();
 	if (tooLarge)
-	pOut->PrintTruthTable();
+		pOut->PrintTruthTable();
 	else {
 		int X, Y, w, h;
 		//The before saved Image
-		image *img = pOut->DrawTruthTable(table, NumOfInputs, NumOfOutputs, X, Y, w, h);
+		image *img = pOut->DrawTruthTable(table2, NumOfInputs, NumOfOutputs, X, Y, w, h);
 		if (img != NULL) {
 			Input *pIn = pManager->GetInput(); //Pointer to Input Class
 			int x, y;
@@ -368,10 +378,10 @@ void CreateTruthTable::Execute()
 			}
 		}
 		else {
-			int res = pOut->printPopUpMessage("",'T');
+			int res = pOut->printPopUpMessage("", 'T');
 			if (res == 1) {
 				file.open("TruthTable.txt");
-				for (int i = 0; i < (1<<NumOfInputs) + 1; i++) {
+				for (int i = 0; i < (1 << NumOfInputs) + 1; i++) {
 					file << table[i] << endl;
 				}
 				file.close();
