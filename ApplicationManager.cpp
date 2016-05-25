@@ -455,6 +455,10 @@ void ApplicationManager::componentLoading(ifstream & in, string compType, Graphi
 	//Draw the Loaded Gate 
 	pA->Draw(GetOutput());
 }
+void ApplicationManager::componentSaving(int id, ofstream & file)
+{
+	getComponent(id)->save(id + 1, file);
+}
 void ApplicationManager::setExitChoice(int x)
 {
 	Exitchoice = x;

@@ -67,6 +67,7 @@ public:
 
 	//Loading Function
 	void componentLoading(ifstream& in, string compType, GraphicsInfo point);
+	void componentSaving(int id, ofstream & file);
 	//Exitting Indicator
 	void setExitChoice(int x);
 	//destructor

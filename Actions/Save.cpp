@@ -47,7 +47,7 @@ void Save::Execute()
 			}
 			if (dynamic_cast<Connection*>(pManager->getComponent(i)))
 				continue;
-			pManager->getComponent(i)->save(i + 1, file);
+			pManager->componentSaving(i, file);
 		}
 		file << "Connections\n";
 		file << ConnectionCount << '\n';
@@ -59,9 +59,10 @@ void Save::Execute()
 			}
 			if (dynamic_cast<Connection*>(pManager->getComponent(i)))
 			{
-				pManager->getComponent(i)->save(i + 1, file);
+				pManager->componentSaving(i, file);
 			}
 		}
+		file << -1 << endl;
 		file.close();
 		pManager->GetOutput()->PrintStatusBox("Design saved successfully");
 	}

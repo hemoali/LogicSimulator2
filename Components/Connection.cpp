@@ -120,6 +120,7 @@ void Connection::save(int id, ofstream & file)
 	}
 	c1 = theOutputPinComponent->getCenterLocation().x1 + 9;
 	c2 = theOutputPinComponent->getCenterLocation().y1;
+	//file << id << "  " << 
 	file << "  " << c1 << "  " << c2 << "  " << c3 << "  " << c4 << " L" << this->getLabel() <<  endl;
 }
 
