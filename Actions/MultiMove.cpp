@@ -17,6 +17,9 @@
 #include<iostream>
 #include<algorithm>
 using namespace std;
+//=======================================================================================================================
+//							Check move action for more comments of the same code
+//=======================================================================================================================
 
 MultiMove::MultiMove(ApplicationManager *pApp) :Action(pApp)
 {

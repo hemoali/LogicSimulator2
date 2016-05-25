@@ -20,6 +20,7 @@ void Cut::Execute()
 {
 	if (this->ReadActionParameters(NULL, NULL))
 	{
+		pManager->cutorcopy = CUTAction;
 		ptrfordeletegate = new Delete(pManager, pManager->PastedComponent, true);
 		ptrfordeletegate->Execute();
 	}

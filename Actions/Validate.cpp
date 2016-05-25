@@ -18,8 +18,9 @@ bool Validate::ReadActionParameters(image *, Component* c)
 {
 	return false;
 }
+// Check for floating pins
 bool Validate::validateOutputComponent(Component* comp) {
-	if (comp != NULL && dynamic_cast<LED*>(comp))
+	if (comp != NULL && dynamic_cast<LED*>(comp)) // if last level led
 	{
 		return true;
 	}
@@ -36,8 +37,8 @@ bool Validate::validateOutputComponent(Component* comp) {
 	}
 	return t[0] && t[1] && t[2];
 }
-bool Validate::validateInputComponent(Component* comp) {
-	if (comp != NULL && dynamic_cast<SWITCH*>(comp))
+bool Validate::validateInputComponent(Component* comp) { // check for floating pins and first level
+	if (comp != NULL && dynamic_cast<SWITCH*>(comp)) // if first level is switch
 	{
 		return true;
 	}
@@ -78,6 +79,7 @@ void Validate::Execute()
 
 		if (comp->getDelete())continue;
 		cnt++;
+		// if not valid first level
 		if (!dynamic_cast<LED*> (comp))
 		{
 			isValid = validateOutputComponent(comp);
@@ -91,6 +93,7 @@ void Validate::Execute()
 		{
 			isValid2 = validateInputComponent(comp);
 		}
+		// if not valid last level
 		if (!isValid2 && msg.find("switches") == string::npos)
 		{
 			msg += ((msg.length() == 0) ? "" : "\n"); msg += " • First level isn't all switches";

@@ -13,14 +13,12 @@ bool Select::ReadActionParameters(image * smallImageBeforeAddingComponent, Compo
 	Output* pOut = pManager->GetOutput();
 	Input* pIn = pManager->GetInput();
 	int x, y;
-	
 	return true;
 }
 
 void Select::Execute()
 {
 	//Get Center point of the Gate
-
 }
 
 void Select::Undo()

@@ -21,15 +21,16 @@ void ChangeSwitch::Execute()
 {
 	Output* pOut = pManager->GetOutput();
 	if (this->ReadActionParameters(NULL, NULL)) {
-		oldStatus = theComponent->GetOutPinStatus();
-		newStatus = !oldStatus;
-		theComponent->setOutputPinStatus(static_cast<STATUS>(newStatus));
-		theComponent->Draw(pOut, false);
-		Utils::simulationUndoActions.push(this);		
+		oldStatus = theComponent->GetOutPinStatus(); // old status for undo
+		newStatus = !oldStatus; // change the status
+		theComponent->setOutputPinStatus(static_cast<STATUS>(newStatus)); // set new status
+		theComponent->Draw(pOut, false); // redraw the switch
+		Utils::simulationUndoActions.push(this); //push to undo simualtion actions
 	}	
 }
 void ChangeSwitch::Undo()
 {
+	// back to old status and simulate
 	Output* pOut = pManager->GetOutput();
 	theComponent->setOutputPinStatus(static_cast<STATUS>(oldStatus));
 	theComponent->Draw(pOut, false);
@@ -39,6 +40,7 @@ void ChangeSwitch::Undo()
 
 void ChangeSwitch::Redo()
 {
+	// back to new status and simulate
 	Output *pOut = pManager->GetOutput();
 	theComponent->setOutputPinStatus(static_cast<STATUS>(newStatus));
 	theComponent->Draw(pOut, false);

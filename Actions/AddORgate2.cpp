@@ -7,6 +7,7 @@ AddORgate2::AddORgate2(ApplicationManager *pApp) :Action(pApp)
 AddORgate2::~AddORgate2(void)
 {
 }
+//Check AddANDgate2 for the explanation of the next lines of code
 
 bool AddORgate2::ReadActionParameters(image * smallImageBeforeAddingComponent, Component* c)
 {

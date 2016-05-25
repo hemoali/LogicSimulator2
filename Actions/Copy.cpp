@@ -1,7 +1,4 @@
 #include "Copy.h"
-
-
-
 Copy::Copy(ApplicationManager* pApp) :Action(pApp)
 {
 
@@ -20,7 +17,8 @@ bool Copy::ReadActionParameters(image *, Component* c)
 }
 void Copy::Execute()
 {
-
+	pManager->cutorcopy = COPYAction; 
+	pManager->PastedComponent = theComponent;
 }
 void Copy::Redo()
 {

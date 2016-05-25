@@ -6,6 +6,7 @@ AddLED::AddLED(ApplicationManager *pApp) :Action(pApp)
 AddLED::~AddLED(void)
 {
 }
+//Check AddANDgate2 for the explanation of the next lines of code
 
 bool AddLED::ReadActionParameters(image * smallImageBeforeAddingComponent, Component* c)
 {

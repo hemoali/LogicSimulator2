@@ -45,7 +45,7 @@ void Load::Execute()
 	bool cleared = false;
 	if (ReadActionParameters(NULL, NULL) && path != "") {
 		// To clear the screen
-		
+
 		file.open(path);
 		int compCount, connectionCount = 0;
 		string compName, compLabel;
@@ -101,13 +101,13 @@ void Load::Execute()
 		}
 		else {
 			pOut->PrintStatusBox("Error Loading Design");
-		}		
+		}
+
 		file.close();
 		// clear undo/redo stacks
 		while (!Utils::undoActions.empty()) Utils::undoActions.pop();
-		while (!Utils::redoActions.empty()) Utils::redoActions.pop(); 
-}
-
+		while (!Utils::redoActions.empty()) Utils::redoActions.pop();
+	}
 }
 void Load::Undo()
 {

@@ -36,7 +36,9 @@ void Move::Execute()
 
 	int x, y;
 	Component* Comp = NULL;
+	// While the user is clicking
 	while (pIn->GetButtonStatus(LEFT_BUTTON, x, y) == BUTTON_DOWN) {
+		// Get the component to move
 		for (int i = 0; i < Utils::allComponentsCorners.size(); i++)
 		{
 			if (x >= Utils::allComponentsCorners[i].x1 && x <= Utils::allComponentsCorners[i].x2 && y >= Utils::allComponentsCorners[i].y1&&y <= Utils::allComponentsCorners[i].y2 && !dynamic_cast<Connection*> (pManager->getComponent(i)))
@@ -45,14 +47,14 @@ void Move::Execute()
 				Comp = pManager->getComponent(i);
 			}
 		}
-		//
+	
 		if (Comp != NULL &&Comp->getDelete()) Comp = NULL;
 		if (Comp != NULL && compIdx != -1) {
+			// get old preimage for undo
 			oldSmallCleanImage = Comp->getSmallCleanImageBeforeAddingComp();
-
+			//Delete the component
 			Comp->setDelete(true);
 			Comp->Draw(pManager->GetOutput());
-			//Free gate location
 			oldGraphicsInfo.x1 = Comp->getCenterLocation().x1;
 			oldGraphicsInfo.y1 = Comp->getCenterLocation().y1;
 			// Free related connections
@@ -64,7 +66,9 @@ void Move::Execute()
 			ActionType ActType = Comp->getComponentActionType();
 			//Drag
 			if (pManager->GetOutput()->SetDragImage(ActType, newCoor, newSmallImageForGate, true, Comp)) {
+				//set new center location
 				Comp->setNewCenterLocation(newCoor);
+				// redraw and set the parameters
 				Comp->setDelete(false);
 				Utils::allComponentsCorners[compIdx].x1 = newCoor.x1 - UI.GATE_Width / 2;
 				Utils::allComponentsCorners[compIdx].y1 = newCoor.y1 - UI.GATE_Height / 2;
@@ -72,6 +76,8 @@ void Move::Execute()
 				Utils::allComponentsCorners[compIdx].y2 = newCoor.y1 + UI.GATE_Height / 2;
 				Comp->setSmallCleanImageBeforeAddingComp(newSmallImageForGate);
 				Comp->Draw(pOut, false);
+
+				// Select the connected with  normal color after releasing the moved gate
 				vector<Connection*> allInConnections, allOutConnections;
 				Comp->getAllInputConnections(allInConnections);
 				Comp->getAllOutputConnections(allOutConnections);
@@ -103,6 +109,7 @@ void Move::Execute()
 void Move::Undo()
 {
 	Output* pOut = pManager->GetOutput();
+	//delete the comp
 	pA->setDelete(true);
 	pA->Draw(pOut, false);
 
@@ -123,6 +130,7 @@ void Move::Undo()
 	Utils::allComponentsCorners[compIdx].y2 = oldGraphicsInfo.y1 + UI.GATE_Height / 2;
 	pA->setSmallCleanImageBeforeAddingComp(oldSmallCleanImage);
 
+	// redraw after changing parameters
 	pA->setDelete(false);
 	pA->Draw(pOut, false);
 	//redraw old connections
@@ -193,8 +201,6 @@ void Move::Redo()
 
 	}
 }
-
-
 Move::~Move()
 {
 }

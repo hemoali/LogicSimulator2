@@ -14,6 +14,7 @@ MultiDelete::MultiDelete(ApplicationManager * pApp, vector<pair<int, Component*>
 
 MultiDelete::~MultiDelete()
 {
+	// Delete the deleting actions :D
 	for (size_t i = 0; i < allDeleteActions.size(); i++)
 	{
 		delete allDeleteActions[i];
@@ -31,6 +32,7 @@ void MultiDelete::Execute()
 {
 	Output* pOut = pManager->GetOutput();
 	if (this->ReadActionParameters(NULL, NULL)) {
+		// Delete the components
 		for (int i = 0; i < theVector.size(); i++) {
 			Action* act = new Delete(pManager, theVector[i].second, false);
 			allDeleteActions.push_back(act);
@@ -46,6 +48,7 @@ void MultiDelete::Execute()
 
 void MultiDelete::Undo()
 {
+	// undo deleting by first undo deleting gates then undo deleting connections
 	for (size_t i = 0; i < allDeleteActions.size(); i++)
 	{
 		((Delete*)allDeleteActions[i])->Undo(0);

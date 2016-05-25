@@ -15,7 +15,7 @@ void MultiSelect::Execute()
 	//Get a Pointer to the Input / Output Interfaces
 	Output* pOut = pManager->GetOutput();
 	Input* pIn = pManager->GetInput();
-	if (pManager->GetInput()->toBeAddedToSelected != NULL)
+	if (pManager->GetInput()->toBeAddedToSelected != NULL) // check if new comp to be added for the selected components
 	{
 		allSelectedComponents = pManager->GetInput()->getSelectedComponents();
 		for (size_t i = 0; i < Utils::allComponentsCorners.size(); i++)
@@ -28,8 +28,9 @@ void MultiSelect::Execute()
 		}
 		pManager->GetInput()->toBeAddedToSelected = NULL;
 	}
-	else if (pManager->GetInput()->toBeRemovedFromSelected != NULL) {
+	else if (pManager->GetInput()->toBeRemovedFromSelected != NULL) {  // check if comp to be removed from the selected components
 		allSelectedComponents = pManager->GetInput()->getSelectedComponents();
+		// Removing highlighting
 
 		for (size_t i = 0; i < Utils::allConnections.size(); i++)
 		{
@@ -42,6 +43,7 @@ void MultiSelect::Execute()
 		{
 			pIn->getSelectedComponents()[i].second->Draw(pOut, false);
 		}
+		// remove the comp from selected vector
 		for (size_t i = 0; i <allSelectedComponents.size(); i++)
 		{
 			if (allSelectedComponents.at(i).second == pManager->GetInput()->toBeRemovedFromSelected)
@@ -53,12 +55,11 @@ void MultiSelect::Execute()
 		pManager->GetInput()->toBeRemovedFromSelected = NULL;
 	}
 	else {
-		//clear first
+		// Removing highlighting
 		for (size_t i = 0; i < Utils::allConnections.size(); i++)
 		{
 			Utils::allConnections[i]->selectYourSelf(pOut, UI.ConnColor);
 		}
-
 
 		for (size_t i = 0; i < pIn->getSelectedComponents().size(); i++)
 		{
@@ -67,18 +68,19 @@ void MultiSelect::Execute()
 				pIn->getSelectedComponents()[i].second->Draw(pOut, false);
 			}
 		}
-		//Always Clear hover Bar if found
 		pIn->setSelectMode(false);
 		pIn->setisSelectionContainConnections(false);
 		pIn->clearSelectedComponents();
 
 		int x, y, initX, initY;
-		pIn->getMouseCoordinates(initX, initY);
+		pIn->getMouseCoordinates(initX, initY); // get inital points for rectangle
 		if (Utils::CheckPointInBorders(initX, initY))
 		{
+			// store screenshot for drawing area
 			image* originalImage = new image;
 			pOut->storeDrawingAreaImage(originalImage);
-			int xOld = 0, yOld = 0;
+
+			int xOld = 0, yOld = 0; // used for stop flickering of the rectangle while holding at same position
 
 			while (pIn->GetButtonStatus(LEFT_BUTTON, x, y) == BUTTON_DOWN) {
 				if ((x != xOld || y != yOld) && Utils::CheckPointInBorders(x, y))
@@ -87,13 +89,15 @@ void MultiSelect::Execute()
 					pOut->drawRectangle(x, y, initX, initY);
 					xOld = x;
 					yOld = y;
-					//Get components
+					//clear components of exists
 					allSelectedComponents.clear();
+					//Add components to selected vector
 					for (size_t i = 0; i < Utils::allComponentsCorners.size(); i++)
 					{
 						int gateCenterX = Utils::allComponentsCorners[i].x1 + UI.GATE_Width / 2;
 						int gateCenterY = Utils::allComponentsCorners[i].y1 + UI.GATE_Height / 2;
 						if (
+							// Check if rectangle crossed the center
 							(x > initX && gateCenterX < x && gateCenterX > initX && initY < y && gateCenterY < y && gateCenterY > initY) ||
 							(x<initX && gateCenterX > x && gateCenterX < initX && initY < y && gateCenterY < y && gateCenterY > initY) ||
 							(x<initX && gateCenterX > x && gateCenterX < initX && initY > y && gateCenterY > y && gateCenterY < initY) ||
@@ -101,8 +105,11 @@ void MultiSelect::Execute()
 							) {
 							if (!dynamic_cast<Connection*>(pManager->getComponent(i)) && !pManager->getComponent(i)->getDelete())
 							{
+								//Add to vector and highlught
 								allSelectedComponents.push_back(make_pair(i, pManager->getComponent(i)));
 								pManager->getComponent(i)->Draw(pOut, true);
+
+								//Highlight all relative connections
 								vector<Connection*> allInConnections, allOutConnections;
 								pManager->getComponent(i)->getAllInputConnections(allInConnections);
 								pManager->getComponent(i)->getAllOutputConnections(allOutConnections);
@@ -116,6 +123,7 @@ void MultiSelect::Execute()
 								}
 							}
 						}
+						// Push and highlight connections
 						if (dynamic_cast<Connection*> (pManager->getComponent(i)) && !pManager->getComponent(i)->getDelete())
 						{
 							Connection* conn = (Connection*)pManager->getComponent(i);
@@ -138,11 +146,13 @@ void MultiSelect::Execute()
 					}
 				}
 			}
-			pOut->drawStoredDrawingAreaImage(originalImage);
+			pOut->drawStoredDrawingAreaImage(originalImage); //restore old image after finishing 
 		}
 	}
+	//if selected elements
 	if (allSelectedComponents.size() > 0)
 	{
+		//hightlight all
 		for (size_t i = 0; i < allSelectedComponents.size(); i++)
 		{
 			if (dynamic_cast<Connection*>(allSelectedComponents[i].second))
@@ -163,7 +173,7 @@ void MultiSelect::Execute()
 				allOutConnections[i]->selectYourSelf(pOut, UI.SelectColor);
 			}
 		}
-
+		// set input parameters
 		pIn->setSelectMode(true);
 		pIn->setSelectedComponents(allSelectedComponents);
 		Utils::undoActions.push(this);
@@ -177,6 +187,7 @@ void MultiSelect::Undo()
 
 	if (allSelectedComponents.size() > 0)
 	{
+		//unhighlight all selected components
 		for (size_t i = 0; i < allSelectedComponents.size(); i++)
 		{
 			if (dynamic_cast<Connection*>(allSelectedComponents[i].second))
@@ -209,6 +220,7 @@ void MultiSelect::Redo()
 	Output* pOut = pManager->GetOutput();
 	Input* pIn = pManager->GetInput();
 
+	//rehighlight selected components
 	if (allSelectedComponents.size() > 0)
 	{
 		for (size_t i = 0; i < allSelectedComponents.size(); i++)

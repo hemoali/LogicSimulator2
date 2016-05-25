@@ -5,7 +5,7 @@
 class Exit :
 	public Action
 {
-	int choice;
+	int choice; // if the user wants to save or exit without saving
 public:
 	Exit(ApplicationManager* pApp);
 	virtual ~Exit();

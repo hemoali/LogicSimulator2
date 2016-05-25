@@ -6,6 +6,7 @@ AddSWITCH::AddSWITCH(ApplicationManager *pApp) :Action(pApp)
 AddSWITCH::~AddSWITCH(void)
 {
 }
+//Check AddANDgate2 for the explanation of the next lines of code
 
 bool AddSWITCH::ReadActionParameters(image * smallImageBeforeAddingComponent, Component* c)
 {

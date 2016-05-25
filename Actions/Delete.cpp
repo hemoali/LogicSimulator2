@@ -3,7 +3,9 @@ Delete::Delete(ApplicationManager* pApp) :Action(pApp)
 {
 
 }
-
+/**
+@param pushToUndo: if true : not mutli delete action, false means multi delete action
+*/
 Delete::Delete(ApplicationManager* pApp, Component* C, bool pushToUndo) : Action(pApp)
 {
 	theComponent = C;
@@ -22,9 +24,10 @@ void Delete::Execute()
 	Output* pOut = pManager->GetOutput();
 	if (this->ReadActionParameters(NULL, NULL)) {
 		if (theComponent != NULL && (dynamic_cast<Gate*> (theComponent) || dynamic_cast<LED*>(theComponent) || dynamic_cast<SWITCH*> (theComponent))) {
+			
 			Output *pOut = pManager->GetOutput();
 			string s = "Gate: " + (theComponent->getLabel()) + " has been deleted successfully";
-			if(pushToUndo)pOut->PrintStatusBox(s);
+			if(pushToUndo)pOut->PrintStatusBox(s); // show msg box if not multi delete
 			theComponent->setDelete(true);
 			theComponent->Draw(pOut);
 
@@ -117,6 +120,10 @@ void Delete::Undo()
 		}
 	}
 }
+/**
+This undo for multi delete only because we need to undelete the gates first then undelete te connections
+@param c: if 0 means redraw gates only if 1 redraw connections only
+*/
 void Delete::Undo(int c)
 {
 	Output* pOut = pManager->GetOutput();

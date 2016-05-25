@@ -79,8 +79,7 @@ bool RightClick::ReadActionParameters(image* img, Component* c) {
 				y -= MenuRectangle.y1;
 				actionNum = y / 30;
 				SelectedAction = ActionType(actionNum + COPYAction); //Copy is the start of the needed actions in enum ActionType
-				if (SelectedAction == CUTAction || SelectedAction == COPYAction) { pManager->PastedComponent = C; if (SelectedAction == CUTAction)pManager->cutorcopy = CUTAction; else pManager->cutorcopy = COPYAction; }
-
+				
 			}
 		}
 		//Delete the DrawMenu

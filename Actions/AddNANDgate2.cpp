@@ -6,6 +6,7 @@ AddNANDgate2::AddNANDgate2(ApplicationManager *pApp) :Action(pApp)
 AddNANDgate2::~AddNANDgate2(void)
 {
 }
+//Check AddANDgate2 for the explanation of the next lines of code
 
 bool AddNANDgate2::ReadActionParameters(image * smallImageBeforeAddingComponent, Component* c)
 {

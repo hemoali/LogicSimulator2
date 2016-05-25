@@ -5,6 +5,10 @@
 #include"..\Components\SWITCH.h"
 #include"..\Components\LED.h"
 #include <iostream>
+
+//=======================================================================================================================
+//							Check adding connection action for more comments for the same code
+//=======================================================================================================================
 ModifyConnection::ModifyConnection(ApplicationManager*pApp) : Action(pApp)
 {
 
@@ -13,7 +17,7 @@ ModifyConnection::ModifyConnection(ApplicationManager*pApp, Connection* c) : Act
 {
 
 }
-bool ModifyConnection::validateOutputComponent(Component* comp, Component* dstComp) {
+bool ModifyConnection::validateOutputComponent(Component* comp, Component* dstComp) { // check for feedback
 	if (comp == NULL)
 	{
 		return true;
@@ -38,7 +42,6 @@ bool ModifyConnection::ReadActionParameters(image *, Component* c)
 	pOut->PrintStatusBox("Connection : Click to select the Destination");
 	pIn->GetPointClicked(Cx2, Cy2);
 	
-	
 
 	return true;
 }
@@ -52,8 +55,8 @@ void ModifyConnection::Execute()
 
 	Output* pOut = pManager->GetOutput();
 	vector<Connection*> connection; connection.push_back(theConnection);
-	pOut->clearConnections(connection, -1, -1, false, false);
-	//remove conenctoin from pins
+	pOut->clearConnections(connection, -1, -1, false, false); // clear old connection
+	//remove connection from old pins
 	theConnection->getSourcePin()->removeConnectedConnection(theConnection);
 	theConnection->getDestPin()->setConnection(NULL);
 
@@ -64,6 +67,7 @@ void ModifyConnection::Execute()
 		int numOfInputs = 0;
 		int indxOfInputComponent;
 
+		//get input and output components
 		for (int i = 0; i < Utils::allComponentsCorners.size(); i++)
 		{
 			if (dynamic_cast<Connection*>(pManager->getComponent(i)) || pManager->getComponent(i)->getDelete())

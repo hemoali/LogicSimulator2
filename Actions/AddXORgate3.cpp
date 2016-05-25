@@ -6,6 +6,7 @@ AddXORgate3::AddXORgate3(ApplicationManager *pApp) :Action(pApp)
 AddXORgate3::~AddXORgate3(void)
 {
 }
+//Check AddANDgate2 for the explanation of the next lines of code
 
 bool AddXORgate3::ReadActionParameters(image * smallImageBeforeAddingComponent, Component* c)
 {

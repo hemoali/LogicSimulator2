@@ -33,9 +33,9 @@ bool Paste::ReadActionParameters(image *, Component* c)
 
 void Paste::Execute()
 {
-	cout << "X";
 	Output* pOut = pManager->GetOutput();
 
+	//create the new object
 	if (dynamic_cast<AND2*>(pManager->PastedComponent)) {
 		pastedcomponent = new AND2(pManager->pastepoint, FANOUT);
 	}
@@ -76,6 +76,7 @@ void Paste::Execute()
 		pastedcomponent = new XOR3(pManager->pastepoint, FANOUT);
 	}
 
+	//set parametees
 	GraphicsInfo Gffx;
 	image* smallImageBeforeAddingComponent = new image;
 	Gffx.x1 = pManager->pastepoint.x1 - UI.GATE_Width / 2;
@@ -84,13 +85,14 @@ void Paste::Execute()
 	Gffx.y2 = pManager->pastepoint.y1 + UI.GATE_Height / 2;
 	if (pastedcomponent != NULL && Utils::CheckPoint({ pManager->pastepoint.x1 ,  pManager->pastepoint.y1 }, pOut, false, true))
 	{
+		//push to needed vectors
 		Utils::allComponentsCorners.push_back(Gffx);
 		pManager->AddComponent(pastedcomponent);
 		pastedcomponent->setLabel(pManager->PastedComponent->getLabel());
 		pastedcomponent->setSmallCleanImageBeforeAddingComp(smallImageBeforeAddingComponent);
 		pOut->storeimagefordeletegate(smallImageBeforeAddingComponent, { pManager->pastepoint.x1 ,  pManager->pastepoint.y1 });
 		pastedcomponent->setNewCenterLocation(pManager->pastepoint);
-		pastedcomponent->Draw(pOut);
+		pastedcomponent->Draw(pOut); // draw
 		
 		pA = pastedcomponent;
 		Utils::undoActions.push(this);

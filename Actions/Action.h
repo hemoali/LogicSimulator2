@@ -7,8 +7,8 @@ protected:
 	ApplicationManager *pManager;	//Actions needs AppMngr to do their job
 	string gateLabel;
 	GraphicsInfo GInfo;
-	//Debugging For the deleted
 
+	//Debugging For the deleted
 	int theId;
 	//For undo/redo
 	Component* pA;
@@ -34,7 +34,6 @@ public:
 	virtual ~Action() {
 		IDD++;
 	}
-
 };
 
 #endif

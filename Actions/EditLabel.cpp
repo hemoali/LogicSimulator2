@@ -12,14 +12,13 @@ EditLabel::EditLabel(ApplicationManager *pApp,Component* C) : Action(pApp)
 	theComponenet = C;
 }
 
-
 bool EditLabel::ReadActionParameters(image *, Component* c)
 {
 	Output* pOut = pManager->GetOutput();
 	Input *pIn = pManager->GetInput();
-	//To be Modified Later with Menus 
+	// Get new label
 	theNewLabel = pIn->getStringBox(theComponenet->getLabel());
-	if (theComponenet == NULL) return false; //Idon't know whether this condtion is gonna be executed or not 
+	if (theComponenet == NULL) return false;
 	return true;
 }
 
@@ -29,7 +28,7 @@ void EditLabel::Execute()
 	Input *pIn = pManager->GetInput();
 	if (this->ReadActionParameters(NULL, NULL)) {
 		theOriginalLabel = theComponenet->getLabel();
-		theComponenet->setLabel(theNewLabel);
+		theComponenet->setLabel(theNewLabel); // Assign the new label
 		if( theNewLabel!= theOriginalLabel)
 		pOut->PrintStatusBox("Label changed Successfully");
 		Utils::undoActions.push(this);

@@ -6,6 +6,7 @@ AddNOTgate::AddNOTgate(ApplicationManager *pApp) :Action(pApp)
 AddNOTgate::~AddNOTgate(void)
 {
 }
+//Check AddANDgate2 for the explanation of the next lines of code
 
 bool AddNOTgate::ReadActionParameters(image * smallImageBeforeAddingComponent, Component* c)
 {

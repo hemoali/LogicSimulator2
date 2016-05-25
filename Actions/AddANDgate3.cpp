@@ -6,7 +6,7 @@ AddANDgate3::AddANDgate3(ApplicationManager *pApp) :Action(pApp)
 AddANDgate3::~AddANDgate3(void)
 {
 }
-
+//Check AddANDgate2 for the explanation of the next lines of code
 bool AddANDgate3::ReadActionParameters(image * smallImageBeforeAddingComponent, Component* c)
 {
 	bool done = false;
@@ -20,13 +20,8 @@ bool AddANDgate3::ReadActionParameters(image * smallImageBeforeAddingComponent, 
 	if (pOut->SetDragImage(ADD_AND_GATE_3, GInfo, smallImageBeforeAddingComponent, false, c)){
 		gateLabel =pIn->getStringBox();
 		done = true;
-
 	}
-
-	
-	
-	return done;
-
+		return done;
 }
 
 void AddANDgate3::Execute()

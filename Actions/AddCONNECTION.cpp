@@ -15,31 +15,28 @@ bool AddConnection::ReadActionParameters(image * smallImageBeforeAddingComponent
 	//Get a Pointer to the Input / Output Interfaces
 	Output* pOut = pManager->GetOutput();
 	Input* pIn = pManager->GetInput();
-	if (!Silent) {
+	if (!Silent) { // Get next point from the user (the first point is got from the input file when he clicks the output pin)
 		//Print Action Message
 		pIn->getConnectionStartPoint(Cx1, Cy1);
 		pOut->PrintStatusBox("Connection : Click to select the Destination");
 		pIn->GetPointClicked(Cx2, Cy2);
 		pIn->GetPointClicked(Cx2, Cy2);
-
-		
-		
 	}
-	else {
+	else { // if adding silent connection (used for modifying/loading connection)
 		pIn->CorrectPointClickedSilent(Cx1, Cy1);
 		pIn->CorrectPointClickedSilent(Cx2, Cy2);
 	}
 	return true;
 }
-bool AddConnection::validateOutputComponent(Component* comp, Component* dstComp) {
+bool AddConnection::validateOutputComponent(Component* comp, Component* dstComp) { // check for feedback
 	if (comp == NULL)
 	{
 		return true;
 	}
-	if (comp == dstComp) {
+	if (comp == dstComp) { // if we returned to same component -> there's feedback
 		return false;
 	}
-	bool t[3] = { true, true, true };
+	bool t[3] = { true, true, true }; // check for all connections out of the output component
 	for (size_t j = 0; j < comp->getOutputPin()->connectedConnectionsCount(); j++)
 	{
 		t[j] = validateOutputComponent(comp->getOutputPin()->getConnection(j)->getDestPin()->getComponent(), dstComp);
@@ -56,12 +53,14 @@ void AddConnection::Execute()
 
 	int indxOfInputComponent;
 
-	for (int i = 0; i < Utils::allComponentsCorners.size(); i++)
+	//Detect the output/input components
+	for (int i = 0; i < Utils::allComponentsCorners.size() && (outputComponent == NULL || inputComponent == NULL); i++)
 	{
 		if (dynamic_cast<Connection*>(pManager->getComponent(i)) || pManager->getComponent(i)->getDelete())
 			continue;
 		if (Cx1 >= Utils::allComponentsCorners[i].x1&&Cx1 <= Utils::allComponentsCorners[i].x2&& Cy1 >= Utils::allComponentsCorners[i].y1&&Cy1 <= Utils::allComponentsCorners[i].y2)
 		{
+			//Check if output pin clicked
 			if (Cx1 > (Utils::allComponentsCorners[i].x1 + UI.GATE_Width / 2) && !dynamic_cast<LED*>( pManager->getComponent(i)))
 			{
 				outputComponent = pManager->getComponent(i);
@@ -69,6 +68,7 @@ void AddConnection::Execute()
 		}
 		if (Cx2 >= Utils::allComponentsCorners[i].x1&&Cx2 <= Utils::allComponentsCorners[i].x2&& Cy2 >= Utils::allComponentsCorners[i].y1&&Cy2 <= Utils::allComponentsCorners[i].y2)
 		{
+			//Check if input pin clicked
 			if (Cx2 < (Utils::allComponentsCorners[i].x1 + UI.GATE_Width / 2) && !dynamic_cast<SWITCH*>(pManager->getComponent(i)))
 			{
 				inputComponent = pManager->getComponent(i);
@@ -98,6 +98,7 @@ void AddConnection::Execute()
 			}
 		}
 
+		//Detect input pin position
 		numOfInputs = inputComponent->getNumOfInputs();
 		int inputPin;
 		if (numOfInputs == 3)
@@ -121,6 +122,7 @@ void AddConnection::Execute()
 			Sleep(100);
 		}
 		else {
+			// Set connection corners
 			GraphicsInfo GInfo;
 			GInfo.x1 = outputComponent->getCenterLocation().x1 + UI.GATE_Width / 2 - 2;
 			GInfo.y1 = outputComponent->getCenterLocation().y1;
@@ -136,18 +138,23 @@ void AddConnection::Execute()
 			else {
 				GInfo.y2 = inputComponent->getCenterLocation().y1 + UI.GATE_Height / 2 - 2;
 			}
-			vector<Cell> cellsBeforeAddingConnection;
+
+			vector<Cell> cellsBeforeAddingConnection; // Cells to hold the state of grid pixels before adding the conenction
 			Connection *pA = new Connection(GInfo, outputComponent->getOutputPin(), inputComponent->getInputPin(inputPin));
+			//Draw the conenction
 			if (pManager->GetOutput()->DrawConnection(GInfo, numOfInputs, inputComponent->getCenterLocation(), cellsBeforeAddingConnection, false, pA) && !(outputComponent->getOutputPin()->connectedConnectionsCount() == FANOUT))
 			{
-				pManager->AddComponent(pA);
-				Utils::allComponentsCorners.push_back(GInfo);
+				pManager->AddComponent(pA); // Add to complist
+				Utils::allComponentsCorners.push_back(GInfo); // Add to corners vector
+				// set parameters
 				pA->setCellsBeforeAddingConnection(cellsBeforeAddingConnection);
+				// connect the connection to the inout/outputn pins
 				outputComponent->getOutputPin()->ConnectTo(pA);
 				inputComponent->getInputPin(inputPin)->setConnection(pA);
 				inputComponent->getInputPin(inputPin)->setPosition(numOfInputs);
+
 				if (!Silent) {
-					gateLabel = pManager->GetInput()->getStringBox();
+					gateLabel = pManager->GetInput()->getStringBox(); // get the label
 				}
 				pA->setLabel(gateLabel);
 				pA->setIsDrawn(true);
@@ -155,7 +162,7 @@ void AddConnection::Execute()
 				Utils::undoActions.push(this);
 				Action::pA = pA;
 			}
-			else {
+			else { // if not added successfully
 				delete pA;
 				pA = NULL;
 				pManager->GetOutput()->PrintStatusBox("No Available Connection");
@@ -170,7 +177,7 @@ end: if (outputComponent != NULL)
 }
 
 void AddConnection::AddConnectionSilent(int c1, int c2, int c3, int c4, string s)
-{
+{ // set the new corners manually for loading/modifying connections
 	Silent = true;
 	Cx1 = c1;
 	Cy1 = c2;
@@ -185,12 +192,13 @@ void AddConnection::Undo()
 {
 	vector<Connection*> connection;
 	connection.push_back((Connection*)pA);
-	pManager->GetOutput()->clearConnections(connection, -1, -1, false, true);
-	((Connection*)pA)->setIsDrawn(false);
+	pManager->GetOutput()->clearConnections(connection, -1, -1, false, true); // clear the connection from grid/visually
+	((Connection*)pA)->setIsDrawn(false); // set not drawn
 }
 
 void AddConnection::Redo()
 {
+	// redraw the connection (check execute function for the same code comments)
 	Connection* conn = (Connection*)pA;
 	conn->setDelete(false);
 	conn->getDestPin()->setConnection(conn);
@@ -215,7 +223,5 @@ void AddConnection::Redo()
 	else {
 		GInfo.y2 = inputComponent->getCenterLocation().y1 + UI.GATE_Height / 2 - 2;
 	}
-
 	pManager->GetOutput()->DrawConnection(GInfo, numOfInputs, inputComponent->getCenterLocation(), conn->getCellsBeforeAddingConnection(), false, conn);
-
 }

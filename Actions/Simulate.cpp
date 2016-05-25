@@ -23,13 +23,14 @@ void Simulate::Execute()
 		Validate validateAction(pManager);
 		validateAction.Execute();
 		isValid = validateAction.getValid();
-	}else{
+	} else{
 		isValid = true;
 	}
 	if (!isValid)
 	{
 		return;
 	}
+	// reset all input pins to avoid old pins state
 	for (size_t i = 0; i < Utils::allComponentsCorners.size(); i++)
 	{
 		Component* comp = pManager->getComponent(i);
@@ -56,7 +57,7 @@ void Simulate::Execute()
 		else if (!dynamic_cast<LED*>(comp)) { toBeOperatedComponents.push_back(comp); totalComponentsCount++; }
 	}
 	//Go to all LEDS and calcaulate the pins values
-	while (operatedItemsCount < totalComponentsCount)
+	while (operatedItemsCount < totalComponentsCount) //iterate until all components pins get status
 	{
 		for (size_t i = 0; i < toBeOperatedComponents.size(); i++)
 		{
@@ -65,6 +66,7 @@ void Simulate::Execute()
 			{
 				continue;
 			}
+			// if not all pins have value skip this component
 			bool isAllPinsHaveStatus = true;
 			for (size_t j = 0; j < comp->getNumOfInputs(); j++)
 			{
@@ -78,6 +80,7 @@ void Simulate::Execute()
 				continue;
 			}
 			else {
+				// operate the component and send its value to connected connections
 				comp->Operate();
 				for (size_t k = 0; k < comp->getOutputPin()->connectedConnectionsCount(); k++)
 				{
