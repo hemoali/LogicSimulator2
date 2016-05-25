@@ -56,7 +56,6 @@ void MultiMove::Execute()
 			oldGraphicsInfo.push_back({ c->getCenterLocation().x1 ,  c->getCenterLocation().y1 });
 			compIdx.push_back(pIn->getSelectedComponents()[i].first);
 
-			//start moving process
 			c->setDelete(true);
 			c->Draw(pManager->GetOutput());
 		}

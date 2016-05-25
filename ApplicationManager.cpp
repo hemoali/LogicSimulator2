@@ -384,10 +384,8 @@ void ApplicationManager::componentLoading(ifstream & in, string compType, Graphi
 	}
 	//Filling the needed arrays of the Grid
 	GraphicsInfo GInfotmp = point;
-	int Len = UI.GATE_Width;
-	int Wdth = UI.GATE_Height;
 	Utils::allComponentsCorners.push_back(point);
-	GetOutput()->storeImage(img, pA->getCenterLocation().x1 - UI.GRID_SIZE - 5, pA->getCenterLocation().y1 - UI.GRID_SIZE - 5, 2 * UI.GRID_SIZE + 4, UI.GATE_Height + 3);
+	GetOutput()->storeImage(img, pA->getCenterLocation().x1 - UI.GRID_SIZE - 5, pA->getCenterLocation().y1 - UI.GRID_SIZE - 5, 2 * UI.GRID_SIZE + 3, UI.GATE_Height + 3);
 	pA->setSmallCleanImageBeforeAddingComp(img);
 	//Draw the Loaded Gate 
 	pA->Draw(GetOutput());

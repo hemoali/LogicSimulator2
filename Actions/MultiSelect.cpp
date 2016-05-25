@@ -53,11 +53,13 @@ void MultiSelect::Execute()
 		pManager->GetInput()->toBeRemovedFromSelected = NULL;
 	}
 	else {
-		//cler=ar first
+		//clear first
 		for (size_t i = 0; i < Utils::allConnections.size(); i++)
 		{
 			Utils::allConnections[i]->selectYourSelf(pOut, UI.ConnColor);
 		}
+
+
 		for (size_t i = 0; i < pIn->getSelectedComponents().size(); i++)
 		{
 			if (!pIn->getSelectedComponents()[i].second->getDelete())

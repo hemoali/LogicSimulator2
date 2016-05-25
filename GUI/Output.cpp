@@ -691,7 +691,7 @@ image * Output::DrawTruthTable(vector<vector<string> > table, int inputsNum, int
 	pWind->DrawRectangle(startx + 1, starty + 1, startx + 1 + w - 3, starty + 1 + h - 3, FILLED);
 
 	//Print header
-	pWind->SetFont(20, BOLD, BY_NAME, "Consolas");
+	pWind->SetFont(20, BOLD | UNDERLINED, BY_NAME, "Consolas");
 	pWind->SetPen(color(0, 72, 130));
 	for (size_t i = 0; i < table[0].size(); i++)
 	{
@@ -893,7 +893,7 @@ void Output::changeConnectionColor(Connection * connection, color Color) {
 						isCell2XGreaterThanCellX = false;
 						if (!PreviousIsIntersection)
 						{
-							pWind->DrawLine(cell.x * UI.GRID_SIZE + ((arrayOfCorners[cell.y][cell.x] == 0) ? 4 : 0), cell.y*UI.GRID_SIZE, cell2.x * UI.GRID_SIZE + 6, cell2.y*UI.GRID_SIZE);
+							pWind->DrawLine(cell.x * UI.GRID_SIZE + ((arrayOfCorners[cell.y][cell.x] == 0 && (i!=0 || j != 0)) ? 4 : 0), cell.y*UI.GRID_SIZE, cell2.x * UI.GRID_SIZE + 6, cell2.y*UI.GRID_SIZE);
 						}
 						else {
 							pWind->DrawLine(cell.x * UI.GRID_SIZE - 6, cell.y*UI.GRID_SIZE, cell2.x * UI.GRID_SIZE + 6, cell2.y*UI.GRID_SIZE);
@@ -1332,7 +1332,7 @@ bool Output::SetDragImage(ActionType ActType, GraphicsInfo& GfxInfo, image* smal
 				GraphicsInfo Gfx;
 				Gfx.x1 = RectULX + UI.GATE_Width / 2;
 				Gfx.y1 = RectULY + UI.GATE_Height / 2;
-				pWind->StoreImage(smallCleanImageBeforeAddingGate, Gfx.x1 - UI.GRID_SIZE - 5, Gfx.y1 - UI.GRID_SIZE - 5, 2 * UI.GRID_SIZE + 4, UI.GATE_Height + 3);
+				pWind->StoreImage(smallCleanImageBeforeAddingGate, Gfx.x1 - UI.GRID_SIZE - 5, Gfx.y1 - UI.GRID_SIZE - 5, 2 * UI.GRID_SIZE + 3, UI.GATE_Height + 3);
 				switch (ActType) {
 				case ADD_Buff: {
 					DrawNot_Buffer(Gfx, true, moving, wrong);
@@ -1556,7 +1556,11 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 		clearConnections(allInputConnections, originalX, originalY, true);
 		clearConnections(allOutputConnections, originalX, originalY, false);
 	}
-
+	for (size_t m = 0; m < allSelectedComponents.size(); m++)
+	{
+		allSelectedComponents[m].second->setDelete(true);
+		allSelectedComponents[m].second->Draw(this);
+	}
 	pWind->StoreImage(storedImg, 0, 0, pWind->GetWidth(), pWind->GetHeight());
 	pWind->StoreImage(storedDrawingImg, UI.LeftToolBarWidth, 0, pWind->GetWidth() - UI.LeftToolBarWidth, pWind->GetHeight() - UI.StatusBarHeight);
 
@@ -1620,7 +1624,7 @@ bool Output::SetMultiDragImage(int currentX, int currentY, Component* mainMoving
 					GraphicsInfo Gfx;
 					Gfx.x1 = RectULXY[m].first + UI.GATE_Width / 2;
 					Gfx.y1 = RectULXY[m].second + UI.GATE_Height / 2;
-					pWind->StoreImage(allSmallCleanImages[m], Gfx.x1 - UI.GRID_SIZE - 5, Gfx.y1 - UI.GRID_SIZE - 5, 2 * UI.GRID_SIZE + 4, UI.GATE_Height + 3);
+					pWind->StoreImage(allSmallCleanImages[m], Gfx.x1 - UI.GRID_SIZE - 5, Gfx.y1 - UI.GRID_SIZE - 5, 2 * UI.GRID_SIZE + 3, UI.GATE_Height + 3);
 
 					switch (allSelectedComponents[m].second->getComponentActionType()) {
 					case ADD_Buff: {
@@ -2183,7 +2187,7 @@ void Output::DrawXor_Xnor(GraphicsInfo g, int in, bool isXNor, bool highlighted,
 		//Draw lines
 		pWind->DrawLine(in1x - 3 - (2 * ciDefBrushSize), in1y, in1x, in1y, FRAME); //The Input1-Line
 		pWind->DrawLine(in2x - 3 - (2 * ciDefBrushSize), in2y, in2x, in2y, FRAME); //The Input2-Line
-		pWind->DrawLine(outx + 4 * ciDefBrushSize - 1, outy, outx + 4 + (2 * ciDefBrushSize), outy, FRAME); //The Output-Line
+		pWind->DrawLine(outx + 4 * ciDefBrushSize - 3, outy, outx + 4 + (2 * ciDefBrushSize), outy, FRAME); //The Output-Line
 		if (in == 3) { //Checking for 3 input Gate 
 			int in3x = in1x, in3y = cy;
 			pWind->DrawLine(in3x - 6 - (2 * ciDefBrushSize), in3y, in3x, in3y, FRAME); //The Input3-Line
@@ -2195,7 +2199,7 @@ void Output::DrawXor_Xnor(GraphicsInfo g, int in, bool isXNor, bool highlighted,
 		//draw the xor Bezier with Delta x slightly different than the previous to avoid collision
 		pWind->DrawBezier(p1x + (2 * ciDefBrushSize), p1y, in1x + (2 * ciDefBrushSize), in1y, in2x + (2 * ciDefBrushSize), in2y, p2x + (2 * ciDefBrushSize), p2y, FRAME);
 		//Drawing Bubble
-		pWind->DrawCircle(outx + 2 * ciDefBrushSize, outy, 2 * ciDefBrushSize, FRAME);
+		pWind->DrawCircle(outx + 1 * ciDefBrushSize, outy, 2 * ciDefBrushSize, FRAME);
 
 	}
 	else {
