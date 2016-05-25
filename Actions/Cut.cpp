@@ -34,5 +34,5 @@ void Cut::Undo()
 }
 Cut::~Cut()
 {
-
+	delete ptrfordeletegate;
 }
