@@ -295,6 +295,30 @@ void ApplicationManager::setCompCount(int n)
 {
 	CompCount = n;
 }
+void ApplicationManager::setPastePoint(GraphicsInfo s)
+{
+	pastepoint = s;
+}
+GraphicsInfo ApplicationManager::getPastePoint()
+{
+	return pastepoint;
+}
+void ApplicationManager::setPastedComponent(Component * C)
+{
+	PastedComponent = C;
+}
+Component * ApplicationManager::getPastedComponent()
+{
+	return PastedComponent;
+}
+void ApplicationManager::setActionType(ActionType s)
+{
+	cutorcopy = s;
+}
+ActionType ApplicationManager::getActionType()
+{
+	return cutorcopy;
+}
 ////////////////////////////////////////////////////////////////////
 Component * ApplicationManager::getComponent(int idx)
 {

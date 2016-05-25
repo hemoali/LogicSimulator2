@@ -222,7 +222,7 @@ bool RightClick::ReadActionParameters(image* img, Component* c) {
 		if (actionNum != -1) return true;
 	}
 	if (C == NULL) {
-		pManager->pastepoint.x1 = x; pManager->pastepoint.y1 = y;
+		pManager->setPastePoint({x,y,0,0});
 		//User Right Clicked on a free space
 		if (pIn->getSelectMode()) {
 			vector<pair<int, Component*>> V = pIn->getSelectedComponents();
