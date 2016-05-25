@@ -58,7 +58,7 @@ void SWITCH::selectYourSelf(Output* pOut, color Color) {
 void SWITCH::save(int id, ofstream & file)
 {
 
-	file << "SWITCH  "<< " "<< m_GfxInfo.x1 << "  " << m_GfxInfo.y1 << " L" << this->getLabel() << endl;
+	file << "SWITCH  "<< "  " << id << "  " << m_GfxInfo.x1 << "  " << m_GfxInfo.y1 << " L" << this->getLabel() << endl;
 }
 
 void SWITCH::load(ApplicationManager* pM, ifstream& in)

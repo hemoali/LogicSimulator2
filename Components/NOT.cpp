@@ -52,7 +52,7 @@ void NOT::selectYourSelf(Output* pOut, color Color) {
 void NOT::save(int id, ofstream & file)
 {
 
-	file << "NOT  "<<"  "<< m_GfxInfo.x1 << "  " << m_GfxInfo.y1 << " L" << this->getLabel() << endl;
+	file << "NOT  "<<"  " << id << "  " <<m_GfxInfo.x1 << "  " << m_GfxInfo.y1 << " L" << this->getLabel() << endl;
 }
 
 void NOT::load(ApplicationManager* pM, ifstream& in)
