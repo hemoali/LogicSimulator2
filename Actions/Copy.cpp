@@ -17,8 +17,8 @@ bool Copy::ReadActionParameters(image *, Component* c)
 }
 void Copy::Execute()
 {
-	pManager->cutorcopy = COPYAction; 
-	pManager->PastedComponent = theComponent;
+	pManager->setActionType(COPYAction); 
+	pManager->setPastedComponent(theComponent);
 }
 void Copy::Redo()
 {

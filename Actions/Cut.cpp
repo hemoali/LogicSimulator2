@@ -20,9 +20,9 @@ void Cut::Execute()
 {
 	if (this->ReadActionParameters(NULL, NULL))
 	{
-		pManager->cutorcopy = CUTAction;
-		pManager->PastedComponent = theComponent;
-		ptrfordeletegate = new Delete(pManager, pManager->PastedComponent, true);
+		pManager->setActionType(CUTAction);
+		pManager->setPastedComponent(theComponent);
+		ptrfordeletegate = new Delete(pManager, pManager->getPastedComponent(), true);
 		ptrfordeletegate->Execute();
 	}
 }

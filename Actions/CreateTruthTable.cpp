@@ -371,17 +371,17 @@ void CreateTruthTable::Execute()
 		pOut->PrintStatusBox("The truth table has been created sucessfully");
 	if (tooLarge)
 		file.close();
-	if (tooLarge)
+	if (tooLarge) //Too large means it's more than 4 inputs
 		pOut->PrintTruthTable();
 	else {
 		int X, Y, w, h;
 		//The before saved Image
 		image *img = pOut->DrawTruthTable(table2, NumOfInputs, NumOfOutputs, X, Y, w, h);
-		if (img != NULL) {
+		if (img != NULL) { //This means that it is possible to draw the table in the permitted area
 			Input *pIn = pManager->GetInput(); //Pointer to Input Class
 			int x, y;
 			bool terminate = false;
-			pOut->PrintStatusBox("To exit, click at any point out of the rectangle");
+			pOut->PrintStatusBox("To close the table, click outside it");
 			//New member function to wait for Selection Point.
 			pIn->WaitSelectionPoint(x, y);
 			//Check if the new Point is in the Menu Bar or Not
@@ -397,8 +397,11 @@ void CreateTruthTable::Execute()
 					pOut->drawAfterTruthTable(img, X, Y, w, h);
 				}
 			}
+			delete[] table;
 		}
 		else {
+			//The table is too wide to be drawn, So we gonna ask the user to open it externally
+			//Or not
 			int res = pOut->printPopUpMessage("", 'T');
 			if (res == 1) {
 				file.open("TruthTable.txt");
@@ -408,6 +411,7 @@ void CreateTruthTable::Execute()
 				file.close();
 				pOut->PrintTruthTable();
 			}
+			delete[] table;
 		}
 	}
 

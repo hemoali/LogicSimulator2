@@ -15,7 +15,7 @@ void MultiSelect::Execute()
 	//Get a Pointer to the Input / Output Interfaces
 	Output* pOut = pManager->GetOutput();
 	Input* pIn = pManager->GetInput();
-	if (pManager->GetInput()->toBeAddedToSelected != NULL) // check if new comp to be added for the selected components
+	if (pManager->GetInput()->getComponentToBeAddedToSelected() != NULL) // check if new comp to be added for the selected components
 	{
 		allSelectedComponents = pManager->GetInput()->getSelectedComponents();
 		
@@ -23,7 +23,7 @@ void MultiSelect::Execute()
 		allSelectedComponents.push_back(make_pair(idx, pManager->GetInput()->toBeAddedToSelected));
 		pManager->GetInput()->toBeAddedToSelected = NULL;
 	}
-	else if (pManager->GetInput()->toBeRemovedFromSelected != NULL) {  // check if comp to be removed from the selected components
+	else if (pManager->GetInput()->getComponentToBeRemovedFromSelected() != NULL) {  // check if comp to be removed from the selected components
 		allSelectedComponents = pManager->GetInput()->getSelectedComponents();
 		// Removing highlighting
 
@@ -41,13 +41,13 @@ void MultiSelect::Execute()
 		// remove the comp from selected vector
 		for (size_t i = 0; i <allSelectedComponents.size(); i++)
 		{
-			if (allSelectedComponents.at(i).second == pManager->GetInput()->toBeRemovedFromSelected)
+			if (allSelectedComponents.at(i).second == pManager->GetInput()->getComponentToBeRemovedFromSelected())
 			{
 				allSelectedComponents.erase(allSelectedComponents.begin() + i);
 				break;
 			}
 		}
-		pManager->GetInput()->toBeRemovedFromSelected = NULL;
+		pManager->GetInput()->setComponentToBeRemovedFromSelected(NULL);
 	}
 	else {
 		// Removing highlighting
