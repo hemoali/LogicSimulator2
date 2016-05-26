@@ -10,7 +10,7 @@ using namespace std;
 Validate::Validate(ApplicationManager*pApp) : Action(pApp)
 {
 	msg = "";
-	isValid = true;
+	isValid = isValid2 = ifValid= true;
 	cnt = 0;
 }
 
@@ -70,8 +70,8 @@ bool Validate::validateInputComponent(Component* comp) { // check for floating p
 }
 void Validate::Execute()
 {
-
-	for (size_t i = 0; i < pManager->getCompCount() && isValid && isValid2; i++)
+	
+	for (size_t i = 0; i < pManager->getCompCount(); i++)
 	{
 		Component* comp = pManager->getComponent(i);
 
@@ -98,9 +98,13 @@ void Validate::Execute()
 		{
 			msg += ((msg.length() == 0) ? "" : "\n"); msg += " • First level isn't all switches";
 		}
+		if (!isValid || !isValid2)
+		{
+			ifValid = false;
+		}
 
 	}
-	if (isValid && isValid2 && cnt > 0)
+	if (ifValid && cnt > 0)
 	{
 		pManager->GetOutput()->switchMode(SIMULATION);
 		UI.AppMode = SIMULATION;
