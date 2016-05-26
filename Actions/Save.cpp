@@ -50,16 +50,20 @@ void Save::Execute()
 			pManager->componentSaving(i, file);
 		}
 		file << "Connections\n";
-		file << ConnectionCount << '\n';
-		for (int i = 0; i < pManager->getCompCount(); i++)
-		{
-			if (pManager->getComponent(i)->getDelete())
+		//file << ConnectionCount << '\n';
+		Connection*ptr;
+		for (int k = 0; k < 3; k++) {
+			for (int i = 0; i < pManager->getCompCount(); i++)
 			{
-				continue;
-			}
-			if (dynamic_cast<Connection*>(pManager->getComponent(i)))
-			{
-				pManager->componentSaving(i, file);
+				if (pManager->getComponent(i)->getDelete())
+				{
+					continue;
+				}
+				if (ptr = dynamic_cast<Connection*>(pManager->getComponent(i)))
+				{
+					if(ptr->getDestPin()->getPosition() == k)
+					pManager->componentSaving(i, file);
+				}
 			}
 		}
 		file << -1 << endl;

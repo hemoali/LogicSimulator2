@@ -366,7 +366,7 @@ Component* ApplicationManager::getComponentByCoordinates(int xT, int yT, bool ig
 	}	
 	return NULL;
 }
-void ApplicationManager::componentLoading(ifstream & in, string compType, GraphicsInfo point)
+void ApplicationManager::componentLoading(ifstream & in, string compType, GraphicsInfo point,int id)
 {
 	image* img = new image;
 	Component* pA;
@@ -454,6 +454,7 @@ void ApplicationManager::componentLoading(ifstream & in, string compType, Graphi
 	pA->setSmallCleanImageBeforeAddingComp(img);
 	//Draw the Loaded Gate 
 	pA->Draw(GetOutput());
+	pA->setID(id);
 }
 void ApplicationManager::componentSaving(int id, ofstream & file)
 {

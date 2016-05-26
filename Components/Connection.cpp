@@ -1,7 +1,7 @@
 #include "Connection.h"
 #include"..\ApplicationManager.h"
 #include<fstream>
-
+int Connection::ids = 1;
 Connection::Connection(const GraphicsInfo &r_GfxInfo, OutputPin *pSrcPin, InputPin *pDstPin) :Component(r_GfxInfo)
 
 {
@@ -120,8 +120,9 @@ void Connection::save(int id, ofstream & file)
 	}
 	c1 = theOutputPinComponent->getCenterLocation().x1 + 9;
 	c2 = theOutputPinComponent->getCenterLocation().y1;
-	//file << id << "  " << 
-	file << "  " << c1 << "  " << c2 << "  " << c3 << "  " << c4 << " L" << this->getLabel() <<  endl;
+	setID(ids++);
+	file << getID() << "  " << theOutputPinComponent->getID() << "  " << theInputPinComponent->getID() << endl;
+	//file << "  " << c1 << "  " << c2 << "  " << c3 << "  " << c4 << " L" << this->getLabel() <<  endl;
 }
 
 void Connection::load(ApplicationManager*pM,ifstream& in)

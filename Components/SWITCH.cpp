@@ -57,7 +57,7 @@ void SWITCH::selectYourSelf(Output* pOut, color Color) {
 
 void SWITCH::save(int id, ofstream & file)
 {
-
+	setID(id);
 	file << "SWITCH  "<< "  " << id << "  " << m_GfxInfo.x1 << "  " << m_GfxInfo.y1 << " L" << this->getLabel() << endl;
 }
 

@@ -65,7 +65,7 @@ void Load::Execute()
 			point.x2 = point.x1 + UI.GATE_Width;
 			point.y2 = point.y1 + UI.GATE_Height;
 			//Leaving the componenet instantaiting for the application manager
-			pManager->componentLoading(file, compName, point);
+			pManager->componentLoading(file, compName, point,id);
 
 		}
 
@@ -74,26 +74,87 @@ void Load::Execute()
 		//Then I initiated the ADD CONNECTION Action With Silent Parameter to draw it without 
 		// The need to press mouse buttons like normal
 		file >> compName;
-		file >> connectionCount;
-		int c1, c2, c3, c4;
+		file >> id;
+		int c1, c2, c3, c4, I, O;
 		c1 = c2 = c3 = c4 = 0;
-		for (int l = 0; l < connectionCount; l++)
+		while(id != - 1)
 		{
 			// (c1,c2) Point of The output Pin (Source Pin)
 			// (c3,c4) Point of The input pin (Dest pin)
-			file >> c1 >> c2 >> c3 >> c4 >> compLabel;
+			//file >> c1 >> c2 >> c3 >> c4 >> compLabel;
+			file >> O >> I;
+			Component *theInputPinComponent ;
+			Component *theOutputPinComponent ;
+			int inputPosistion = 3;
+			for (int k = 0; k < pManager->getCompCount(); k++) {
+				if (pManager->getComponent(k)->getID() == O)
+					theOutputPinComponent = pManager->getComponent(k);
+				else if( pManager->getComponent(k)->getID() == I)
+					theInputPinComponent = pManager->getComponent(k);
+			}
+			
+			//generating the pins Points by checking for empty input pins
+			if (theInputPinComponent->getNumOfInputs() == 3) {
+				if (theInputPinComponent->getInputPin(0)->getConnection() == NULL) {
+					inputPosistion = 0;
+				}
+				else if (theInputPinComponent->getInputPin(1)->getConnection() == NULL) {
+					inputPosistion = 1;
+				}
+				else if (theInputPinComponent->getInputPin(2)->getConnection() == NULL) {
+					inputPosistion = 2;
+				}
+				
+			}
+			else if ( theInputPinComponent->getNumOfInputs() == 2) {
+				if (theInputPinComponent->getInputPin(0)->getConnection() == NULL) {
+					inputPosistion = 0;
+				}
+				else if (theInputPinComponent->getInputPin(1)->getConnection() == NULL) {
+					inputPosistion = 2;
+				}
+			}
+			else if (theInputPinComponent->getNumOfInputs() == 1) 
+				if (theInputPinComponent->getInputPin(0)->getConnection() == NULL) {
+					inputPosistion = 0;
+				}
+			int c1, c2, c3, c4;
+			c1 = c2 = c3 = c4 = 0;
+			switch (inputPosistion) {
+			
+			case 0:
+				c3 = theInputPinComponent->getCenterLocation().x1 - 10;
+				c4 = theInputPinComponent->getCenterLocation().y1 - 13;
+				break;
+			case 1:
+				c3 = theInputPinComponent->getCenterLocation().x1 - 10;
+				c4 = theInputPinComponent->getCenterLocation().y1;
+				break;
+			case 2:
+				c3 = theInputPinComponent->getCenterLocation().x1 - 10;
+				c4 = theInputPinComponent->getCenterLocation().y1 + 13;
+				break;
+			default:
+				c3 = 0;
+				c4 = 0;
+				break;
+			}
+			c1 = theOutputPinComponent->getCenterLocation().x1 + 9;
+			c2 = theOutputPinComponent->getCenterLocation().y1;
 			//Adding Connection Action Silently
 			AddConnection theConnection(pManager);
-			if (compLabel.size() == 1) {
-				//Means that the label is empty as we have put an extra L 
-				//char at the begining of te saved label to know whetherit has a name or not
-				// in order to avoid misreading the input file
-				compLabel = "";
-			}
-			else {
-				compLabel = compLabel.substr(1, compLabel.size());
-			}
+			//if (compLabel.size() == 1) {
+			//	//Means that the label is empty as we have put an extra L 
+			//	//char at the begining of te saved label to know whetherit has a name or not
+			//	// in order to avoid misreading the input file
+			//	compLabel = "";
+			//}
+			//else {
+			//	compLabel = compLabel.substr(1, compLabel.size());
+			//}
+			compLabel = "";
 			theConnection.AddConnectionSilent(c1, c2, c3, c4, compLabel);
+			file >> id;
 		}
 		if (cleared)
 		{

@@ -66,7 +66,7 @@ public:
 	ActionType getActionType();
 
 	//Loading Function
-	void componentLoading(ifstream& in, string compType, GraphicsInfo point);
+	void componentLoading(ifstream& in, string compType, GraphicsInfo point,int id);
 	void componentSaving(int id, ofstream & file);
 	//Exitting Indicator
 	void setExitChoice(int x);
