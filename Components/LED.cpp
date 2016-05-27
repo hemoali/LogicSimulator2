@@ -50,6 +50,7 @@ void LED::selectYourSelf(Output* pOut, color Color) {
 
 void LED::save(int id, ofstream & file)
 {
+	setID(id);
 	file << "LED  "<< "  " << id << "  " <<m_GfxInfo.x1 << "  " << m_GfxInfo.y1 << " L" << this->getLabel() << endl;
 }
 

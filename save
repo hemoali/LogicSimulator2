@@ -1,16 +1,25 @@
-13
-AND2    1  184  216 L
-AND3    2  328  296 L
-OR2    3  184  376 L
-XOR2    4  360  488 L
-XOR3    5  456  280 L
-BUFFER    6  536  216 L
-NOT    7  552  392 L
-NAND2    8  648  248 L
-NOR2    9  680  392 L
-NOR3    10  744  264 L
-XNOR2   11  792  392 L
-SWITCH    12  840  296 L
-LED    13  504  520 Lddihygiyfgygiyg
+11
+AND2    1  568  344 L
+NOT    2  344  200 L
+XOR3    3  376  280 L
+LED    4  680  344 Lcasca
+SWITCH    5  184  216 Lcascas
+SWITCH    6  216  328 Lscasca
+LED    7  632  184 L
+LED    8  712  264 L
+SWITCH    9  184  408 Lw
+NOT    10  424  456 L
+LED    11  584  424 Lfqwfqw
 Connections
-0
+11
+  409  304  582  355 Lsacac
+  377  224  582  381 Lcascasc
+  601  368  694  368 Lcascac
+  409  304  358  224 L
+  217  240  390  291 L
+  249  352  390  304 L
+  249  352  390  317 L
+  377  224  646  208 Lfewfwef
+  601  368  726  288 Lfqwfqwfq
+  217  432  438  480 L
+  457  480  598  448 L
