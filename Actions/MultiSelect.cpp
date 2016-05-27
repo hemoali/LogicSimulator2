@@ -15,20 +15,15 @@ void MultiSelect::Execute()
 	//Get a Pointer to the Input / Output Interfaces
 	Output* pOut = pManager->GetOutput();
 	Input* pIn = pManager->GetInput();
-	if (pManager->GetInput()->toBeAddedToSelected != NULL) // check if new comp to be added for the selected components
+	if (pManager->GetInput()->getComponentToBeAddedToSelected() != NULL) // check if new comp to be added for the selected components
 	{
 		allSelectedComponents = pManager->GetInput()->getSelectedComponents();
-		for (size_t i = 0; i < Utils::allComponentsCorners.size(); i++)
-		{
-			if (pManager->getComponent(i) == pManager->GetInput()->toBeAddedToSelected)
-			{
-				allSelectedComponents.push_back(make_pair(i, pManager->GetInput()->toBeAddedToSelected));
-				break;
-			}
-		}
-		pManager->GetInput()->toBeAddedToSelected = NULL;
+		
+		int idx = pManager->getComponentIndex(pManager->GetInput()->getComponentToBeAddedToSelected());
+		allSelectedComponents.push_back(make_pair(idx, pManager->GetInput()->getComponentToBeAddedToSelected()));
+		pManager->GetInput()->setComponentToBeAddedToSelected(NULL);
 	}
-	else if (pManager->GetInput()->toBeRemovedFromSelected != NULL) {  // check if comp to be removed from the selected components
+	else if (pManager->GetInput()->getComponentToBeRemovedFromSelected() != NULL) {  // check if comp to be removed from the selected components
 		allSelectedComponents = pManager->GetInput()->getSelectedComponents();
 		// Removing highlighting
 
@@ -46,13 +41,13 @@ void MultiSelect::Execute()
 		// remove the comp from selected vector
 		for (size_t i = 0; i <allSelectedComponents.size(); i++)
 		{
-			if (allSelectedComponents.at(i).second == pManager->GetInput()->toBeRemovedFromSelected)
+			if (allSelectedComponents.at(i).second == pManager->GetInput()->getComponentToBeRemovedFromSelected())
 			{
 				allSelectedComponents.erase(allSelectedComponents.begin() + i);
 				break;
 			}
 		}
-		pManager->GetInput()->toBeRemovedFromSelected = NULL;
+		pManager->GetInput()->setComponentToBeRemovedFromSelected(NULL);
 	}
 	else {
 		// Removing highlighting
@@ -61,11 +56,11 @@ void MultiSelect::Execute()
 			Utils::allConnections[i]->selectYourSelf(pOut, UI.ConnColor);
 		}
 
-		for (size_t i = 0; i < pIn->getSelectedComponents().size(); i++)
+		for (size_t i = 0; i < pManager->getCompCount(); i++)
 		{
-			if (!pIn->getSelectedComponents()[i].second->getDelete())
+			if (!pManager->getComponent(i)->getDelete())
 			{
-				pIn->getSelectedComponents()[i].second->Draw(pOut, false);
+				pManager->getComponent(i)->Draw(pOut, false);
 			}
 		}
 		pIn->setSelectMode(false);
@@ -92,10 +87,10 @@ void MultiSelect::Execute()
 					//clear components of exists
 					allSelectedComponents.clear();
 					//Add components to selected vector
-					for (size_t i = 0; i < Utils::allComponentsCorners.size(); i++)
+					for (size_t i = 0; i < pManager->getCompCount(); i++)
 					{
-						int gateCenterX = Utils::allComponentsCorners[i].x1 + UI.GATE_Width / 2;
-						int gateCenterY = Utils::allComponentsCorners[i].y1 + UI.GATE_Height / 2;
+						int gateCenterX = pManager->getComponent(i)->getCornersLocation().x1 + UI.GATE_Width / 2;
+						int gateCenterY = pManager->getComponent(i)->getCornersLocation().y1 + UI.GATE_Height / 2;
 						if (
 							// Check if rectangle crossed the center
 							(x > initX && gateCenterX < x && gateCenterX > initX && initY < y && gateCenterY < y && gateCenterY > initY) ||

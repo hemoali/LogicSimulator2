@@ -26,7 +26,6 @@ public:
 	static int J, K, widthh ;
 	static void setArrayOfComponents(int i, int j, Component*);
 	static Component* getArrayOfComponents(int i, int j);
-	static vector<GraphicsInfo> allComponentsCorners;
 	static vector<Connection*> allConnections;
 	static vector<Action*> theActions;
 

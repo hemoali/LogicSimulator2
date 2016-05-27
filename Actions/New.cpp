@@ -20,7 +20,7 @@ void Clear::Execute()
 {
 	if (Loading || ReadActionParameters()) {
 		Output *pOut = pManager->GetOutput();
-		for (int i = 0; i < Utils::allComponentsCorners.size(); i++) {
+		for (int i = 0; i <pManager->getCompCount(); i++) {
 			Component *C = pManager->getComponent(i);
 			if (!dynamic_cast<Connection*> (C)) {
 				C->setDelete(true);
@@ -32,12 +32,7 @@ void Clear::Execute()
 				pOut->clearConnections(allInConnections, C->getCenterLocation().x1, C->getCenterLocation().y1, true, true);
 				pOut->clearConnections(allOutConnections, C->getCenterLocation().x1, C->getCenterLocation().y1, false, true);
 			}
-		}
-		//Deleteion Completely
-		for (int i = 0; i < Utils::allComponentsCorners.size(); i++) {
-			Component *C = pManager->getComponent(i);
-			delete C;
-		}
+		}		
 		// clear status bar
 		
 		//Clear Drawing Area
@@ -45,7 +40,6 @@ void Clear::Execute()
 		//Resetting Interface
 		pOut->resetInterfaceArrays();
 		pManager->setCompCount(0);
-		Utils::allComponentsCorners.resize(0);
 		if (Loading)
 			Loading = false;
 	}

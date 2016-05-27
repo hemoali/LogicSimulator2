@@ -25,8 +25,12 @@
 #include"Actions\CreateTruthTable.h"
 #include"Actions\ChangeSwitch.h"
 #include"Actions\New.h"
+#include"Actions\SelectConnection.h"
+#include"Components\Component.h"
+#include <fstream>
 #include "Utils.h"
 #include "Actions\Exit.h"
+using namespace std;
 
 ApplicationManager::ApplicationManager()
 {
@@ -142,17 +146,26 @@ void ApplicationManager::ExecuteAction(ActionType ActType)
 		pAct = new MultiMove(this); Utils::theActions.push_back(pAct);
 		break;
 	}
+	case SELECT: {
+		pAct = new Select(this); Utils::theActions.push_back(pAct);
+		break;
+	}
 	case MULTI_SELECT: {
 		pAct = new MultiSelect(this); Utils::theActions.push_back(pAct);
 		break;
 	}
+	case SELECT_CONNECTION: {
+		Select_Connection selectConnection(this);
+		selectConnection.Execute();
+		break;
+	}
 	case Change_Switch: {
-		ChangeSwitch* act = new ChangeSwitch(this, GetInput()->toBeChangedSwitch);
+		ChangeSwitch* act = new ChangeSwitch(this, GetInput()->getToBeChangedSwitch());
 		Utils::theActions.push_back(act);
 		act->Execute();
 		Simulate simulateAction(this, false);
 		simulateAction.Execute();
-		
+
 		break;
 	}
 	case Create_TruthTable:
@@ -235,7 +248,7 @@ void ApplicationManager::ExecuteAction(ActionType ActType)
 		break;
 	}
 	case DSN_MODE:
-		for (size_t i = 0; i < Utils::allComponentsCorners.size(); i++)
+		for (size_t i = 0; i < getCompCount(); i++)
 		{
 			Component* comp = getComponent(i);
 			if (comp->getDelete()) continue;
@@ -293,12 +306,68 @@ int ApplicationManager::getCompCount()
 }
 void ApplicationManager::setCompCount(int n)
 {
+	if (n == 0)
+	{
+		//Deleteion Completely
+		for (int i = 0; i < getCompCount(); i++) {
+			Component *C = CompList[i];
+			delete C;
+		}
+	}
 	CompCount = n;
+}
+void ApplicationManager::setPastePoint(GraphicsInfo s)
+{
+	pastepoint = s;
+}
+GraphicsInfo ApplicationManager::getPastePoint()
+{
+	return pastepoint;
+}
+void ApplicationManager::setPastedComponent(Component * C)
+{
+	PastedComponent = C;
+}
+Component * ApplicationManager::getPastedComponent()
+{
+	return PastedComponent;
+}
+void ApplicationManager::setActionType(ActionType s)
+{
+	cutorcopy = s;
+}
+ActionType ApplicationManager::getActionType()
+{
+	return cutorcopy;
 }
 ////////////////////////////////////////////////////////////////////
 Component * ApplicationManager::getComponent(int idx)
 {
 	return CompList[idx];
+}
+int ApplicationManager::getComponentIndex(Component* c) {
+	for (size_t i = 0; i < CompCount; i++)
+	{
+		if (CompList[i] == c)
+		{
+			return i;
+		}
+	}
+	return -1;
+}
+
+Component* ApplicationManager::getComponentByCoordinates(int xT, int yT, bool ignoreConnections, bool ignoreDelete, int&i) {
+	for (size_t i = 0; i < CompCount; i++)
+	{
+		if (ignoreDelete && CompList[i]->getDelete()) continue;
+		if (ignoreConnections && dynamic_cast<Connection*> (CompList[i])) continue;
+		GraphicsInfo compCorner = CompList[i]->getCornersLocation();
+		if (xT >= compCorner.x1&&xT <= compCorner.x2&& yT >= compCorner.y1&&yT <= compCorner.y2)
+		{
+			return CompList[i];
+		}
+	}
+	return NULL;
 }
 void ApplicationManager::componentLoading(ifstream & in, string compType, GraphicsInfo point)
 {
@@ -384,11 +453,119 @@ void ApplicationManager::componentLoading(ifstream & in, string compType, Graphi
 	}
 	//Filling the needed arrays of the Grid
 	GraphicsInfo GInfotmp = point;
-	Utils::allComponentsCorners.push_back(point);
 	GetOutput()->storeImage(img, pA->getCenterLocation().x1 - UI.GRID_SIZE - 5, pA->getCenterLocation().y1 - UI.GRID_SIZE - 5, 2 * UI.GRID_SIZE + 3, UI.GATE_Height + 3);
 	pA->setSmallCleanImageBeforeAddingComp(img);
 	//Draw the Loaded Gate 
 	pA->Draw(GetOutput());
+}
+void ApplicationManager::componentSaving(int id, ofstream & file)
+{
+
+	getComponent(id)->save(id + 1, file);
+
+}
+void ApplicationManager::SaveComponents(ofstream & file)
+{
+	void SaveComponents(ofstream& file); {
+		int compCount = 0;
+		int ConnectionCount = 0;
+		for (int i = 0; i < getCompCount(); i++)
+		{
+			if (getComponent(i)->getDelete())
+			{
+				continue;
+			}
+			if (dynamic_cast<Connection*>(getComponent(i)))
+				ConnectionCount++;
+			else compCount++;
+		}
+		file << compCount << "\n";
+		for (int i = 0; i < getCompCount(); i++)
+		{
+			if (getComponent(i)->getDelete())
+			{
+				continue;
+			}
+			if (dynamic_cast<Connection*>(getComponent(i)))
+				continue;
+			componentSaving(i, file);
+		}
+		file << "Connections\n";
+		file << ConnectionCount << '\n';
+		for (int i = 0; i < getCompCount(); i++)
+		{
+			if (getComponent(i)->getDelete())
+			{
+				continue;
+			}
+			if (dynamic_cast<Connection*>(getComponent(i)))
+			{
+				componentSaving(i, file);
+			}
+		}
+	}
+}
+void ApplicationManager::LoadComponents(ifstream & file)
+{
+	Output *pOut = GetOutput();
+	Clear newAction(this);
+	bool cleared = false;
+	int compCount, connectionCount = 0, id;
+	string compName, compLabel;
+	GraphicsInfo point;
+	//Loading Gates
+	file >> compCount;
+	for (int i = 0; i < compCount; i++)
+	{
+		if (!cleared)
+		{
+			newAction.setLoading(true);
+			newAction.Execute();
+			cleared = true;
+		}
+		file >> compName >> id >> point.x1 >> point.y1;
+		//Completing the Component Corners
+		point.x2 = point.x1 + UI.GATE_Width;
+		point.y2 = point.y1 + UI.GATE_Height;
+		//Leaving the componenet instantaiting for the application manager
+		componentLoading(file, compName, point);
+
+	}
+
+	//Loading The Connection What've saved in connection 
+	//the input pin Coordinates and the output pin Coordinates
+	//Then I initiated the ADD CONNECTION Action With Silent Parameter to draw it without 
+	// The need to press mouse buttons like normal
+	file >> compName;
+	file >> connectionCount;
+	int c1, c2, c3, c4;
+	c1 = c2 = c3 = c4 = 0;
+	for (int l = 0; l < connectionCount; l++)
+	{
+		// (c1,c2) Point of The output Pin (Source Pin)
+		// (c3,c4) Point of The input pin (Dest pin)
+		file >> c1 >> c2 >> c3 >> c4 >> compLabel;
+		//Adding Connection Action Silently
+		AddConnection theConnection(this);
+		if (compLabel.size() == 1) {
+			//Means that the label is empty as we have put an extra L 
+			//char at the begining of te saved label to know whetherit has a name or not
+			// in order to avoid misreading the input file
+			compLabel = "";
+		}
+		else {
+			compLabel = compLabel.substr(1, compLabel.size());
+		}
+		theConnection.AddConnectionSilent(c1, c2, c3, c4, compLabel);
+	}
+	if (cleared)
+	{
+		pOut->PrintStatusBox("Design loaded successfully");
+	}
+	else {
+		pOut->PrintStatusBox("Error Loading Design");
+	}
+
 }
 void ApplicationManager::setExitChoice(int x)
 {
@@ -403,10 +580,10 @@ ApplicationManager::~ApplicationManager()
 		delete Utils::theActions[i];
 	file.open("Check.txt");
 	file << "Using Check.txt file to debug deallocations or any furthur Checking.\n" << "................................................................." <<
-		"\nThis Function is Called in the Application Manager Destructor\n" << "................................................................." << endl << endl ;
+		"\nThis Function is Called in the Application Manager Destructor\n" << "................................................................." << endl << endl;
 	file << "Actions constructed  " << Action::ID << endl;
 	file << "Actions Destructed  " << Action::IDD << endl;
-	file << "\n\n"<< "................................................................." << endl << endl;
+	file << "\n\n" << "................................................................." << endl << endl;
 	file << "Components constructed  " << Component::CreatedComponents << endl;
 	file << "Components Destructed  " << Component::DestructedComponents << endl;
 	file.close();

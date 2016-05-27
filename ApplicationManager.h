@@ -22,20 +22,23 @@ private:
 
 	Output* OutputInterface; //pointer to the Output Clase Interface
 	Input* InputInterface; //pointer to the Input Clase Interface
-public:	
 	int Exitchoice;
-	Component*PastedComponent;
 	GraphicsInfo pastepoint;
+	Component*PastedComponent;
 	ActionType cutorcopy;
+public:
+
+
+
 
 	ApplicationManager(); //constructor
 	void UpdateInterface() {};
 	//Reads the required action from the user and returns the corresponding action type
 	ActionType GetUserAction();
-	
+
 	//Creates an action and executes it
 	void ExecuteAction(ActionType);
-	
+
 	//Gets a pointer to Input / Output Object
 	Output* GetOutput();
 	Input* GetInput();
@@ -44,13 +47,29 @@ public:
 	void AddComponent(Component* pComp);
 
 	Component* getComponent(int);
-
+	Component* getComponentByCoordinates(int x, int y, bool ignoreConnections, bool ignoreDelete, int&i);
+	int getComponentIndex(Component* c);
 	//Compcount Setter And Getter
 	int getCompCount();
 	void setCompCount(int n);
 
+	//Paste Point Setter and getter
+	void setPastePoint(GraphicsInfo s);
+	GraphicsInfo getPastePoint();
+
+	//Pasted Component Setters and getters
+	void setPastedComponent(Component* C);
+	Component* getPastedComponent();
+
+	//Action(Cut / paste ) setter and Getter
+	void setActionType(ActionType s);
+	ActionType getActionType();
+
 	//Loading Function
 	void componentLoading(ifstream& in, string compType, GraphicsInfo point);
+	void componentSaving(int id, ofstream & file);
+	void SaveComponents(ofstream& file);
+	void LoadComponents(ifstream& file);
 	//Exitting Indicator
 	void setExitChoice(int x);
 	//destructor

@@ -1,13 +1,12 @@
 #ifndef SELECT_Header
 #define SELECT__Header
 #include "Action.h"
-class Select :
+class Select_Connection :
 	public Action
 {
-	Component* theSelectedComponent;
 public:
-	Select(ApplicationManager *pApp);
-	virtual ~Select();
+	Select_Connection(ApplicationManager *pApp);
+	virtual ~Select_Connection();
 
 	//Reads parameters required for action to execute
 	virtual bool  ReadActionParameters(image * , Component*);

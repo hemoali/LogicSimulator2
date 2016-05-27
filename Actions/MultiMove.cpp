@@ -76,11 +76,6 @@ void MultiMove::Execute()
 			{
 				newCoor.push_back({ pIn->getSelectedComponents()[i].second->getCenterLocation().x1,pIn->getSelectedComponents()[i].second->getCenterLocation().y1 });
 				newSmallImageForGate.push_back(pIn->getSelectedComponents()[i].second->getSmallCleanImageBeforeAddingComp());
-
-				Utils::allComponentsCorners[pIn->getSelectedComponents()[i].first].x1 = pIn->getSelectedComponents()[i].second->getCornersLocation().x1;
-				Utils::allComponentsCorners[pIn->getSelectedComponents()[i].first].y1 = pIn->getSelectedComponents()[i].second->getCornersLocation().y1;
-				Utils::allComponentsCorners[pIn->getSelectedComponents()[i].first].x2 = pIn->getSelectedComponents()[i].second->getCornersLocation().x2;
-				Utils::allComponentsCorners[pIn->getSelectedComponents()[i].first].y2 = pIn->getSelectedComponents()[i].second->getCornersLocation().y2;
 				if (dynamic_cast<Connection*> (pIn->getSelectedComponents()[i].second))
 				{
 					((Connection*)pIn->getSelectedComponents()[i].second)->selectYourSelf(pManager->GetOutput(), UI.DrawColor);
@@ -129,12 +124,7 @@ void MultiMove::Undo()
 	{
 		pA = selectedComponents[i];
 		pA->setNewCenterLocation(oldGraphicsInfo[i]);
-		Utils::allComponentsCorners[compIdx[i]].x1 = oldGraphicsInfo[i].x1 - UI.GATE_Width / 2;
-		Utils::allComponentsCorners[compIdx[i]].y1 = oldGraphicsInfo[i].y1 - UI.GATE_Height / 2;
-		Utils::allComponentsCorners[compIdx[i]].x2 = oldGraphicsInfo[i].x1 + UI.GATE_Width / 2;
-		Utils::allComponentsCorners[compIdx[i]].y2 = oldGraphicsInfo[i].y1 + UI.GATE_Height / 2;
 		pA->setSmallCleanImageBeforeAddingComp(oldSmallCleanImage[i]);
-
 		pA->setDelete(false);
 		pA->Draw(pOut, false);
 	}
@@ -217,15 +207,11 @@ void MultiMove::Redo()
 		//redraw and reassign data
 
 		pA->setNewCenterLocation(newCoor[i]);
-		Utils::allComponentsCorners[compIdx[i]].x1 = newCoor[i].x1 - UI.GATE_Width / 2;
-		Utils::allComponentsCorners[compIdx[i]].y1 = newCoor[i].y1 - UI.GATE_Height / 2;
-		Utils::allComponentsCorners[compIdx[i]].x2 = newCoor[i].x1 + UI.GATE_Width / 2;
-		Utils::allComponentsCorners[compIdx[i]].y2 = newCoor[i].y1 + UI.GATE_Height / 2;
 		pA->setSmallCleanImageBeforeAddingComp(newSmallImageForGate[i]);
 
 		pA->setDelete(false);
 		pA->Draw(pOut, false);
-	}	
+	}
 	vector<Connection*> allDrawnConnections;
 	for (size_t i = 0; i < selectedComponents.size(); i++)
 	{
@@ -240,7 +226,7 @@ void MultiMove::Redo()
 			if (find(allDrawnConnections.begin(), allDrawnConnections.end(), allInputConnections[j]) != allDrawnConnections.end())
 			{
 				continue;
-			}			
+			}
 			allDrawnConnections.push_back(allInputConnections[j]);
 			GraphicsInfo currentGfx = allInputConnections[j]->getCornersLocation();
 			currentGfx.x2 = currentGfx.x2 + (newCoor[i].x1 - oldGraphicsInfo[i].x1);
@@ -263,7 +249,7 @@ void MultiMove::Redo()
 			if (find(allDrawnConnections.begin(), allDrawnConnections.end(), allOutputConnections[j]) != allDrawnConnections.end())
 			{
 				continue;
-			}	
+			}
 			allDrawnConnections.push_back(allOutputConnections[j]);
 			GraphicsInfo currentGfx = allOutputConnections[j]->getCornersLocation();
 			currentGfx.x1 = currentGfx.x1 + (newCoor[i].x1 - oldGraphicsInfo[i].x1);

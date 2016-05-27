@@ -48,7 +48,7 @@ void AddNORgate2::Execute()
 		GInfotmp.y2 = GInfo.y1 + Wdth / 2;
 		pA->setNewCenterLocation(GInfo);
 		pA->setSmallCleanImageBeforeAddingComp(smallImageBeforeAddingComponent);
-		Utils::allComponentsCorners.push_back(GInfotmp);
+		
 		pManager->AddComponent(pA);
 		pA->setLabel(gateLabel);
 		Utils::undoActions.push(this);

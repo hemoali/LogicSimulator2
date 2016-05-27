@@ -66,28 +66,9 @@ void ModifyConnection::Execute()
 		ReadActionParameters(NULL, NULL);
 		int numOfInputs = 0;
 		int indxOfInputComponent;
-
-		//get input and output components
-		for (int i = 0; i < Utils::allComponentsCorners.size(); i++)
-		{
-			if (dynamic_cast<Connection*>(pManager->getComponent(i)) || pManager->getComponent(i)->getDelete())
-				continue;
-			if (Cx1 >= Utils::allComponentsCorners[i].x1&&Cx1 <= Utils::allComponentsCorners[i].x2&& Cy1 >= Utils::allComponentsCorners[i].y1&&Cy1 <= Utils::allComponentsCorners[i].y2)
-			{
-				if (Cx1 > (Utils::allComponentsCorners[i].x1 + UI.GATE_Width / 2))
-				{
-					outputComponent = pManager->getComponent(i);
-				}
-			}
-			if (Cx2 >= Utils::allComponentsCorners[i].x1&&Cx2 <= Utils::allComponentsCorners[i].x2&& Cy2 >= Utils::allComponentsCorners[i].y1&&Cy2 <= Utils::allComponentsCorners[i].y2)
-			{
-				if (Cx2 < (Utils::allComponentsCorners[i].x1 + UI.GATE_Width / 2))
-				{
-					inputComponent = pManager->getComponent(i);
-					indxOfInputComponent = i;
-				}
-			}
-		}
+		int ii;
+		outputComponent = pManager->getComponentByCoordinates(Cx1, Cy1, true, true, ii);
+		inputComponent = pManager->getComponentByCoordinates(Cx2, Cy2, true, true, ii);
 
 		if (inputComponent == NULL || outputComponent == NULL || inputComponent == outputComponent || dynamic_cast<SWITCH*> (inputComponent) || dynamic_cast<LED*> (outputComponent))
 		{
@@ -114,14 +95,14 @@ void ModifyConnection::Execute()
 			numOfInputs = inputComponent->getNumOfInputs();
 			if (numOfInputs == 3)
 			{
-				if (Cy2 <= Utils::allComponentsCorners[indxOfInputComponent].y2 - UI.GATE_Height / 2 - 6)numOfInputs = inputPin = 0;
-				else if (Cy2 >= Utils::allComponentsCorners[indxOfInputComponent].y2 - UI.GATE_Height / 2 + 6)numOfInputs = inputPin = 2;
+				if (Cy2 <= inputComponent->getCornersLocation().y2 - UI.GATE_Height / 2 - 6)numOfInputs = inputPin = 0;
+				else if (Cy2 >= inputComponent->getCornersLocation().y2 - UI.GATE_Height / 2 + 6)numOfInputs = inputPin = 2;
 				else numOfInputs = inputPin = 1;
 			}
 			else if (numOfInputs == 2)
 			{
-				if (Cy2 <= Utils::allComponentsCorners[indxOfInputComponent].y2 - UI.GATE_Height / 2)numOfInputs = inputPin = 0;
-				else if (Cy2 >= Utils::allComponentsCorners[indxOfInputComponent].y2 - UI.GATE_Height / 2) {
+				if (Cy2 <= inputComponent->getCornersLocation().y2 - UI.GATE_Height / 2)numOfInputs = inputPin = 0;
+				else if (Cy2 >= inputComponent->getCornersLocation().y2 - UI.GATE_Height / 2) {
 					numOfInputs = 2; inputPin = 1;
 				}
 			}
@@ -164,17 +145,6 @@ void ModifyConnection::Execute()
 
 					theConnection->setSourcePin(newOutputPin = outputComponent->getOutputPin());
 					theConnection->setDestPin(newInputPin = inputComponent->getInputPin(inputPin));
-
-					for (size_t i = 0; i < Utils::allComponentsCorners.size(); i++)
-					{
-						if (dynamic_cast<Connection*>(pManager->getComponent(i)) && pManager->getComponent(i) == theConnection) {
-							Utils::allComponentsCorners[i].x1 = GInfo.x1;
-							Utils::allComponentsCorners[i].x2 = GInfo.x2;
-							Utils::allComponentsCorners[i].y1 = GInfo.y1;
-							Utils::allComponentsCorners[i].y2 = GInfo.y2;
-							break;
-						}
-					}
 					theConnection->setCellsBeforeAddingConnection(cellsBeforeAddingConnection);
 					outputComponent->getOutputPin()->ConnectTo(theConnection);
 					inputComponent->getInputPin(inputPin)->setConnection(theConnection);
@@ -212,16 +182,6 @@ void ModifyConnection::Undo()
 	theConnection->setCornersLocation(oldGInfo);
 	theConnection->setSourcePin(oldOutputPin);
 	theConnection->setDestPin(oldInputPin);
-
-	for (size_t i = 0; i < Utils::allComponentsCorners.size(); i++)
-	{
-		if (dynamic_cast<Connection*>(pManager->getComponent(i)) && pManager->getComponent(i) == theConnection) {
-			Utils::allComponentsCorners[i].x1 = oldGInfo.x1;
-			Utils::allComponentsCorners[i].x2 = oldGInfo.x2;
-			Utils::allComponentsCorners[i].y1 = oldGInfo.y1;
-			Utils::allComponentsCorners[i].y2 = oldGInfo.y2;
-		}
-	}
 	theConnection->setCellsBeforeAddingConnection(oldCells);
 	oldOutputComponent->getOutputPin()->ConnectTo(theConnection);
 	oldInputComponent->getInputPin(oldInputPinPosition)->setConnection(theConnection);
@@ -242,16 +202,6 @@ void ModifyConnection::Redo()
 
 	theConnection->setSourcePin(newOutputPin);
 	theConnection->setDestPin(newInputPin);
-
-	for (size_t i = 0; i < Utils::allComponentsCorners.size(); i++)
-	{
-		if (dynamic_cast<Connection*>(pManager->getComponent(i)) && pManager->getComponent(i) == theConnection) {
-			Utils::allComponentsCorners[i].x1 = GInfo.x1;
-			Utils::allComponentsCorners[i].x2 = GInfo.x2;
-			Utils::allComponentsCorners[i].y1 = GInfo.y1;
-			Utils::allComponentsCorners[i].y2 = GInfo.y2;
-		}
-	}
 	theConnection->setCellsBeforeAddingConnection(newCells);
 	outputComponent->getOutputPin()->ConnectTo(theConnection);
 	inputComponent->getInputPin(inputPin)->setConnection(theConnection);

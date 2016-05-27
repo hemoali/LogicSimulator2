@@ -42,67 +42,11 @@ void Load::Execute()
 {
 	Clear newAction(pManager);
 	Output *pOut = pManager->GetOutput();
-	bool cleared = false;
 	if (ReadActionParameters(NULL, NULL) && path != "") {
 		// To clear the screen
 
 		file.open(path);
-		int compCount, connectionCount = 0, id;
-		string compName, compLabel;
-		GraphicsInfo point;
-		//Loading Gates
-		file >> compCount;
-		for (int i = 0; i < compCount; i++)
-		{
-			if (!cleared)
-			{
-				newAction.setLoading(true);
-				newAction.Execute();
-				cleared = true;
-			}
-			file >> compName >> id >> point.x1 >> point.y1;
-			//Completing the Component Corners
-			point.x2 = point.x1 + UI.GATE_Width;
-			point.y2 = point.y1 + UI.GATE_Height;
-			//Leaving the componenet instantaiting for the application manager
-			pManager->componentLoading(file, compName, point);
-
-		}
-
-		//Loading The Connection What've saved in connection 
-		//the input pin Coordinates and the output pin Coordinates
-		//Then I initiated the ADD CONNECTION Action With Silent Parameter to draw it without 
-		// The need to press mouse buttons like normal
-		file >> compName;
-		file >> connectionCount;
-		int c1, c2, c3, c4;
-		c1 = c2 = c3 = c4 = 0;
-		for (int l = 0; l < connectionCount; l++)
-		{
-			// (c1,c2) Point of The output Pin (Source Pin)
-			// (c3,c4) Point of The input pin (Dest pin)
-			file >> c1 >> c2 >> c3 >> c4 >> compLabel;
-			//Adding Connection Action Silently
-			AddConnection theConnection(pManager);
-			if (compLabel.size() == 1) {
-				//Means that the label is empty as we have put an extra L 
-				//char at the begining of te saved label to know whetherit has a name or not
-				// in order to avoid misreading the input file
-				compLabel = "";
-			}
-			else {
-				compLabel = compLabel.substr(1, compLabel.size());
-			}
-			theConnection.AddConnectionSilent(c1, c2, c3, c4, compLabel);
-		}
-		if (cleared)
-		{
-			pOut->PrintStatusBox("Design loaded successfully");
-		}
-		else {
-			pOut->PrintStatusBox("Error Loading Design");
-		}
-
+		pManager->LoadComponents(file);
 		file.close();
 		// clear undo/redo stacks
 		while (!Utils::undoActions.empty()) Utils::undoActions.pop();
