@@ -50,7 +50,7 @@ void XNOR2::selectYourSelf(Output* pOut, color Color) {
 
 void XNOR2::save(int id, ofstream & file)
 {
-	setID(id);
+
 	file << "XNOR2 "<< "  " << id << "  " << m_GfxInfo.x1 << "  " << m_GfxInfo.y1 << " L" << this->getLabel() << endl;
 }
 

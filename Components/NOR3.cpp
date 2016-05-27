@@ -51,7 +51,7 @@ void NOR3::selectYourSelf(Output* pOut, color Color) {
 
 void NOR3::save(int id, ofstream & file)
 {
-	setID(id);
+
 	file << "NOR3  "<<"  " << id <<"  "<< m_GfxInfo.x1 << "  " << m_GfxInfo.y1 << " L" << this->getLabel() << endl;
 }
 

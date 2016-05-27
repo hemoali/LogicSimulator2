@@ -48,7 +48,7 @@ void AND2::selectYourSelf(Output* pOut, color Color) {
 
 void AND2::save(int id, ofstream & file)
 {
-	setID(id);
+
 	file << "AND2  "<< "  " << id <<"  " << m_GfxInfo.x1 << "  " << m_GfxInfo.y1 << " L" << this->getLabel() << endl;
 }
 

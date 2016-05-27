@@ -52,7 +52,7 @@ void OR2::selectYourSelf(Output* pOut, color Color) {
 
 void OR2::save(int id, ofstream & file)
 {
-	setID(id);
+
 	file << "OR2  "<<"  " << id << "  " << m_GfxInfo.x1 << "  " << m_GfxInfo.y1 << " L" << this->getLabel() << endl;
 }
 

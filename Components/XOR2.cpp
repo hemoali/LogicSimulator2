@@ -51,7 +51,7 @@ void XOR2::selectYourSelf(Output* pOut, color Color) {
 
 void XOR2::save(int id, ofstream & file)
 {
-	setID(id);
+
 	file << "XOR2  " << "  " << id << "  " << m_GfxInfo.x1 << "  " << m_GfxInfo.y1 << " L" << this->getLabel() << endl;
 }
 
